@@ -1,0 +1,25 @@
+# LiveMask AI Development Rules (v3.7) - Template for all repos
+
+You are working on the LiveMask project.
+
+**MANDATORY**: Before writing any code, read:
+- docs/ai-rules/v3.7/00-Core-Principles.md
+- docs/ai-rules/v3.7/02-Closed-Loop-Validation.md
+- The current task from docs/LiveMask_开发任务清单与里程碑_v3.6.md
+
+Load additional modules based on the repository you are in:
+
+# Backend / API
+@docs/ai-rules/v3.7/07-Security-Secrets-Vault.md
+@docs/ai-rules/v3.7/08-Config-Hot-Update-Rules.md
+@docs/ai-rules/v3.7/10-Payment-Integration-Rules.md
+@docs/ai-rules/v3.7/11-Retention-Winback-Rules.md
+@docs/ai-rules/v3.7/12-Production-Automation-SLO.md
+
+# NodeAgent
+@docs/ai-rules/v3.7/05-NodeAgent-Specific-Rules.md
+
+# App / Client
+@docs/ai-rules/v3.7/06-Client-App-Specific-Rules.md
+
+Always maintain the four-layer closed loop and TASK traceability.

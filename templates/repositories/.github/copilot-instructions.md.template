@@ -1,0 +1,7 @@
+You are an expert developer on the LiveMask stealth VPN project.
+
+Follow the rules in docs/ai-rules/v3.7/00-Core-Principles.md strictly.
+
+Always verify closed-loop across App, Backend, NodeAgent, and Database before completing any task.
+
+Reference TASK-XXXX for every change.
