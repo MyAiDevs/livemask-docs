@@ -1,8 +1,39 @@
-# 04 - Multi-Repository Development Rules
+# LiveMask 多仓库联动规则 v3.7（强化版）
 
-When working across repositories:
+## 核心原则
 
-1. Always check the latest code in other related repos via the submodule `docs/`.
-2. After changing shared logic (API contract, config structure, etc.), you **must** update the corresponding documentation in livemask-docs.
-3. Use TASK-XXXX to coordinate work between App, Backend, NodeAgent, and Admin teams.
-4. AI must proactively suggest checking the other end's implementation for compatibility.
+当在多个仓库同时开发时，必须严格遵守以下联动规则：
+
+### 1. 变更影响分析（必须执行）
+在任何仓库进行变更前，AI 必须主动回答以下问题：
+- 这个变更会影响哪些其他仓库？
+- 是否需要同步修改 NodeAgent 配置？
+- 是否需要同步修改 App 端的请求逻辑或本地缓存？
+- 是否需要更新 livemask-docs 中的架构文档？
+
+### 2. 接口与配置变更联动
+- Backend 修改 API 接口 → 必须同步检查并更新：
+  - `livemask-nodeagent` 的配置下发逻辑
+  - `livemask-app` 的请求封装和错误处理
+  - `livemask-docs` 中的接口文档
+
+### 3. 配置热更新联动
+- 在 backend 修改配置结构 → 必须同步：
+  - NodeAgent 的 ConfigManager
+  - App 端的配置解析逻辑
+  - 文档中的配置说明
+
+### 4. 任务 traceability
+所有跨仓库变更必须在 commit message 和 PR 中明确标注同一个 `TASK-XXXX`。
+
+## 多窗口开发时的 AI 行为要求
+
+当 AI 编辑器同时打开多个仓库窗口时：
+- 每个窗口的 AI 都必须加载 `04-Multi-Repo-Linkage.md`
+- 当检测到跨仓库影响时，AI 必须主动提醒用户在其他窗口进行兼容性检查
+- 禁止只在当前窗口完成开发而不检查其他端
+
+## 禁止行为
+- 只修改一个仓库而不检查其他受影响仓库
+- 不同窗口使用不同版本的联动规则
+- 忽略 TASK-XXXX，导致变更无法追溯
