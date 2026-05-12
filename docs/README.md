@@ -1,5 +1,7 @@
 # LiveMask 项目文档库（v3.7 完整版）
 
+> **重要**：多仓库 + 多窗口 AI 开发请优先阅读 [DEVELOPMENT.md](./DEVELOPMENT.md)
+
 本目录包含 LiveMask 项目所有核心详细文档，已按功能模块分类整理。
 
 ## 目录结构
@@ -17,6 +19,18 @@
 - **security/** — 威胁情报、Secret 管理
 - **admin/** — 管理后台 Figma 描述与 React 代码示例
 - **archive/** — 历史/辅助文档
+
+## 多仓库开发特别说明
+
+当使用 AI 编辑器同时打开多个项目时，请务必阅读：
+
+→ [DEVELOPMENT.md](./DEVELOPMENT.md)（多仓库 + 多窗口开发核心指南）
+
+该文档详细说明了：
+- 每个窗口如何正确加载规则
+- 跨仓库变更的处理流程
+- TASK-XXXX traceability 要求
+- 推荐的日常开发协作方式
 
 ## 使用建议
 
