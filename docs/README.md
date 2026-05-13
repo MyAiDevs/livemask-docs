@@ -8,6 +8,7 @@
 
 - **architecture/** — 系统架构、数据库设计、技术架构
 - **contracts/** — API、配置、事件、错误码、状态机契约
+- **data/** — PostgreSQL、Redis、一致性、迁移与缓存策略
 - **development/** — 开发规范、任务清单、测试策略、AI开发规则
 - **nodeagent/** — NodeAgent 架构、代码示例、一键安装脚本
 - **app/** — 多平台客户端开发与安全规范
@@ -21,6 +22,7 @@
 - **admin/** — 管理后台 Figma 描述与 React 代码示例
 - **qa/** — 测试策略、验收证据、发布质量门禁
 - **product/** — 需求范围、验收标准、灰度与复盘
+- **support/** — 客服、人工介入、补偿、申诉和发布后反馈
 - **archive/** — 历史/辅助文档
 
 ## 多仓库开发特别说明
@@ -42,7 +44,7 @@
 3. 跨仓库字段、配置、事件或错误码变化，请先更新 `contracts/`。
 4. App → NodeAgent → API → DB/Redis 链路变化，请先阅读 `architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md`。
 5. 每个跨仓库任务请在 `development/tasks/` 创建独立任务单。
-6. 不同角色请先阅读对应目录 README，并对照 `development/ROLE_CLOSURE_AUDIT.md`。
+6. 不同角色请先阅读对应目录 README，并对照 `development/ROLE_READINESS_ASSESSMENT.md`。
 7. 跨角色任务必须对照 `development/ROLE_HANDOFF_CHAINS.md` 填写交接证据。
 8. 若发现 TODO、占位实现或未完成项，请先登记到 `development/LiveMask_TODO闭环登记表_v3.7.md`。
 9. 所有文档已按 v3.7 最终结构整理。

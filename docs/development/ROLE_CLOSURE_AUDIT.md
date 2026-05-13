@@ -14,6 +14,7 @@
 - 统一风险台账：`docs/development/RISK_REGISTER.md`
 - 统一自动检查：`scripts/check-docs.sh`
 - 统一角色交接链：`docs/development/ROLE_HANDOFF_CHAINS.md`
+- 统一角色就绪评估：`docs/development/ROLE_READINESS_ASSESSMENT.md`
 
 本轮补齐的缺口：
 
@@ -169,3 +170,4 @@
 - `TASK-DOC-003`：为 archive 文档标注 Active / Superseded / Historical
 - `TASK-DOC-004`：把核心 API、支付状态机和 NodeAgent 配置契约从模板推进到真实条目
 - `TASK-DOC-005`：在真实业务任务中试运行角色交接链，补充样例证据
+- `TASK-DOC-007`：补齐真实 Dashboard / Alert / Runbook 索引

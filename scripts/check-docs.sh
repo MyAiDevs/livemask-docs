@@ -8,6 +8,7 @@ python3 "$ROOT/scripts/check-task-traceability.py"
 python3 "$ROOT/scripts/check-ai-rule-links.py"
 python3 "$ROOT/scripts/check-role-handoff.py"
 python3 "$ROOT/scripts/check-e2e-chain.py"
+python3 "$ROOT/scripts/check-role-readiness.py"
 git -C "$ROOT" diff --check
 
 echo "Documentation checks OK"

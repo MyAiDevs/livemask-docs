@@ -37,11 +37,14 @@
 | Backend 开发者 | [docs/backend/README.md](docs/backend/README.md), [ai-rules/v3.7/04-Multi-Repo-Linkage.md](ai-rules/v3.7/04-Multi-Repo-Linkage.md) |
 | NodeAgent 开发者 | [docs/nodeagent/README.md](docs/nodeagent/README.md), [ai-rules/v3.7/04-Multi-Repo-Linkage.md](ai-rules/v3.7/04-Multi-Repo-Linkage.md) |
 | App 开发者 | [docs/app/README.md](docs/app/README.md), [ai-rules/v3.7/04-Multi-Repo-Linkage.md](ai-rules/v3.7/04-Multi-Repo-Linkage.md) |
+| Database / Redis 开发者 | [docs/data/README.md](docs/data/README.md), [docs/contracts/data-consistency.md](docs/contracts/data-consistency.md) |
 | Admin / Frontend 开发者 | [docs/admin/README.md](docs/admin/README.md), [docs/contracts/README.md](docs/contracts/README.md) |
 | Payment 开发者 | [docs/payment/README.md](docs/payment/README.md), [docs/contracts/state-machines.md](docs/contracts/state-machines.md) |
 | Ops / DevOps | [docs/operations/README.md](docs/operations/README.md), [docs/development/RISK_REGISTER.md](docs/development/RISK_REGISTER.md) |
+| Monitoring / SRE | [docs/monitoring/README.md](docs/monitoring/README.md), [docs/architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md](docs/architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md) |
 | QA | [docs/qa/README.md](docs/qa/README.md), [docs/development/DEFINITION_OF_DONE.md](docs/development/DEFINITION_OF_DONE.md) |
 | Product | [docs/product/README.md](docs/product/README.md), [docs/development/tasks/README.md](docs/development/tasks/README.md) |
+| Support / Business Ops | [docs/support/README.md](docs/support/README.md), [docs/product/README.md](docs/product/README.md) |
 | 使用 AI 辅助开发 | [ai-rules/v3.7/](ai-rules/v3.7/), [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) |
 
 ---
