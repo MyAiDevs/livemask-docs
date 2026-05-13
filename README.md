@@ -22,6 +22,7 @@
 - 配置变更必须先在 `livemask-docs` 中记录影响范围
 - API、配置、事件、错误码、状态机变化必须先更新 [docs/contracts/](docs/contracts/README.md)
 - 跨仓库任务必须在 [docs/development/tasks/](docs/development/tasks/README.md) 建立独立任务单
+- 跨角色任务必须按 [docs/development/ROLE_HANDOFF_CHAINS.md](docs/development/ROLE_HANDOFF_CHAINS.md) 记录交接证据、阻断条件和回流路径
 - 关键代码注释必须包含 `TASK-XXXX`
 - 修改后必须检查其他仓库是否需要同步更新
 - 完成前必须执行闭环验证清单

@@ -19,6 +19,16 @@
 | `livemask-backend` |  |  |  |
 | `livemask-nodeagent` |  |  |  |
 | `livemask-app` |  |  |  |
+| `livemask-admin` |  |  |  |
+
+## Role Handoff
+
+| From | To | Evidence | Status |
+| --- | --- | --- | --- |
+| Product / Owner | Engineering |  |  |
+| Contract Owner | App / NodeAgent / Admin |  |  |
+| Engineering | QA |  |  |
+| QA | Ops / Product |  |  |
 
 ## Contracts
 
@@ -41,6 +51,8 @@
 - 风险：
 - 回滚方式：
 - 监控指标：
+- 阻断条件：
+- 回流路径：
 
 ## Follow-up
 

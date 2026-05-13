@@ -13,6 +13,7 @@
 - 统一完成标准：`docs/development/DEFINITION_OF_DONE.md`
 - 统一风险台账：`docs/development/RISK_REGISTER.md`
 - 统一自动检查：`scripts/check-docs.sh`
+- 统一角色交接链：`docs/development/ROLE_HANDOFF_CHAINS.md`
 
 本轮补齐的缺口：
 
@@ -22,6 +23,7 @@
 - QA 缺少角色入口
 - Product 缺少角色入口
 - Definition of Done 缺少 Admin、Ops、QA、Product 角色标准
+- 跨角色链路缺少交接物、阻断条件和回流路径
 
 ## 2. Backend 视角
 
@@ -166,3 +168,4 @@
 - `TASK-DOC-002`：同步各业务仓库 `.cursorrules` / `.github/copilot-instructions.md`
 - `TASK-DOC-003`：为 archive 文档标注 Active / Superseded / Historical
 - `TASK-DOC-004`：把核心 API、支付状态机和 NodeAgent 配置契约从模板推进到真实条目
+- `TASK-DOC-005`：在真实业务任务中试运行角色交接链，补充样例证据

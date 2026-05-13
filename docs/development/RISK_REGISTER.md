@@ -9,6 +9,8 @@
 | RISK-CONFIG-001 | 配置热更新缺少回滚策略 | 大面积节点异常或客户端解析失败 | 配置 schema 或默认值变化 | 使用 config contract 和配置变更模板 | Backend / NodeAgent Lead | Open | 待创建 |
 | RISK-PAY-001 | 支付状态机与权益发放不一致 | 资金或用户权益异常 | Webhook 重放、乱序、失败补偿 | 状态机契约 + 幂等测试 + 审计 | Backend Lead | Open | 待创建 |
 | RISK-SEC-001 | Secret 或内部配置泄露到客户端 | 安全事故 | 配置下发或日志输出包含 Secret | Security 文档审查 + 配置安全级别 | Security Owner | Open | 待创建 |
+| RISK-HANDOFF-001 | 角色交接缺少证据 | 下游无法验收，上线后才暴露断点 | 任务单没有交接物、阻断条件或回流路径 | 使用 `ROLE_HANDOFF_CHAINS.md` 和 PR Role Handoff 表 | Task Owner | Open | `TASK-DOC-005` |
+| RISK-QA-001 | QA 只验证正向路径 | 失败、回滚、乱序、兼容问题漏测 | 验收标准不可测试或缺少失败路径 | QA 必须对照角色链和 DoD 出具证据 | QA Lead | Open | 待创建 |
 
 ## 风险关闭标准
 
@@ -17,3 +19,4 @@
 - [ ] 有验证证据
 - [ ] 有回滚或缓解方案
 - [ ] 相关文档已更新
+- [ ] 受影响角色已完成交接确认

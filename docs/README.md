@@ -42,7 +42,8 @@
 3. 跨仓库字段、配置、事件或错误码变化，请先更新 `contracts/`。
 4. 每个跨仓库任务请在 `development/tasks/` 创建独立任务单。
 5. 不同角色请先阅读对应目录 README，并对照 `development/ROLE_CLOSURE_AUDIT.md`。
-6. 若发现 TODO、占位实现或未完成项，请先登记到 `development/LiveMask_TODO闭环登记表_v3.7.md`。
-7. 所有文档已按 v3.7 最终结构整理。
+6. 跨角色任务必须对照 `development/ROLE_HANDOFF_CHAINS.md` 填写交接证据。
+7. 若发现 TODO、占位实现或未完成项，请先登记到 `development/LiveMask_TODO闭环登记表_v3.7.md`。
+8. 所有文档已按 v3.7 最终结构整理。
 
 最后更新：2026年
