@@ -22,6 +22,7 @@
 - 配置变更必须先在 `livemask-docs` 中记录影响范围
 - API、配置、事件、错误码、状态机变化必须先更新 [docs/contracts/](docs/contracts/README.md)
 - App Client → NodeAgent → API → Database / Redis 链路变化必须对照 [docs/architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md](docs/architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md)
+- 非 MVP 模块进入开发前必须对照 [docs/architecture/future-chains/README.md](docs/architecture/future-chains/README.md)
 - 跨仓库任务必须在 [docs/development/tasks/](docs/development/tasks/README.md) 建立独立任务单
 - 跨角色任务必须按 [docs/development/ROLE_HANDOFF_CHAINS.md](docs/development/ROLE_HANDOFF_CHAINS.md) 记录交接证据、阻断条件和回流路径
 - 关键代码注释必须包含 `TASK-XXXX`

@@ -10,6 +10,7 @@ python3 "$ROOT/scripts/check-role-handoff.py"
 python3 "$ROOT/scripts/check-e2e-chain.py"
 python3 "$ROOT/scripts/check-role-readiness.py"
 python3 "$ROOT/scripts/check-mvp-readiness.py"
+python3 "$ROOT/scripts/check-future-chains.py"
 git -C "$ROOT" diff --check
 
 echo "Documentation checks OK"

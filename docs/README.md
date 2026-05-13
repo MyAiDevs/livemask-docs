@@ -61,4 +61,8 @@
 - `qa/P0_VALIDATION_MATRIX.md`
 - `operations/RELEASE_RUNBOOK.md`
 
+## 未来模块链路入口
+
+- `architecture/future-chains/README.md`
+
 最后更新：2026年
