@@ -1,0 +1,105 @@
+name: LiveMask TASK
+description: Create a traceable LiveMask task
+title: "TASK-XXXX: "
+labels:
+  - task
+  - needs-triage
+body:
+  - type: input
+    id: task_id
+    attributes:
+      label: TASK ID
+      description: Use the same TASK ID across all affected repositories.
+      placeholder: TASK-P1-05
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - P0
+        - P1
+        - P2
+    validations:
+      required: true
+
+  - type: dropdown
+    id: task_type
+    attributes:
+      label: Task Type
+      options:
+        - API
+        - Config
+        - Payment
+        - App
+        - NodeAgent
+        - Admin
+        - Website
+        - Ops
+        - Docs
+        - Security
+        - QA
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: affected_repos
+    attributes:
+      label: Affected Repositories
+      options:
+        - label: livemask-docs
+        - label: livemask-backend
+        - label: livemask-nodeagent
+        - label: livemask-app
+        - label: livemask-admin
+        - label: livemask-website
+        - label: livemask-ci-cd
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: Include in-scope and out-of-scope items.
+      placeholder: |
+        In scope:
+        - ...
+
+        Out of scope:
+        - ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: contracts
+    attributes:
+      label: Contracts / Docs To Update
+      description: List API, config, event, state machine, DB/Redis, runbook, and QA docs.
+      placeholder: |
+        - docs/contracts/api/...
+        - docs/contracts/config/...
+        - docs/data/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: validation
+    attributes:
+      label: Validation
+      description: Required tests, smoke checks, rollback checks, and evidence.
+      placeholder: |
+        - Unit:
+        - Integration:
+        - E2E:
+        - Rollback:
+    validations:
+      required: true
+
+  - type: textarea
+    id: rollback
+    attributes:
+      label: Rollback
+      description: How this task can be safely rolled back.
+    validations:
+      required: true

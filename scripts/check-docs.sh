@@ -12,6 +12,11 @@ python3 "$ROOT/scripts/check-role-readiness.py"
 python3 "$ROOT/scripts/check-mvp-readiness.py"
 python3 "$ROOT/scripts/check-future-chains.py"
 test -x "$ROOT/scripts/install-repo-ai-rules.sh"
+test -x "$ROOT/scripts/install-github-automation.sh"
+test -f "$ROOT/.github/workflows/docs-check.yml"
+test -f "$ROOT/.github/workflows/dispatch-affected-repos.yml"
+test -f "$ROOT/.github/ISSUE_TEMPLATE/task.yml"
+test -f "$ROOT/.github/CODEOWNERS"
 git -C "$ROOT" diff --check
 
 echo "Documentation checks OK"

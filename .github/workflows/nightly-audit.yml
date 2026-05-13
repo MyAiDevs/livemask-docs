@@ -1,0 +1,14 @@
+name: Nightly Audit
+
+on:
+  schedule:
+    - cron: "0 18 * * *"
+  workflow_dispatch:
+
+jobs:
+  docs-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run docs checks
+        run: bash scripts/check-docs.sh

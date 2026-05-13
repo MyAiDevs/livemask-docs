@@ -1,0 +1,31 @@
+# Default owner. Replace @sammytan with role teams when they exist.
+* @sammytan
+
+# Architecture and delivery control
+/README.md @sammytan
+/docs/architecture/ @sammytan
+/docs/development/ @sammytan
+
+# Contracts
+/docs/contracts/api/ @sammytan
+/docs/contracts/config/ @sammytan
+/docs/contracts/events/ @sammytan
+/docs/contracts/error-codes.md @sammytan
+/docs/contracts/state-machines.md @sammytan
+/docs/contracts/data-consistency.md @sammytan
+
+# Role domains
+/docs/app/ @sammytan
+/docs/backend/ @sammytan
+/docs/nodeagent/ @sammytan
+/docs/admin/ @sammytan
+/docs/payment/ @sammytan
+/docs/security/ @sammytan
+/docs/operations/ @sammytan
+/docs/monitoring/ @sammytan
+/docs/qa/ @sammytan
+/docs/product/ @sammytan
+
+# Automation
+/.github/ @sammytan
+/scripts/ @sammytan

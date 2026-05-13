@@ -1,0 +1,37 @@
+name: Dispatch Affected Repos
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/contracts/**"
+      - "docs/architecture/**"
+      - "docs/development/tasks/**"
+      - "docs/data/**"
+      - "docs/operations/**"
+      - "docs/monitoring/**"
+      - ".github/workflows/dispatch-affected-repos.yml"
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        repo:
+          - livemask-backend
+          - livemask-nodeagent
+          - livemask-app
+          - livemask-admin
+          - livemask-website
+          - livemask-ci-cd
+    steps:
+      - name: Dispatch ${{ matrix.repo }}
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.LIVEMASK_BOT_TOKEN }}
+          repository: sammytan/${{ matrix.repo }}
+          event-type: docs-contract-changed
+          client-payload: '{"source_repo":"livemask-docs","source_ref":"${{ github.sha }}"}'
