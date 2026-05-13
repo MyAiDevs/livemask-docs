@@ -31,6 +31,9 @@ Database / Redis 角色负责 PostgreSQL schema、迁移、索引、约束、审
 ## 5. 必读文档
 
 - `docs/contracts/data-consistency.md`
+- `docs/data/redis-key-registry.md`
+- `docs/data/DB_MIGRATION_PLAN.md`
+- `docs/data/outbox-compensation.md`
 - `docs/architecture/LiveMask_数据库详细设计_v3.6.md`
 - `docs/architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md`
 - `docs/development/ROLE_READINESS_ASSESSMENT.md`

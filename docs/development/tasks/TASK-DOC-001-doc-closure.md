@@ -24,6 +24,7 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - 新增角色交接链路、阻断条件和回流路径
 - 新增 App Client -> NodeAgent -> API -> Database / Redis 端到端假设审计和数据一致性契约
 - 新增角色就绪评估，并补齐 Database / Redis、Monitoring / SRE、Support / Business Ops 入口
+- 新增 MVP 落地计划、真实核心契约、Redis/DB/Outbox 清单、P0 验证矩阵和上线 Runbook
 
 ### Out of Scope
 
@@ -58,6 +59,7 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - [x] 角色交接链路、PR 交接表、任务模板交接表已补齐
 - [x] App/NodeAgent/API/DB/Redis 链路假设、DB/Redis 一致性、幂等与补偿策略已补齐
 - [x] 各角色开工条件、输出证据、阻断条件、回流路径已形成就绪评估表
+- [x] MVP P0/P1 任务已拆分为独立 TASK，真实契约和上线门禁已补齐
 
 ## 6. Follow-up
 

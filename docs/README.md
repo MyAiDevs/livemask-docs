@@ -49,4 +49,16 @@
 8. 若发现 TODO、占位实现或未完成项，请先登记到 `development/LiveMask_TODO闭环登记表_v3.7.md`。
 9. 所有文档已按 v3.7 最终结构整理。
 
+## MVP 落地入口
+
+- `development/MVP_IMPLEMENTATION_PLAN.md`
+- `contracts/api/core-mvp.md`
+- `contracts/config/core-configs.md`
+- `contracts/events/core-events.md`
+- `data/redis-key-registry.md`
+- `data/DB_MIGRATION_PLAN.md`
+- `data/outbox-compensation.md`
+- `qa/P0_VALIDATION_MATRIX.md`
+- `operations/RELEASE_RUNBOOK.md`
+
 最后更新：2026年

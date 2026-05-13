@@ -36,3 +36,22 @@
 - 修改错误码含义视为 breaking change。
 - 删除错误码必须说明替代错误码。
 - 支付、安全、权限错误必须记录审计和告警策略。
+
+## Payment Errors
+
+| Error Code | HTTP | 用户可见 | App 行为 | NodeAgent 行为 | 是否告警 | Owner | TASK |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `PAYMENT_PROVIDER_UNAVAILABLE` | 503 | 是 | 提示稍后重试 | N/A | P1 | Payment | `TASK-P1-01` |
+| `PAYMENT_WEBHOOK_SIGNATURE_INVALID` | 400 | 否 | N/A | N/A | P0 | Payment | `TASK-P1-01` |
+| `PAYMENT_STATUS_CONFLICT` | 409 | 否 | 刷新订单状态 | N/A | P1 | Backend | `TASK-P1-01` |
+| `ENTITLEMENT_GRANT_FAILED` | 500 | 是 | 提示支付处理中，稍后刷新 | N/A | P0 | Backend | `TASK-P1-01` |
+
+## Node / Config Errors
+
+| Error Code | HTTP | 用户可见 | App 行为 | NodeAgent 行为 | 是否告警 | Owner | TASK |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `CONFIG_VERSION_CONFLICT` | 409 | 否 | 重新拉取配置 | 强制刷新配置 | 否 | Backend | `TASK-P0-03` |
+| `CONFIG_HASH_MISMATCH` | 422 | 否 | 回滚 last-known-good | 回滚 last-known-good | P1 | Backend | `TASK-P1-05` |
+| `NODE_REPORT_DUPLICATE` | 200 | 否 | N/A | 停止重试该 report_id | 否 | Backend | `TASK-P3-01` |
+| `NODE_DEGRADED_REPORT_REJECTED` | 400 | 否 | N/A | 修正 payload 后重试 | P1 | NodeAgent | `TASK-P1-05` |
+| `RECOMMENDATION_STALE_STATE` | 503 | 是 | 使用 last-known-good 或稍后重试 | N/A | P1 | Backend | `TASK-P2-05` |

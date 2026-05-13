@@ -27,3 +27,10 @@ Operations / DevOps 负责部署、CI/CD、监控告警、Secret 管理、灾备
 - [ ] 告警和 Dashboard 已同步更新
 - [ ] 灾备或回滚验证证据已记录
 - [ ] 值班和升级路径已明确
+
+## 5. 必读文档
+
+- `docs/operations/RELEASE_RUNBOOK.md`
+- `docs/monitoring/ALERT_DASHBOARD_INDEX.md`
+- `docs/data/DB_MIGRATION_PLAN.md`
+- `docs/data/outbox-compensation.md`

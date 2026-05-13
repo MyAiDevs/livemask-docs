@@ -40,3 +40,14 @@ Draft -> Ready -> In Progress -> Review -> Done
 复制 [TASK-TEMPLATE.md](TASK-TEMPLATE.md) 创建新任务。
 
 当前样例：[TASK-DOC-001-doc-closure.md](TASK-DOC-001-doc-closure.md)。
+
+## MVP P0/P1 任务
+
+- [TASK-P0-03-config-center.md](TASK-P0-03-config-center.md)
+- [TASK-P1-01-usdt-payment.md](TASK-P1-01-usdt-payment.md)
+- [TASK-P1-05-config-hot-reload.md](TASK-P1-05-config-hot-reload.md)
+- [TASK-P2-05-node-recommendation.md](TASK-P2-05-node-recommendation.md)
+- [TASK-P3-01-connection-quality-report.md](TASK-P3-01-connection-quality-report.md)
+- [TASK-P3-02-quick-feedback.md](TASK-P3-02-quick-feedback.md)
+- [TASK-P5-03-monitoring-alerting.md](TASK-P5-03-monitoring-alerting.md)
+- [TASK-P5-04-deploy-runbook.md](TASK-P5-04-deploy-runbook.md)

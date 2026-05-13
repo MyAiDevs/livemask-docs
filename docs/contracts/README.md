@@ -11,6 +11,12 @@
 - [State Machines](state-machines.md)：支付、订阅、节点、申诉等状态机
 - [Data Consistency](data-consistency.md)：PostgreSQL、Redis、App/NodeAgent 本地缓存一致性规则
 
+## 真实 MVP 契约
+
+- [Core MVP API Contracts](api/core-mvp.md)
+- [Core MVP Config Contracts](config/core-configs.md)
+- [Core MVP Event Contracts](events/core-events.md)
+
 ## 2. 变更规则
 
 任何契约变更必须包含：
