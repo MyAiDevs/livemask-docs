@@ -9,6 +9,7 @@
 - [Event Contract](events/README.md)：异步事件、队列消息、Webhook、领域事件契约
 - [Error Codes](error-codes.md)：统一错误码、用户可见错误和重试策略
 - [State Machines](state-machines.md)：支付、订阅、节点、申诉等状态机
+- [Data Consistency](data-consistency.md)：PostgreSQL、Redis、App/NodeAgent 本地缓存一致性规则
 
 ## 2. 变更规则
 

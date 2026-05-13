@@ -22,6 +22,7 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - 新增 contracts、tasks、风险台账和检查脚本
 - 新增多角色闭环审计和缺失角色入口
 - 新增角色交接链路、阻断条件和回流路径
+- 新增 App Client -> NodeAgent -> API -> Database / Redis 端到端假设审计和数据一致性契约
 
 ### Out of Scope
 
@@ -54,6 +55,7 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - [x] TODO 有归属登记表
 - [x] Backend / NodeAgent / App / Admin / Payment / Ops / Security / QA / Product 角色入口已覆盖
 - [x] 角色交接链路、PR 交接表、任务模板交接表已补齐
+- [x] App/NodeAgent/API/DB/Redis 链路假设、DB/Redis 一致性、幂等与补偿策略已补齐
 
 ## 6. Follow-up
 
@@ -61,3 +63,4 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - `TASK-DOC-003`：为 archive 文档标注 Active / Superseded / Historical 状态
 - `TASK-DOC-004`：把核心 API、支付状态机和 NodeAgent 配置契约从模板推进到真实条目
 - `TASK-DOC-005`：在真实业务任务中试运行角色交接链，补充样例证据
+- `TASK-DOC-006`：把 App/NodeAgent/API/DB/Redis 链路字段补入真实 API / Config / Event contract 条目

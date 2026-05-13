@@ -11,6 +11,7 @@
 | RISK-SEC-001 | Secret 或内部配置泄露到客户端 | 安全事故 | 配置下发或日志输出包含 Secret | Security 文档审查 + 配置安全级别 | Security Owner | Open | 待创建 |
 | RISK-HANDOFF-001 | 角色交接缺少证据 | 下游无法验收，上线后才暴露断点 | 任务单没有交接物、阻断条件或回流路径 | 使用 `ROLE_HANDOFF_CHAINS.md` 和 PR Role Handoff 表 | Task Owner | Open | `TASK-DOC-005` |
 | RISK-QA-001 | QA 只验证正向路径 | 失败、回滚、乱序、兼容问题漏测 | 验收标准不可测试或缺少失败路径 | QA 必须对照角色链和 DoD 出具证据 | QA Lead | Open | 待创建 |
+| RISK-E2E-CHAIN-001 | App/NodeAgent/API/DB/Redis 局部成功导致链路不一致 | App 推荐错误、节点状态错误、Admin 大盘延迟或收益重复 | DB 写入与 Redis 写入、Pub/Sub、NodeAgent 补报任一环节失败 | 使用端到端链路假设审计和数据一致性契约 | Backend / NodeAgent Lead | Open | `TASK-DOC-006` |
 
 ## 风险关闭标准
 

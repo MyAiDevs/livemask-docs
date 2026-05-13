@@ -17,6 +17,7 @@
 | Admin 高风险操作变化 | `docs/admin/`、contracts | Backend、Security、Ops、QA、Product | 权限、审计、双人复核、误操作恢复测试 |
 | Secret / 权限变化 | `docs/security/` | Backend、App、NodeAgent、Ops、Admin、QA | 权限、审计、轮换、泄露边界验证 |
 | 监控/告警变化 | `docs/monitoring/` | Backend、NodeAgent、Ops、QA、Product | 告警样例、恢复记录、发布观察指标 |
+| App / NodeAgent / API / DB / Redis 链路变化 | `docs/architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md`、`docs/contracts/data-consistency.md` | App、NodeAgent、Backend、DB、Redis、Ops、QA | 失败假设测试、幂等测试、缓存一致性测试 |
 | 任务新增或范围变化 | `docs/development/tasks/` | 里程碑表、风险台账、角色交接链 | TASK 单、PR 链接、交接证据 |
 
 提交前如果无法定位对应文档，必须在 PR 中说明原因，并创建后续 `TASK-XXXX`。
