@@ -19,6 +19,8 @@
 - **retention/** — 留存预警与 Onboarding 系统
 - **security/** — 威胁情报、Secret 管理
 - **admin/** — 管理后台 Figma 描述与 React 代码示例
+- **qa/** — 测试策略、验收证据、发布质量门禁
+- **product/** — 需求范围、验收标准、灰度与复盘
 - **archive/** — 历史/辅助文档
 
 ## 多仓库开发特别说明
@@ -39,7 +41,8 @@
 2. NodeAgent、App、Backend 开发者请重点阅读对应目录。
 3. 跨仓库字段、配置、事件或错误码变化，请先更新 `contracts/`。
 4. 每个跨仓库任务请在 `development/tasks/` 创建独立任务单。
-5. 若发现 TODO、占位实现或未完成项，请先登记到 `development/LiveMask_TODO闭环登记表_v3.7.md`。
-6. 所有文档已按 v3.7 最终结构整理。
+5. 不同角色请先阅读对应目录 README，并对照 `development/ROLE_CLOSURE_AUDIT.md`。
+6. 若发现 TODO、占位实现或未完成项，请先登记到 `development/LiveMask_TODO闭环登记表_v3.7.md`。
+7. 所有文档已按 v3.7 最终结构整理。
 
 最后更新：2026年

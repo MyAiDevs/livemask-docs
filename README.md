@@ -35,6 +35,11 @@
 | Backend 开发者 | [docs/backend/README.md](docs/backend/README.md), [ai-rules/v3.7/04-Multi-Repo-Linkage.md](ai-rules/v3.7/04-Multi-Repo-Linkage.md) |
 | NodeAgent 开发者 | [docs/nodeagent/README.md](docs/nodeagent/README.md), [ai-rules/v3.7/04-Multi-Repo-Linkage.md](ai-rules/v3.7/04-Multi-Repo-Linkage.md) |
 | App 开发者 | [docs/app/README.md](docs/app/README.md), [ai-rules/v3.7/04-Multi-Repo-Linkage.md](ai-rules/v3.7/04-Multi-Repo-Linkage.md) |
+| Admin / Frontend 开发者 | [docs/admin/README.md](docs/admin/README.md), [docs/contracts/README.md](docs/contracts/README.md) |
+| Payment 开发者 | [docs/payment/README.md](docs/payment/README.md), [docs/contracts/state-machines.md](docs/contracts/state-machines.md) |
+| Ops / DevOps | [docs/operations/README.md](docs/operations/README.md), [docs/development/RISK_REGISTER.md](docs/development/RISK_REGISTER.md) |
+| QA | [docs/qa/README.md](docs/qa/README.md), [docs/development/DEFINITION_OF_DONE.md](docs/development/DEFINITION_OF_DONE.md) |
+| Product | [docs/product/README.md](docs/product/README.md), [docs/development/tasks/README.md](docs/development/tasks/README.md) |
 | 使用 AI 辅助开发 | [ai-rules/v3.7/](ai-rules/v3.7/), [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) |
 
 ---

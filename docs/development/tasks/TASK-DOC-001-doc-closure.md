@@ -20,6 +20,7 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - 补齐架构基线和任务登记入口
 - 新增 TODO 闭环登记
 - 新增 contracts、tasks、风险台账和检查脚本
+- 新增多角色闭环审计和缺失角色入口
 
 ### Out of Scope
 
@@ -50,8 +51,10 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - [x] `git diff --check` 通过
 - [x] README 核心链接有对应文件
 - [x] TODO 有归属登记表
+- [x] Backend / NodeAgent / App / Admin / Payment / Ops / Security / QA / Product 角色入口已覆盖
 
 ## 6. Follow-up
 
 - `TASK-DOC-002`：同步各业务仓库 `.cursorrules` / `.github/copilot-instructions.md`
 - `TASK-DOC-003`：为 archive 文档标注 Active / Superseded / Historical 状态
+- `TASK-DOC-004`：把核心 API、支付状态机和 NodeAgent 配置契约从模板推进到真实条目
