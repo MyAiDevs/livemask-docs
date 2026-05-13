@@ -7,6 +7,7 @@
 ## 目录结构
 
 - **architecture/** — 系统架构、数据库设计、技术架构
+- **contracts/** — API、配置、事件、错误码、状态机契约
 - **development/** — 开发规范、任务清单、测试策略、AI开发规则
 - **nodeagent/** — NodeAgent 架构、代码示例、一键安装脚本
 - **app/** — 多平台客户端开发与安全规范
@@ -36,6 +37,9 @@
 
 1. 优先阅读 `architecture/` 和 `development/` 目录。
 2. NodeAgent、App、Backend 开发者请重点阅读对应目录。
-3. 所有文档已按 v3.7 最终结构整理。
+3. 跨仓库字段、配置、事件或错误码变化，请先更新 `contracts/`。
+4. 每个跨仓库任务请在 `development/tasks/` 创建独立任务单。
+5. 若发现 TODO、占位实现或未完成项，请先登记到 `development/LiveMask_TODO闭环登记表_v3.7.md`。
+6. 所有文档已按 v3.7 最终结构整理。
 
 最后更新：2026年

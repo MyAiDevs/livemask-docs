@@ -1,0 +1,33 @@
+# LiveMask Contracts
+
+> 本目录是跨仓库协作的契约层。任何 API、配置、事件、错误码、状态机变化，都必须先在这里记录，再进入各仓库实现。
+
+## 1. 契约类型
+
+- [API Contract](api/README.md)：Backend 对 App、NodeAgent、Admin 暴露的 HTTP/gRPC/WebSocket 契约
+- [Config Contract](config/README.md)：配置热更新、FeatureFlag、NodeAgent 配置和客户端配置契约
+- [Event Contract](events/README.md)：异步事件、队列消息、Webhook、领域事件契约
+- [Error Codes](error-codes.md)：统一错误码、用户可见错误和重试策略
+- [State Machines](state-machines.md)：支付、订阅、节点、申诉等状态机
+
+## 2. 变更规则
+
+任何契约变更必须包含：
+
+- `TASK-XXXX`
+- Owner
+- 变更动机
+- 兼容策略
+- 影响仓库
+- 验证方式
+- 回滚策略
+
+## 3. 契约优先级
+
+当代码实现与本目录不一致时，必须先判断：
+
+1. 代码是否误实现，应该修正代码。
+2. 契约是否过期，应该先更新契约并说明原因。
+3. 是否存在跨仓库未同步，应该登记到任务清单。
+
+禁止在没有契约更新的情况下修改跨仓库字段、状态、错误码或事件结构。
