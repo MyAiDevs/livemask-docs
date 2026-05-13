@@ -11,6 +11,7 @@ python3 "$ROOT/scripts/check-e2e-chain.py"
 python3 "$ROOT/scripts/check-role-readiness.py"
 python3 "$ROOT/scripts/check-mvp-readiness.py"
 python3 "$ROOT/scripts/check-future-chains.py"
+test -x "$ROOT/scripts/install-repo-ai-rules.sh"
 git -C "$ROOT" diff --check
 
 echo "Documentation checks OK"
