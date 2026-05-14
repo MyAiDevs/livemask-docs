@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: [self-hosted, livemask, docker]
+    runs-on: [self-hosted, linux, livemask, backend, docker]
     steps:
       - uses: actions/checkout@v4
       - name: Test

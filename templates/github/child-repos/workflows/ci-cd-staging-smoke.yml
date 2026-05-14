@@ -9,7 +9,7 @@ on:
 
 jobs:
   smoke:
-    runs-on: [self-hosted, livemask, staging, docker]
+    runs-on: [self-hosted, linux, livemask, ci-cd, staging, docker]
     steps:
       - uses: actions/checkout@v4
       - name: Start staging
