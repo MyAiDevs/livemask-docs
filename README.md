@@ -86,14 +86,14 @@ livemask-docs/
 ## Getting Started
 
 ```bash
-git submodule add git@github.com:sammytan/livemask-docs.git docs
+git submodule add git@github.com:MyAiDevs/livemask-docs.git docs
 git submodule update --init --recursive
 ```
 
 如果当前项目不能使用 SSH，可改用 HTTPS：
 
 ```bash
-git submodule add https://github.com/sammytan/livemask-docs.git docs
+git submodule add https://github.com/MyAiDevs/livemask-docs.git docs
 ```
 
 ---

@@ -39,7 +39,7 @@ Each window should only focus on **one repository** at a time. The AI rules in e
 
 ```bash
 # Initialize submodule in any repo
-git submodule add https://github.com/sammytan/livemask-docs.git docs
+git submodule add https://github.com/MyAiDevs/livemask-docs.git docs
 git submodule update --init --recursive
 
 # Sync latest AI rules

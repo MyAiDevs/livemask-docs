@@ -349,6 +349,40 @@ notify-lark:
 
 Use `if: always()` so failure and cancellation still generate a report.
 
+### 9.4 Scaffold-Aware CI
+
+The child repositories may start as skeleton repositories before real Go,
+Node.js, Swift, or web project files are committed. CI should not fail just
+because a repository is still a scaffold. It should fail only after the expected
+project files exist and the real build or test command fails.
+
+Backend and NodeAgent example:
+
+```yaml
+- name: Test
+  run: |
+    if [[ ! -f go.mod ]]; then
+      echo "go.mod not found; scaffold repository, skip Go tests."
+      exit 0
+    fi
+    go test ./...
+```
+
+Frontend example:
+
+```yaml
+- name: Install
+  run: |
+    if [[ ! -f package.json ]]; then
+      echo "package.json not found; scaffold repository, skip frontend build."
+      exit 0
+    fi
+    npm ci
+```
+
+This prevents false negatives during repository bootstrapping while preserving a
+real gate once implementation begins.
+
 ## 10. Lark Reporting
 
 CI/CD notifications include:
@@ -523,7 +557,17 @@ Check:
 The notification script intentionally skips sending if `LARK_BOT_WEBHOOK` is
 missing, so missing secrets do not fail CI.
 
-### 13.5 Push rejected with fetch first
+### 13.5 Lark signed bot rejects the message
+
+Check:
+
+1. `LARK_BOT_SECRET` is the bot signing secret, not the webhook URL.
+2. The notification script generates `timestamp` and `sign`.
+3. The signing algorithm uses HMAC-SHA256 with the string
+   `<timestamp>\n<secret>` as the key and an empty message.
+4. The server clock is reasonably accurate.
+
+### 13.6 Push rejected with fetch first
 
 Cause:
 
@@ -538,6 +582,12 @@ git push origin main
 ```
 
 Do not force push unless the project owner explicitly approves it.
+
+### 13.7 Scaffold repository fails CI
+
+If a repository has no `go.mod` or `package.json`, the scaffold-aware CI should
+print a skip message and pass. If it fails before real project files exist,
+update the workflow from the `livemask-docs` template.
 
 ## 14. Scaling Rules
 

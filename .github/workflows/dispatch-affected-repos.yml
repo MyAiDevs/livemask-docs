@@ -14,6 +14,10 @@ on:
       - ".github/workflows/dispatch-affected-repos.yml"
   workflow_dispatch:
 
+permissions:
+  actions: read
+  contents: read
+
 jobs:
   dispatch:
     runs-on: ubuntu-latest
