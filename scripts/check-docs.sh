@@ -18,6 +18,10 @@ test -f "$ROOT/.github/workflows/dispatch-affected-repos.yml"
 test -f "$ROOT/.github/ISSUE_TEMPLATE/task.yml"
 test -f "$ROOT/.github/CODEOWNERS"
 test -f "$ROOT/docs/operations/GITHUB_ACTIONS_RUNNER_ARCHITECTURE.md"
+test -f "$ROOT/design/README.md"
+test -f "$ROOT/design/app/atoms/v1/handoff.md"
+test -f "$ROOT/design/admin/atoms/v1/handoff.md"
+test -f "$ROOT/design/website/atoms/v1/handoff.md"
 git -C "$ROOT" diff --check
 
 echo "Documentation checks OK"
