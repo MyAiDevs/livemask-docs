@@ -17,6 +17,7 @@ test -f "$ROOT/.github/workflows/docs-check.yml"
 test -f "$ROOT/.github/workflows/dispatch-affected-repos.yml"
 test -f "$ROOT/.github/ISSUE_TEMPLATE/task.yml"
 test -f "$ROOT/.github/CODEOWNERS"
+test -f "$ROOT/docs/operations/GITHUB_ACTIONS_RUNNER_ARCHITECTURE.md"
 git -C "$ROOT" diff --check
 
 echo "Documentation checks OK"

@@ -30,6 +30,9 @@ Operations / DevOps 负责部署、CI/CD、监控告警、Secret 管理、灾备
 
 ## 5. 必读文档
 
+- `docs/operations/GITHUB_ACTIONS_RUNNER_ARCHITECTURE.md`
+- `docs/operations/GITHUB_AUTOMATION_SETUP.md`
+- `docs/operations/LARK_REPORTING.md`
 - `docs/operations/RELEASE_RUNBOOK.md`
 - `docs/monitoring/ALERT_DASHBOARD_INDEX.md`
 - `docs/data/DB_MIGRATION_PLAN.md`

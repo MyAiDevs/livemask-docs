@@ -1,6 +1,9 @@
 # GitHub Automation Setup
 
 > This runbook explains how LiveMask uses GitHub Projects, Issues, Actions, CODEOWNERS, repository_dispatch, and organization-level self-hosted runners.
+>
+> For the design rationale, examples, troubleshooting, and scaling rules, read
+> `docs/operations/GITHUB_ACTIONS_RUNNER_ARCHITECTURE.md`.
 
 ## 1. Repository Roles
 
