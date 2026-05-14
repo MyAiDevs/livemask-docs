@@ -25,3 +25,9 @@
 - [ ] 失败、重试、取消和恢复路径完整
 - [ ] Backend / NodeAgent 影响已检查
 - [ ] 验证结果写入 PR 或任务记录
+
+## 5. 设计输入
+
+- `docs/app/LIVEMASK_APP_DESIGN_BRIEF_FOR_ATOMS.md`
+
+该文档用于生成 App 原型设计，包含 Atoms 可直接使用的 Prompt、MVP 屏幕清单、状态设计、失败恢复路径和开发交付组件要求。
