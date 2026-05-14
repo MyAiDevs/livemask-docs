@@ -1,0 +1,43 @@
+name: Lark Project Report
+
+on:
+  workflow_dispatch:
+    inputs:
+      title:
+        description: Report title
+        required: true
+        default: LiveMask Multi-Repo Development Report
+      summary:
+        description: Overall summary
+        required: true
+      tasks:
+        description: Task progress, one item per line
+        required: false
+        default: ""
+      risks:
+        description: Risks or blockers
+        required: false
+        default: ""
+      next_steps:
+        description: Next steps
+        required: false
+        default: ""
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Send project report to Lark
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LARK_BOT_WEBHOOK: ${{ secrets.LARK_BOT_WEBHOOK }}
+          LARK_BOT_SECRET: ${{ secrets.LARK_BOT_SECRET }}
+          REPORT_KIND: project-report
+          REPORT_TITLE: ${{ inputs.title }}
+          REPORT_SUMMARY: ${{ inputs.summary }}
+          REPORT_TASKS: ${{ inputs.tasks }}
+          REPORT_RISKS: ${{ inputs.risks }}
+          REPORT_NEXT_STEPS: ${{ inputs.next_steps }}
+          WORKFLOW_RESULT: success
+        run: bash templates/github/child-repos/scripts/lark-notify.sh "$WORKFLOW_RESULT"
