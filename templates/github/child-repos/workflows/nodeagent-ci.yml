@@ -8,7 +8,9 @@ on:
 
 jobs:
   test:
-    runs-on: [self-hosted, linux, livemask, nodeagent, docker]
+    runs-on:
+      group: livemask-ci
+      labels: [self-hosted, linux, livemask, docker, ci]
     steps:
       - uses: actions/checkout@v4
       - name: Test
