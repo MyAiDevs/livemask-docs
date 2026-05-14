@@ -32,6 +32,19 @@ jobs:
         uses: peter-evans/repository-dispatch@v3
         with:
           token: ${{ secrets.LIVEMASK_BOT_TOKEN }}
-          repository: sammytan/${{ matrix.repo }}
+          repository: MyAiDevs/${{ matrix.repo }}
           event-type: docs-contract-changed
           client-payload: '{"source_repo":"livemask-docs","source_ref":"${{ github.sha }}"}'
+
+  notify-lark:
+    needs: [dispatch]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Notify Lark
+        env:
+          LARK_BOT_WEBHOOK: ${{ secrets.LARK_BOT_WEBHOOK }}
+          LARK_BOT_SECRET: ${{ secrets.LARK_BOT_SECRET }}
+          WORKFLOW_RESULT: ${{ needs.dispatch.result }}
+        run: bash templates/github/child-repos/scripts/lark-notify.sh "$WORKFLOW_RESULT"

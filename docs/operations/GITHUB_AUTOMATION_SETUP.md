@@ -16,15 +16,23 @@
 
 ## 2. Required GitHub Secrets
 
-In `livemask-docs`:
+In `MyAiDevs -> Settings -> Secrets and variables -> Actions`, configure these
+organization secrets and allow access from all LiveMask repos:
 
 - `LIVEMASK_BOT_TOKEN`: fine-grained token that can dispatch workflows in all child repos.
+- `LARK_BOT_WEBHOOK`: Lark custom bot webhook URL.
+- `LARK_BOT_SECRET`: Lark custom bot signing secret.
 
 Recommended permissions:
 
 - Contents: read
 - Actions: read/write
 - Metadata: read
+
+Do not commit webhook URLs or signing secrets into any repository. All CI/CD
+workflows call `.github/scripts/lark-notify.sh` or the docs template copy of
+that script. If Lark secrets are missing, the notification step is skipped and
+the workflow result is not changed.
 
 ## 3. GitHub Project
 

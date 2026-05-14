@@ -50,6 +50,8 @@ copy_file() {
 
 copy_file "$TEMPLATE_ROOT/pull_request_template.md" "$TARGET/.github/pull_request_template.md"
 copy_file "$TEMPLATE_ROOT/CODEOWNERS" "$TARGET/.github/CODEOWNERS"
+copy_file "$TEMPLATE_ROOT/scripts/lark-notify.sh" "$TARGET/.github/scripts/lark-notify.sh"
+chmod +x "$TARGET/.github/scripts/lark-notify.sh"
 
 case "$KIND" in
   backend)
