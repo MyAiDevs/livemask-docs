@@ -27,3 +27,9 @@
 - [ ] 回滚策略有说明
 - [ ] App / NodeAgent 影响已检查
 - [ ] 验证结果写入 PR 或任务记录
+
+## 5. 实现输入
+
+- `docs/backend/LIVEMASK_BACKEND_IMPLEMENTATION_BRIEF.md`
+
+该文档用于后端 AI 辅助开发，包含 MVP 模块边界、API / DB / Redis / 状态机 / 幂等 / 错误模型 / 测试矩阵和可直接使用的 AI 实现 Prompt。

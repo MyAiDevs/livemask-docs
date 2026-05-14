@@ -27,3 +27,9 @@
 - [ ] 权限矩阵和审计字段已说明
 - [ ] 运营人员操作路径和异常处理路径完整
 - [ ] 验证截图、接口响应或手工验证记录写入任务单
+
+## 5. 前端设计输入
+
+- `docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md`
+
+该文档用于 Admin Console 与 Website 的前端设计输入，包含 Atoms 可直接使用的 Prompt、页面结构、组件要求、状态设计和验收清单。
