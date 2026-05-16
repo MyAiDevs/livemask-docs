@@ -13,7 +13,7 @@ import urllib.parse
 import urllib.request
 
 
-TASK_RE = re.compile(r"TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*")
+TASK_RE = re.compile(r"TASK-[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*")
 VALID_RESULTS = {"completed", "partial", "blocked"}
 DOCS_REPO = "livemask-docs"
 REPO_ALLOWLIST = {
