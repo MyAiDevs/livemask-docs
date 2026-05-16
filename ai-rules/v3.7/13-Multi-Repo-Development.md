@@ -23,10 +23,13 @@
 每个窗口的规则入口至少包含：
 
 ```markdown
-@docs/ai-rules/v3.7/00-Core-Principles.md
-@docs/ai-rules/v3.7/04-Multi-Repo-Linkage.md
-@docs/ai-rules/v3.7/13-Multi-Repo-Development.md
+@../livemask-docs/ai-rules/v3.7/00-Core-Principles.md
+@../livemask-docs/ai-rules/v3.7/04-Multi-Repo-Linkage.md
+@../livemask-docs/ai-rules/v3.7/13-Multi-Repo-Development.md
 ```
+
+`livemask-docs` 仓库自身可以使用仓库内相对路径，例如
+`@ai-rules/v3.7/00-Core-Principles.md`。不要在规则中写本机绝对路径。
 
 ## 3. 标准流程
 
