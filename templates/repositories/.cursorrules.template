@@ -4,6 +4,7 @@ You are working on the LiveMask project.
 
 **MANDATORY**: Before writing any code, read:
 - @../livemask-docs/ai-rules/v3.7/00-Core-Principles.md
+- @../livemask-docs/ai-rules/v3.7/13-Multi-Repo-Development.md
 - @../livemask-docs/ai-rules/v3.7/02-Closed-Loop-Validation.md
 - @../livemask-docs/ai-rules/v3.7/16-Task-Completion-Report.md
 - The current task from @../livemask-docs/docs/development/tasks/
@@ -24,6 +25,29 @@ Load additional modules based on the repository you are in:
 @../livemask-docs/ai-rules/v3.7/06-Client-App-Specific-Rules.md
 
 Always maintain the four-layer closed loop and TASK traceability.
+
+## Mandatory Task / Repository Match Gate
+
+Before writing any file, confirm the current repository matches the current
+TASK:
+
+1. Run or infer `basename "$PWD"`.
+2. Open the current `TASK-XXXX` file in `../livemask-docs/docs/development/tasks/`.
+3. Confirm this repository is listed as the primary repository, an affected
+   repository, an explicit Cursor handoff window, or an unlocked repo for this
+   task.
+4. If it does not match, stop and report:
+
+```text
+BLOCKED: current repository does not match TASK scope.
+Current repo: <repo>
+Task: <TASK-ID>
+Expected repos: <list from TASK>
+No files changed.
+```
+
+Reading contracts from another repo does not authorize writing that repo's
+runtime code here.
 
 ## Branch, GitHub, and Sync Rules
 

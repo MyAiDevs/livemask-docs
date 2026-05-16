@@ -8,6 +8,19 @@
 @docs/operations/BRANCH_ENVIRONMENT_RELEASE_MODEL.md
 @docs/operations/AI_TASK_SYNC_AUTOMATION.md
 
+## Mandatory Task / Repository Match Gate
+Before writing any file, confirm the current TASK explicitly includes
+`livemask-docs` as primary/affected repository or this docs window is named in
+the Cursor handoff. If it does not match, stop and report:
+
+```text
+BLOCKED: current repository does not match TASK scope.
+Current repo: livemask-docs
+Task: <TASK-ID>
+Expected repos: <list from TASK>
+No files changed.
+```
+
 ## Branch, GitHub, and Sync Rules
 - You may use `gh` commands to operate GitHub API, Issues, Actions, `workflow_dispatch`, and `repository_dispatch`.
 - All development must start from `dev`:
