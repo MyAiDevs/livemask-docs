@@ -1,13 +1,24 @@
 # LiveMask App Design Brief for Atoms
 
-> This document is a design prompt and product brief for generating the first
-> LiveMask App prototype in Atoms. It focuses on product experience, visual
+> This document is a design prompt and product brief for generating LiveMask
+> client prototypes in Atoms. It covers mobile clients and desktop clients
+> including macOS, Windows, and Linux. It focuses on product experience, visual
 > direction, screen structure, interaction states, and development handoff
 > requirements.
 
 ## 1. Design Goal
 
-Design a polished mobile VPN app named **LiveMask**.
+Design polished cross-platform VPN clients named **LiveMask**.
+
+Primary targets:
+
+| Platform | Form factor | Design output |
+| --- | --- | --- |
+| iOS | Mobile | MVP mobile client |
+| Android | Mobile | MVP mobile client |
+| macOS | Desktop | Windowed app + menu bar status |
+| Windows | Desktop | Windowed app + system tray status |
+| Linux | Desktop | Windowed app + tray/status indicator where supported |
 
 LiveMask should feel:
 
@@ -90,7 +101,7 @@ serious modern network utility with a premium consumer app finish.
 
 ### 5.1 Overall Style
 
-Use a clean, modern mobile app style:
+Use a clean, modern cross-platform client style:
 
 - light-first interface with optional dark mode concept
 - high contrast text
@@ -98,6 +109,9 @@ Use a clean, modern mobile app style:
 - 8px card radius maximum unless required by platform convention
 - clear hierarchy for primary status, secondary metrics, and actions
 - restrained animation only for connection transitions
+- mobile screens should feel native to phones
+- desktop screens should feel like real desktop utilities, not stretched phone
+  screens
 
 The design should feel closer to:
 
@@ -157,6 +171,8 @@ Do not use skulls, masks, hacker symbols, or aggressive threat imagery.
 
 ## 6. App Navigation
 
+### 6.1 Mobile Navigation
+
 Use bottom navigation with 4 tabs:
 
 | Tab | Purpose |
@@ -172,6 +188,47 @@ Optional MVP shortcut:
 - Payments can live inside Plan first.
 - Points / rewards should be hidden or shown as a small future-ready section,
   not a primary tab.
+
+### 6.2 Desktop Navigation
+
+Use a left sidebar or compact split-view navigation instead of mobile bottom
+tabs.
+
+Recommended desktop sections:
+
+| Section | Purpose |
+| --- | --- |
+| Connect | Primary VPN connection state and selected node |
+| Nodes | Region, node, latency, protocol, favorites |
+| Plan | Subscription, entitlement, payment status |
+| Diagnostics | Feedback, reports, error history |
+| Settings | Account, security, app preferences, advanced network settings |
+
+Desktop status entry:
+
+| Platform | Required status surface |
+| --- | --- |
+| macOS | Menu bar item with connected/disconnected/degraded status |
+| Windows | System tray item with connected/disconnected/degraded status |
+| Linux | Tray/status indicator where supported, with in-app fallback |
+
+Desktop tray/menu actions:
+
+```text
+Connect / Disconnect
+Current node
+Switch recent node
+Open LiveMask
+Send diagnostic report
+Quit
+```
+
+Rules:
+
+- Tray/menu actions must never hide dangerous or unclear state.
+- If connection failed, tray/menu should offer Open LiveMask and Retry, not a
+  silent reconnect loop.
+- Full node selection stays in the main window, not only in the tray/menu.
 
 ## 7. Required Screens
 
@@ -410,6 +467,98 @@ App settings:
 - threat warning toggle
 - diagnostic sharing toggle
 
+### 7.9 Desktop Main Window
+
+Purpose:
+
+- provide the same core LiveMask client functions in a desktop-appropriate
+  layout
+
+Required layout:
+
+```text
+Sidebar:
+  Connect
+  Nodes
+  Plan
+  Diagnostics
+  Settings
+
+Main area:
+  Current connection state
+  Selected node
+  Primary action
+  Metrics
+  Recovery actions
+```
+
+Window requirements:
+
+- minimum usable width: 960px
+- minimum usable height: 640px
+- must remain usable at 1280x720
+- support compact window mode around 420px width for quick connect
+- do not use mobile bottom tabs on desktop
+- do not stretch mobile cards into empty wide panels
+
+Desktop-specific states:
+
+| State | UI requirement |
+| --- | --- |
+| System permission needed | Explain VPN/network permission and next action |
+| Helper/daemon unavailable | Explain service repair/restart action |
+| Auto-start disabled | Show optional enable action |
+| Update available | Show release note and update action |
+| Tray unavailable | Show in-app status fallback |
+
+### 7.10 Desktop Platform Screens
+
+#### macOS
+
+Required:
+
+- menu bar status item
+- Network Extension permission explanation
+- keychain credential storage explanation
+- launch at login setting
+- quit vs disconnect copy
+
+Design notes:
+
+- Follow macOS window and sidebar conventions.
+- Use native-feeling toolbar density.
+- Do not make the window look like a stretched phone screen.
+
+#### Windows
+
+Required:
+
+- system tray status item
+- VPN adapter / service permission explanation
+- Windows notification state
+- launch on startup setting
+- repair service action when helper is unavailable
+
+Design notes:
+
+- Keep controls readable at common laptop resolutions.
+- Avoid tiny tray-only controls for critical recovery.
+
+#### Linux
+
+Required:
+
+- tray/status indicator where desktop environment supports it
+- fallback in-app connection status when tray is unavailable
+- permission/service explanation for NetworkManager/systemd-based setups where
+  applicable
+- log export entry for diagnostics
+
+Design notes:
+
+- Linux UI must avoid assumptions about one desktop shell.
+- Do not depend on tray availability for primary actions.
+
 ## 8. Critical Interaction Flows
 
 ### 8.1 First Successful Connection
@@ -478,6 +627,36 @@ Design requirement:
 - Show entitlement change after payment.
 - Payment pending should not look like failure.
 
+### 8.5 Desktop Quick Connect
+
+```text
+Open menu bar / tray
+-> see current state
+-> connect or disconnect
+-> notification confirms result
+-> main window available for details
+```
+
+Design requirement:
+
+- Quick connect should be fast, but failure recovery should open the main app.
+- Menu/tray copy must distinguish Disconnect from Quit.
+
+### 8.6 Desktop Permission Recovery
+
+```text
+Connect
+-> permission/helper missing
+-> explain required system action
+-> open system settings or repair flow
+-> retry connection
+```
+
+Design requirement:
+
+- Be explicit about platform permission without alarming the user.
+- Do not bury repair actions in advanced settings only.
+
 ## 9. Screen Copy Guidelines
 
 Tone:
@@ -509,18 +688,35 @@ Avoid:
 Copy this prompt into Atoms as the main design generation request:
 
 ```text
-Design a polished mobile app prototype for "LiveMask", a premium privacy VPN and secure network access app.
+Design polished cross-platform client app prototypes for "LiveMask", a premium privacy VPN and secure network access app. Include mobile screens and desktop screens for macOS, Windows, and Linux.
 
-The app should feel secure, calm, fast, and trustworthy. Avoid hacker, cyberpunk, gaming VPN, crypto, or neon-dark aesthetics. Use a modern light-first mobile UI with optional dark mode direction, strong typography, clear hierarchy, restrained motion, and familiar icons such as shield, power, globe, server, gauge, credit card, settings, and message.
+The app should feel secure, calm, fast, and trustworthy. Avoid hacker, cyberpunk, gaming VPN, crypto, or neon-dark aesthetics. Use a modern light-first UI with optional dark mode direction, strong typography, clear hierarchy, restrained motion, and familiar icons such as shield, power, globe, server, gauge, credit card, settings, and message.
 
 Primary product goal:
-Users should be able to open the app, understand connection status in one second, connect or retry quickly, switch nodes, understand their subscription entitlement, and send diagnostics when connection fails.
+Users should be able to open the client, understand connection status in one second, connect or retry quickly, switch nodes, understand their subscription entitlement, and send diagnostics when connection fails.
 
-Required bottom navigation:
+Required mobile bottom navigation:
 1. Home
 2. Nodes
 3. Plan
 4. Profile
+
+Required desktop navigation:
+1. Connect
+2. Nodes
+3. Plan
+4. Diagnostics
+5. Settings
+
+Desktop requirements:
+- macOS windowed app with menu bar status item.
+- Windows windowed app with system tray status item.
+- Linux windowed app with tray/status indicator where supported and an in-app fallback when unsupported.
+- Desktop main window uses a sidebar or split-view layout, not mobile bottom tabs.
+- Desktop quick actions: Connect / Disconnect, current node, recent node switch, Open LiveMask, Send diagnostic report, Quit.
+- Show platform states: permission needed, helper/daemon unavailable, auto-start disabled, update available, tray unavailable.
+- Distinguish Disconnect from Quit.
+- Keep full node selection and recovery actions in the main window.
 
 Required screens:
 1. Splash / launch with config check
@@ -531,6 +727,10 @@ Required screens:
 6. Plan / subscription
 7. Diagnostics / feedback
 8. Profile / settings
+9. Desktop main window
+10. macOS menu bar flow
+11. Windows system tray flow
+12. Linux tray/status fallback flow
 
 Home screen requirements:
 - LiveMask logo and plan badge
@@ -578,6 +778,14 @@ Profile screen requirements:
 - Logout
 - Include certificate pinning status, device trust status, clear cached config, theme, language, auto-connect, threat warning toggle
 
+Desktop screen requirements:
+- Main window minimum target: usable at 960x640 and 1280x720.
+- Compact desktop mode around 420px width for quick connect.
+- Sidebar navigation.
+- Connection status, selected node, primary action, latency, protocol, session duration, config version.
+- Permission/help panel for macOS Network Extension, Windows service/adapter, and Linux NetworkManager/systemd-style setups.
+- Menu bar/tray status with connected, disconnected, degraded, failed states.
+
 Visual style:
 - Premium network utility + consumer fintech clarity
 - Primary color: deep teal / cyan-green
@@ -587,7 +795,7 @@ Visual style:
 - No meaningless charts, packet animations, skulls, masks, or hacker symbols
 - Do not show visited domains, destination IPs, browsing categories, or traffic content
 
-Output should include a consistent design system, reusable components, and high-fidelity mobile screens ready for developer handoff.
+Output should include a consistent design system, reusable components, high-fidelity mobile screens, and high-fidelity desktop screens for macOS, Windows, and Linux ready for developer handoff.
 ```
 
 ## 11. Follow-Up Atoms Prompts
@@ -641,6 +849,10 @@ The design must produce components that map cleanly to implementation:
 | `DiagnosticForm` | empty, submitting, submitted, failed |
 | `ErrorBanner` | info, warning, danger |
 | `SettingRow` | default, toggle, destructive |
+| `DesktopSidebar` | default, selected, collapsed |
+| `TrayStatusMenu` | disconnected, connecting, connected, degraded, failed |
+| `PermissionPanel` | macOS, Windows, Linux, resolved, failed |
+| `DesktopCompactConnect` | disconnected, connecting, connected, failed |
 
 Each component should have:
 
@@ -649,6 +861,17 @@ Each component should have:
 - disabled state
 - error state where applicable
 - mobile-safe layout
+- desktop-safe layout where applicable
+
+Desktop handoff must include:
+
+- default window layout
+- compact window layout
+- tray/menu bar states
+- permission recovery states
+- helper/service unavailable state
+- update available state
+- platform-specific copy for macOS, Windows, and Linux
 
 ## 13. Acceptance Checklist
 
@@ -661,6 +884,10 @@ Each component should have:
 - [ ] No user browsing history, domains, destination IPs, or traffic content are shown.
 - [ ] Visual direction avoids hacker/cyberpunk/neon stereotypes.
 - [ ] Bottom navigation supports MVP without overexposing future modules.
+- [ ] Desktop sidebar navigation supports the same MVP sections.
+- [ ] macOS menu bar, Windows tray, and Linux tray/fallback states are designed.
+- [ ] Desktop permission/helper recovery states are designed.
+- [ ] Desktop design does not look like a stretched mobile screen.
 - [ ] Components are reusable for Flutter implementation.
 - [ ] Design can support future dark mode.
 
