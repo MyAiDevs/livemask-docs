@@ -28,7 +28,8 @@ Important App boundary:
 - On Apple Silicon development machines, the first local target is the native
   macOS Flutter client through `livemask-app/scripts/local-app.sh`.
 - App platform targets are selected by parameter: `macos`, `ios`, `android`,
-  `linux`, `windows`, and `web`. Queue builds use
+  `linux`, `windows`, and `web`. Single-target builds use
+  `bash scripts/local-app.sh build --target macos`. Queue builds use
   `bash scripts/local-app.sh build --targets macos,ios` or `--targets all`.
 - Xcode license acceptance is a local machine prerequisite and requires the
   developer's macOS sudo password.

@@ -187,9 +187,18 @@ bash scripts/local-app.sh logs --target macos
 Build multiple App targets as a queue:
 
 ```bash
+bash scripts/local-app.sh build --target macos
+bash scripts/local-app.sh build --target ios
+bash scripts/local-app.sh build --target android
+bash scripts/local-app.sh build --target linux
+bash scripts/local-app.sh build --target windows
+bash scripts/local-app.sh build --target web
 bash scripts/local-app.sh build --targets macos,ios
 bash scripts/local-app.sh build --targets all
 ```
+
+Use single-target builds when CPU/memory is limited. Use `--targets` only when
+you intentionally want the script to run a queue.
 
 When running on a specific simulator or device:
 
