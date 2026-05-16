@@ -111,3 +111,6 @@ only validate and notify. It must still be triggered only by release events.
 | 2026-05-17 | Created remote `dev` branches for all seven LiveMask repos | `livemask-*` branches pushed to `origin/dev` |
 | 2026-05-17 | Reclassified `task-unlocked` as development coordination, not deployment | this runbook + AI rules |
 | 2026-05-17 | Defined `dev -> main -> release` promotion model | this runbook |
+| 2026-05-17 | Updated child repo workflows to test `dev` and dispatch `staging-promote` / `production-release` | `livemask-backend@7c35ad8`, `livemask-nodeagent@c7c8671`, `livemask-app@be12f24`, `livemask-admin@6318e29`, `livemask-website@30273bc` |
+| 2026-05-17 | Split CI/CD staging smoke from production release gate | `livemask-ci-cd@1eae151` |
+| 2026-05-17 | Updated docs, AI rules, and branch bootstrap script | `livemask-docs@cbc3869`, `livemask-docs@8673a8f` |
