@@ -11,6 +11,7 @@ import urllib.parse
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LINK_RE = re.compile(r"\[[^\]]+\]\(([^)]+)\)")
+IGNORED_DIRS = {".git", ".local-dev", "__pycache__"}
 
 
 def is_external(url: str) -> bool:
@@ -20,6 +21,8 @@ def is_external(url: str) -> bool:
 def main() -> int:
     missing: list[tuple[pathlib.Path, str]] = []
     for path in ROOT.rglob("*.md"):
+        if any(part in IGNORED_DIRS for part in path.parts):
+            continue
         text = path.read_text(encoding="utf-8")
         for match in LINK_RE.finditer(text):
             url = match.group(1).split("#", 1)[0].strip()
