@@ -1,6 +1,6 @@
 # TASK-INFRA-001 - MVP Health API 与 CI/CD Smoke 闭环验证
 
-- 状态：Draft
+- 状态：Done
 - Owner：Backend Lead / DevOps
 - 创建日期：2026-05-16
 - 目标完成日期：2026-05-23
@@ -149,16 +149,34 @@
 
 ## 10. Completion Evidence
 
-- PR：
+- PR：N/A（当前阶段直接提交到 `main`）
 - Commit：
+  - `livemask-docs`: `2c3e66d docs: add infra health smoke task`
+  - `livemask-backend`: `2c53398 TASK-INFRA-001: initialize Go scaffold with Health API + CI smoke closed loop`
+  - `livemask-backend`: `212a38d ci: avoid fixed service ports in backend integration tests`
+  - `livemask-ci-cd`: `8c446cc ci: upgrade staging smoke from nginx placeholder to backend + postgres + redis`
 - Test output：
+  - `livemask-docs`: `bash scripts/check-docs.sh` passed.
+  - `livemask-ci-cd`: `docker compose -f infra/docker-compose.staging.yml config` passed.
+  - `livemask-ci-cd`: `bash scripts/smoke.sh` passed against backend + postgres + redis.
+  - `livemask-ci-cd`: GitHub Actions `Staging Smoke` passed on `main`.
 - Screenshots / logs：
+  - GitHub Actions run: `https://github.com/MyAiDevs/livemask-ci-cd/actions/runs/25964707267`
+  - Smoke response contained `status=ok`, `db_connected=true`, `redis_connected=true`.
+  - Lark `notify-lark` job passed in the same workflow run.
 - 文档链接：
+  - `docs/contracts/api/health-check.md`
+  - `docs/contracts/api/core-mvp.md#health-api`
+  - `docs/architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md#h8health-api--ci-smoke-不可用阻塞下一阶段开发判断`
+  - `docs/operations/GITHUB_ACTIONS_RUNNER_ARCHITECTURE.md`
 - Dashboard / alert：
+  - Lark CI/CD notification job verified through GitHub Actions run.
 - Product / support note：
+  - INFRA-001 establishes the infrastructure green-light gate before `TASK-P0-03-config-center`.
 
 ## 11. Follow-up
 
 - 后续 TASK：`TASK-P0-03-config-center`（依赖 INFRA-001 CI/CD 就绪）
 - 后续 TASK：`TASK-P5-03-monitoring-alerting`（依赖 Health API 指标）
 - 未完成项：
+  - GitHub Actions emitted a Node.js 20 deprecation annotation for `actions/checkout@v4`; track separately before GitHub's Node 24 migration deadline.
