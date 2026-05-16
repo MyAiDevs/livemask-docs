@@ -18,6 +18,12 @@
 - last-known-good 回滚
 - 配置生效率监控
 
+本任务作为配置热更新总任务，拆分为以下可并行子任务：
+
+- `TASK-ADMIN-001-config-center-management-ui`
+- `TASK-APP-001-remote-config-cache-fallback`
+- `TASK-NA-CONFIG-001-config-sync-hot-reload`
+
 ## 3. Contracts
 
 - API：`docs/contracts/api/core-mvp.md#config-api`
@@ -41,8 +47,17 @@
 - [ ] 非法配置拒绝应用
 - [ ] NodeAgent 离线后恢复同步
 - [ ] App 使用 last-known-good 并提示可能过期
+- [ ] Admin 配置中心 UI 可完成 draft / publish / rollback
 
-## 6. Rollback
+## 6. Child Tasks
+
+| TASK | 仓库 | 目标 | 解锁条件 |
+| --- | --- | --- | --- |
+| `TASK-ADMIN-001-config-center-management-ui` | `livemask-admin` | 配置中心管理页 | `TASK-P0-03` completed |
+| `TASK-APP-001-remote-config-cache-fallback` | `livemask-app` | App remote config + last-known-good | `TASK-P0-03` completed |
+| `TASK-NA-CONFIG-001-config-sync-hot-reload` | `livemask-nodeagent` | NodeAgent config sync + hot reload | `TASK-P0-03` completed |
+
+## 7. Rollback
 
 - 恢复上一版本配置。
 - 标记失败版本为 disabled。
