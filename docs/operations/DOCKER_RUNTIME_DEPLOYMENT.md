@@ -50,6 +50,8 @@ Split service startup:
 ```bash
 bash scripts/runtime.sh start --mode local --services backend
 bash scripts/runtime.sh start --mode local --services admin
+bash scripts/runtime.sh start --mode local --services website
+bash scripts/runtime.sh start --mode local --services app
 bash scripts/runtime.sh start --mode local --services nodeagent
 ```
 
@@ -109,6 +111,7 @@ postgres
 redis
 backend
 admin
+website
 nodeagent
 ```
 
@@ -250,6 +253,8 @@ POSTGRES_IMAGE=<mirror>/postgres:16-alpine
 REDIS_IMAGE=<mirror>/redis:7-alpine
 BACKEND_GO_IMAGE=<mirror>/golang:1.22-alpine
 ADMIN_NODE_IMAGE=<mirror>/node:22-alpine
+WEBSITE_NODE_IMAGE=<mirror>/node:22-alpine
+APP_FLUTTER_IMAGE=<mirror>/cirruslabs/flutter:stable
 NODEAGENT_GO_IMAGE=<mirror>/golang:1.26-alpine
 ```
 

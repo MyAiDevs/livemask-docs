@@ -14,8 +14,9 @@ Local runtime means:
 PostgreSQL + Redis via Docker Compose
 Backend via Docker Compose, mounted from local `livemask-backend`
 Admin via Docker Compose, mounted from local `livemask-admin`
+Website via Docker Compose, mounted from local `livemask-website`
+App web preview via Docker Compose, mounted from local `livemask-app`
 NodeAgent via Docker Compose, mounted from local `livemask-nodeagent`
-App / Flutter points to local Backend when needed
 ```
 
 This is not production and not staging. It is the developer integration
@@ -29,6 +30,8 @@ environment for `dev-local`.
 | PostgreSQL | `127.0.0.1:15432` | Docker compose |
 | Redis | `127.0.0.1:16379` | Docker compose |
 | Admin | `http://127.0.0.1:3001` | `livemask-admin` |
+| Website | `http://127.0.0.1:3002` | `livemask-website` |
+| App web preview | `http://127.0.0.1:3003` | `livemask-app` |
 | NodeAgent status | `http://127.0.0.1:19090` | `livemask-nodeagent` |
 
 These ports intentionally avoid common defaults such as `5432`, `6379`, and
@@ -48,6 +51,8 @@ Optional:
 
 ```bash
 bash scripts/local-dev.sh start --admin
+bash scripts/local-dev.sh start --website
+bash scripts/local-dev.sh start --app
 bash scripts/local-dev.sh start --nodeagent
 bash scripts/local-dev.sh start --all
 ```
@@ -68,8 +73,9 @@ The local runtime uses official images by default:
 ```text
 postgres:16-alpine
 redis:7-alpine
-golang:1.22-alpine
+golang:1.25-alpine
 node:22-alpine
+ghcr.io/cirruslabs/flutter:stable
 golang:1.26-alpine
 ```
 
@@ -85,8 +91,10 @@ Then change the image variables while keeping the same image names and tags:
 ```text
 POSTGRES_IMAGE=<mirror>/postgres:16-alpine
 REDIS_IMAGE=<mirror>/redis:7-alpine
-BACKEND_GO_IMAGE=<mirror>/golang:1.22-alpine
+BACKEND_GO_IMAGE=<mirror>/golang:1.25-alpine
 ADMIN_NODE_IMAGE=<mirror>/node:22-alpine
+WEBSITE_NODE_IMAGE=<mirror>/node:22-alpine
+APP_FLUTTER_IMAGE=<mirror>/cirruslabs/flutter:stable
 NODEAGENT_GO_IMAGE=<mirror>/golang:1.26-alpine
 ```
 
@@ -99,6 +107,9 @@ mirrors once so every repository benefits from the same acceleration policy.
 bash scripts/local-dev.sh status
 curl -fsS http://127.0.0.1:18080/api/v1/health
 curl -fsS http://127.0.0.1:18080/api/v1/config/client
+curl -I http://127.0.0.1:3001
+curl -I http://127.0.0.1:3002
+curl -I http://127.0.0.1:3003
 curl -fsS http://127.0.0.1:19090/config/status
 ```
 
@@ -113,6 +124,8 @@ Examples:
 ```bash
 docker compose -f ../livemask-ci-cd/infra/docker-compose.local.yml logs backend -f
 docker compose --profile admin -f ../livemask-ci-cd/infra/docker-compose.local.yml logs admin -f
+docker compose --profile website -f ../livemask-ci-cd/infra/docker-compose.local.yml logs website -f
+docker compose --profile app -f ../livemask-ci-cd/infra/docker-compose.local.yml logs app -f
 docker compose --profile nodeagent -f ../livemask-ci-cd/infra/docker-compose.local.yml logs nodeagent -f
 ```
 
@@ -166,10 +179,28 @@ Local Runtime:
 - bash scripts/local-dev.sh start passed
 - GET /api/v1/health returned status=ok
 - Admin opened against local Backend
+- Website opened against local Backend
+- App web preview opened against local Backend
 - NodeAgent /config/status returned current/degraded status
 ```
 
-## 9. Relationship To Other Environments
+## 9. Troubleshooting
+
+If NodeAgent is reachable but reports a `config_hash` mismatch after reusing an
+old local PostgreSQL/Redis volume, refresh the local cache and restart only
+NodeAgent:
+
+```bash
+cd ../livemask-ci-cd
+docker compose --profile deps -f infra/docker-compose.local.yml exec -T redis redis-cli del config:nodeagent.runtime_config config:version:nodeagent.runtime_config
+docker compose --profile nodeagent --profile deps -f infra/docker-compose.local.yml restart nodeagent
+```
+
+If Admin or Website is stuck in an `npm install` restart loop, the local compose
+command automatically clears only the container `node_modules` volume and
+reinstalls dependencies. Source files are not removed.
+
+## 10. Relationship To Other Environments
 
 | Environment | Trigger | Purpose |
 | --- | --- | --- |

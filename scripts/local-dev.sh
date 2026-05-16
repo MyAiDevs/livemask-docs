@@ -22,6 +22,14 @@ while [[ $# -gt 0 ]]; do
       services="backend,admin"
       shift
       ;;
+    --website)
+      services="backend,website"
+      shift
+      ;;
+    --app)
+      services="backend,app"
+      shift
+      ;;
     --nodeagent)
       services="backend,nodeagent"
       shift
@@ -56,6 +64,8 @@ case "${command}" in
     echo
     echo "Backend:   http://127.0.0.1:${LIVEMASK_BACKEND_HTTP_PORT:-18080}"
     echo "Admin:     http://127.0.0.1:${LIVEMASK_ADMIN_PORT:-3001} (when --admin/--all)"
+    echo "Website:   http://127.0.0.1:${LIVEMASK_WEBSITE_PORT:-3002} (when --website/--all)"
+    echo "App Web:   http://127.0.0.1:${LIVEMASK_APP_WEB_PORT:-3003} (when --app/--all)"
     echo "NodeAgent: http://127.0.0.1:${LIVEMASK_NODEAGENT_PORT:-19090} (when --nodeagent/--all)"
     ;;
   stop|status|logs|pull|help|-h|--help)
