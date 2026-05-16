@@ -6,6 +6,25 @@
 
 详细闭环契约见独立文档：[config-center.md](config-center.md)。
 
+## Auth / Account / RBAC API
+
+详细闭环契约见独立文档：[auth-rbac.md](auth-rbac.md)。
+
+### Required MVP Endpoints
+
+| Endpoint | Caller | Auth | Purpose |
+| --- | --- | --- | --- |
+| `POST /api/v1/auth/register` | App / Website | none | User registration |
+| `POST /api/v1/auth/login` | App / Website / Admin | none | Login and token issue |
+| `POST /api/v1/auth/refresh` | App / Website / Admin | refresh token/cookie | Access token refresh |
+| `POST /api/v1/auth/logout` | App / Website / Admin | access token/cookie | Session revoke |
+| `GET /api/v1/me` | App / Website | User JWT | Current user bootstrap |
+| `GET /admin/api/v1/auth/me` | Admin | Admin JWT | Admin current user and namespaces |
+| `GET /admin/api/v1/users` | Admin | `user:read` | Minimal user list |
+| `POST /admin/api/v1/users/{user_id}/roles` | Admin | `role:manage` | Role assignment |
+
+Route namespace and RBAC rules are defined in [auth-rbac.md](auth-rbac.md).
+
 ### GET `/api/v1/config/client`
 
 - Caller：App Client

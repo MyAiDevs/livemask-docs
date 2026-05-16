@@ -49,6 +49,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-ADMIN-001-config-center-management-ui.md](TASK-ADMIN-001-config-center-management-ui.md)
 - [TASK-APP-001-remote-config-cache-fallback.md](TASK-APP-001-remote-config-cache-fallback.md)
 - [TASK-NA-CONFIG-001-config-sync-hot-reload.md](TASK-NA-CONFIG-001-config-sync-hot-reload.md)
+- [TASK-AUTH-001-account-auth-rbac-closed-loop.md](TASK-AUTH-001-account-auth-rbac-closed-loop.md)
 - [TASK-P1-01-usdt-payment.md](TASK-P1-01-usdt-payment.md)
 - [TASK-P1-05-config-hot-reload.md](TASK-P1-05-config-hot-reload.md)
 - [TASK-P2-05-node-recommendation.md](TASK-P2-05-node-recommendation.md)

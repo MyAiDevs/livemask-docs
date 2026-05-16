@@ -3,6 +3,7 @@
 - [Core MVP API Contracts](core-mvp.md)
 - [Health Check API](health-check.md)
 - [Config Center API](config-center.md)
+- [Auth / Account / RBAC API](auth-rbac.md)
 
 ## 1. 适用范围
 
