@@ -203,6 +203,7 @@ def main() -> int:
         "task_id": args.task_id,
         "result": args.result,
         "source_repo": "livemask-docs",
+        "target_branch": "dev",
         "source_run_id": args.run_id,
         "summary": args.summary,
         "verification": args.verification,

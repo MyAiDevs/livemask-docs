@@ -21,13 +21,18 @@ state, repository unlocks, and Lark reports.
 
 Every AI window must:
 
-1. Read the current `TASK-XXXX`.
-2. Include `TASK-XXXX` in commit / PR / completion report.
-3. Use the standard completion report from
+1. Start from the repository `dev` branch, not `main`.
+2. Read the current `TASK-XXXX`.
+3. Include `TASK-XXXX` in commit / PR / completion report.
+4. Use the standard completion report from
    `ai-rules/v3.7/16-Task-Completion-Report.md`.
-4. Explicitly declare unlocked and blocked repositories.
-5. Never claim another repo is unblocked unless the API / config / DB / Redis
+5. Explicitly declare unlocked and blocked repositories.
+6. Never claim another repo is unblocked unless the API / config / DB / Redis
    contract it depends on is stable enough to implement against.
+
+`task-unlocked` is a development coordination event. It must not be treated as
+a staging or production deployment event. Staging promotion happens only after
+`dev` is merged into `main`; production happens only from a versioned release.
 
 ## 3. Manual Sync Flow
 
@@ -36,6 +41,7 @@ Use this when Codex or Cursor completes a meaningful subtask:
 ```bash
 gh workflow run task-sync.yml \
   --repo MyAiDevs/livemask-docs \
+  --ref dev \
   -f task_id=TASK-P0-03 \
   -f result=completed \
   -f summary="Backend config center core implemented and CI passed." \
@@ -52,6 +58,9 @@ The workflow will:
 - dispatch `task-unlocked` to each unlocked repo,
 - send a Lark project report,
 - skip Project movement unless Project variables are configured.
+
+The dispatch payload includes `target_branch=dev` so child repository CI checks
+the development integration branch instead of accidentally testing `main`.
 
 Important: if `unlocked_repos` contains any child repository, the workflow
 requires `LIVEMASK_BOT_TOKEN`. The default `GITHUB_TOKEN` can comment on the
@@ -144,7 +153,7 @@ Validation command after the secret is configured:
 ```bash
 gh workflow run task-sync.yml \
   --repo MyAiDevs/livemask-docs \
-  --ref main \
+  --ref dev \
   -f task_id=TASK-INFRA-002 \
   -f result=partial \
   -f summary="Task sync closure validation." \
@@ -171,6 +180,9 @@ Before relying on task sync for multi-window development, verify these scenarios
 | Project variables are missing | No Project move happens | Project movement is documented but disabled |
 | Same TASK receives multiple syncs | Multiple comments become audit history | issue comments are append-only evidence |
 | `LIVEMASK_BOT_TOKEN` lacks repo access | Dispatch/comment fails loudly | GitHub API errors fail workflow |
+| Task sync unlocks a child repo | Child workflow checks `dev` branch | `target_branch=dev` payload |
+| `dev` merges to `main` | CI/CD staging is triggered | `staging-promote` event |
+| Production release is needed | Only GitHub Release / `v*` can trigger it | `production-release` event |
 
 ## 10. Recommended Next Step
 

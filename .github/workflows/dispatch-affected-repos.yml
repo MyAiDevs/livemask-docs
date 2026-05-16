@@ -3,7 +3,7 @@ name: Dispatch Affected Repos
 on:
   push:
     branches:
-      - main
+      - dev
     paths:
       - "docs/contracts/**"
       - "docs/architecture/**"
@@ -38,7 +38,7 @@ jobs:
           token: ${{ secrets.LIVEMASK_BOT_TOKEN }}
           repository: MyAiDevs/${{ matrix.repo }}
           event-type: docs-contract-changed
-          client-payload: '{"source_repo":"livemask-docs","source_ref":"${{ github.sha }}"}'
+          client-payload: '{"source_repo":"livemask-docs","source_ref":"${{ github.sha }}","target_branch":"dev"}'
 
   notify-lark:
     needs: [dispatch]

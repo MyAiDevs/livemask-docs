@@ -23,7 +23,8 @@
 - 验证结果：
 
 ### 4. 代码提交信息
-- **分支**：`dev/TASK-XXXX-xxx`
+- **分支**：`dev` / `dev/TASK-XXXX-xxx`
+- **环境阶段**：dev-local / main-staging / release-production
 - **Commit Hash**：
 - **Commit Message**：
 
@@ -56,6 +57,14 @@
 
 ### 8. 是否可以合并到 dev？
 - [ ] 是（已通过基本验证）
+- [ ] 否，原因：
+
+### 8.1 是否可以从 dev 合并到 main 预发布？
+- [ ] 是（跨仓库依赖和本地验证已闭环）
+- [ ] 否，原因：
+
+### 8.2 是否可以创建 release 生产发布？
+- [ ] 是（main staging smoke 已通过，具备回滚版本）
 - [ ] 否，原因：
 
 ### 9. 下一步建议

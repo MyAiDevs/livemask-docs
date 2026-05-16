@@ -16,9 +16,17 @@
 
 ## 2. Git 分支与命名规范（强制）
 
+LiveMask 采用 `dev -> main -> release` 三段式发布模型：
+
+| 分支 / ref | 环境 | 说明 |
+|------------|------|------|
+| `dev` | 本地 Go / Docker 开发验证 | 所有 AI 窗口默认工作分支 |
+| `main` | 远程预发布 staging | 只能由 `dev` 合并进入，并自动触发 CI/CD staging |
+| GitHub Release / `v*` tag | 生产 | 只能手动打版本发布，并触发生产 gate |
+
 | 类型       | 分支命名示例                  | 说明 |
 |------------|-------------------------------|------|
-| 常规开发   | `dev/TASK-P1-03-promotion-engine` | 默认使用 dev 分支开发 |
+| 常规开发   | `dev` 或 `dev/TASK-P1-03-promotion-engine` | 默认使用 dev 分支开发 |
 | Bug 修复   | `bug/TASK-P3-02-quick-feedback`   | Bug 修复专用 |
 | 补丁/热修复 | `patch/TASK-P1-01-payment-webhook` | 紧急补丁 |
 | 功能特性   | `feature/TASK-P2-02-connection-orchestrator` | 大型新功能（可选） |
@@ -26,7 +34,10 @@
 **强制规则**：
 - 所有分支必须包含 **Task ID**（如 `TASK-P1-03`）。
 - 禁止直接在 `main` / `master` 分支开发。
-- Merge 到 `dev` 后必须删除本地分支。
+- 如果仓库没有 `dev`，必须从 `origin/dev` 或 `origin/main` 创建并推送。
+- Merge 到 `dev` 后必须删除临时任务分支。
+- Merge 到 `main` 等同预发布，不等同生产发布。
+- 生产发布只能来自 GitHub Release / `v*` tag。
 
 ---
 
