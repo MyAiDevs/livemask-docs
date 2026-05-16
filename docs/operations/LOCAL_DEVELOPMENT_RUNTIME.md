@@ -62,6 +62,7 @@ bash scripts/local-dev.sh start --admin
 bash scripts/local-dev.sh start --website
 bash scripts/local-dev.sh start --app       # local macOS Flutter client
 bash scripts/local-dev.sh start --app-web   # local Flutter web-server preview
+bash scripts/local-dev.sh start --app-target macos,ios
 bash scripts/local-dev.sh start --nodeagent
 bash scripts/local-dev.sh start --all
 ```
@@ -182,6 +183,27 @@ bash scripts/local-app.sh doctor
 bash scripts/local-app.sh start --target macos
 bash scripts/local-app.sh logs --target macos
 ```
+
+Build multiple App targets as a queue:
+
+```bash
+bash scripts/local-app.sh build --targets macos,ios
+bash scripts/local-app.sh build --targets all
+```
+
+Target support:
+
+| Target | Where it can be built / run |
+| --- | --- |
+| `macos` | macOS host with full Xcode |
+| `ios` | macOS host with full Xcode and simulator/device setup |
+| `android` | macOS/Linux/Windows host with Android SDK configured |
+| `linux` | Linux host |
+| `windows` | Windows host, including Parallels Desktop Windows VM |
+| `web` | macOS/Linux/Windows host with Flutter web enabled |
+
+When a queue includes a target unsupported by the current host, the script
+prints a blocker for that target and continues unless `--fail-fast` is passed.
 
 On a new macOS machine, complete the native toolchain once:
 
