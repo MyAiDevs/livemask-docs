@@ -163,7 +163,62 @@ Status:
 bash scripts/runtime.sh status --mode runtime --env-file infra/env/production.env --services all --no-deps
 ```
 
-## 7. Docker Pull Acceleration
+## 7. API Smoke Test
+
+API tests must not care whether Backend is running as a local process, a local
+container, a staging container, or a production container. They should only use
+`API_BASE_URL`.
+
+Default local check:
+
+```bash
+cd livemask-ci-cd
+bash scripts/api-smoke.sh
+```
+
+This defaults to:
+
+```text
+http://127.0.0.1:18080
+```
+
+Point it to another Backend:
+
+```bash
+API_BASE_URL=http://127.0.0.1:18080 bash scripts/api-smoke.sh
+API_BASE_URL=https://staging-api.example.com bash scripts/api-smoke.sh
+```
+
+Add future API paths in:
+
+```text
+livemask-ci-cd/scripts/api-smoke-cases.tsv
+```
+
+Each row is:
+
+```text
+name<TAB>method<TAB>path<TAB>expected_status<TAB>assertions
+```
+
+Examples:
+
+```text
+Health API	GET	/api/v1/health	200	json.status=ok;json.db_connected=true
+Admin Config List	GET	/admin/api/v1/configs	200	json.configs.length>=2
+```
+
+Supported JSON assertions:
+
+```text
+json.status=ok
+json.db_connected=true
+json.config_version>=1
+json.config_hash~^sha256:
+json.configs.length>=2
+```
+
+## 8. Docker Pull Acceleration
 
 The preferred server-level acceleration is Docker daemon registry mirrors:
 
@@ -201,7 +256,7 @@ NODEAGENT_GO_IMAGE=<mirror>/golang:1.26-alpine
 For production release images, configure the CI image push target rather than
 rewriting image names manually on every server.
 
-## 8. Environment Rules
+## 9. Environment Rules
 
 | Environment | Runtime command | Dependency mode |
 | --- | --- | --- |
