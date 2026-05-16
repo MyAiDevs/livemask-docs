@@ -22,6 +22,12 @@ NodeAgent via Docker Compose, mounted from local `livemask-nodeagent`
 This is not production and not staging. It is the developer integration
 environment for `dev-local`.
 
+App is intentionally local-only in this runtime. Pre-release and production do
+not start an App container, because App is a client deliverable that is built,
+packaged, installed, and tested through platform-specific flows. The Docker App
+web preview exists only so developers can see and verify App UI/auth/config
+integration against the local Backend.
+
 ## 2. Ports
 
 | Service | URL / Port | Owner |
@@ -211,6 +217,10 @@ reinstalls dependencies. Source files are not removed.
 
 Do not use `task-unlocked` to deploy staging. It is only a development
 coordination signal.
+
+App validation belongs to `dev-local` and platform test pipelines. Staging and
+production should validate Backend/Admin/Website/NodeAgent plus API smoke, not
+start a long-running App service.
 
 For the full local, staging, and production Docker runtime model, see
 [DOCKER_RUNTIME_DEPLOYMENT.md](DOCKER_RUNTIME_DEPLOYMENT.md).

@@ -19,6 +19,15 @@ cd livemask-ci-cd
 bash scripts/runtime.sh <command> [options]
 ```
 
+Important App boundary:
+
+- `app` is supported only in `--mode local`.
+- Pre-release and production must not start App as a server/container.
+- App validation is done by local developer preview, simulator/device testing,
+  and platform build pipelines.
+- `--mode runtime --services all` expands to Backend, Admin, Website, and
+  NodeAgent only.
+
 Supported commands:
 
 ```text
@@ -94,7 +103,7 @@ This means:
 ## 4. Internal PostgreSQL / Redis
 
 For small private deployments or staging servers, use internal dependency
-containers:
+containers. This still does not start App; App is local-only:
 
 ```bash
 bash scripts/runtime.sh start \
