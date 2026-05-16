@@ -94,7 +94,7 @@ Backend/API/DB/Go 字样，并不代表 Admin/Website/App 窗口可以写 Backen
 | `livemask-backend` | Go Backend、DB migration、Backend tests、Backend API contract notes | Flutter App、Next/Admin 页面、Website 页面、NodeAgent runtime |
 | `livemask-admin` | Admin / Sponsor / Ambassador 前端、TypeScript、React、Next.js、shadcn、Admin API client | Go 文件、DB migration、Backend handler/service/repository、Flutter App、NodeAgent runtime |
 | `livemask-website` | Public website、user portal、TypeScript、React/Vite/Next、Website API client | Go 文件、DB migration、Backend handler/service/repository、Admin-only pages under `/admin/*` |
-| `livemask-app` | Flutter/Dart App、secure storage、App API client、App tests | Go Backend、Admin/Website pages、NodeAgent runtime |
+| `livemask-app` | Flutter/Dart App、secure storage、App API client、App tests、MethodChannel 接口定义 | Go Backend、Admin/Website pages、NodeAgent runtime；不得声称纯 Dart 已实现系统 VPN 运行时 |
 | `livemask-nodeagent` | Go NodeAgent runtime、agent config/cache/reporting、agent tests | Backend API handlers, Admin/Website/App UI |
 | `livemask-ci-cd` | Compose, workflows, runtime scripts, smoke tests | Product code unless explicitly scoped to CI templates |
 | `livemask-docs` | Contracts, tasks, handoff docs, rules, design source | Runtime implementation code |

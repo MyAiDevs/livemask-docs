@@ -15,8 +15,8 @@ PostgreSQL + Redis via Docker Compose
 Backend via Docker Compose, mounted from local `livemask-backend`
 Admin via Docker Compose, mounted from local `livemask-admin`
 Website via Docker Compose, mounted from local `livemask-website`
-App web preview via Docker Compose, mounted from local `livemask-app`
 NodeAgent via Docker Compose, mounted from local `livemask-nodeagent`
+App via local Flutter SDK, compiled and launched on the developer machine
 ```
 
 This is not production and not staging. It is the developer integration
@@ -24,9 +24,10 @@ environment for `dev-local`.
 
 App is intentionally local-only in this runtime. Pre-release and production do
 not start an App container, because App is a client deliverable that is built,
-packaged, installed, and tested through platform-specific flows. The Docker App
-web preview exists only so developers can see and verify App UI/auth/config
-integration against the local Backend.
+packaged, installed, and tested through platform-specific flows. On macOS M-series
+developer machines, the first verification target is the native macOS Flutter
+client. Web preview remains available for quick UI checks, but it also runs from
+the local Flutter SDK, not Docker.
 
 ## 2. Ports
 
@@ -37,7 +38,8 @@ integration against the local Backend.
 | Redis | `127.0.0.1:16379` | Docker compose |
 | Admin | `http://127.0.0.1:3001` | `livemask-admin` |
 | Website | `http://127.0.0.1:3002` | `livemask-website` |
-| App web preview | `http://127.0.0.1:3003` | `livemask-app` |
+| App macOS client | local `.app` / Flutter process | `livemask-app` |
+| App web preview | `http://127.0.0.1:3003` when `--app-web` | `livemask-app` |
 | NodeAgent status | `http://127.0.0.1:19090` | `livemask-nodeagent` |
 
 These ports intentionally avoid common defaults such as `5432`, `6379`, and
@@ -58,10 +60,14 @@ Optional:
 ```bash
 bash scripts/local-dev.sh start --admin
 bash scripts/local-dev.sh start --website
-bash scripts/local-dev.sh start --app
+bash scripts/local-dev.sh start --app       # local macOS Flutter client
+bash scripts/local-dev.sh start --app-web   # local Flutter web-server preview
 bash scripts/local-dev.sh start --nodeagent
 bash scripts/local-dev.sh start --all
 ```
+
+`--all` starts Backend/Admin/Website/NodeAgent with Docker and starts the App as
+a local macOS Flutter process.
 
 For local Backend code reload, run:
 
@@ -100,8 +106,15 @@ REDIS_IMAGE=<mirror>/redis:7-alpine
 BACKEND_GO_IMAGE=<mirror>/golang:1.25-alpine
 ADMIN_NODE_IMAGE=<mirror>/node:22-alpine
 WEBSITE_NODE_IMAGE=<mirror>/node:22-alpine
-APP_FLUTTER_IMAGE=<mirror>/cirruslabs/flutter:stable
 NODEAGENT_GO_IMAGE=<mirror>/golang:1.26-alpine
+```
+
+Flutter is not pulled as a Docker image for App development. Install Flutter on
+the Mac and verify with:
+
+```bash
+cd ../livemask-app
+bash scripts/local-app.sh doctor
 ```
 
 On a shared development server, prefer configuring Docker daemon registry
@@ -115,7 +128,7 @@ curl -fsS http://127.0.0.1:18080/api/v1/health
 curl -fsS http://127.0.0.1:18080/api/v1/config/client
 curl -I http://127.0.0.1:3001
 curl -I http://127.0.0.1:3002
-curl -I http://127.0.0.1:3003
+bash ../livemask-app/scripts/local-app.sh status
 curl -fsS http://127.0.0.1:19090/config/status
 ```
 
@@ -131,8 +144,8 @@ Examples:
 docker compose -f ../livemask-ci-cd/infra/docker-compose.local.yml logs backend -f
 docker compose --profile admin -f ../livemask-ci-cd/infra/docker-compose.local.yml logs admin -f
 docker compose --profile website -f ../livemask-ci-cd/infra/docker-compose.local.yml logs website -f
-docker compose --profile app -f ../livemask-ci-cd/infra/docker-compose.local.yml logs app -f
 docker compose --profile nodeagent -f ../livemask-ci-cd/infra/docker-compose.local.yml logs nodeagent -f
+bash ../livemask-app/scripts/local-app.sh logs --target macos
 ```
 
 ## 6. Stop
@@ -143,7 +156,8 @@ bash scripts/local-dev.sh stop
 
 This stops and removes local Docker containers. Named volumes are preserved so
 PostgreSQL data, Go module cache, and `node_modules` do not need to be rebuilt
-on every start.
+on every start. It also stops local App macOS/web Flutter processes started by
+this script.
 
 Restart:
 
@@ -160,6 +174,44 @@ The App should point to:
 http://127.0.0.1:18080
 ```
 
+The App must be run from the Mac local Flutter SDK:
+
+```bash
+cd ../livemask-app
+bash scripts/local-app.sh doctor
+bash scripts/local-app.sh start --target macos
+bash scripts/local-app.sh logs --target macos
+```
+
+On a new macOS machine, complete the native toolchain once:
+
+```bash
+brew install --cask flutter
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+sudo xcodebuild -license accept
+flutter doctor
+```
+
+`sudo xcodebuild -license accept` requires the developer's macOS password and
+must be run in a local Terminal session.
+
+For quick UI-only browser preview:
+
+```bash
+bash scripts/local-app.sh start --target web
+open http://127.0.0.1:3003
+```
+
+If the `macos/` target does not exist yet, `scripts/local-app.sh` generates it
+with `flutter create --platforms=macos .`.
+
+Flutter Web is served from `http://127.0.0.1:3003`, so Backend must allow that
+origin for local browser auth/API calls. The local compose stack sets:
+
+```text
+CORS_ALLOWED_ORIGINS=http://127.0.0.1:3001,http://127.0.0.1:3002,http://127.0.0.1:3003,http://localhost:3001,http://localhost:3002,http://localhost:3003
+```
+
 For emulators or devices, use the platform-specific host mapping:
 
 | Platform | Backend base URL |
@@ -169,7 +221,25 @@ For emulators or devices, use the platform-specific host mapping:
 | Physical device | LAN IP of the developer machine |
 | macOS / Windows / Linux desktop app | `http://127.0.0.1:18080` |
 
-## 8. Local Runtime Is Required For Completion
+## 8. Default Development Users
+
+Local dev seeds five fixed users when `DEV_SEED_USERS=true`. These accounts are
+for local development, UI verification, and QA smoke only. They must not be
+enabled in production.
+
+| Role | Email | Password | Primary Surface |
+| --- | --- | --- | --- |
+| Admin | `admin@livemask.dev` | `AdminPass123!` | `/admin/*` |
+| Sponsor ambassador | `sponsor@livemask.dev` | `SponsorPass123!` | `/sponsor/*` |
+| Promotion ambassador | `ambassador@livemask.dev` | `AmbassadorPass123!` | `/ambassador/*` |
+| Subscriber | `subscriber@livemask.dev` | `SubscriberPass123!` | App / Website user portal |
+| Normal user | `user@livemask.dev` | `UserPass123!` | App / Website user portal |
+
+The default values live in `livemask-ci-cd/infra/env/local.env.example` and can
+be overridden through a local env file. Production env files must leave
+`DEV_SEED_USERS` unset or `false`.
+
+## 9. Local Runtime Is Required For Completion
 
 For backend, admin, app, and nodeagent tasks, a completion report should include
 one of:
@@ -190,7 +260,7 @@ Local Runtime:
 - NodeAgent /config/status returned current/degraded status
 ```
 
-## 9. Troubleshooting
+## 10. Troubleshooting
 
 If NodeAgent is reachable but reports a `config_hash` mismatch after reusing an
 old local PostgreSQL/Redis volume, refresh the local cache and restart only
@@ -206,7 +276,7 @@ If Admin or Website is stuck in an `npm install` restart loop, the local compose
 command automatically clears only the container `node_modules` volume and
 reinstalls dependencies. Source files are not removed.
 
-## 10. Relationship To Other Environments
+## 11. Relationship To Other Environments
 
 | Environment | Trigger | Purpose |
 | --- | --- | --- |

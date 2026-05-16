@@ -9,7 +9,7 @@ LiveMask supports two Docker runtime modes:
 
 | Mode | Compose file | Purpose |
 | --- | --- | --- |
-| `local` | `livemask-ci-cd/infra/docker-compose.local.yml` | Source-mounted containers for daily development and staging-style debugging |
+| `local` | `livemask-ci-cd/infra/docker-compose.local.yml` + local Flutter SDK | Source-mounted containers for server-side services and local native App development |
 | `runtime` | `livemask-ci-cd/infra/docker-compose.runtime.yml` | Image-based one-click deployment for staging or production |
 
 Both modes are controlled by:
@@ -21,10 +21,14 @@ bash scripts/runtime.sh <command> [options]
 
 Important App boundary:
 
-- `app` is supported only in `--mode local`.
+- `app` is not a Docker runtime service.
 - Pre-release and production must not start App as a server/container.
-- App validation is done by local developer preview, simulator/device testing,
-  and platform build pipelines.
+- App validation is done by local Flutter builds, simulator/device testing, and
+  platform build pipelines.
+- On Apple Silicon development machines, the first local target is the native
+  macOS Flutter client through `livemask-app/scripts/local-app.sh`.
+- Xcode license acceptance is a local machine prerequisite and requires the
+  developer's macOS sudo password.
 - `--mode runtime --services all` expands to Backend, Admin, Website, and
   NodeAgent only.
 
@@ -41,11 +45,13 @@ logs
 
 ## 2. Local / Staging Docker Runtime
 
-Local mode runs all services in containers but mounts local source code:
+Local mode runs server-side services in containers and runs the App locally:
 
 ```bash
 cd livemask-ci-cd
 bash scripts/runtime.sh start --mode local --services all
+cd ../livemask-app
+bash scripts/local-app.sh start --target macos
 ```
 
 Backend hot reload:
@@ -60,8 +66,8 @@ Split service startup:
 bash scripts/runtime.sh start --mode local --services backend
 bash scripts/runtime.sh start --mode local --services admin
 bash scripts/runtime.sh start --mode local --services website
-bash scripts/runtime.sh start --mode local --services app
 bash scripts/runtime.sh start --mode local --services nodeagent
+bash ../livemask-app/scripts/local-app.sh start --target macos
 ```
 
 The docs shortcut uses the same runtime script:
@@ -175,7 +181,33 @@ Status:
 bash scripts/runtime.sh status --mode runtime --env-file infra/env/production.env --services all --no-deps
 ```
 
-## 7. API Smoke Test
+## 7. Development Seed Users
+
+Backend can seed local QA accounts only when `DEV_SEED_USERS=true`.
+
+Default local accounts:
+
+| Role | Email |
+| --- | --- |
+| Admin | `admin@livemask.dev` |
+| Sponsor ambassador | `sponsor@livemask.dev` |
+| Promotion ambassador | `ambassador@livemask.dev` |
+| Subscriber | `subscriber@livemask.dev` |
+| Normal user | `user@livemask.dev` |
+
+Rules:
+
+- Local mode defaults `DEV_SEED_USERS=true`.
+- Staging keeps `DEV_SEED_USERS=false` unless the staging stack is private QA.
+- Production must not set `DEV_SEED_USERS=true`.
+- Production owner/admin creation must use a separate controlled runbook, not
+  dev seed users.
+
+For browser-based local surfaces, Backend must also allow the local frontend
+origins through `CORS_ALLOWED_ORIGINS`. Keep this explicit and environment
+specific; production should only allow the real public/admin domains.
+
+## 8. API Smoke Test
 
 API tests must not care whether Backend is running as a local process, a local
 container, a staging container, or a production container. They should only use
@@ -230,7 +262,7 @@ json.config_hash~^sha256:
 json.configs.length>=2
 ```
 
-## 8. Docker Pull Acceleration
+## 9. Docker Pull Acceleration
 
 The preferred server-level acceleration is Docker daemon registry mirrors:
 
@@ -270,7 +302,7 @@ NODEAGENT_GO_IMAGE=<mirror>/golang:1.26-alpine
 For production release images, configure the CI image push target rather than
 rewriting image names manually on every server.
 
-## 9. Environment Rules
+## 10. Environment Rules
 
 | Environment | Runtime command | Dependency mode |
 | --- | --- | --- |

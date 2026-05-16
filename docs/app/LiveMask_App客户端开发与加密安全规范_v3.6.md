@@ -12,6 +12,27 @@
 - **状态管理**：Riverpod 或 Bloc
 - **构建**：官方 Flutter build + 混淆
 
+### 2.1 VPN 原生运行时边界（强制）
+
+Flutter/Dart 不能被当作系统 VPN 运行时本身。Flutter 负责 UI、状态、
+API、缓存、诊断和跨平台交互；真正的 VPN 连接、断开、权限申请、系统
+tunnel 生命周期必须由各平台原生层实现，并通过 MethodChannel 或独立
+Flutter plugin 暴露给 Dart。
+
+| 平台 | 必须使用的原生能力 |
+|------|--------------------|
+| Android | Kotlin/Java `VpnService` + 用户授权 + 前台服务 |
+| iOS | Swift NetworkExtension / PacketTunnelProvider + entitlement |
+| macOS | NetworkExtension 或经过审批的 privileged helper |
+| Windows | 本地 service / tunnel engine / installer 权限 |
+| Linux | daemon / NetworkManager / TUN 权限与发行版降级 |
+| Web | 不支持系统 VPN 启停，不得伪造连接能力 |
+
+任何客户端 TASK 如果声明“VPN 已可连接”，必须提供对应平台的原生运行时
+验证，而不能只以 Flutter 页面状态、Mock、按钮跳转或 Dart service 作为完成依据。
+
+详细契约见：`docs/app/VPN_NATIVE_RUNTIME_CONTRACT.md`。
+
 ## 3. 多平台构建与加密规范
 
 ### 3.1 Android

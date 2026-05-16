@@ -41,6 +41,22 @@ Onboarding
 -> Profile / settings
 ```
 
+Important implementation boundary:
+
+- Flutter owns cross-platform UI, state, API calls, local cache, and diagnostics.
+- Real VPN connection control is not pure Dart. It must be backed by native
+  platform runtime code through MethodChannel or a dedicated Flutter plugin.
+- Android requires native `VpnService`.
+- iOS requires NetworkExtension / PacketTunnelProvider entitlement and native
+  extension code.
+- macOS, Windows, and Linux require their own native service / extension /
+  daemon integration.
+- Flutter Web must not show fake VPN connect/disconnect behavior.
+
+Designs may show VPN connection UI, but handoff notes must label it as
+`requires native VPN runtime` unless the platform-native implementation has
+already been delivered and verified.
+
 This design should support future modules such as points economy, ambassador
 revenue, C2C trading, and multi-payment, but those modules must not dominate the
 MVP navigation.
