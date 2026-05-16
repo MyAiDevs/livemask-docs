@@ -331,8 +331,28 @@ Download
 Security
 Support
 Login
+Create Account
 Get LiveMask
 ```
+
+Auth entry rules:
+
+- Public website login entry uses `/login`.
+- Public website registration entry uses `/register`.
+- Password recovery uses `/forgot-password`.
+- Email verification / magic link result pages use `/verify-email` or
+  `/auth/callback`.
+- These public account routes must not share URI prefixes with internal or
+  role-specific consoles such as `/admin/*`, `/sponsor/*`, `/ambassador/*`,
+  `/account/*`, or `/billing/*`.
+- After successful login, route by role and entitlement:
+  - normal user -> `/account/*`
+  - subscription/billing user -> `/billing/*`
+  - sponsor ambassador -> `/sponsor/*`
+  - promotion ambassador -> `/ambassador/*`
+  - internal admin/operator/finance -> `/admin/*`
+- Website navigation hiding is not security. Backend auth and authorization
+  must enforce destination access after login.
 
 ### 4.3 Website Required Pages
 
@@ -404,6 +424,100 @@ Required:
 - status page link placeholder
 - contact/support entry
 
+#### Login
+
+Purpose:
+
+- let existing users enter the LiveMask account flow safely
+- route users to the correct post-login surface based on role and entitlement
+
+Route:
+
+```text
+/login
+```
+
+Required:
+
+- email / password login
+- optional magic link or verification-code login placeholder
+- remember device checkbox only if supported by backend
+- forgot password link
+- create account link
+- clear error states for invalid credentials, locked account, rate limit, and
+  network failure
+- privacy/security reassurance without long legal copy
+
+Post-login routing:
+
+| User type | Destination |
+| --- | --- |
+| normal account user | `/account/*` |
+| subscription/billing user | `/billing/*` |
+| sponsor ambassador | `/sponsor/*` |
+| promotion ambassador | `/ambassador/*` |
+| internal admin / ops / finance | `/admin/*` |
+
+Design requirements:
+
+- Login should be calm, compact, and trustworthy.
+- Do not use a marketing hero layout for the form.
+- Do not expose whether an email exists unless backend explicitly supports
+  that behavior.
+- Show rate-limit and security messages without panic.
+
+#### Register
+
+Purpose:
+
+- let new users create a LiveMask account and move toward download, plan, or
+  onboarding
+
+Route:
+
+```text
+/register
+```
+
+Required:
+
+- email registration
+- password creation or verification-code registration, depending on backend
+  contract
+- terms / privacy acknowledgement
+- optional referral or invite code field
+- login link
+- clear states for duplicate account, weak password, invalid invite code,
+  verification required, and network failure
+- success state that sends user to email verification, app download, or account
+  onboarding
+
+Design requirements:
+
+- Registration should feel lightweight.
+- Do not place payment fields directly on the first registration screen.
+- If plan selection is needed, link to Pricing or `/billing/*` after account
+  creation.
+
+#### Forgot Password / Verification
+
+Routes:
+
+```text
+/forgot-password
+/verify-email
+/auth/callback
+```
+
+Required:
+
+- request reset link / code
+- reset confirmation
+- expired link state
+- already verified state
+- safe generic messaging
+- return to login action
+
 ### 4.4 Website Components
 
 | Component | Purpose |
@@ -415,6 +529,8 @@ Required:
 | `FAQAccordion` | support |
 | `StatusBanner` | operational status |
 | `CTASection` | conversion |
+| `AuthForm` | login and registration |
+| `AuthStatePanel` | verification, rate limit, expired link, success |
 
 ### 4.5 Website Atoms Prompt
 
@@ -426,7 +542,18 @@ The website should feel premium, calm, trustworthy, and conversion-focused. Avoi
 Use a real product/app visual in the hero. The first viewport must clearly communicate the product name and category: "LiveMask Secure VPN".
 
 Navigation:
-Product, Pricing, Download, Security, Support, Login, Get LiveMask.
+Product, Pricing, Download, Security, Support, Login, Create Account, Get LiveMask.
+
+Public auth route boundaries:
+- /login for existing users.
+- /register for new users.
+- /forgot-password for password recovery.
+- /verify-email and /auth/callback for verification or magic-link results.
+- Do not place these pages under /admin, /sponsor, /ambassador, /account, or
+  /billing.
+- After successful login, route users by role: /account for normal users,
+  /billing for subscription users, /sponsor for sponsor ambassadors,
+  /ambassador for promotion ambassadors, and /admin for internal staff.
 
 Required pages/sections:
 1. Home
@@ -434,6 +561,9 @@ Required pages/sections:
 3. Download
 4. Security / Privacy
 5. Support / FAQ
+6. Login
+7. Register
+8. Forgot Password / Email Verification
 
 Home hero:
 - headline: LiveMask Secure VPN
@@ -469,6 +599,29 @@ Support:
 - status page placeholder
 - contact/support entry
 
+Login:
+- email/password form
+- optional magic link or verification-code placeholder
+- forgot password link
+- create account link
+- error states: invalid credentials, locked account, rate limit, network failure
+- role-aware post-login routing
+
+Register:
+- email registration
+- password or verification-code registration placeholder
+- terms and privacy acknowledgement
+- optional referral/invite code
+- login link
+- states: duplicate account, weak password, invalid invite code, verification
+  required, network failure, success
+
+Forgot Password / Verification:
+- request reset link/code
+- expired link state
+- already verified state
+- return to login action
+
 Visual direction:
 - light-first, premium, high contrast
 - deep teal primary color
@@ -479,7 +632,7 @@ Visual direction:
 - mobile responsive
 
 Output reusable components:
-HeroProductVisual, PlanCard, DownloadCard, SecurityFeature, FAQAccordion, StatusBanner, CTASection.
+HeroProductVisual, PlanCard, DownloadCard, SecurityFeature, FAQAccordion, StatusBanner, CTASection, AuthForm, AuthStatePanel.
 ```
 
 ## 5. Frontend Development Rules
@@ -498,6 +651,9 @@ For `livemask-website`:
 - use real product visuals as soon as App design is available
 - avoid unsupported claims
 - keep pricing, download, and support easy to find
+- provide visible login and registration entries
+- keep public auth pages outside `/admin/*`, `/sponsor/*`, `/ambassador/*`,
+  `/account/*`, and `/billing/*`
 - mobile layout is mandatory
 
 ## 6. Acceptance Checklist
@@ -515,6 +671,11 @@ Website:
 - [ ] First viewport clearly says LiveMask Secure VPN.
 - [ ] CTA to download/get LiveMask is obvious.
 - [ ] Pricing and security sections are easy to scan.
+- [ ] Login and Create Account entries are visible in navigation.
+- [ ] `/login`, `/register`, `/forgot-password`, `/verify-email`, and
+      `/auth/callback` states are designed.
+- [ ] Public auth pages route users to the correct role-specific URI after
+      login.
 - [ ] No impossible privacy claims.
 - [ ] Mobile layout is complete.
 
