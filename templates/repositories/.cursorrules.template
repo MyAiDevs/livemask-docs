@@ -25,7 +25,39 @@ Load additional modules based on the repository you are in:
 
 Always maintain the four-layer closed loop and TASK traceability.
 
+## Branch, GitHub, and Sync Rules
+
+- You may use `gh` commands to operate GitHub API, Issues, Actions,
+  `workflow_dispatch`, and `repository_dispatch`.
+- All development must start from `dev`:
+  ```bash
+  git fetch origin main dev
+  git checkout dev
+  git pull --ff-only origin dev
+  ```
+- If local `dev` does not exist, create it from `origin/dev` or `origin/main`.
+- Do not do daily development on `main`.
+- `main` is only for staging / pre-release after merging from `dev`.
+- Production is triggered only by GitHub Release / `v*` tag.
+- `task-unlocked` is only a development coordination signal; never use it to
+  trigger `livemask-ci-cd`.
+
 When a task or subtask is complete, reply with the standard completion report from:
 @docs/ai-rules/v3.7/16-Task-Completion-Report.md
 
 The report must explicitly say which other repo windows are unlocked for parallel development and which remain blocked.
+
+After a meaningful completion, run task sync from `livemask-docs`:
+
+```bash
+gh workflow run task-sync.yml \
+  --repo MyAiDevs/livemask-docs \
+  --ref dev \
+  -f task_id=TASK-XXXX \
+  -f result=partial \
+  -f summary="..." \
+  -f verification="..." \
+  -f unlocked_repos="" \
+  -f blocked_repos="" \
+  -f next_steps="..."
+```

@@ -1,0 +1,45 @@
+# LiveMask Docs - AI Development Rules v3.7
+
+## Always Start Here (Mandatory Pre-check)
+@docs/ai-rules/v3.7/00-Core-Principles.md
+@docs/ai-rules/v3.7/04-Multi-Repo-Linkage.md
+@docs/ai-rules/v3.7/13-Multi-Repo-Development.md
+@docs/ai-rules/v3.7/16-Task-Completion-Report.md
+@docs/operations/BRANCH_ENVIRONMENT_RELEASE_MODEL.md
+@docs/operations/AI_TASK_SYNC_AUTOMATION.md
+
+## Branch, GitHub, and Sync Rules
+- You may use `gh` commands to operate GitHub API, Issues, Actions, `workflow_dispatch`, and `repository_dispatch`.
+- All development must start from `dev`:
+  ```bash
+  git fetch origin main dev
+  git checkout dev
+  git pull --ff-only origin dev
+  ```
+- If local `dev` does not exist, create it from `origin/dev` or `origin/main`.
+- Do not do daily development on `main`.
+- `main` is only for staging / pre-release after merging from `dev`.
+- Production is triggered only by GitHub Release / `v*` tag.
+- `task-unlocked` is only a development coordination signal; never use it to trigger `livemask-ci-cd`.
+
+## Task Completion Report
+When a task or subtask is complete, use the standard completion report from:
+@docs/ai-rules/v3.7/16-Task-Completion-Report.md
+
+After a meaningful completion, run task sync from `livemask-docs`:
+
+```bash
+gh workflow run task-sync.yml \
+  --repo MyAiDevs/livemask-docs \
+  --ref dev \
+  -f task_id=TASK-XXXX \
+  -f result=partial \
+  -f summary="..." \
+  -f verification="..." \
+  -f unlocked_repos="" \
+  -f blocked_repos="" \
+  -f next_steps="..."
+```
+
+The report must explicitly say which repo windows are unlocked for parallel
+development and which remain blocked.
