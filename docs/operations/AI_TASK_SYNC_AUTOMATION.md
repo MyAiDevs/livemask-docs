@@ -53,6 +53,13 @@ The workflow will:
 - send a Lark project report,
 - skip Project movement unless Project variables are configured.
 
+Important: if `unlocked_repos` contains any child repository, the workflow
+requires `LIVEMASK_BOT_TOKEN`. The default `GITHUB_TOKEN` can comment on the
+current repository, but it cannot create `repository_dispatch` events in sibling
+repositories. The script fails before writing the TASK Issue comment when this
+token is missing, so the audit trail cannot claim a repo was unlocked when no
+dispatch was sent.
+
 ## 4. Issue Comment Sync Flow
 
 When a developer posts a standard AI completion report to a TASK issue,
@@ -97,11 +104,57 @@ when variables are absent.
 | --- | --- |
 | TASK issue not found | Workflow fails; create the issue first |
 | Lark secret missing | Lark notification skips; sync still succeeds |
+| Child repo unlock requested but `LIVEMASK_BOT_TOKEN` is missing | Workflow fails before writing the Issue comment |
 | Unlocked repo dispatch fails | Workflow fails; fix token or repo access |
 | Project variables missing | Project move skips; sync still succeeds |
 | Comment cannot be parsed | Workflow exits with neutral skip |
 
-## 8. Closure Assumption Matrix
+## 8. Required Token Closure
+
+`LIVEMASK_BOT_TOKEN` must be available to `livemask-docs` Actions whenever
+task sync needs to unlock another repository.
+
+Recommended setup:
+
+```bash
+gh secret set LIVEMASK_BOT_TOKEN \
+  --org MyAiDevs \
+  --visibility selected \
+  --repos livemask-docs
+```
+
+The token owner must have access to all repositories that can be unlocked:
+
+- `livemask-backend`
+- `livemask-nodeagent`
+- `livemask-app`
+- `livemask-admin`
+- `livemask-website`
+- `livemask-ci-cd`
+
+Minimum practical permissions:
+
+- `livemask-docs`: Issues read/write, Contents read
+- child repositories: Contents read/write or repository administration scope
+  sufficient for `POST /repos/{owner}/{repo}/dispatches`
+- Metadata read
+
+Validation command after the secret is configured:
+
+```bash
+gh workflow run task-sync.yml \
+  --repo MyAiDevs/livemask-docs \
+  --ref main \
+  -f task_id=TASK-INFRA-002 \
+  -f result=partial \
+  -f summary="Task sync closure validation." \
+  -f verification="Expect repository_dispatch to start livemask-backend CI." \
+  -f unlocked_repos="livemask-backend" \
+  -f blocked_repos="" \
+  -f next_steps="Confirm backend task-unlocked run."
+```
+
+## 9. Closure Assumption Matrix
 
 Before relying on task sync for multi-window development, verify these scenarios:
 
@@ -112,13 +165,14 @@ Before relying on task sync for multi-window development, verify these scenarios
 | Workflow posts its own audit comment | No second sync run is created | bot comments ignored + generated title is not a trigger phrase |
 | TASK Issue does not exist | Workflow fails loudly | `find_task_issue()` hard failure |
 | `unlocked_repos` contains a typo | Workflow fails before dispatch | repo allowlist in `task-sync.py` |
+| Child repo unlock is requested without bot token | Workflow fails before Issue comment | `LIVEMASK_BOT_TOKEN` preflight |
 | Unlocked child repo exists but has no consumer | CI would not run; this is invalid | child workflows must listen to `task-unlocked` |
 | Lark secrets are missing | Sync still succeeds, Lark step skips | `lark-notify.sh` skip behavior |
 | Project variables are missing | No Project move happens | Project movement is documented but disabled |
 | Same TASK receives multiple syncs | Multiple comments become audit history | issue comments are append-only evidence |
 | `LIVEMASK_BOT_TOKEN` lacks repo access | Dispatch/comment fails loudly | GitHub API errors fail workflow |
 
-## 9. Recommended Next Step
+## 10. Recommended Next Step
 
 After this automation is merged, create GitHub Issues for:
 

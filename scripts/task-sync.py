@@ -15,6 +15,7 @@ import urllib.request
 
 TASK_RE = re.compile(r"TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*")
 VALID_RESULTS = {"completed", "partial", "blocked"}
+DOCS_REPO = "livemask-docs"
 REPO_ALLOWLIST = {
     "livemask-docs",
     "livemask-backend",
@@ -142,6 +143,22 @@ def build_comment(args: argparse.Namespace, unlocked: list[str], blocked: list[s
 """
 
 
+def child_dispatch_targets(unlocked: list[str]) -> list[str]:
+    return [repo for repo in unlocked if repo != DOCS_REPO]
+
+
+def require_bot_token_for_dispatch(targets: list[str]) -> str:
+    bot_token = os.getenv("LIVEMASK_BOT_TOKEN", "")
+    if targets and not bot_token:
+        target_list = ", ".join(targets)
+        raise RuntimeError(
+            "LIVEMASK_BOT_TOKEN is required before syncing unlocked child repositories "
+            f"({target_list}). The default GITHUB_TOKEN cannot create repository_dispatch "
+            "events in other repositories. Configure the secret first, then rerun task sync."
+        )
+    return bot_token
+
+
 def write_github_output(values: dict[str, str]) -> None:
     output_path = os.getenv("GITHUB_OUTPUT")
     if not output_path:
@@ -168,7 +185,14 @@ def main() -> int:
         print(str(exc), file=sys.stderr)
         return 2
 
-    token = os.getenv("LIVEMASK_BOT_TOKEN") or os.getenv("GITHUB_TOKEN", "")
+    dispatch_targets = child_dispatch_targets(unlocked)
+    try:
+        bot_token = require_bot_token_for_dispatch(dispatch_targets)
+    except RuntimeError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+
+    token = bot_token or os.getenv("GITHUB_TOKEN", "")
     gh = GitHub(token)
 
     issue_number = gh.find_task_issue(args.task_id)
@@ -184,9 +208,7 @@ def main() -> int:
         "verification": args.verification,
         "next_steps": args.next_steps,
     }
-    for repo in unlocked:
-        if repo == "livemask-docs":
-            continue
+    for repo in dispatch_targets:
         gh.dispatch_repo(repo, "task-unlocked", payload)
 
     report_tasks = (
@@ -207,8 +229,8 @@ def main() -> int:
     )
 
     print(f"Synced {args.task_id} to issue #{issue_number}")
-    if unlocked:
-        print(f"Dispatched task-unlocked to: {', '.join(repo for repo in unlocked if repo != 'livemask-docs')}")
+    if dispatch_targets:
+        print(f"Dispatched task-unlocked to: {', '.join(dispatch_targets)}")
     return 0
 
 

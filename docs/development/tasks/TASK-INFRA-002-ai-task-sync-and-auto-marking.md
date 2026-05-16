@@ -83,6 +83,11 @@ Recommended `LIVEMASK_BOT_TOKEN` permissions:
 - Metadata: read
 - Projects: read/write (only when Project auto move is enabled)
 
+Closure rule: if a sync request includes child repositories in
+`unlocked_repos`, `LIVEMASK_BOT_TOKEN` must be configured before the workflow
+writes an Issue comment. Otherwise the audit trail could say a repo was
+unlocked while the cross-repo `repository_dispatch` was never sent.
+
 ## 6. Event Sources
 
 | Source | Trigger | Behavior |
@@ -188,6 +193,7 @@ If variables are missing, workflow must skip Project update and still complete.
 - [ ] Issue comment trigger ignores unrelated comments.
 - [ ] Issue comment trigger handles standard completion report.
 - [ ] Workflow-generated audit comments do not trigger recursive sync.
+- [ ] Missing `LIVEMASK_BOT_TOKEN` fails before Issue comment when child repos are unlocked.
 - [ ] `task-unlocked` dispatch starts the target child repo workflow.
 
 ## 12. Rollback
