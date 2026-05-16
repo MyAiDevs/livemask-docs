@@ -58,11 +58,14 @@ The workflow will:
 When a developer posts a standard AI completion report to a TASK issue,
 `task-sync.yml` can parse the comment if it contains:
 
+- `/task-sync`, or a level-2 heading named `任务完成报告` / `Task Completion Report`
 - `TASK ID`
 - `Result`
 - `Unlocked Repositories`
 
-Unrelated comments are ignored.
+Unrelated comments are ignored. Comments from GitHub bot users are ignored to
+avoid automation feedback loops. The workflow-generated `AI Task Sync` audit
+comment is intentionally not a trigger phrase.
 
 ## 5. Child Repo Consumer Contract
 
@@ -77,6 +80,10 @@ on:
 
 The first useful consumer is compatibility CI. For example, when Backend unlocks
 `livemask-admin`, Admin can run API client generation or contract checks.
+
+Current baseline: all child repositories must include `task-unlocked` in their
+existing `repository_dispatch` CI workflow triggers. This guarantees that a
+sync event is not silently dropped.
 
 ## 6. Project Automation
 
@@ -94,7 +101,24 @@ when variables are absent.
 | Project variables missing | Project move skips; sync still succeeds |
 | Comment cannot be parsed | Workflow exits with neutral skip |
 
-## 8. Recommended Next Step
+## 8. Closure Assumption Matrix
+
+Before relying on task sync for multi-window development, verify these scenarios:
+
+| Assumption | Expected result | Current guard |
+| --- | --- | --- |
+| Human manually syncs a TASK | Issue comment is created, Lark report is sent | `workflow_dispatch` |
+| Human posts a completion report comment | Comment parser extracts task/result/repos | `issue_comment.created` with explicit trigger phrase |
+| Workflow posts its own audit comment | No second sync run is created | bot comments ignored + generated title is not a trigger phrase |
+| TASK Issue does not exist | Workflow fails loudly | `find_task_issue()` hard failure |
+| `unlocked_repos` contains a typo | Workflow fails before dispatch | repo allowlist in `task-sync.py` |
+| Unlocked child repo exists but has no consumer | CI would not run; this is invalid | child workflows must listen to `task-unlocked` |
+| Lark secrets are missing | Sync still succeeds, Lark step skips | `lark-notify.sh` skip behavior |
+| Project variables are missing | No Project move happens | Project movement is documented but disabled |
+| Same TASK receives multiple syncs | Multiple comments become audit history | issue comments are append-only evidence |
+| `LIVEMASK_BOT_TOKEN` lacks repo access | Dispatch/comment fails loudly | GitHub API errors fail workflow |
+
+## 9. Recommended Next Step
 
 After this automation is merged, create GitHub Issues for:
 

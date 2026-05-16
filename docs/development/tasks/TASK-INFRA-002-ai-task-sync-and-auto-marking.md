@@ -187,6 +187,8 @@ If variables are missing, workflow must skip Project update and still complete.
 - [ ] Missing Project variables skip Project update without failing task sync.
 - [ ] Issue comment trigger ignores unrelated comments.
 - [ ] Issue comment trigger handles standard completion report.
+- [ ] Workflow-generated audit comments do not trigger recursive sync.
+- [ ] `task-unlocked` dispatch starts the target child repo workflow.
 
 ## 12. Rollback
 

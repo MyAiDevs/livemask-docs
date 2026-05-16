@@ -45,7 +45,11 @@ permissions:
 
 jobs:
   parse-comment:
-    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, 'TASK-') && (contains(github.event.comment.body, 'AI Task Sync') || contains(github.event.comment.body, '任务完成报告'))
+    if: >-
+      github.event_name == 'issue_comment'
+      && github.event.comment.user.type != 'Bot'
+      && contains(github.event.comment.body, 'TASK-')
+      && (contains(github.event.comment.body, '/task-sync') || contains(github.event.comment.body, '## 任务完成报告') || contains(github.event.comment.body, '## Task Completion Report'))
     runs-on: ubuntu-latest
     outputs:
       task_id: ${{ steps.parse.outputs.task_id }}
@@ -89,6 +93,20 @@ jobs:
           next_steps = section("Next Steps") or section("下一步建议")
           unlocked = repos("Unlocked Repositories") or repos("已解锁的后续开发窗口")
           blocked = repos("Blocked Repositories") or repos("仍然阻塞的窗口")
+          if not unlocked:
+              impact = section("跨端影响与解锁状态") or section("Cross-Repo Impact")
+              unlocked_found = []
+              blocked_found = []
+              for line in impact.splitlines():
+                  repo_match = re.search(r"livemask-[a-z-]+", line)
+                  if not repo_match:
+                      continue
+                  if "可并行" in line or "已完成" in line or "unlocked" in line.lower() or "ready" in line.lower():
+                      unlocked_found.append(repo_match.group(0))
+                  if "阻塞" in line or "blocked" in line.lower():
+                      blocked_found.append(repo_match.group(0))
+              unlocked = ",".join(dict.fromkeys(unlocked_found))
+              blocked = blocked or ",".join(dict.fromkeys(blocked_found))
 
           out = os.environ["GITHUB_OUTPUT"]
           values = {
