@@ -14,6 +14,16 @@ Current design version:
 design/website/atoms/v1
 ```
 
+Current combined Atoms export for public website, login, registration,
+sponsor ambassador, promotion ambassador, and related user portal surfaces:
+
+```text
+design/frontend-suite/atoms/v1/export/
+```
+
+This export is shared with Admin because the Atom output contains both public
+website and role-based backend UI surfaces in one generated project.
+
 Website auth routes that must be represented in design:
 
 ```text

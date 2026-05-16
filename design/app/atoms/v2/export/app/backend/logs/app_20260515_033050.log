@@ -1,0 +1,24 @@
+2026-05-15 03:30:50,526 - main - INFO - === Logging system initialized ===
+2026-05-15 03:30:50,526 - main - INFO - Log file: logs/app_20260515_033050.log
+2026-05-15 03:30:50,526 - main - INFO - Log level: INFO
+2026-05-15 03:30:50,527 - main - INFO - Timestamp: 20260515_033050
+2026-05-15 03:30:51,698 - main - INFO - Included router: routers.aihub.router
+2026-05-15 03:30:51,726 - main - INFO - Included router: routers.auth.router
+2026-05-15 03:30:51,794 - main - INFO - Included router: routers.diagnostic_reports.router
+2026-05-15 03:30:51,842 - main - INFO - Included router: routers.favorite_nodes.router
+2026-05-15 03:30:51,846 - main - INFO - Included router: routers.health.router
+2026-05-15 03:30:51,870 - main - INFO - Included router: routers.settings.router
+2026-05-15 03:30:51,916 - main - INFO - Included router: routers.storage.router
+2026-05-15 03:30:51,974 - main - INFO - Included router: routers.subscription_plans.router
+2026-05-15 03:30:51,994 - main - INFO - Included router: routers.user.router
+2026-05-15 03:30:52,054 - main - INFO - Included router: routers.user_subscriptions.router
+2026-05-15 03:30:52,113 - main - INFO - Included router: routers.vpn_nodes.router
+2026-05-15 03:30:52,117 - main - INFO - === Application startup initiated ===
+2026-05-15 03:30:52,117 - services.database - INFO - Ignore creating tables
+2026-05-15 03:30:52,118 - services.mock_data - INFO - Ignore initialize data
+2026-05-15 03:30:52,118 - services.auth - INFO - Ignore initialize admin
+2026-05-15 03:30:52,118 - main - INFO - === Application startup completed successfully ===
+2026-05-15 03:31:00,235 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-15 03:56:44,761 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-15 03:56:44,762 - services.database - INFO - Database connections closed
+2026-05-15 03:56:44,762 - services.database - DEBUG - [DB_OP] Database close completed in 0.0007s

@@ -1,0 +1,26 @@
+{
+    "title": "user_preferences",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "User ID"
+        },
+        "theme": {
+            "type": "string",
+            "description": "Theme preference: light or dark"
+        },
+        "language": {
+            "type": "string",
+            "description": "Language preference"
+        }
+    },
+    "required": [
+        "id",
+        "user_id"
+    ]
+}

@@ -1,0 +1,25 @@
+2026-05-16 09:31:21,907 - main - INFO - === Logging system initialized ===
+2026-05-16 09:31:21,907 - main - INFO - Log file: logs/app_20260516_093121.log
+2026-05-16 09:31:21,908 - main - INFO - Log level: INFO
+2026-05-16 09:31:21,908 - main - INFO - Timestamp: 20260516_093121
+2026-05-16 09:31:22,925 - main - INFO - Included router: routers.aihub.router
+2026-05-16 09:31:22,946 - main - INFO - Included router: routers.auth.router
+2026-05-16 09:31:23,016 - main - INFO - Included router: routers.diagnostic_reports.router
+2026-05-16 09:31:23,089 - main - INFO - Included router: routers.favorite_nodes.router
+2026-05-16 09:31:23,092 - main - INFO - Included router: routers.health.router
+2026-05-16 09:31:23,114 - main - INFO - Included router: routers.settings.router
+2026-05-16 09:31:23,154 - main - INFO - Included router: routers.storage.router
+2026-05-16 09:31:23,220 - main - INFO - Included router: routers.subscription_plans.router
+2026-05-16 09:31:23,230 - main - INFO - Included router: routers.user.router
+2026-05-16 09:31:23,280 - main - INFO - Included router: routers.user_subscriptions.router
+2026-05-16 09:31:23,326 - main - INFO - Included router: routers.vpn_nodes.router
+2026-05-16 09:31:23,328 - main - INFO - === Application startup initiated ===
+2026-05-16 09:31:23,328 - services.database - INFO - Ignore creating tables
+2026-05-16 09:31:23,328 - services.mock_data - INFO - Ignore initialize data
+2026-05-16 09:31:23,328 - services.auth - INFO - Ignore initialize admin
+2026-05-16 09:31:23,328 - main - INFO - === Application startup completed successfully ===
+2026-05-16 09:31:37,853 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 09:31:38,080 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 09:46:11,001 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-16 09:46:11,001 - services.database - INFO - Database connections closed
+2026-05-16 09:46:11,001 - services.database - DEBUG - [DB_OP] Database close completed in 0.0005s

@@ -21,6 +21,7 @@ Only move code or assets into `livemask-app`, `livemask-admin`, or
 | `design/admin/` | Admin / Ops / Design | Admin console design source |
 | `design/admin/sponsor-node/` | Admin / Revenue / Design | Sponsor node and ambassador revenue UI source |
 | `design/website/` | Website / Growth / Design | Public website design source |
+| `design/frontend-suite/` | Website / Admin / Growth / Ops | Combined Atoms export for public website, auth, sponsor/ambassador, and system admin UI |
 | `design/shared/` | All teams | Brand, colors, typography, icons, shared assets |
 
 ## Versioning Rule
@@ -32,6 +33,7 @@ design/app/atoms/v1
 design/app/atoms/v2
 design/admin/atoms/v1
 design/website/atoms/v1
+design/frontend-suite/atoms/v1
 ```
 
 Each version should contain:
@@ -62,6 +64,7 @@ App developers:
 
 ```text
 design/app/
+design/app/atoms/v2/export/
 docs/app/LIVEMASK_APP_DESIGN_BRIEF_FOR_ATOMS.md
 ```
 
@@ -69,6 +72,7 @@ Admin developers:
 
 ```text
 design/admin/
+design/frontend-suite/atoms/v1/export/
 docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md
 ```
 
@@ -76,6 +80,7 @@ Website developers:
 
 ```text
 design/website/
+design/frontend-suite/atoms/v1/export/
 docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md
 ```
 

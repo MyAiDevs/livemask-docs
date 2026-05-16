@@ -1,0 +1,29 @@
+[
+    {
+        "name": "Free",
+        "price_monthly": 0,
+        "price_yearly": 0,
+        "max_nodes": 4,
+        "bandwidth_limit": "5 GB/month",
+        "features": "[\"4 free nodes\",\"5 GB monthly bandwidth\",\"Standard protocols\",\"Basic support\"]",
+        "is_active": true
+    },
+    {
+        "name": "Pro",
+        "price_monthly": 9.99,
+        "price_yearly": 99.99,
+        "max_nodes": 14,
+        "bandwidth_limit": "Unlimited",
+        "features": "[\"All nodes\",\"Unlimited bandwidth\",\"WireGuard protocol\",\"Priority support\",\"Auto-connect\",\"5 devices\"]",
+        "is_active": true
+    },
+    {
+        "name": "Premium",
+        "price_monthly": 14.99,
+        "price_yearly": 149.99,
+        "max_nodes": 14,
+        "bandwidth_limit": "Unlimited",
+        "features": "[\"All nodes\",\"Unlimited bandwidth\",\"All protocols\",\"24/7 Priority support\",\"Auto-connect\",\"10 devices\",\"Dedicated IP\",\"Ad blocking\"]",
+        "is_active": true
+    }
+]

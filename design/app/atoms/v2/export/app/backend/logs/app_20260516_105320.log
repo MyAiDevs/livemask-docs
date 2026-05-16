@@ -1,0 +1,30 @@
+2026-05-16 10:53:20,490 - main - INFO - === Logging system initialized ===
+2026-05-16 10:53:20,491 - main - INFO - Log file: logs/app_20260516_105320.log
+2026-05-16 10:53:20,491 - main - INFO - Log level: INFO
+2026-05-16 10:53:20,492 - main - INFO - Timestamp: 20260516_105320
+2026-05-16 10:53:21,634 - main - INFO - Included router: routers.aihub.router
+2026-05-16 10:53:21,661 - main - INFO - Included router: routers.auth.router
+2026-05-16 10:53:21,730 - main - INFO - Included router: routers.diagnostic_reports.router
+2026-05-16 10:53:21,781 - main - INFO - Included router: routers.favorite_nodes.router
+2026-05-16 10:53:21,784 - main - INFO - Included router: routers.health.router
+2026-05-16 10:53:21,807 - main - INFO - Included router: routers.settings.router
+2026-05-16 10:53:21,860 - main - INFO - Included router: routers.storage.router
+2026-05-16 10:53:21,922 - main - INFO - Included router: routers.subscription_plans.router
+2026-05-16 10:53:21,934 - main - INFO - Included router: routers.user.router
+2026-05-16 10:53:22,003 - main - INFO - Included router: routers.user_preferences.router
+2026-05-16 10:53:22,107 - main - INFO - Included router: routers.user_subscriptions.router
+2026-05-16 10:53:22,170 - main - INFO - Included router: routers.vpn_nodes.router
+2026-05-16 10:53:22,173 - main - INFO - === Application startup initiated ===
+2026-05-16 10:53:22,173 - services.database - INFO - Ignore creating tables
+2026-05-16 10:53:22,173 - services.mock_data - INFO - Ignore initialize data
+2026-05-16 10:53:22,174 - services.auth - INFO - Ignore initialize admin
+2026-05-16 10:53:22,174 - main - INFO - === Application startup completed successfully ===
+2026-05-16 10:53:28,264 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:53:28,473 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:54:51,354 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:54:51,384 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:55:37,473 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:55:37,479 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:55:47,551 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-16 10:55:47,551 - services.database - INFO - Database connections closed
+2026-05-16 10:55:47,551 - services.database - DEBUG - [DB_OP] Database close completed in 0.0005s

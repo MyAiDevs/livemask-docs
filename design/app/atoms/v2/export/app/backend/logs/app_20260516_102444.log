@@ -1,0 +1,27 @@
+2026-05-16 10:24:44,674 - main - INFO - === Logging system initialized ===
+2026-05-16 10:24:44,674 - main - INFO - Log file: logs/app_20260516_102444.log
+2026-05-16 10:24:44,674 - main - INFO - Log level: INFO
+2026-05-16 10:24:44,675 - main - INFO - Timestamp: 20260516_102444
+2026-05-16 10:24:45,727 - main - INFO - Included router: routers.aihub.router
+2026-05-16 10:24:45,748 - main - INFO - Included router: routers.auth.router
+2026-05-16 10:24:45,918 - main - INFO - Included router: routers.diagnostic_reports.router
+2026-05-16 10:24:46,022 - main - INFO - Included router: routers.favorite_nodes.router
+2026-05-16 10:24:46,050 - main - INFO - Included router: routers.health.router
+2026-05-16 10:24:46,124 - main - INFO - Included router: routers.settings.router
+2026-05-16 10:24:46,159 - main - INFO - Included router: routers.storage.router
+2026-05-16 10:24:46,247 - main - INFO - Included router: routers.subscription_plans.router
+2026-05-16 10:24:46,255 - main - INFO - Included router: routers.user.router
+2026-05-16 10:24:46,336 - main - INFO - Included router: routers.user_preferences.router
+2026-05-16 10:24:46,381 - main - INFO - Included router: routers.user_subscriptions.router
+2026-05-16 10:24:46,446 - main - INFO - Included router: routers.vpn_nodes.router
+2026-05-16 10:24:46,448 - main - INFO - === Application startup initiated ===
+2026-05-16 10:24:46,448 - services.database - INFO - Ignore creating tables
+2026-05-16 10:24:46,448 - services.mock_data - INFO - Ignore initialize data
+2026-05-16 10:24:46,448 - services.auth - INFO - Ignore initialize admin
+2026-05-16 10:24:46,448 - main - INFO - === Application startup completed successfully ===
+2026-05-16 10:24:57,064 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:24:58,541 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:24:58,762 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:36:19,183 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-16 10:36:19,184 - services.database - INFO - Database connections closed
+2026-05-16 10:36:19,184 - services.database - DEBUG - [DB_OP] Database close completed in 0.0006s

@@ -1,0 +1,36 @@
+{
+    "title": "user_subscriptions",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "User ID from auth"
+        },
+        "plan_id": {
+            "type": "integer",
+            "description": "Reference to subscription_plans"
+        },
+        "status": {
+            "type": "string",
+            "description": "Status: active, expiring, suspended, cancelled"
+        },
+        "renewal_date": {
+            "type": "string",
+            "description": "Next renewal date ISO string"
+        },
+        "payment_method": {
+            "type": "string",
+            "description": "Payment method used"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "plan_id",
+        "status"
+    ]
+}

@@ -1,0 +1,23 @@
+{
+    "title": "favorite_nodes",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "User ID from auth"
+        },
+        "node_id": {
+            "type": "integer",
+            "description": "Reference to vpn_nodes"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "node_id"
+    ]
+}

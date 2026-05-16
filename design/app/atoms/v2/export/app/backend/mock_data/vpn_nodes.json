@@ -1,0 +1,142 @@
+[
+    {
+        "region": "Asia Pacific",
+        "city": "Tokyo",
+        "country_code": "JP",
+        "latency": 45,
+        "load": 32,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": false
+    },
+    {
+        "region": "Asia Pacific",
+        "city": "Singapore",
+        "country_code": "SG",
+        "latency": 38,
+        "load": 55,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": true
+    },
+    {
+        "region": "Asia Pacific",
+        "city": "Hong Kong",
+        "country_code": "HK",
+        "latency": 52,
+        "load": 78,
+        "protocol": "WireGuard",
+        "status": "busy",
+        "is_free": false
+    },
+    {
+        "region": "Asia Pacific",
+        "city": "Sydney",
+        "country_code": "AU",
+        "latency": 120,
+        "load": 25,
+        "protocol": "OpenVPN",
+        "status": "healthy",
+        "is_free": true
+    },
+    {
+        "region": "Europe",
+        "city": "London",
+        "country_code": "GB",
+        "latency": 85,
+        "load": 42,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": false
+    },
+    {
+        "region": "Europe",
+        "city": "Frankfurt",
+        "country_code": "DE",
+        "latency": 78,
+        "load": 61,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": true
+    },
+    {
+        "region": "Europe",
+        "city": "Amsterdam",
+        "country_code": "NL",
+        "latency": 82,
+        "load": 88,
+        "protocol": "OpenVPN",
+        "status": "degraded",
+        "is_free": false
+    },
+    {
+        "region": "Europe",
+        "city": "Paris",
+        "country_code": "FR",
+        "latency": 90,
+        "load": 35,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": false
+    },
+    {
+        "region": "North America",
+        "city": "New York",
+        "country_code": "US",
+        "latency": 65,
+        "load": 48,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": true
+    },
+    {
+        "region": "North America",
+        "city": "Los Angeles",
+        "country_code": "US",
+        "latency": 72,
+        "load": 56,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": false
+    },
+    {
+        "region": "North America",
+        "city": "Toronto",
+        "country_code": "CA",
+        "latency": 68,
+        "load": 30,
+        "protocol": "OpenVPN",
+        "status": "healthy",
+        "is_free": false
+    },
+    {
+        "region": "North America",
+        "city": "Miami",
+        "country_code": "US",
+        "latency": 70,
+        "load": 92,
+        "protocol": "WireGuard",
+        "status": "busy",
+        "is_free": false
+    },
+    {
+        "region": "South America",
+        "city": "São Paulo",
+        "country_code": "BR",
+        "latency": 145,
+        "load": 40,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": true
+    },
+    {
+        "region": "Middle East",
+        "city": "Dubai",
+        "country_code": "AE",
+        "latency": 110,
+        "load": 22,
+        "protocol": "WireGuard",
+        "status": "healthy",
+        "is_free": false
+    }
+]

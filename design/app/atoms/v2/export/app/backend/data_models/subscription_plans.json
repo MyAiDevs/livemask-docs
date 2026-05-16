@@ -1,0 +1,44 @@
+{
+    "title": "subscription_plans",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "name": {
+            "type": "string",
+            "description": "Plan name e.g. Free, Pro, Premium"
+        },
+        "price_monthly": {
+            "type": "number",
+            "description": "Monthly price in USD"
+        },
+        "price_yearly": {
+            "type": "number",
+            "description": "Yearly price in USD"
+        },
+        "max_nodes": {
+            "type": "integer",
+            "description": "Maximum number of nodes accessible"
+        },
+        "bandwidth_limit": {
+            "type": "string",
+            "description": "Bandwidth limit description"
+        },
+        "features": {
+            "type": "string",
+            "description": "JSON string of feature list"
+        },
+        "is_active": {
+            "type": "boolean",
+            "description": "Whether plan is currently available"
+        }
+    },
+    "required": [
+        "id",
+        "name",
+        "price_monthly",
+        "is_active"
+    ]
+}

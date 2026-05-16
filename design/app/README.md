@@ -12,19 +12,23 @@ docs/app/LIVEMASK_APP_DESIGN_BRIEF_FOR_ATOMS.md
 Current design version:
 
 ```text
-design/app/atoms/v1
+design/app/atoms/v2
 ```
 
-When Atoms generates UI files, put them under:
+Current Atoms export:
 
 ```text
-design/app/atoms/v1/export/
+design/app/atoms/v2/export/
 ```
 
-When Atoms generates screenshots, put them under:
+This export came from the local `LiveMask App Design Brief` folder and contains
+cross-platform App UI code and files for mobile and desktop clients.
+
+When Atoms generates a new App UI version, create the next version folder:
 
 ```text
-design/app/atoms/v1/screenshots/
+design/app/atoms/v3/export/
+design/app/atoms/v3/screenshots/
 ```
 
 Required client design targets:

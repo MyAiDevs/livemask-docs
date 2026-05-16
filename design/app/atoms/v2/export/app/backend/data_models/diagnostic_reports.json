@@ -1,0 +1,56 @@
+{
+    "title": "diagnostic_reports",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "user_id": {
+            "type": "string",
+            "description": "User ID from auth"
+        },
+        "issue_type": {
+            "type": "string",
+            "description": "Type of issue reported"
+        },
+        "node_id": {
+            "type": "integer",
+            "description": "Node ID where issue occurred"
+        },
+        "protocol": {
+            "type": "string",
+            "description": "Protocol in use"
+        },
+        "network_type": {
+            "type": "string",
+            "description": "Network type e.g. WiFi, 4G"
+        },
+        "app_version": {
+            "type": "string",
+            "description": "App version string"
+        },
+        "config_version": {
+            "type": "string",
+            "description": "Config version string"
+        },
+        "error_code": {
+            "type": "string",
+            "description": "Error code if any"
+        },
+        "description": {
+            "type": "string",
+            "description": "User description of the issue"
+        },
+        "status": {
+            "type": "string",
+            "description": "Report status: submitted, reviewing, resolved"
+        }
+    },
+    "required": [
+        "id",
+        "user_id",
+        "issue_type",
+        "status"
+    ]
+}

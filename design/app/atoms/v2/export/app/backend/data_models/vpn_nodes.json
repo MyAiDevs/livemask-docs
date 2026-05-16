@@ -1,0 +1,53 @@
+{
+    "title": "vpn_nodes",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "integer",
+            "description": "Primary key, auto-increment"
+        },
+        "region": {
+            "type": "string",
+            "description": "Region name e.g. Asia Pacific"
+        },
+        "city": {
+            "type": "string",
+            "description": "City name e.g. Tokyo"
+        },
+        "country_code": {
+            "type": "string",
+            "description": "ISO country code e.g. JP"
+        },
+        "latency": {
+            "type": "integer",
+            "description": "Latency in ms"
+        },
+        "load": {
+            "type": "integer",
+            "description": "Server load percentage 0-100"
+        },
+        "protocol": {
+            "type": "string",
+            "description": "VPN protocol e.g. WireGuard"
+        },
+        "status": {
+            "type": "string",
+            "description": "Node status: healthy, busy, degraded, quarantine"
+        },
+        "is_free": {
+            "type": "boolean",
+            "description": "Whether node is available for free users"
+        }
+    },
+    "required": [
+        "id",
+        "region",
+        "city",
+        "country_code",
+        "latency",
+        "load",
+        "protocol",
+        "status",
+        "is_free"
+    ]
+}

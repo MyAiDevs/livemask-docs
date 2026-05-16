@@ -1,0 +1,74 @@
+2026-05-16 10:48:25,176 - main - INFO - === Logging system initialized ===
+2026-05-16 10:48:25,177 - main - INFO - Log file: logs/app_20260516_104825.log
+2026-05-16 10:48:25,177 - main - INFO - Log level: INFO
+2026-05-16 10:48:25,177 - main - INFO - Timestamp: 20260516_104825
+2026-05-16 10:48:26,142 - main - INFO - Included router: routers.aihub.router
+2026-05-16 10:48:26,168 - main - INFO - Included router: routers.auth.router
+2026-05-16 10:48:26,244 - main - INFO - Included router: routers.diagnostic_reports.router
+2026-05-16 10:48:26,301 - main - INFO - Included router: routers.favorite_nodes.router
+2026-05-16 10:48:26,308 - main - INFO - Included router: routers.health.router
+2026-05-16 10:48:26,331 - main - INFO - Included router: routers.settings.router
+2026-05-16 10:48:26,377 - main - INFO - Included router: routers.storage.router
+2026-05-16 10:48:26,428 - main - INFO - Included router: routers.subscription_plans.router
+2026-05-16 10:48:26,437 - main - INFO - Included router: routers.user.router
+2026-05-16 10:48:26,481 - main - INFO - Included router: routers.user_preferences.router
+2026-05-16 10:48:26,526 - main - INFO - Included router: routers.user_subscriptions.router
+2026-05-16 10:48:26,567 - main - INFO - Included router: routers.vpn_nodes.router
+2026-05-16 10:48:26,568 - main - INFO - === Application startup initiated ===
+2026-05-16 10:48:26,568 - services.database - INFO - Ignore creating tables
+2026-05-16 10:48:26,568 - services.mock_data - INFO - Ignore initialize data
+2026-05-16 10:48:26,569 - services.auth - INFO - Ignore initialize admin
+2026-05-16 10:48:26,569 - main - INFO - === Application startup completed successfully ===
+2026-05-16 10:48:39,913 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:48:40,936 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:48:41,166 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:48:56,004 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-16 10:48:56,004 - core.database - WARNING - Database session maker not available, attempting lazy initialization...
+2026-05-16 10:48:56,004 - core.database - WARNING - Database not initialized, attempting lazy initialization...
+2026-05-16 10:48:56,004 - core.database - INFO - Starting database initialization...
+2026-05-16 10:48:56,004 - core.config - DEBUG - Read dynamic attribute database_url from environment variable DATABASE_URL
+2026-05-16 10:48:56,005 - core.database - INFO - Normalizing database URL for async compatibility...
+2026-05-16 10:48:56,006 - core.database - INFO - Creating async database engine...
+2026-05-16 10:48:56,006 - core.database - INFO - Using QueuePool with connection pooling for non-Lambda environment
+2026-05-16 10:48:56,094 - core.database - INFO - Database engine created successfully
+2026-05-16 10:48:56,094 - core.database - INFO - Creating async session maker...
+2026-05-16 10:48:56,096 - core.database - INFO - Async session maker created successfully
+2026-05-16 10:48:56,096 - core.database - INFO - Database connection initialized successfully
+2026-05-16 10:48:56,096 - core.database - DEBUG - [DB_OP] Starting create_tables
+2026-05-16 10:48:56,096 - core.database - INFO - 🔧 Starting table creation...
+2026-05-16 10:48:57,794 - core.database - INFO - Tables initialized successfully
+2026-05-16 10:48:57,794 - core.database - DEBUG - [DB_OP] Create tables completed in 1.6983s
+2026-05-16 10:48:57,857 - core.database - INFO - Lazy database initialization completed successfully
+2026-05-16 10:48:57,858 - core.database - DEBUG - [DB_OP] Database session created successfully in 1.8545s
+2026-05-16 10:48:57,858 - routers.vpn_nodes - DEBUG - Querying vpn_nodess: query={}, sort=latency, skip=0, limit=50, fields=None
+2026-05-16 10:48:58,437 - routers.vpn_nodes - DEBUG - Found 14 vpn_nodess
+2026-05-16 10:48:58,438 - core.database - DEBUG - [DB_OP] Database session cleanup after 2.4341s
+2026-05-16 10:48:59,869 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-16 10:48:59,870 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0004s
+2026-05-16 10:48:59,870 - routers.subscription_plans - DEBUG - Querying subscription_planss: query={}, sort=price_monthly, skip=0, limit=10, fields=None
+2026-05-16 10:49:00,380 - routers.subscription_plans - DEBUG - Found 3 subscription_planss
+2026-05-16 10:49:00,384 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.5142s
+2026-05-16 10:49:00,730 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:49:02,512 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:49:04,993 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:49:06,119 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-16 10:49:06,119 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0004s
+2026-05-16 10:49:06,120 - routers.vpn_nodes - DEBUG - Querying vpn_nodess: query={}, sort=latency, skip=0, limit=50, fields=None
+2026-05-16 10:49:06,506 - routers.vpn_nodes - DEBUG - Found 14 vpn_nodess
+2026-05-16 10:49:06,507 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3879s
+2026-05-16 10:49:07,763 - core.database - DEBUG - [DB_OP] Starting get_db session creation
+2026-05-16 10:49:07,764 - core.database - DEBUG - [DB_OP] Database session created successfully in 0.0005s
+2026-05-16 10:49:07,764 - routers.subscription_plans - DEBUG - Querying subscription_planss: query={}, sort=price_monthly, skip=0, limit=10, fields=None
+2026-05-16 10:49:08,140 - routers.subscription_plans - DEBUG - Found 3 subscription_planss
+2026-05-16 10:49:08,141 - core.database - DEBUG - [DB_OP] Database session cleanup after 0.3779s
+2026-05-16 10:49:08,480 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:49:08,693 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:51:05,597 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:51:22,297 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:51:22,303 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:52:12,354 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:52:12,372 - dependencies.auth - DEBUG - Authentication required for request GET /api/v1/auth/me
+2026-05-16 10:53:03,375 - services.database - DEBUG - [DB_OP] Starting database close
+2026-05-16 10:53:03,442 - core.database - INFO - Database connection closed and engine disposed
+2026-05-16 10:53:03,443 - services.database - INFO - Database connections closed
+2026-05-16 10:53:03,443 - services.database - DEBUG - [DB_OP] Database close completed in 0.0680s

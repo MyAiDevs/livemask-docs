@@ -1,0 +1,48 @@
+{
+  "status": "success",
+  "results": [
+    {
+      "status": "success",
+      "path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkjbyaagqq/onboarding-secure-connection.png",
+      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkjbyaagqq/onboarding-secure-connection.png",
+      "url": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkjbyaagqq/onboarding-secure-connection.png",
+      "message": "Image generated successfully.\n\nNote: The image is on CDN and will be displayed automatically. Just describe what you created briefly, no need to mention filenames or URLs.",
+      "description": "Abstract minimalist illustration of a glowing shield protecting a network of connected dots and lines, deep teal and cyan-green color palette on a soft white background, clean modern style, representing secure private network access",
+      "style": "minimalist",
+      "filename": "onboarding-secure-connection.jpg"
+    },
+    {
+      "status": "success",
+      "path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkh4qaagoq/onboarding-global-nodes.png",
+      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkh4qaagoq/onboarding-global-nodes.png",
+      "url": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkh4qaagoq/onboarding-global-nodes.png",
+      "message": "Image generated successfully.\n\nNote: The image is on CDN and will be displayed automatically. Just describe what you created briefly, no need to mention filenames or URLs.",
+      "description": "Abstract minimalist illustration of a globe with multiple location pins connected by flowing light paths, deep teal and cyan-green accents on soft white background, representing fast global VPN nodes across regions",
+      "style": "minimalist",
+      "filename": "onboarding-global-nodes.jpg"
+    },
+    {
+      "status": "success",
+      "path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkjryaagnq/onboarding-recovery.png",
+      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkjryaagnq/onboarding-recovery.png",
+      "url": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkjryaagnq/onboarding-recovery.png",
+      "message": "Image generated successfully.\n\nNote: The image is on CDN and will be displayed automatically. Just describe what you created briefly, no need to mention filenames or URLs.",
+      "description": "Abstract minimalist illustration of a broken connection being repaired with a glowing bridge, retry arrows and diagnostic tools, deep teal and cyan-green color palette on soft white background, representing network recovery and diagnostics",
+      "style": "minimalist",
+      "filename": "onboarding-recovery.jpg"
+    },
+    {
+      "status": "success",
+      "path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkhzaaagqa/livemask-logo.png",
+      "absolute_path": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkhzaaagqa/livemask-logo.png",
+      "url": "https://mgx-backend-cdn.metadl.com/generate/images/319396/2026-05-14/ordkhzaaagqa/livemask-logo.png",
+      "message": "Image generated successfully.\n\nNote: The image is on CDN and will be displayed automatically. Just describe what you created briefly, no need to mention filenames or URLs.",
+      "description": "LiveMask VPN app logo mark, a modern stylized shield with a subtle mask silhouette integrated into the design, deep teal cyan-green color, clean geometric shapes, premium fintech style, transparent background",
+      "style": "minimalist",
+      "filename": "livemask-logo.png"
+    }
+  ],
+  "success_count": 4,
+  "failed_count": 0,
+  "message": "Generated 4/4 images"
+}
