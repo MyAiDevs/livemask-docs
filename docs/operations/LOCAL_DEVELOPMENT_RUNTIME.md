@@ -191,6 +191,15 @@ bash scripts/local-app.sh build --targets macos,ios
 bash scripts/local-app.sh build --targets all
 ```
 
+When running on a specific simulator or device:
+
+```bash
+cd ../livemask-app
+flutter devices
+bash scripts/local-app.sh start --target ios --device-id <simulator-or-device-id>
+bash scripts/local-app.sh start --target android --device-id <emulator-or-device-id>
+```
+
 Target support:
 
 | Target | Where it can be built / run |
