@@ -1,7 +1,12 @@
 # GitHub Automation Setup
 
 > This runbook explains how LiveMask uses GitHub Projects, Issues, Actions, CODEOWNERS, repository_dispatch, and organization-level self-hosted runners.
->
+
+Branch and environment policy is defined in
+`docs/operations/BRANCH_ENVIRONMENT_RELEASE_MODEL.md`: daily development uses
+`dev`, remote pre-release uses `main`, and production uses GitHub Release /
+`v*` tags only.
+
 > For the design rationale, examples, troubleshooting, and scaling rules, read
 > `docs/operations/GITHUB_ACTIONS_RUNNER_ARCHITECTURE.md`.
 
