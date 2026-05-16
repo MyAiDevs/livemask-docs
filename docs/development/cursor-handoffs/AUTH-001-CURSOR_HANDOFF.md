@@ -7,6 +7,10 @@ Use this file to start Cursor windows for parallel development.
 ```text
 You are working in livemask-backend on branch dev.
 
+Repository boundary:
+- You may write Go Backend code, DB schema/migrations, Backend tests.
+- Do not modify livemask-admin, livemask-website, livemask-app, or livemask-nodeagent from this window.
+
 Task:
 Implement TASK-AUTH-001 Account/Auth/RBAC Backend foundation.
 
@@ -38,6 +42,12 @@ Completion report must include:
 ```text
 You are working in livemask-admin on branch dev.
 
+Repository boundary:
+- You may write TypeScript/React/Next.js/shadcn Admin frontend code only.
+- You may implement API clients and mocks that call Backend contracts.
+- You must not create or modify Go files, go.mod, go.sum, DB migrations, Backend handlers/services/repositories, or Backend runtime code in this repository.
+- If Backend changes are needed, report them as blockers for the livemask-backend window.
+
 Task:
 Implement TASK-AUTH-001 Admin login and RBAC route guard.
 
@@ -68,6 +78,12 @@ Completion report must include:
 ```text
 You are working in livemask-website on branch dev.
 
+Repository boundary:
+- You may write Website/user-portal frontend code only.
+- You may implement API clients and mocks that call Backend contracts.
+- You must not create or modify Go files, go.mod, go.sum, DB migrations, Backend handlers/services/repositories, or Admin-only runtime code in this repository.
+- If Backend changes are needed, report them as blockers for the livemask-backend window.
+
 Task:
 Implement TASK-AUTH-001 public website auth entry and user portal shell.
 
@@ -96,6 +112,12 @@ Completion report must include:
 
 ```text
 You are working in livemask-app on branch dev.
+
+Repository boundary:
+- You may write Flutter/Dart App code only.
+- You may implement API clients, secure storage, mocks, and App tests.
+- You must not create or modify Go Backend files, DB migrations, Admin/Website frontend code, or NodeAgent runtime code in this repository.
+- If Backend changes are needed, report them as blockers for the livemask-backend window.
 
 Task:
 Implement TASK-AUTH-001 App authenticated API foundation.

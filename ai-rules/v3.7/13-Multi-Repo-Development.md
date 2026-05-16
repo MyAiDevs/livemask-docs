@@ -42,7 +42,32 @@
 7. 在 PR 描述中说明影响范围、验证结果、回滚策略和未完成项。
 8. 只有 `dev` 合并到 `main` 才能触发远程预发布 CI/CD；只有 release 才能触发生产 CI/CD。
 
-## 4. 分支与环境映射
+## 4. 仓库写入边界
+
+多窗口协同时，AI 可以阅读其它仓库和公共契约，但不得在错误仓库实现别的端的代码。
+
+| 当前仓库 | 允许写入 | 禁止写入 |
+| --- | --- | --- |
+| `livemask-backend` | Go Backend、DB migration、Backend tests、Backend API contract notes | Flutter App、Next/Admin 页面、Website 页面、NodeAgent runtime |
+| `livemask-admin` | Admin / Sponsor / Ambassador 前端、TypeScript、React、Next.js、shadcn、Admin API client | Go 文件、DB migration、Backend handler/service/repository、Flutter App、NodeAgent runtime |
+| `livemask-website` | Public website、user portal、TypeScript、React/Vite/Next、Website API client | Go 文件、DB migration、Backend handler/service/repository、Admin-only pages under `/admin/*` |
+| `livemask-app` | Flutter/Dart App、secure storage、App API client、App tests | Go Backend、Admin/Website pages、NodeAgent runtime |
+| `livemask-nodeagent` | Go NodeAgent runtime、agent config/cache/reporting、agent tests | Backend API handlers, Admin/Website/App UI |
+| `livemask-ci-cd` | Compose, workflows, runtime scripts, smoke tests | Product code unless explicitly scoped to CI templates |
+| `livemask-docs` | Contracts, tasks, handoff docs, rules, design source | Runtime implementation code |
+
+如果一个任务需要 Backend 和 Admin 同时改：
+
+1. Backend 窗口只改 `livemask-backend`。
+2. Admin 窗口只改 `livemask-admin`。
+3. 双方通过 `livemask-docs` 契约、TASK、Issue 评论和 task-sync 交接。
+4. 非本仓库代码最多只能提出变更建议，不能直接创建或修改。
+
+特别规则：`livemask-admin` 和 `livemask-website` 读取 Backend 契约时，只能实现
+API client、mock、页面状态和错误处理；不得创建 `.go`、`go.mod`、`go.sum`、migration
+或 Backend 目录结构。
+
+## 5. 分支与环境映射
 
 | 分支 / ref | 环境含义 | 允许动作 |
 | --- | --- | --- |
@@ -53,7 +78,7 @@
 `task-unlocked` 只表示其它仓库窗口可以开始或继续开发，不表示 staging
 部署，也不表示 production 发布。
 
-## 5. 紧急处理
+## 6. 紧急处理
 
 发现跨仓库不一致时：
 
