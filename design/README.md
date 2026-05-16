@@ -19,6 +19,7 @@ Only move code or assets into `livemask-app`, `livemask-admin`, or
 | --- | --- | --- |
 | `design/app/` | App / Product / Design | Mobile App design source |
 | `design/admin/` | Admin / Ops / Design | Admin console design source |
+| `design/admin/sponsor-node/` | Admin / Revenue / Design | Sponsor node and ambassador revenue UI source |
 | `design/website/` | Website / Growth / Design | Public website design source |
 | `design/shared/` | All teams | Brand, colors, typography, icons, shared assets |
 
@@ -69,6 +70,7 @@ Admin developers:
 ```text
 design/admin/
 docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md
+docs/admin/LIVEMASK_NODE_SPONSOR_UI_DESIGN_BRIEF_FOR_ATOMS.md
 ```
 
 Website developers:
