@@ -159,6 +159,20 @@ Response:
 | `server_config_version` | int | 是 | Backend 当前配置版本 |
 | `fallback_action` | string | 否 | `refresh_config` / `continue` |
 
+## Health API
+
+参见独立文档：[health-check.md](health-check.md)
+
+### GET `/api/v1/health`
+
+- Caller：CI smoke / staging monitoring / load balancer / App startup
+- Auth：staging/monitoring no auth；production 限制内网
+- Idempotency：N/A（无副作用）
+
+轻量探活端点，检测 PostgreSQL 和 Redis 连通状态。不写入数据库。
+
+详细契约：见 [health-check.md](health-check.md)。
+
 ## Payment API
 
 ### POST `/api/v1/payments/usdt/orders`

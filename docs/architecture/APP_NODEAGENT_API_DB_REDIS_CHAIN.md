@@ -161,6 +161,26 @@ NodeAgent degraded / traffic / quality report
 - NodeAgent 本地缓存补报测试
 - API 恢复后幂等入库测试
 
+### H8：Health API / CI Smoke 不可用，阻塞下一阶段开发判断
+
+**风险**：在 Health API 未就绪或 staging smoke 不可靠的情况下，后续业务 TASK（配置中心、支付、推荐）无法验证 App → Backend API → DB/Redis → CI/CD → Lark 的完整链路。开发者在假性闭环中实现业务逻辑，上线后发现基础设施级问题。
+
+**必须闭环**：
+
+- `GET /api/v1/health` 必须在第一个业务 API 之前实现并部署，作为基础设施就绪的信号。
+- staging smoke 必须从占位 nginx 升级为真实 backend + postgres + redis，并调用 Health API。
+- 每个 CI 运行必须包含 notify-lark job，确保失败时可观测。
+- `livemask-docs` 契约变更必须通过 `repository_dispatch` 通知子仓库，子仓库 CI 自动触发。
+- 在 Health API CI/smoke 未全部通过之前，不得进入 P0-03（配置中心）的实现阶段。
+
+**验收证据**：
+
+- Health API 返回正确状态（ok / degraded / down）
+- Backend CI + staging smoke 全绿
+- Lark 收到 CI 通知
+- Dispatch 触发子仓库 CI
+- 对应 TASK 文档标记为 blocked until INFRA-001 pass
+
 ## 4. 必须存在的契约字段
 
 ### App -> API
@@ -218,19 +238,21 @@ NodeAgent degraded / traffic / quality report
 | 重复上报 | 无 | 重发同 report_id | 幂等拒重 | 唯一约束 | 状态不重复 | 聚合不重复 |
 | Pub/Sub 丢失 | 轮询发现新版本 | 心跳发现新版本 | 版本比对 | 配置为准 | 无通知 | 最终一致 |
 | API 不可用 | 使用 last-known-good | 本地缓存批次 | 恢复后处理 | 幂等入库 | 重建状态 | 不丢数据 |
+| Health API / CI smoke | 启动时调用 Health API | 无 | 返回连通状态 | PING 检测 | PING 检测 | 状态正确反映 DB/Redis 实际连通 |
 
 ## 7. 当前审计结论
 
 | 项目 | 状态 | 说明 |
 | --- | --- | --- |
 | 正常路径描述 | 已有 | 架构文档已有推荐、上报、监控闭环描述 |
-| 失败假设与兜底 | 本文补齐 | 覆盖 Redis stale、DB/Redis 部分失败、重复乱序、通知丢失 |
+| 失败假设与兜底 | 本文补齐 | 覆盖 Redis stale、DB/Redis 部分失败、重复乱序、通知丢失、Health 不可用 |
 | 必需契约字段 | 本文补齐 | App、NodeAgent、API 响应字段已列出 |
 | DB / Redis 事实源规则 | 本文补齐 | 明确 PostgreSQL 与 Redis 的职责 |
 | 自动化检查 | 已接入 | `scripts/check-e2e-chain.py` 检查本文和数据一致性契约 |
 
 ## 8. 后续 TASK
 
+- `TASK-INFRA-001`：实现 Health API + CI smoke 闭环，验证链路的可运行性（前置条件）。
 - `TASK-DOC-006`：把本文中的字段补入真实 API / Config / Event contract 条目。
 - `TASK-BE-CHAIN-001`：实现 DB outbox + Redis Stream 事件一致性方案。
 - `TASK-NA-REPORT-001`：统一 NodeAgent `report_id`、`sequence`、补报幂等规则。

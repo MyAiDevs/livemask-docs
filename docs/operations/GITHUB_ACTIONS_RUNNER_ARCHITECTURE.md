@@ -136,7 +136,7 @@ is a permission boundary, not a machine boundary.
 `livemask-ci` is for regular validation:
 
 - Docs checks
-- Backend tests
+- Backend tests (unit + integration, including postgres + redis + Health API)
 - NodeAgent tests
 - Frontend builds
 - Contract-triggered checks
@@ -313,7 +313,7 @@ jobs:
 
 ### 9.2 Staging Smoke
 
-Use in `livemask-ci-cd`:
+Use in `livemask-ci-cd`. 启动 backend + postgres + redis，调用 `GET /api/v1/health` 验证连通状态。
 
 ```yaml
 jobs:
@@ -325,6 +325,38 @@ jobs:
       - uses: actions/checkout@v4
       - run: docker compose -f infra/docker-compose.staging.yml up -d
       - run: bash scripts/smoke.sh
+```
+
+`smoke.sh` 示例：
+
+```bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+HEALTH_URL="${HEALTH_URL:-http://localhost:8080/api/v1/health}"
+
+echo "=== Health check ==="
+response=$(curl -sS --max-time 5 "$HEALTH_URL")
+echo "$response"
+
+status=$(echo "$response" | python3 -c "import sys,json; print(json.load(sys.stdin)['status'])")
+db=$(echo "$response" | python3 -c "import sys,json; print(json.load(sys.stdin)['db_connected'])")
+redis=$(echo "$response" | python3 -c "import sys,json; print(json.load(sys.stdin)['redis_connected'])")
+
+if [ "$status" != "ok" ]; then
+  echo "FAIL: health status is $status, expected ok"
+  exit 1
+fi
+if [ "$db" != "True" ]; then
+  echo "FAIL: db_connected is $db"
+  exit 1
+fi
+if [ "$redis" != "True" ]; then
+  echo "FAIL: redis_connected is $redis"
+  exit 1
+fi
+
+echo "Smoke PASS: backend + postgres + redis connected"
 ```
 
 ### 9.3 Lark Notification
@@ -635,3 +667,13 @@ and allow only the release/deployment repository to use it.
 - [ ] Failed CI/CD run produces a Lark card with an error summary.
 - [ ] `Lark Project Report` can send a manual multi-repo report.
 - [ ] `livemask-ci-cd` staging smoke can start and run.
+
+### Health API Smoke Validation
+
+- [ ] `livemask-backend` CI runs `build → unit test → integration test` on `livemask-ci`.
+- [ ] Integration test starts postgres + redis containers and calls `GET /api/v1/health`.
+- [ ] `livemask-ci-cd` staging compose replaces nginx placeholder with backend + postgres + redis.
+- [ ] Staging smoke calls `GET /api/v1/health` and validates `status == "ok"`.
+- [ ] Health API returns `degraded` when DB or Redis is unreachable.
+- [ ] Health API returns `down` when both DB and Redis are unreachable.
+- [ ] Scaffold repositories without `go.mod` / `package.json` skip build without failure.
