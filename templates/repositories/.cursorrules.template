@@ -5,6 +5,7 @@ You are working on the LiveMask project.
 **MANDATORY**: Before writing any code, read:
 - docs/ai-rules/v3.7/00-Core-Principles.md
 - docs/ai-rules/v3.7/02-Closed-Loop-Validation.md
+- docs/ai-rules/v3.7/16-Task-Completion-Report.md
 - The current task from docs/LiveMask_开发任务清单与里程碑_v3.6.md
 
 Load additional modules based on the repository you are in:
@@ -23,3 +24,8 @@ Load additional modules based on the repository you are in:
 @docs/ai-rules/v3.7/06-Client-App-Specific-Rules.md
 
 Always maintain the four-layer closed loop and TASK traceability.
+
+When a task or subtask is complete, reply with the standard completion report from:
+@docs/ai-rules/v3.7/16-Task-Completion-Report.md
+
+The report must explicitly say which other repo windows are unlocked for parallel development and which remain blocked.

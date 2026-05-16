@@ -27,10 +27,12 @@
 
 ## 3. Contracts
 
-- API：`docs/contracts/api/core-mvp.md#config-api`
+- API：`docs/contracts/api/config-center.md`
 - Config：`docs/contracts/config/core-configs.md`
 - Events：`docs/contracts/events/core-events.md#config-published`
 - Data：`docs/contracts/data-consistency.md`
+- Redis：`docs/data/redis-key-registry.md`
+- DB：`docs/architecture/LiveMask_数据库详细设计_v3.6.md#26-system_configs-表配置中心`
 
 ## 4. Cross-Repo Impact
 
@@ -40,6 +42,7 @@
 | `livemask-nodeagent` | 拉取并应用配置 | 后续 P1-05 | mock config reload |
 | `livemask-app` | 拉取 remote config | 后续 P1-05 | old config fallback |
 | `livemask-admin` | 配置编辑和审计 | 后续 | 手工验证 |
+| `livemask-ci-cd` | 配置中心 staging smoke | 是 | docker compose + config read/publish smoke |
 
 ## 5. Role Handoff Chain
 
@@ -51,14 +54,25 @@
 
 ## 6. Validation Plan
 
-- [ ] Config CRUD API
-- [ ] Hash/version mismatch
-- [ ] Redis cache miss
-- [ ] Pub/Sub lost fallback
-- [ ] Rollback to previous config
+- [ ] `GET /api/v1/config/client` returns published `client.remote_config`.
+- [ ] `GET /internal/agent/config` returns published `nodeagent.runtime_config`.
+- [ ] Admin draft / publish / rollback APIs preserve monotonic versions.
+- [ ] `config_hash` is stable for canonical JSON and rejects mismatched publish.
+- [ ] Redis cache miss rebuilds from PostgreSQL.
+- [ ] Redis publish uses `pubsub:config.published`.
+- [ ] Pub/Sub lost fallback works through polling / version comparison.
+- [ ] Rollback creates a new published version from the selected old payload.
+- [ ] Staging smoke validates Backend + PostgreSQL + Redis + config read path.
 
-## 7. Rollback
+## 7. Implementation Notes
+
+- MVP may seed default config rows at backend startup or migration time, but production should use migrations/seed scripts.
+- Published config is unique per `config_key`; draft history may contain multiple versions.
+- `payment.usdt_nowpayments` must store only non-secret config and secret references. Real secrets remain in env / secret manager.
+- If Redis update fails after DB commit, API must report a warning and metrics; committed DB state remains the source of truth.
+
+## 8. Rollback
 
 - 回滚触发条件：配置解析失败、NodeAgent/App 生效率异常、P0 告警。
-- 回滚步骤：恢复上一版本 `system_configs`，发布 `config.published`，观察生效率。
+- 回滚步骤：基于目标历史 payload 创建新版本并发布，发布 `config.published`，观察生效率。
 - 回滚验证：`config_version_lagging_nodes` 下降，App / NodeAgent 上报版本一致。

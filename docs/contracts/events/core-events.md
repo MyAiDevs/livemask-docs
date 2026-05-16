@@ -5,7 +5,7 @@
 - Owner：Backend
 - Producer：Config Service
 - Consumer：NodeAgent, App polling layer, Admin, Ops
-- Delivery：Redis Pub/Sub + DB version fallback
+- Delivery：Redis Pub/Sub channel `pubsub:config.published` + DB version fallback
 - Ordering：By `config_key` + `config_version`
 - Idempotency key：`config_key` + `config_version`
 - Retry policy：Consumers poll if Pub/Sub lost

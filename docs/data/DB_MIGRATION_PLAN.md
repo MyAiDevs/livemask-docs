@@ -11,7 +11,7 @@
 
 | Migration | 目标 | 验证 |
 | --- | --- | --- |
-| `001_system_configs` | 配置中心 | CRUD、version/hash unique |
+| `001_system_configs` | 配置中心 | key+version unique、single published per key、rollback creates new version |
 | `002_node_reports` | NodeAgent 上报历史 | `report_id` unique |
 | `003_connection_quality_reports` | App 连接质量反馈 | `request_id` unique per user |
 | `004_payment_orders` | USDT 支付订单 | provider external id unique |

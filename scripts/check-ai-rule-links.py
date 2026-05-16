@@ -17,6 +17,7 @@ REQUIRED = [
     "13-Multi-Repo-Development.md",
     "14-Code-Comment-Traceability.md",
     "15-MultiWindow-Consistency-Checklist.md",
+    "16-Task-Completion-Report.md",
 ]
 
 

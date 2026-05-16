@@ -1,5 +1,9 @@
 # API Contract
 
+- [Core MVP API Contracts](core-mvp.md)
+- [Health Check API](health-check.md)
+- [Config Center API](config-center.md)
+
 ## 1. 适用范围
 
 本目录记录 Backend 对外部调用方暴露的契约，包括：

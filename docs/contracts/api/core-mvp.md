@@ -4,6 +4,8 @@
 
 ## Config API
 
+详细闭环契约见独立文档：[config-center.md](config-center.md)。
+
 ### GET `/api/v1/config/client`
 
 - Caller：App Client
@@ -23,10 +25,12 @@ Response:
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
 | `schema_version` | string | 是 | 响应 schema 版本 |
+| `config_key` | string | 是 | `client.remote_config` |
 | `config_version` | int | 是 | 配置版本 |
 | `config_hash` | string | 是 | 配置 hash |
 | `payload` | object | 是 | 配置内容 |
-| `fallback_action` | string | 否 | `use_cached` / `force_refresh` / `upgrade_required` |
+| `fallback_action` | string | 否 | `continue` / `use_cached` / `force_refresh` / `upgrade_required` |
+| `published_at` | string | 是 | 发布时间 |
 
 ### GET `/internal/agent/config`
 
@@ -43,6 +47,10 @@ Request query:
 | `config_version` | int | 否 | 当前配置版本 |
 
 Response 同 `/api/v1/config/client`，但 `payload` 为 NodeAgent runtime config。
+
+### Admin Config API
+
+MVP 管理端接口、发布、回滚、错误码和 Redis 行为见 [config-center.md](config-center.md#4-admin-management)。
 
 ## Node Recommendation API
 

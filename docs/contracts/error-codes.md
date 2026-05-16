@@ -50,7 +50,11 @@
 
 | Error Code | HTTP | 用户可见 | App 行为 | NodeAgent 行为 | 是否告警 | Owner | TASK |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| `CONFIG_KEY_NOT_FOUND` | 404 | 否 | 使用缓存 / 上报异常 | 使用 last-known-good | 否 | Backend | `TASK-P0-03` |
+| `CONFIG_SCHEMA_INVALID` | 400 | 否 | 拒绝应用 / 上报异常 | 拒绝应用并上报 `config_apply_failed` | P1 | Backend | `TASK-P0-03` |
 | `CONFIG_VERSION_CONFLICT` | 409 | 否 | 重新拉取配置 | 强制刷新配置 | 否 | Backend | `TASK-P0-03` |
+| `CONFIG_NOT_PUBLISHED` | 404 | 否 | 使用缓存 | 使用 last-known-good | P1 | Backend | `TASK-P0-03` |
+| `CONFIG_REDIS_SYNC_FAILED` | 202/500 | 否 | 继续轮询 | 继续轮询 | P1 | Backend / Ops | `TASK-P0-03` |
 | `CONFIG_HASH_MISMATCH` | 422 | 否 | 回滚 last-known-good | 回滚 last-known-good | P1 | Backend | `TASK-P1-05` |
 | `NODE_REPORT_DUPLICATE` | 200 | 否 | N/A | 停止重试该 report_id | 否 | Backend | `TASK-P3-01` |
 | `NODE_DEGRADED_REPORT_REJECTED` | 400 | 否 | N/A | 修正 payload 后重试 | P1 | NodeAgent | `TASK-P1-05` |

@@ -10,6 +10,7 @@
 - [13-Multi-Repo-Development.md](13-Multi-Repo-Development.md)
 - [14-Code-Comment-Traceability.md](14-Code-Comment-Traceability.md)
 - [15-MultiWindow-Consistency-Checklist.md](15-MultiWindow-Consistency-Checklist.md)
+- [16-Task-Completion-Report.md](16-Task-Completion-Report.md)
 
 ## 一句话原则
 
@@ -19,6 +20,7 @@
 2. 影响哪些仓库和层？
 3. 文档、代码、提交、PR 是否使用同一个追踪编号？
 4. 验证、回滚、未完成项是否记录清楚？
+5. 哪些其它端/窗口已经被解锁可以继续开发，哪些仍然阻塞？
 
 ## 最小闭环
 
@@ -37,3 +39,4 @@
 - README 或规则文件指向不存在的文档
 - 有 TODO 但没有后续 TASK
 - 有配置或接口变化但没有回滚策略
+- 完成报告没有明确跨端影响和解锁状态

@@ -6,6 +6,7 @@
 | --- | --- | --- | --- | --- | --- |
 | `config:{config_key}` | string/json | Backend | 10 min | PostgreSQL `system_configs` | cache miss 从 DB 读取 |
 | `config:version:{config_key}` | string | Backend | 10 min | PostgreSQL `system_configs` | cache miss 从 DB 读取 |
+| `pubsub:config.published` | pubsub | Backend | N/A | PostgreSQL `system_configs` | 丢失后 App / NodeAgent 轮询或心跳比对 |
 | `node:realtime:{node_id}` | hash/json | NodeAgent / Backend | 180 sec | NodeAgent latest report + DB history | 从最近 DB 心跳重建 |
 | `node:degraded:{node_id}` | string/json | NodeAgent / Backend | 180 sec | DB latest node status | 从 DB status 和 quality logs 重建 |
 | `recommendation:user:{user_id}` | json | Backend | 60 sec | Computed from DB + Redis realtime | 重新计算 |
@@ -18,7 +19,7 @@
 ## 失效规则
 
 - 节点状态变化：删除 `recommendation:user:*` 相关短缓存，更新 `node:realtime:{node_id}`。
-- 配置变化：更新 `config:*`，发布 `config.published`。
+- 配置变化：更新 `config:{config_key}`、`config:version:{config_key}`，发布 `pubsub:config.published`。
 - 支付成功：删除用户权益缓存，发布 `entitlement.granted`。
 - 快速反馈：写入 `node:penalty:{node_id}`，短期影响推荐。
 

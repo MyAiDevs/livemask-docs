@@ -431,18 +431,31 @@ CREATE INDEX idx_appeals_created ON appeals(created_at);
 ```sql
 CREATE TABLE system_configs (
     id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    config_key          VARCHAR(100) UNIQUE NOT NULL,
+    config_key          VARCHAR(100) NOT NULL,
     config_value        JSONB NOT NULL,
-    config_version      INTEGER DEFAULT 1,
-    config_hash         VARCHAR(64),
+    config_version      INTEGER NOT NULL,
+    config_hash         VARCHAR(80) NOT NULL,
+    status              VARCHAR(20) NOT NULL DEFAULT 'draft'
+                            CHECK (status IN ('draft','published','archived')),
+    change_reason       TEXT,
     updated_by          UUID REFERENCES users(id),
+    published_at        TIMESTAMPTZ,
     created_at          TIMESTAMPTZ DEFAULT NOW(),
     updated_at          TIMESTAMPTZ DEFAULT NOW()
 );
 
-CREATE UNIQUE INDEX idx_system_configs_key ON system_configs(config_key);
-CREATE INDEX idx_system_configs_version ON system_configs(config_version DESC);
+CREATE UNIQUE INDEX idx_system_configs_key_version
+    ON system_configs(config_key, config_version);
+CREATE UNIQUE INDEX idx_system_configs_published
+    ON system_configs(config_key)
+    WHERE status = 'published';
+CREATE INDEX idx_system_configs_key_status
+    ON system_configs(config_key, status);
+CREATE INDEX idx_system_configs_version
+    ON system_configs(config_key, config_version DESC);
 ```
+
+> P0-03 实现要求：`config_version` 按 `config_key` 单调递增；回滚必须创建新版本，不能回写旧版本号。Redis 只缓存当前发布版本，历史和审计以 PostgreSQL 为准。
 
 ### 2.6.1 `vpn_client_governance` 配置详细结构（推荐 JSON Schema）
 
@@ -844,4 +857,3 @@ CREATE INDEX idx_points_c2c_trades_buyer ON points_c2c_trades(buyer_id);
 CREATE INDEX idx_points_c2c_trades_seller ON points_c2c_trades(seller_id);
 CREATE INDEX idx_points_c2c_trades_created ON points_c2c_trades(created_at DESC);
 ```
-
