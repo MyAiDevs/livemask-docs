@@ -354,6 +354,19 @@ Auth entry rules:
 - Website navigation hiding is not security. Backend auth and authorization
   must enforce destination access after login.
 
+Website account and subscription rule:
+
+- The App is not the only subscription entry.
+- Logged-in website users must also be able to subscribe to a plan, renew,
+  review billing state, and manage allowed devices from the web user portal.
+- Subscription and payment pages live under `/billing/*`.
+- Device management lives under `/account/devices/*`.
+- C2C marketplace pages live under `/market/*`.
+- Website subscription state must use the same backend source of truth as the
+  App. Do not create a website-only entitlement state.
+- Website C2C marketplace state must use the same backend order, escrow,
+  points, payment, and risk-control source of truth as the App and Backend.
+
 ### 4.3 Website Required Pages
 
 #### Home
@@ -499,6 +512,132 @@ Design requirements:
 - If plan selection is needed, link to Pricing or `/billing/*` after account
   creation.
 
+#### Account Portal
+
+Purpose:
+
+- let logged-in users manage account security and devices from the website
+
+Routes:
+
+```text
+/account
+/account/security
+/account/devices
+/account/devices/add
+```
+
+Required:
+
+- current account profile summary
+- security status and recent login/device context
+- registered device list
+- add device entry
+- revoke device action
+- device limit warning based on current subscription
+- device trust / last active / platform / app version where available
+- empty state for no registered devices
+
+Device management requirements:
+
+- Adding a device must respect the user's active plan device limit.
+- If limit is reached, show upgrade or revoke-device path.
+- Revoking the current device must require confirmation.
+- Device list must not expose sensitive device secrets.
+- Device changes must be auditable by backend.
+
+#### Billing / Subscription Portal
+
+Purpose:
+
+- let website users subscribe, renew, upgrade, downgrade, and review billing
+  status without requiring the App
+
+Routes:
+
+```text
+/billing
+/billing/plans
+/billing/checkout
+/billing/success
+/billing/failure
+/billing/history
+```
+
+Required:
+
+- current subscription status
+- plan cards sourced from the same plan model as the App
+- monthly / annual plan selection
+- payment method entry placeholder
+- checkout confirmation
+- success and failure states
+- renewal / expiration state
+- upgrade / downgrade path
+- invoice or order history
+- restore / refresh subscription state action
+
+Subscription requirements:
+
+- Web and App subscription status must converge to the same backend
+  entitlement.
+- The website must not show a plan as active before backend confirms payment or
+  subscription activation.
+- Checkout failure must preserve the selected plan and provide retry.
+- Upgrade/downgrade copy must explain when the change takes effect.
+- If payment provider is not ready, use disabled provider cards with clear
+  `coming soon` or `staging only` state, not fake success.
+
+#### C2C Marketplace Portal
+
+Purpose:
+
+- let logged-in website users browse, create, buy, sell, and track C2C market
+  orders from the browser
+- expose market state clearly without bypassing backend escrow, payment, points,
+  or risk controls
+
+Routes:
+
+```text
+/market
+/market/listings
+/market/listings/new
+/market/listings/:listing_id
+/market/orders
+/market/orders/:order_id
+/market/wallet
+/market/disputes
+```
+
+Required:
+
+- marketplace overview with available listings
+- buy / sell tabs
+- listing detail with price, amount, limits, seller status, and risk notices
+- create listing flow
+- order detail timeline
+- payment / escrow state panel
+- points or balance summary if C2C uses points
+- dispute / appeal entry
+- empty, blocked, risk review, and suspended-account states
+
+C2C state requirements:
+
+- Do not show an order as completed until backend confirms final settlement.
+- Do not allow frontend-only balance mutation.
+- Listings must show availability, limit, and lock/escrow state from backend.
+- Buyer and seller actions must be idempotent and auditable by backend.
+- Suspicious listings or users must show review/blocked states.
+- Disputes must route to backend case records, not local-only UI state.
+
+Route boundary:
+
+- User-facing market pages use `/market/*`.
+- Internal review and fraud operations use `/admin/ops/*` or
+  `/admin/finance/*`, never `/market/*`.
+- Ambassador C2C commission views use `/ambassador/*`, not `/market/*`.
+
 #### Forgot Password / Verification
 
 Routes:
@@ -554,6 +693,12 @@ Public auth route boundaries:
 - After successful login, route users by role: /account for normal users,
   /billing for subscription users, /sponsor for sponsor ambassadors,
   /ambassador for promotion ambassadors, and /admin for internal staff.
+- Logged-in website users can subscribe, renew, upgrade/downgrade, review
+  billing history, and manage devices from the website. Subscription pages use
+  /billing/* and device management uses /account/devices/*.
+- Website users can access the C2C marketplace from /market/* for listings,
+  orders, wallet/balance, and disputes. Internal C2C review must stay under
+  /admin/ops/* or /admin/finance/*.
 
 Required pages/sections:
 1. Home
@@ -564,6 +709,9 @@ Required pages/sections:
 6. Login
 7. Register
 8. Forgot Password / Email Verification
+9. Account Portal
+10. Billing / Subscription Portal
+11. C2C Marketplace Portal
 
 Home hero:
 - headline: LiveMask Secure VPN
@@ -622,6 +770,37 @@ Forgot Password / Verification:
 - already verified state
 - return to login action
 
+Account Portal:
+- /account profile summary
+- /account/security security and recent login state
+- /account/devices device list
+- /account/devices/add add-device flow
+- revoke device confirmation
+- device limit warning based on subscription plan
+- upgrade/revoke path when device limit is reached
+
+Billing / Subscription Portal:
+- /billing current subscription summary
+- /billing/plans plan cards
+- /billing/checkout checkout confirmation
+- /billing/success activation success
+- /billing/failure retry state
+- /billing/history invoice/order history
+- upgrade, downgrade, renew, restore/refresh subscription state
+- never show active entitlement before backend confirms activation
+
+C2C Marketplace Portal:
+- /market overview
+- /market/listings buy/sell listings
+- /market/listings/new create listing
+- /market/listings/:listing_id listing detail
+- /market/orders order list
+- /market/orders/:order_id order timeline and escrow state
+- /market/wallet points/balance summary if applicable
+- /market/disputes dispute and appeal entry
+- risk review, blocked, suspended, empty, and settlement-pending states
+- never show completed settlement before backend confirms it
+
 Visual direction:
 - light-first, premium, high contrast
 - deep teal primary color
@@ -632,7 +811,7 @@ Visual direction:
 - mobile responsive
 
 Output reusable components:
-HeroProductVisual, PlanCard, DownloadCard, SecurityFeature, FAQAccordion, StatusBanner, CTASection, AuthForm, AuthStatePanel.
+HeroProductVisual, PlanCard, DownloadCard, SecurityFeature, FAQAccordion, StatusBanner, CTASection, AuthForm, AuthStatePanel, DeviceList, DeviceLimitBanner, SubscriptionSummary, CheckoutStatePanel, MarketListingTable, OrderTimeline, EscrowStatePanel, DisputeEntry.
 ```
 
 ## 5. Frontend Development Rules
@@ -654,6 +833,14 @@ For `livemask-website`:
 - provide visible login and registration entries
 - keep public auth pages outside `/admin/*`, `/sponsor/*`, `/ambassador/*`,
   `/account/*`, and `/billing/*`
+- support web subscription purchase, renewal, upgrade/downgrade, billing
+  history, and device management
+- support web C2C marketplace browsing, listing creation, order tracking,
+  escrow state, and dispute entry
+- keep web subscription and App subscription backed by the same entitlement
+  source of truth
+- keep web C2C state backed by the same backend marketplace, payment, points,
+  escrow, and risk-control state machines as the App
 - mobile layout is mandatory
 
 ## 6. Acceptance Checklist
@@ -676,6 +863,13 @@ Website:
       `/auth/callback` states are designed.
 - [ ] Public auth pages route users to the correct role-specific URI after
       login.
+- [ ] Website users can subscribe or renew from `/billing/*`.
+- [ ] Website users can add and revoke devices from `/account/devices/*`.
+- [ ] Device limit reached state offers upgrade or revoke-device path.
+- [ ] Web and App subscription status use the same backend entitlement state.
+- [ ] Website users can browse C2C listings and track orders from `/market/*`.
+- [ ] C2C order, escrow, settlement, and dispute states are represented without
+      frontend-only state changes.
 - [ ] No impossible privacy claims.
 - [ ] Mobile layout is complete.
 
