@@ -44,6 +44,15 @@ The generated website design must also include logged-in user portal flows:
 /market/orders/:order_id
 /market/wallet
 /market/disputes
+/points
+/points/history
+/points/earn
+/points/spend
+/support
+/support/tickets
+/support/tickets/:ticket_id
+/account/diagnostics
+/account/notifications
 ```
 
 Website users must be able to subscribe to a plan, renew, upgrade/downgrade,
@@ -56,6 +65,13 @@ view listing details, track orders, inspect escrow/settlement states, view
 wallet or points balance where applicable, and open disputes. Use /market/* for
 user-facing C2C pages. Internal C2C review and fraud handling belongs under
 /admin/ops/* or /admin/finance/*, not /market/*.
+
+Apply App-to-Website parity: every App user feature except actual VPN runtime
+control must have a Website user-portal equivalent. Do not design browser-based
+VPN connect/disconnect, live tunnel controls, protocol switching, or active
+node switching. Do design account, subscription, device management, support,
+historical diagnostics, notifications, points economy, C2C marketplace,
+ambassador self-service, and sponsor self-service entry points.
 
 Save generated files into:
 

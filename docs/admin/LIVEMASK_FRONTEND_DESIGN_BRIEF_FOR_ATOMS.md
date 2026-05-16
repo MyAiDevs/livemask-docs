@@ -356,6 +356,11 @@ Auth entry rules:
 
 Website account and subscription rule:
 
+- Except for actual VPN connection control, every user-facing App capability
+  must have an equivalent Website user-portal capability.
+- VPN-only capabilities are: connect/disconnect VPN, live tunnel status,
+  protocol switching, active node switching, and NetworkExtension/client
+  diagnostics that require device runtime access.
 - The App is not the only subscription entry.
 - Logged-in website users must also be able to subscribe to a plan, renew,
   review billing state, and manage allowed devices from the web user portal.
@@ -366,6 +371,25 @@ Website account and subscription rule:
   App. Do not create a website-only entitlement state.
 - Website C2C marketplace state must use the same backend order, escrow,
   points, payment, and risk-control source of truth as the App and Backend.
+
+App-to-Website parity map:
+
+| App capability | Website route | Required on Website | Notes |
+| --- | --- | --- | --- |
+| Login / register | `/login`, `/register` | Yes | Same auth backend |
+| Profile / account | `/account/*` | Yes | Account profile, language, security |
+| Subscription / plan | `/billing/*` | Yes | Subscribe, renew, upgrade/downgrade |
+| Payment / order history | `/billing/history` | Yes | Same payment/order state |
+| Device management | `/account/devices/*` | Yes | Add/revoke devices, device limit |
+| Support / feedback | `/support`, `/account/support` | Yes | Feedback, tickets, help paths |
+| Diagnostics records | `/account/diagnostics` | Partial | Historical reports only, not live tunnel diagnostics |
+| C2C marketplace | `/market/*` | Yes | Listings, orders, escrow, disputes |
+| Points economy | `/points/*` | Yes when module is active | Balance, transactions, earn/spend paths |
+| Ambassador revenue | `/ambassador/*` | Yes when role enabled | Own invites, commission, C2C commission |
+| Sponsor node revenue | `/sponsor/*` | Yes when role enabled | Own nodes, traffic, revenue, appeals |
+| Notifications | `/account/notifications` | Yes | Preferences and message history |
+| VPN connect/disconnect | App only | No | Requires client runtime |
+| Active node switching | App only | No | Website may show docs/status, not control tunnel |
 
 ### 4.3 Website Required Pages
 
@@ -638,6 +662,63 @@ Route boundary:
   `/admin/finance/*`, never `/market/*`.
 - Ambassador C2C commission views use `/ambassador/*`, not `/market/*`.
 
+#### Points Portal
+
+Purpose:
+
+- let website users review and use points economy features when the module is
+  enabled
+
+Routes:
+
+```text
+/points
+/points/history
+/points/earn
+/points/spend
+```
+
+Required:
+
+- current points balance
+- transaction history
+- earning sources
+- spend paths for subscription or marketplace where supported
+- expired / frozen / pending states
+- adjustment and dispute references when applicable
+
+#### Support / Diagnostics Portal
+
+Purpose:
+
+- provide web equivalents for App support, feedback, and historical diagnostic
+  review
+
+Routes:
+
+```text
+/support
+/support/tickets
+/support/tickets/:ticket_id
+/account/diagnostics
+/account/notifications
+```
+
+Required:
+
+- create support request
+- list own tickets
+- ticket detail timeline
+- attach App diagnostic report id where available
+- view historical diagnostic reports sent from App
+- notification preferences and message history
+
+Boundary:
+
+- Website can show historical diagnostics and support flows.
+- Website must not pretend to run live client tunnel diagnostics that require
+  App runtime access.
+
 #### Forgot Password / Verification
 
 Routes:
@@ -699,6 +780,9 @@ Public auth route boundaries:
 - Website users can access the C2C marketplace from /market/* for listings,
   orders, wallet/balance, and disputes. Internal C2C review must stay under
   /admin/ops/* or /admin/finance/*.
+- Apart from actual VPN connection/runtime controls, every App user feature
+  must have a Website equivalent: account, subscription, devices, support,
+  historical diagnostics, points, C2C, ambassador, sponsor, and notifications.
 
 Required pages/sections:
 1. Home
@@ -712,6 +796,8 @@ Required pages/sections:
 9. Account Portal
 10. Billing / Subscription Portal
 11. C2C Marketplace Portal
+12. Points Portal
+13. Support / Diagnostics Portal
 
 Home hero:
 - headline: LiveMask Secure VPN
@@ -801,6 +887,21 @@ C2C Marketplace Portal:
 - risk review, blocked, suspended, empty, and settlement-pending states
 - never show completed settlement before backend confirms it
 
+Points Portal:
+- /points balance summary
+- /points/history transaction history
+- /points/earn earning sources
+- /points/spend subscription or marketplace spend paths
+- expired, frozen, pending, adjusted, disputed states
+
+Support / Diagnostics Portal:
+- /support help entry
+- /support/tickets ticket list
+- /support/tickets/:ticket_id ticket timeline
+- /account/diagnostics historical App diagnostic reports
+- /account/notifications notification preferences and history
+- do not design live VPN tunnel diagnostics on Website
+
 Visual direction:
 - light-first, premium, high contrast
 - deep teal primary color
@@ -811,7 +912,7 @@ Visual direction:
 - mobile responsive
 
 Output reusable components:
-HeroProductVisual, PlanCard, DownloadCard, SecurityFeature, FAQAccordion, StatusBanner, CTASection, AuthForm, AuthStatePanel, DeviceList, DeviceLimitBanner, SubscriptionSummary, CheckoutStatePanel, MarketListingTable, OrderTimeline, EscrowStatePanel, DisputeEntry.
+HeroProductVisual, PlanCard, DownloadCard, SecurityFeature, FAQAccordion, StatusBanner, CTASection, AuthForm, AuthStatePanel, DeviceList, DeviceLimitBanner, SubscriptionSummary, CheckoutStatePanel, MarketListingTable, OrderTimeline, EscrowStatePanel, DisputeEntry, PointsBalanceCard, SupportTicketList, DiagnosticReportList, NotificationPreferencePanel.
 ```
 
 ## 5. Frontend Development Rules
@@ -837,10 +938,13 @@ For `livemask-website`:
   history, and device management
 - support web C2C marketplace browsing, listing creation, order tracking,
   escrow state, and dispute entry
+- support web account, support, historical diagnostics, points, ambassador,
+  sponsor, and notification flows when those modules are active
 - keep web subscription and App subscription backed by the same entitlement
   source of truth
 - keep web C2C state backed by the same backend marketplace, payment, points,
   escrow, and risk-control state machines as the App
+- do not implement VPN runtime controls on Website; those remain App-only
 - mobile layout is mandatory
 
 ## 6. Acceptance Checklist
@@ -870,6 +974,10 @@ Website:
 - [ ] Website users can browse C2C listings and track orders from `/market/*`.
 - [ ] C2C order, escrow, settlement, and dispute states are represented without
       frontend-only state changes.
+- [ ] Every non-VPN App user feature has a Website route or documented future
+      route.
+- [ ] Website does not expose fake VPN connect/disconnect or live tunnel
+      controls.
 - [ ] No impossible privacy claims.
 - [ ] Mobile layout is complete.
 

@@ -48,6 +48,15 @@ Website account and subscription routes that must be represented in design:
 /market/orders/:order_id
 /market/wallet
 /market/disputes
+/points
+/points/history
+/points/earn
+/points/spend
+/support
+/support/tickets
+/support/tickets/:ticket_id
+/account/diagnostics
+/account/notifications
 ```
 
 The website must support subscription purchase/renewal and device management
@@ -58,3 +67,13 @@ The website must also support the user-facing C2C marketplace from `/market/*`.
 It must use the same backend marketplace, escrow, payment, points, and
 risk-control state machines as the App and Backend. Internal review remains
 under `/admin/ops/*` or `/admin/finance/*`.
+
+Parity rule:
+
+- Every App user-facing capability must have a Website user-portal equivalent
+  except actual VPN runtime controls.
+- App-only capabilities are connect/disconnect VPN, live tunnel state,
+  protocol switching, active node switching, and device-runtime diagnostics.
+- Website equivalents include account, subscription, devices, C2C, points,
+  support, historical diagnostics, notifications, ambassador, and sponsor
+  self-service flows.
