@@ -48,8 +48,5 @@
 ## 5. 前端设计输入
 
 - `docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md`
-- `docs/admin/LIVEMASK_NODE_SPONSOR_UI_DESIGN_BRIEF_FOR_ATOMS.md`
 
-该文档用于 Admin Console 与 Website 的前端设计输入，包含 Atoms 可直接使用的 Prompt、页面结构、组件要求、状态设计和验收清单。
-
-其中 `LIVEMASK_NODE_SPONSOR_UI_DESIGN_BRIEF_FOR_ATOMS.md` 专门用于赞助节点、推广大使、收益配置、收益计算和追溯重算相关页面。
+该文档用于 Admin Console、赞助节点、推广大使、收益配置、收益计算、追溯重算与 Website 的前端设计输入，包含 Atoms 可直接使用的 Prompt、页面结构、组件要求、状态设计和验收清单。

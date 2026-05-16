@@ -1,6 +1,6 @@
 # Sponsor Node Revenue Operations - Design Notes v1
 
-- Source brief: `docs/admin/LIVEMASK_NODE_SPONSOR_UI_DESIGN_BRIEF_FOR_ATOMS.md`
+- Source brief: `docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md`
 - Target repo: `livemask-admin`
 - This is part of the same back-office product, not a new standalone frontend repo.
 - Keep URI prefixes separated:

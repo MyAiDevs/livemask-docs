@@ -70,7 +70,6 @@ Admin developers:
 ```text
 design/admin/
 docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md
-docs/admin/LIVEMASK_NODE_SPONSOR_UI_DESIGN_BRIEF_FOR_ATOMS.md
 ```
 
 Website developers:

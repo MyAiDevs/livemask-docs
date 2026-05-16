@@ -2,7 +2,7 @@
 
 ## Source
 
-- Brief: `docs/admin/LIVEMASK_NODE_SPONSOR_UI_DESIGN_BRIEF_FOR_ATOMS.md`
+- Brief: `docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md`
 - Raw Atoms export: `design/admin/sponsor-node/atoms/v1/export/`
 - Screenshots: `design/admin/sponsor-node/atoms/v1/screenshots/`
 

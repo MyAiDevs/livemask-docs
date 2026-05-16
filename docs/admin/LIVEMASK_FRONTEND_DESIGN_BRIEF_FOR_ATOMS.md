@@ -78,6 +78,7 @@ Recommended primary navigation:
 | Nodes | Node inventory, health, degraded state |
 | Config | Client and NodeAgent config versions |
 | Payments | Orders, webhooks, refunds, failures |
+| Revenue | Sponsor nodes, ambassador commissions, payout traceback |
 | Feedback | App quick feedback and support queue |
 | Audit | Admin actions and config change history |
 | Settings | Roles, permissions, operational settings |
@@ -219,6 +220,229 @@ Required:
 
 Audit should be immutable from UI.
 
+#### Sponsor Node / Ambassador Revenue Operations
+
+Purpose:
+
+- inspect sponsor node contribution, quality, traffic, payout readiness, and
+  revenue history
+- configure `sponsor_node_revenue_config`
+- run or review revenue calculation jobs
+- perform traceback recalculation after appeal, fraud review, late traffic data,
+  or config correction
+- inspect promotion ambassador invite quality, loyalty bonus, C2C commission,
+  and monthly payout
+
+This module is part of the same back-office product, but role surfaces must use
+separate URI prefixes and permission boundaries.
+
+Route boundaries:
+
+| Surface | URI Prefix | Audience | Notes |
+| --- | --- | --- | --- |
+| System Admin | `/admin/system/*` | platform super admins | users, roles, global settings, security actions |
+| Operations Admin | `/admin/ops/*` | operations and support | nodes, tickets, feedback, operational review |
+| Finance Admin | `/admin/finance/*` | finance reviewers | payout review, revenue approval, exports |
+| Sponsor Ambassador Portal | `/sponsor/*` | node sponsors / sponsor ambassadors | own nodes, traffic, revenue, appeals |
+| Ambassador Portal | `/ambassador/*` | promotion ambassadors | own invites, commission, C2C contribution, payout status |
+
+Do not put sponsor or ambassador self-service pages under `/admin/*`. If an
+internal admin page needs to inspect a sponsor or ambassador, it should use an
+admin-prefixed review route and enforce admin permissions.
+
+Admin-side placement:
+
+```text
+/admin/finance/revenue
+  -> Sponsor Nodes
+  -> Sponsor Revenue
+  -> Ambassador Revenue
+  -> Revenue Config
+  -> Traceback Jobs
+
+/admin/ops/nodes
+  -> Sponsors
+  -> Node Appeals
+```
+
+Required sponsor overview columns:
+
+```text
+Sponsor
+Active nodes
+Healthy nodes
+Traffic GB
+Quality score
+Tier bonus
+Estimated revenue
+Payout status
+Last calculation
+Actions
+```
+
+Required sponsor states:
+
+| State | Meaning |
+| --- | --- |
+| healthy | Normal quality and payout eligible |
+| degraded | Quality below normal but not blocked |
+| blocked | Below `min_quality_for_payout` or under review |
+| traceback_required | Appeal or data correction requires recalculation |
+| stale | No recent node report or calculation is old |
+
+Sponsor detail must show:
+
+- identity summary, sponsor id, account, status, risk flag
+- period selector
+- traffic GB, active nodes, uptime, region spread
+- quality composite score:
+  - uptime score
+  - network quality score
+  - node count score
+  - final score
+- formula breakdown:
+
+```text
+revenue = traffic_gb / base_gb_per_unit * quality_score * tier_bonus
+```
+
+- node table with latency, uptime, traffic, status, last report
+- revenue history
+- appeal and traceback timeline
+
+Revenue config must support:
+
+- config key: `sponsor_node_revenue_config`
+- Form / JSON / Impact Preview modes
+- `base_gb_per_unit`
+- `quality_weights.uptime_score`
+- `quality_weights.network_quality_score`
+- `quality_weights.node_count_score`
+- `tier_rules`
+- `min_quality_for_payout`
+- `payout_cycle`
+- `platform_share_rate`
+- weight sum validation
+- tier overlap validation
+- publish confirmation with expected hash
+- rollback
+- before/after diff
+- estimated impact on top sponsors
+
+Revenue calculation jobs must show:
+
+```text
+Job id
+Period start / end
+Triggered by
+Force recalc
+Status
+Sponsors processed
+Sponsors blocked
+Total payout
+Error count
+Started at
+Finished at
+```
+
+Job actions:
+
+- dry run
+- run calculation
+- rerun failed
+- export result
+- open audit log
+
+Job states:
+
+- queued
+- running
+- completed
+- completed_with_warnings
+- failed
+- cancelled
+
+Traceback flow:
+
+```text
+Select sponsor / node / ambassador
+-> Select affected period
+-> Choose reason
+-> Preview affected records
+-> Confirm recalculation
+-> Review before/after result
+```
+
+Traceback evidence:
+
+- source event id
+- appeal id if applicable
+- old quality score
+- new quality score
+- old revenue
+- new revenue
+- delta
+- reviewer
+- audit id
+
+Danger controls:
+
+- require typed confirmation for large negative or positive payout deltas
+- show whether payout has already been paid
+- block automatic update if payout is already settled and requires finance
+  review
+
+Ambassador revenue overview columns:
+
+```text
+Ambassador
+Tier
+Invited active users
+Average invited user tier
+Loyalty bonus factor
+Consumption base
+C2C commission
+Estimated commission
+Status
+Last calculation
+Actions
+```
+
+Ambassador detail must show:
+
+- commission formula breakdown
+- invited user quality distribution
+- monthly commission trend
+- C2C contribution records
+- loyalty stats update history
+- traceback history
+
+Revenue operation design principles:
+
+- Every revenue number needs a path back to source metrics and period.
+- Payout is gated, not casual.
+- Quality and revenue must be shown together.
+- Appeal outcomes must show before/after score and revenue impact.
+- Revenue config changes must show diff, estimated impact, required approval,
+  and rollback path.
+- Avoid crypto exchange visuals, flashing numbers, candlestick visuals, and
+  speculative profit language.
+
+Revenue permissions:
+
+| URI Prefix | Action | Permission |
+| --- | --- | --- |
+| `/admin/finance/*` | View all sponsor revenue | `revenue.read_all` |
+| `/admin/finance/*` | Edit revenue config | `revenue.config.write` |
+| `/admin/finance/*` | Publish revenue config | `revenue.config.publish` |
+| `/admin/finance/*` | Run calculation | `revenue.calculate.run` |
+| `/admin/finance/*` | Run traceback | `revenue.traceback.run` |
+| `/admin/finance/*` | Approve payout adjustment | `revenue.adjustment.approve` |
+| `/sponsor/*` | View own sponsor revenue | `sponsor.revenue.read_own` |
+| `/sponsor/*` | Create own node appeal | `sponsor.appeal.create_own` |
+| `/ambassador/*` | View own commission | `ambassador.commission.read_own` |
+| `/ambassador/*` | View own invited users summary | `ambassador.invites.read_own` |
+
 ### 3.4 Admin Components
 
 | Component | Required states |
@@ -231,6 +455,10 @@ Audit should be immutable from UI.
 | `ApprovalPanel` | draft, pending, approved, rejected |
 | `AuditTimeline` | normal, expanded |
 | `ActionDialog` | confirm, dangerous, success, failure |
+| `RevenueFormulaBreakdown` | normal, warning, blocked |
+| `TracebackStepper` | draft, preview, confirming, completed, failed |
+| `PayoutStatusBadge` | eligible, pending_review, blocked, traceback_required, paid |
+| `RevenueConfigEditor` | form, json, impactPreview, validationError |
 
 ### 3.5 Admin Atoms Prompt
 
@@ -240,15 +468,18 @@ Design a high-fidelity admin console for LiveMask, a privacy VPN and secure netw
 The Admin console is for internal operations, support, finance, and DevOps. It should feel dense, efficient, trustworthy, and operational. Do not design a marketing dashboard or oversized hero page. Avoid cyberpunk, neon, hacker, crypto trading, or decorative visuals.
 
 Use a left sidebar and top utility bar. Primary navigation:
-Overview, Users, Nodes, Config, Payments, Feedback, Audit, Settings.
+Overview, Users, Nodes, Config, Payments, Revenue, Feedback, Audit, Settings.
 
 Required screens:
 1. Overview dashboard
 2. Node operations
 3. Config management
 4. Payments
-5. Feedback / support queue
-6. Audit log
+5. Sponsor Node Revenue Operations
+6. Ambassador Revenue Overview
+7. Traceback Jobs
+8. Feedback / support queue
+9. Audit log
 
 Overview dashboard:
 - active users
@@ -283,6 +514,18 @@ Payments:
 - order list with status, provider reference, user, plan, amount, chain/currency, webhook history
 - states: waiting, confirming, finished, failed, expired, manual review
 
+Revenue:
+- sponsor node overview with sponsor, active nodes, healthy nodes, traffic GB, quality score, tier bonus, estimated revenue, payout status, last calculation, actions
+- sponsor detail with formula: revenue = traffic_gb / base_gb_per_unit * quality_score * tier_bonus
+- revenue config editor for sponsor_node_revenue_config with Form / JSON / Impact Preview modes
+- revenue calculation jobs with dry run, run calculation, rerun failed, export, audit log
+- traceback jobs for appeal/data/config correction with before/after score and revenue delta
+- ambassador revenue overview with tier, invited active users, loyalty bonus, C2C commission, estimated commission, status
+- states: healthy, degraded, blocked, traceback_required, stale, queued, running, completed, completed_with_warnings, failed
+- every revenue number must be traceable to source metrics and period
+- sensitive actions require confirmation and audit visibility
+- keep route boundaries separate: /admin/finance/* for internal revenue admin, /admin/ops/* for operational review, /sponsor/* for sponsor self-service, /ambassador/* for ambassador self-service
+
 Feedback:
 - issue type, node, protocol, error code, app version, config version, user description, status, assigned operator
 - actions: assign, mark resolved, create node incident, link to node detail
@@ -301,7 +544,7 @@ Visual direction:
 - no decorative gradient backgrounds
 
 Output reusable components:
-MetricTile, StatusBadge, DataTable, FilterBar, ConfigDiffViewer, ApprovalPanel, AuditTimeline, ActionDialog.
+MetricTile, StatusBadge, DataTable, FilterBar, ConfigDiffViewer, ApprovalPanel, AuditTimeline, ActionDialog, RevenueFormulaBreakdown, TracebackStepper, PayoutStatusBadge, RevenueConfigEditor.
 ```
 
 ## 4. Website Design
