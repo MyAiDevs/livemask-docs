@@ -1,0 +1,196 @@
+name: Task Sync and Auto Marking
+
+on:
+  workflow_dispatch:
+    inputs:
+      task_id:
+        description: TASK ID, for example TASK-P0-03
+        required: true
+      result:
+        description: completed / partial / blocked
+        required: true
+        default: partial
+        type: choice
+        options:
+          - completed
+          - partial
+          - blocked
+      summary:
+        description: Summary of completed work
+        required: true
+      verification:
+        description: Tests, CI, smoke, or manual evidence
+        required: false
+        default: ""
+      unlocked_repos:
+        description: Comma-separated repos to notify, for example livemask-admin,livemask-app
+        required: false
+        default: ""
+      blocked_repos:
+        description: Comma-separated repos still blocked
+        required: false
+        default: ""
+      next_steps:
+        description: Next task or action
+        required: false
+        default: ""
+  issue_comment:
+    types:
+      - created
+
+permissions:
+  contents: read
+  issues: write
+  actions: read
+
+jobs:
+  parse-comment:
+    if: github.event_name == 'issue_comment' && contains(github.event.comment.body, 'TASK-') && (contains(github.event.comment.body, 'AI Task Sync') || contains(github.event.comment.body, '任务完成报告'))
+    runs-on: ubuntu-latest
+    outputs:
+      task_id: ${{ steps.parse.outputs.task_id }}
+      result: ${{ steps.parse.outputs.result }}
+      summary: ${{ steps.parse.outputs.summary }}
+      verification: ${{ steps.parse.outputs.verification }}
+      unlocked_repos: ${{ steps.parse.outputs.unlocked_repos }}
+      blocked_repos: ${{ steps.parse.outputs.blocked_repos }}
+      next_steps: ${{ steps.parse.outputs.next_steps }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Parse issue comment
+        id: parse
+        env:
+          COMMENT_BODY: ${{ github.event.comment.body }}
+        run: |
+          python3 - <<'PY'
+          import os
+          import re
+
+          body = os.environ["COMMENT_BODY"]
+          task = re.search(r"TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*", body)
+          result = re.search(r"\*\*Result\*\*:\s*(completed|partial|blocked)", body, re.I)
+          if not result:
+              result = re.search(r"\*\*结果\*\*:\s*(completed|partial|blocked|已完成|部分完成|阻塞)", body, re.I)
+          result_map = {"已完成": "completed", "部分完成": "partial", "阻塞": "blocked"}
+          result_value = result_map.get(result.group(1), result.group(1).lower()) if result else "partial"
+
+          def section(title):
+              pattern = rf"### {re.escape(title)}\n(.*?)(?=\n### |\Z)"
+              match = re.search(pattern, body, re.S)
+              return match.group(1).strip() if match else ""
+
+          def repos(title):
+              text = section(title)
+              found = re.findall(r"livemask-[a-z-]+", text)
+              return ",".join(dict.fromkeys(found))
+
+          summary = section("Summary") or section("已完成内容") or body[:500]
+          verification = section("Verification") or section("测试与验证")
+          next_steps = section("Next Steps") or section("下一步建议")
+          unlocked = repos("Unlocked Repositories") or repos("已解锁的后续开发窗口")
+          blocked = repos("Blocked Repositories") or repos("仍然阻塞的窗口")
+
+          out = os.environ["GITHUB_OUTPUT"]
+          values = {
+              "task_id": task.group(0) if task else "",
+              "result": result_value,
+              "summary": summary,
+              "verification": verification,
+              "unlocked_repos": unlocked,
+              "blocked_repos": blocked,
+              "next_steps": next_steps,
+          }
+          with open(out, "a", encoding="utf-8") as fh:
+              for key, value in values.items():
+                  if "\n" in value:
+                      fh.write(f"{key}<<EOF\n{value}\nEOF\n")
+                  else:
+                      fh.write(f"{key}={value}\n")
+          PY
+
+  sync-manual:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    outputs:
+      report_title: ${{ steps.sync.outputs.report_title }}
+      report_summary: ${{ steps.sync.outputs.report_summary }}
+      report_tasks: ${{ steps.sync.outputs.report_tasks }}
+      report_risks: ${{ steps.sync.outputs.report_risks }}
+      report_next_steps: ${{ steps.sync.outputs.report_next_steps }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync task
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LIVEMASK_BOT_TOKEN: ${{ secrets.LIVEMASK_BOT_TOKEN }}
+        run: |
+          python3 scripts/task-sync.py \
+            --task-id "${{ inputs.task_id }}" \
+            --result "${{ inputs.result }}" \
+            --summary "${{ inputs.summary }}" \
+            --verification "${{ inputs.verification }}" \
+            --unlocked-repos "${{ inputs.unlocked_repos }}" \
+            --blocked-repos "${{ inputs.blocked_repos }}" \
+            --next-steps "${{ inputs.next_steps }}" \
+            --source "workflow_dispatch"
+
+  sync-comment:
+    needs: [parse-comment]
+    if: github.event_name == 'issue_comment' && needs.parse-comment.outputs.task_id != ''
+    runs-on: ubuntu-latest
+    outputs:
+      report_title: ${{ steps.sync.outputs.report_title }}
+      report_summary: ${{ steps.sync.outputs.report_summary }}
+      report_tasks: ${{ steps.sync.outputs.report_tasks }}
+      report_risks: ${{ steps.sync.outputs.report_risks }}
+      report_next_steps: ${{ steps.sync.outputs.report_next_steps }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync task from comment
+        id: sync
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LIVEMASK_BOT_TOKEN: ${{ secrets.LIVEMASK_BOT_TOKEN }}
+        run: |
+          python3 scripts/task-sync.py \
+            --task-id "${{ needs.parse-comment.outputs.task_id }}" \
+            --result "${{ needs.parse-comment.outputs.result }}" \
+            --summary "${{ needs.parse-comment.outputs.summary }}" \
+            --verification "${{ needs.parse-comment.outputs.verification }}" \
+            --unlocked-repos "${{ needs.parse-comment.outputs.unlocked_repos }}" \
+            --blocked-repos "${{ needs.parse-comment.outputs.blocked_repos }}" \
+            --next-steps "${{ needs.parse-comment.outputs.next_steps }}" \
+            --source "issue_comment"
+
+  notify-lark:
+    needs: [sync-manual, sync-comment]
+    if: always() && (needs.sync-manual.result == 'success' || needs.sync-comment.result == 'success')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Resolve report fields
+        id: report
+        run: |
+          {
+            echo "title=${{ needs.sync-manual.outputs.report_title || needs.sync-comment.outputs.report_title }}"
+            echo "summary=${{ needs.sync-manual.outputs.report_summary || needs.sync-comment.outputs.report_summary }}"
+            echo "tasks<<EOF"
+            echo "${{ needs.sync-manual.outputs.report_tasks || needs.sync-comment.outputs.report_tasks }}"
+            echo "EOF"
+            echo "risks=${{ needs.sync-manual.outputs.report_risks || needs.sync-comment.outputs.report_risks }}"
+            echo "next_steps=${{ needs.sync-manual.outputs.report_next_steps || needs.sync-comment.outputs.report_next_steps }}"
+          } >> "$GITHUB_OUTPUT"
+      - name: Send Lark project report
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          LARK_BOT_WEBHOOK: ${{ secrets.LARK_BOT_WEBHOOK }}
+          LARK_BOT_SECRET: ${{ secrets.LARK_BOT_SECRET }}
+          REPORT_KIND: task-sync
+          REPORT_TITLE: ${{ steps.report.outputs.title }}
+          REPORT_SUMMARY: ${{ steps.report.outputs.summary }}
+          REPORT_TASKS: ${{ steps.report.outputs.tasks }}
+          REPORT_RISKS: ${{ steps.report.outputs.risks }}
+          REPORT_NEXT_STEPS: ${{ steps.report.outputs.next_steps }}
+          WORKFLOW_RESULT: success
+        run: bash templates/github/child-repos/scripts/lark-notify.sh "$WORKFLOW_RESULT"

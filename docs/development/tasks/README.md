@@ -44,6 +44,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 ## MVP P0/P1 任务
 
 - [TASK-INFRA-001-mvp-health-ci-smoke-closed-loop.md](TASK-INFRA-001-mvp-health-ci-smoke-closed-loop.md)
+- [TASK-INFRA-002-ai-task-sync-and-auto-marking.md](TASK-INFRA-002-ai-task-sync-and-auto-marking.md)
 - [TASK-P0-03-config-center.md](TASK-P0-03-config-center.md)
 - [TASK-P1-01-usdt-payment.md](TASK-P1-01-usdt-payment.md)
 - [TASK-P1-05-config-hot-reload.md](TASK-P1-05-config-hot-reload.md)

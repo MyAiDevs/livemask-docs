@@ -30,7 +30,9 @@ Recommended permissions:
 
 - Contents: read
 - Actions: read/write
+- Issues: read/write
 - Metadata: read
+- Projects: read/write, only if Project auto movement is enabled
 
 Do not commit webhook URLs or signing secrets into any repository. All CI/CD
 workflows call `.github/scripts/lark-notify.sh` or the docs template copy of
@@ -147,3 +149,25 @@ labels listed in the workflow.
 6. Each child repo runs CI on the `livemask-ci` organization runner group.
 7. Implementation PRs reference the same TASK.
 8. `livemask-ci-cd` runs staging smoke before release.
+9. Meaningful AI completion reports run `Task Sync and Auto Marking`.
+10. The TASK issue receives status evidence, unlocked repos receive
+    `task-unlocked`, and Lark receives a task sync report.
+
+## 8. AI Task Sync
+
+Read `docs/operations/AI_TASK_SYNC_AUTOMATION.md` before using multi-window task
+auto marking.
+
+Manual sync example:
+
+```bash
+gh workflow run task-sync.yml \
+  --repo MyAiDevs/livemask-docs \
+  -f task_id=TASK-P0-03 \
+  -f result=completed \
+  -f summary="Backend config center core implemented and CI passed." \
+  -f verification="Backend CI 25966150751 success." \
+  -f unlocked_repos="livemask-admin,livemask-app,livemask-nodeagent" \
+  -f blocked_repos="livemask-ci-cd" \
+  -f next_steps="Add config center staging smoke."
+```
