@@ -24,6 +24,29 @@ Load additional modules based on the repository you are in:
 # App / Client
 @../livemask-docs/ai-rules/v3.7/06-Client-App-Specific-Rules.md
 
+## App UI Design Gate
+
+If the current repository is `livemask-app` and the TASK changes any
+user-visible App UI, read these design sources before editing UI files:
+
+- @../livemask-docs/docs/app/LIVEMASK_APP_DESIGN_BRIEF_FOR_ATOMS.md
+- @../livemask-docs/design/app/README.md
+- @../livemask-docs/design/app/atoms/v2/README.md
+- @../livemask-docs/design/app/atoms/v2/export/.wiki.md
+
+Use `../livemask-docs/design/app/atoms/v2/` as the current App design fact
+source. Translate Atoms output into Flutter widgets; do not copy React or Atoms
+Cloud runtime code into `livemask-app`.
+
+If no matching design exists for the screen or flow, stop and report:
+
+```text
+BLOCKED: App UI design handoff missing for <screen/flow>.
+Current repo: livemask-app
+Required source: livemask-docs/design/app/atoms/<version>
+No UI files changed.
+```
+
 Always maintain the four-layer closed loop and TASK traceability.
 
 ## Mandatory Task / Repository Match Gate

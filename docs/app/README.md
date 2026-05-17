@@ -38,5 +38,13 @@
 
 - `docs/app/LIVEMASK_APP_DESIGN_BRIEF_FOR_ATOMS.md`
 - `docs/app/VPN_NATIVE_RUNTIME_CONTRACT.md`
+- `design/app/README.md`
+- `design/app/atoms/v2/README.md`
+- `design/app/atoms/v2/export/.wiki.md`
 
 该文档用于生成 App 原型设计，包含 Atoms 可直接使用的 Prompt、MVP 屏幕清单、状态设计、失败恢复路径和开发交付组件要求。
+
+当前 App UI 事实源为 `design/app/atoms/v2/`。App 开发者必须把 Atoms
+设计稿翻译成 Flutter 组件和页面状态，而不是把 Atoms/React/Atoms Cloud
+运行时代码直接复制到 `livemask-app`。如果任务涉及用户可见 UI，完成报告必须
+包含 `Design Alignment` 小节，说明读取了哪些设计文件、对应了哪些屏幕和组件。
