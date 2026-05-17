@@ -39,6 +39,7 @@
 - `docs/app/LIVEMASK_APP_DESIGN_BRIEF_FOR_ATOMS.md`
 - `docs/app/VPN_NATIVE_RUNTIME_CONTRACT.md`
 - `docs/app/APP_PLATFORM_COMPATIBILITY_MATRIX.md`
+- `docs/app/APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md`
 - `design/app/README.md`
 - `design/app/atoms/v2/README.md`
 - `design/app/atoms/v2/export/.wiki.md`
@@ -58,3 +59,6 @@ App 开发必须遵守
 Android、Windows、Linux 和 Web 的编译/运行验证结果。不能用 Apple Silicon
 的 macOS 构建结果代替 Intel，也不能在 macOS 上假设 Windows/Linux 已经通过；
 这些目标必须在对应真实系统或 Parallels Desktop 客体系统内验证。
+
+本地编译、运行、日志排查、Flutter/Xcode/Gradle/CocoaPods 注意事项详见
+[`APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md`](APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md)。

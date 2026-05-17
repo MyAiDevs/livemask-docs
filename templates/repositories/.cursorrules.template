@@ -23,6 +23,8 @@ Load additional modules based on the repository you are in:
 
 # App / Client
 @../livemask-docs/ai-rules/v3.7/06-Client-App-Specific-Rules.md
+@../livemask-docs/docs/app/APP_PLATFORM_COMPATIBILITY_MATRIX.md
+@../livemask-docs/docs/app/APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md
 
 ## App UI Design Gate
 
@@ -48,6 +50,22 @@ No UI files changed.
 ```
 
 Always maintain the four-layer closed loop and TASK traceability.
+
+## App Build / Runtime Gate
+
+If the current repository is `livemask-app`, use
+`scripts/local-app.sh` as the only canonical local App build/run entrypoint.
+Before changing build scripts, native platform folders, secure storage, auth,
+VPN runtime, or user-visible UI, read:
+
+- @../livemask-docs/docs/app/APP_PLATFORM_COMPATIBILITY_MATRIX.md
+- @../livemask-docs/docs/app/APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md
+
+Never claim a platform is complete from another platform's result. macOS Apple
+Silicon and macOS Intel must be reported separately (`macos-arm64` and
+`macos-x64`). Windows and Linux must be verified inside those operating systems,
+for example Parallels Desktop guests. Android physical devices must be
+authorized in `adb devices -l`; iOS physical devices require Xcode signing.
 
 ## Mandatory Task / Repository Match Gate
 
