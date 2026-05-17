@@ -13,7 +13,8 @@ screen, and have known platform-specific limitations documented.
 | --- | --- | --- | --- |
 | iOS | Latest 5 major iOS versions and latest 10 minor/runtime releases available to the release Xcode toolchain | `IPHONEOS_DEPLOYMENT_TARGET=13.0` until native VPN runtime requires a higher floor | macOS + Xcode simulator matrix; physical iPhone with Apple Team signing |
 | Android | Latest 5 major Android versions and latest 10 API/minor releases available through Android Studio SDK Manager | Flutter Android default min SDK; compile/target SDK from installed Flutter/Android toolchain | Android Studio SDK, emulator or authorized physical Android device |
-| macOS | Latest 5 major macOS versions and latest 10 minor releases | `MACOSX_DEPLOYMENT_TARGET=10.15` until native VPN runtime requires a higher floor | macOS development host |
+| macOS Apple Silicon | Latest 5 major macOS versions and latest 10 minor releases on Apple Silicon | `MACOSX_DEPLOYMENT_TARGET=10.15` until native VPN runtime requires a higher floor | `macos-arm64` build verifies the `arm64` slice; runtime on Apple Silicon Mac |
+| macOS Intel | Latest 5 major macOS versions and latest 10 minor releases on Intel | Same macOS baseline; Flutter Release output is universal and must contain `x86_64` | `macos-x64` build verifies the `x86_64` slice; runtime on Intel Mac, Rosetta, or x64 macOS runner |
 | Windows | Windows 10 and Windows 11 | Flutter Windows desktop target | Parallels Desktop Windows guest |
 | Linux | Debian and Ubuntu desktop/server LTS families | Flutter Linux desktop target with GTK runtime dependencies | Parallels Desktop Debian and Ubuntu guests |
 | Web | Current Chrome/Safari/Edge release family for UI-only preview | Flutter Web JS build; WebAssembly warnings are non-blocking until wasm is a release target | macOS browser smoke |
@@ -34,7 +35,8 @@ Every release candidate must record:
 
 ```bash
 bash scripts/local-app.sh doctor
-bash scripts/local-app.sh build --target macos
+bash scripts/local-app.sh build --target macos-arm64
+bash scripts/local-app.sh build --target macos-x64
 bash scripts/local-app.sh build --target ios
 bash scripts/local-app.sh build --target android
 bash scripts/local-app.sh build --target web
@@ -66,6 +68,11 @@ bash scripts/local-app.sh start --target linux
   platforms. This is environment setup, not application compilation failure.
 - Do not run multiple Flutter builds in parallel. Flutter SDK, Gradle, Xcode,
   and CocoaPods locks can corrupt each other.
+- macOS release evidence must separate Apple Silicon and Intel. On the current
+  Flutter toolchain, macOS Release builds are universal; compile evidence must
+  include `lipo -archs` proof that both `arm64` and `x86_64` slices exist.
+  Runtime evidence is still separate: Apple Silicon runtime does not prove Intel
+  runtime behavior.
 
 ## Compatibility Rules
 
@@ -77,5 +84,7 @@ bash scripts/local-app.sh start --target linux
   support for that OS version.
 - Windows/Linux compatibility can only be claimed after compiling and launching
   inside those operating systems. A macOS build is not evidence for either one.
+- macOS compatibility can only be claimed per architecture. Apple Silicon and
+  Intel compile/runtime evidence must be recorded independently.
 - If a platform cannot be verified in the current task, the completion report
   must mark it as blocked or unverified, not completed.

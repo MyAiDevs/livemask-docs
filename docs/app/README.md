@@ -54,6 +54,7 @@
 
 App 开发必须遵守
 [`APP_PLATFORM_COMPATIBILITY_MATRIX.md`](APP_PLATFORM_COMPATIBILITY_MATRIX.md)。
-每个 release candidate 都需要记录 macOS、iOS、Android、Windows、Linux 和
-Web 的编译/运行验证结果。不能在 macOS 上假设 Windows/Linux 已经通过；这些目标
-必须在 Parallels Desktop 对应客体系统内验证。
+每个 release candidate 都需要记录 macOS Apple Silicon、macOS Intel、iOS、
+Android、Windows、Linux 和 Web 的编译/运行验证结果。不能用 Apple Silicon
+的 macOS 构建结果代替 Intel，也不能在 macOS 上假设 Windows/Linux 已经通过；
+这些目标必须在对应真实系统或 Parallels Desktop 客体系统内验证。
