@@ -38,6 +38,7 @@
 
 - `docs/app/LIVEMASK_APP_DESIGN_BRIEF_FOR_ATOMS.md`
 - `docs/app/VPN_NATIVE_RUNTIME_CONTRACT.md`
+- `docs/app/APP_PLATFORM_COMPATIBILITY_MATRIX.md`
 - `design/app/README.md`
 - `design/app/atoms/v2/README.md`
 - `design/app/atoms/v2/export/.wiki.md`
@@ -48,3 +49,11 @@
 设计稿翻译成 Flutter 组件和页面状态，而不是把 Atoms/React/Atoms Cloud
 运行时代码直接复制到 `livemask-app`。如果任务涉及用户可见 UI，完成报告必须
 包含 `Design Alignment` 小节，说明读取了哪些设计文件、对应了哪些屏幕和组件。
+
+## 6. 平台兼容性要求
+
+App 开发必须遵守
+[`APP_PLATFORM_COMPATIBILITY_MATRIX.md`](APP_PLATFORM_COMPATIBILITY_MATRIX.md)。
+每个 release candidate 都需要记录 macOS、iOS、Android、Windows、Linux 和
+Web 的编译/运行验证结果。不能在 macOS 上假设 Windows/Linux 已经通过；这些目标
+必须在 Parallels Desktop 对应客体系统内验证。
