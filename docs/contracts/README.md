@@ -17,6 +17,10 @@
 - [Core MVP Config Contracts](config/core-configs.md)
 - [Core MVP Event Contracts](events/core-events.md)
 
+## 协议契约
+
+- [Hysteria2 Connect Config Contract](vpn/HYSTERIA2_CONNECT_CONFIG_CONTRACT.md) — Hysteria2 首个真实扩展协议的跨仓库字段边界、安全边界和后续任务
+
 ## 2. 变更规则
 
 任何契约变更必须包含：

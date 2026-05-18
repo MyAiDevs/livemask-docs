@@ -47,7 +47,31 @@
 | [TASK-P5-03-monitoring-alerting.md](tasks/TASK-P5-03-monitoring-alerting.md) | MVP 指标、告警、Dashboard | Ops / SRE | P0-P3 |
 | [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
 
-## 3. MVP 完成标准
+## 3. 当前 Roadmap 状态
+
+### 已完成 / 稳定
+
+- ProtocolProfile 接口定义 + Renderer dispatcher + SecretRef 框架（TASK-DOC-PROTOCOL-001 / TASK-NODEAGENT-PROTOCOL-001）
+- Connect Config 安全契约（TASK-VPN-CONFIG-001）
+- Backend protocol_profile 命名对齐（TASK-BACKEND-PROTOCOL-001）
+
+### 进行中
+
+- DOC-HYSTERIA2-CONTRACT-001 — Hysteria2 连接配置跨仓库契约（本文档）
+
+### 下一阶段（Hysteria2 首条真实协议链路）
+
+| TASK | 目标 | Owner | 依赖 |
+| --- | --- | --- | --- |
+| TASK-NODEAGENT-HYSTERIA2-001 | NodeAgent hysteria2 ProtocolProfile 实现 | NodeAgent | TASK-NODEAGENT-PROTOCOL-001 |
+| TASK-BACKEND-CONNECT-CONFIG-HYSTERIA2-001 | Backend hysteria2 connect_config + skeleton | Backend | TASK-NODEAGENT-HYSTERIA2-001 + VPN-CONFIG-001 |
+| TASK-ADMIN-ENDPOINT-002 | Admin 端点编辑 hysteria2 安全字段 | Admin | TASK-NODEAGENT-HYSTERIA2-001 |
+| TASK-APP-CONNECT-PROFILE-001 | App 解析 hysteria2 profile + skeleton | App | TASK-BACKEND-CONNECT-CONFIG-HYSTERIA2-001 |
+| TASK-CICD-PROTOCOL-SMOKE-001 | CI smoke hysteria2 API 验证 | DevOps | TASK-BACKEND-CONNECT-CONFIG-HYSTERIA2-001 |
+| TASK-APP-ANDROID-ENGINE-HYSTERIA2-001 | Android VpnService hysteria2 引擎 | App | TASK-APP-CONNECT-PROFILE-001 |
+| TASK-APP-IOS-PACKET-TUNNEL-HYSTERIA2-001 | iOS PacketTunnelProvider hysteria2 | App | TASK-APP-CONNECT-PROFILE-001 |
+
+## 4. MVP 完成标准
 
 - [ ] 核心 API 契约已在 `docs/contracts/api/core-mvp.md` 登记。
 - [ ] 核心配置已在 `docs/contracts/config/core-configs.md` 登记。

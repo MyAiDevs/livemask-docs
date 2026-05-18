@@ -30,3 +30,7 @@
 
 - [NODEAGENT_PROTOCOL_EXTENSION_ARCHITECTURE.md](NODEAGENT_PROTOCOL_EXTENSION_ARCHITECTURE.md) — 多协议扩展架构（ProtocolProfile 接口、SecretRef、Renderer dispatch、HealthCheck hook、路线图）
 - [PROTOCOL_PROFILE_DEVELOPMENT_GUIDE.md](PROTOCOL_PROFILE_DEVELOPMENT_GUIDE.md) — 协议插件开发指南（实现步骤、测试要求、安全审查清单）
+
+## 6. 协议契约索引
+
+- [Hysteria2 Connect Config Contract](../contracts/vpn/HYSTERIA2_CONNECT_CONFIG_CONTRACT.md) — Hysteria2 首个真实扩展协议的跨仓库契约（字段边界、安全边界、Secret Lifecycle、Repo 职责、Task Roadmap、Validation Matrix）

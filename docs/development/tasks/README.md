@@ -59,3 +59,14 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-P3-02-quick-feedback.md](TASK-P3-02-quick-feedback.md)
 - [TASK-P5-03-monitoring-alerting.md](TASK-P5-03-monitoring-alerting.md)
 - [TASK-P5-04-deploy-runbook.md](TASK-P5-04-deploy-runbook.md)
+
+## 下一阶段任务
+
+- [TASK-DOC-HYSTERIA2-CONTRACT-001] — Hysteria2 连接配置跨仓库契约（当前任务）
+- TASK-NODEAGENT-HYSTERIA2-001 — NodeAgent 端 hysteria2 ProtocolProfile 实现（Render / Validate / HealthCheck / Endpoint / Redact）
+- TASK-BACKEND-CONNECT-CONFIG-HYSTERIA2-001 — Backend 端 hysteria2 connect_config 生成 + profile dispatch + skeleton fallback
+- TASK-ADMIN-ENDPOINT-002 — Admin endpoint editor hysteria2 字段支持
+- TASK-APP-CONNECT-PROFILE-001 — App 端 profile_type=hysteria2 解析 + skeleton 占位态展示
+- TASK-CICD-PROTOCOL-SMOKE-001 — CI smoke 验证 endpoint registration → connect_config hysteria2
+- TASK-APP-ANDROID-ENGINE-HYSTERIA2-001 — Android VpnService hysteria2 原生引擎集成
+- TASK-APP-IOS-PACKET-TUNNEL-HYSTERIA2-001 — iOS/macOS PacketTunnelProvider hysteria2 适配
