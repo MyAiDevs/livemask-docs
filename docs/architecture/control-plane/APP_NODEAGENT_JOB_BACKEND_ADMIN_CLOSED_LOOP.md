@@ -6,6 +6,13 @@
 > Scope: Defines the long-term LiveMask control-plane loop across Admin,
 > Backend, Job Service, NodeAgent, and App.
 
+Related mandatory contract:
+
+- [Job Queue Usage Matrix](../../contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md) — global
+  decision matrix for queue-required, queue-recommended, synchronous, and
+  outbox-required workflows. Backend and NodeAgent tasks must check it before
+  implementing new long-running or fan-out behavior.
+
 ## 1. Why This Exists
 
 LiveMask is moving from simple API CRUD into an operational network platform.

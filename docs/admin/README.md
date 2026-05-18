@@ -54,6 +54,7 @@
 ## 6. Admin Job Center
 
 - `docs/contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md`
+- `docs/contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`
 - `docs/architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md`
 
 通用触发器、定时任务、重试、取消、运行历史、事件日志、审计和 RBAC 必须归入独立的 Admin Job Center。GeoIP 更新、NodeAgent 发布/回滚、内容发布、Dashboard 聚合、账单对账、CI smoke 等任务都应通过 `/admin/jobs` 统一管理。

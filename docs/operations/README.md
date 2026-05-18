@@ -37,6 +37,17 @@ Operations / DevOps 负责部署、CI/CD、监控告警、Secret 管理、灾备
 - `docs/operations/AI_TASK_SYNC_AUTOMATION.md`
 - `docs/operations/LARK_REPORTING.md`
 - `docs/operations/RELEASE_RUNBOOK.md`
+- `docs/contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md`
+- `docs/contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`
+- `docs/architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md`
 - `docs/monitoring/ALERT_DASHBOARD_INDEX.md`
 - `docs/data/DB_MIGRATION_PLAN.md`
 - `docs/data/outbox-compensation.md`
+
+CI/CD and DevOps tasks that trigger smoke runs, task-sync, release rollout,
+runtime sync, artifact cleanup, dashboard aggregation, or scheduled validation
+must check the Job Queue Usage Matrix. Production-grade triggers should create
+Job Service runs through Backend gateway instead of embedding long work inside
+GitHub Actions or Admin feature pages. Local dev runtime sync must remain
+targeted and must not stop the long-lived local stack unless explicitly
+requested.

@@ -11,6 +11,7 @@
 - [State Machines](state-machines.md)：支付、订阅、节点、申诉等状态机
 - [Data Consistency](data-consistency.md)：PostgreSQL、Redis、App/NodeAgent 本地缓存一致性规则
 - [Admin Job Center / Scheduler Contract](jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md)：Admin 统一任务中心契约 — 手动触发、定时任务、重试、取消、运行历史、事件日志、RBAC、审计和跨模块 Job 类型
+- [Job Queue Usage Matrix](jobs/JOB_QUEUE_USAGE_MATRIX.md)：全局队列使用矩阵 — 定义哪些 Backend、NodeAgent、App、Content、Billing、GeoIP、CI/CD 场景必须进入 Job Service 队列，哪些可同步执行，DB/Redis 边界和后续开发门禁
 - [Control Plane Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)：App / NodeAgent / Job Service / Backend / Admin 闭环架构 — Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
 - [NodeAgent Release Contract](nodeagent/NODEAGENT_RELEASE_CONFIG_ROLLBACK_CONTRACT.md)：NodeAgent binary 分发、配置下发、灰度、健康门禁和回滚契约
 - [GeoIP Database Sync Contract](geoip/GEOIP_DATABASE_SYNC_CONTRACT.md)：Backend 定时更新 GeoIP DB、NodeAgent 同步、App 增量同步、校验、LKG 和回滚契约

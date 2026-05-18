@@ -15,6 +15,7 @@
 - DOC-GEOIP-SYNC-001 GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约
 - DOC-CONTENT-001 统一 Content System 契约（覆盖 blog_article / announcement / campaign / app_banner）
 - DOC-CONTROL-PLANE-001 App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构
+- DOC-JOB-QUEUE-MATRIX-001 全局队列使用矩阵（Backend/NodeAgent/Job Service/DB/Redis 开发门禁）
 - P1-05 配置热更新完整闭环
 - P2-05 节点推荐与过滤
 - P3-01 App 上报连接质量
@@ -54,6 +55,7 @@
  | [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
 | [TASK-DOC-CONTENT-001-content-system-contract.md](tasks/TASK-DOC-CONTENT-001-content-system-contract.md) | 统一 Content System 契约：content_items 模型、Blog/App/Admin API | Docs | 无 |
 | TASK-DOC-CONTROL-PLANE-001 | App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构 | Docs / All | Job Center / GeoIP / NodeAgent release docs |
+| [TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md](tasks/TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md) | 全局队列使用矩阵：定义哪些场景必须走 Job Service 队列，哪些可同步执行，DB/Redis 边界和 Backend/NodeAgent 开发门禁 | Docs / Backend / NodeAgent / Job Service | TASK-DOC-CONTROL-PLANE-001 |
 
 ## 3. 当前 Roadmap 状态
 
@@ -66,6 +68,7 @@
 - GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约（TASK-DOC-GEOIP-SYNC-001）
 - GeoIP Source Hardening 契约（TASK-DOC-GEOIP-CONTRACT-002）
 - Control Plane Closed Loop 架构（TASK-DOC-CONTROL-PLANE-001）— Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
+- Job Queue Usage Matrix（TASK-DOC-JOB-QUEUE-MATRIX-001）— 全局长任务、fan-out、retry/backoff、定时任务、DB/Redis 队列边界和 Backend/NodeAgent 必读门禁
 
 ### 进行中
 

@@ -38,5 +38,8 @@
 
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
 - [Admin Job Center / Scheduler Contract](../contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md)
+- [Job Queue Usage Matrix](../contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md)
 
 Backend 在未来控制平面中是 Admin API Gateway 和 domain authority，不是长任务执行器。涉及 Admin 触发的发布、回滚、GeoIP、内容、Dashboard、计费、NodeAgent 操作时，Backend 必须负责 Admin JWT/RBAC、owner-domain permission、audit attribution、domain validation 和 service auth 转发；长任务执行、queue、worker、retry/backoff、lease 和 per-target lock 由独立 `livemask-job-service` 负责。
+
+任何 Backend 新增 Admin action、cron、批处理、外部 vendor 调用、NodeAgent fan-out、Dashboard 聚合、账单对账、内容定时发布、GeoIP 下载、CI smoke 触发或需要 retry/backoff 的工作前，必须先对照 Job Queue Usage Matrix。命中 `queue_required` 的场景不得在 HTTP handler 内同步执行，必须通过 Backend Job Gateway 创建 Job Service run，并返回 `202 + run_id`。

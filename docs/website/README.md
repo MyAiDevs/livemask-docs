@@ -14,3 +14,11 @@ Primary contracts:
 - `docs/contracts/api/auth-rbac.md`
 - `docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md`
 - `design/frontend-suite/atoms/v1/export/`
+- `docs/contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`
+
+Website does not call `livemask-job-service` directly. Website consumes Backend
+public APIs and generated artifacts. SEO rebuilds, sitemap/RSS refresh,
+content cache purge, and other long-running website operations should be
+triggered through Backend Job Gateway and Job Service, then exposed as safe
+Backend/Website state. Website pages must not embed Admin job tokens or service
+credentials.

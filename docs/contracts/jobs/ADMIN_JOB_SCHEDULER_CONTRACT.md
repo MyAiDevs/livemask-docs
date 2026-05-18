@@ -7,6 +7,13 @@
 > scheduled tasks, job history, retry, cancel, audit, RBAC, and cross-module
 > task ownership.
 
+Related mandatory contract:
+
+- [Job Queue Usage Matrix](JOB_QUEUE_USAGE_MATRIX.md) — defines which LiveMask
+  workflows must use Job Service queue/worker/retry/backoff, which may remain
+  synchronous, and the DB/Redis boundary for all future Backend and NodeAgent
+  implementation.
+
 ## 1. Why This Exists
 
 Admin actions such as **GeoIP Trigger Update** must not live as one-off buttons

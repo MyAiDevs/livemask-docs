@@ -66,5 +66,8 @@ Android、Windows、Linux 和 Web 的编译/运行验证结果。不能用 Apple
 ## 7. 控制平面闭环
 
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
+- [Job Queue Usage Matrix](../contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md)
 
 App 不直接参与 Admin 任务调度，但会消费 Job Service 驱动后由 Backend 暴露的结果，例如 GeoIP 增量包、Content feed、节点 region/degraded 状态、协议 profile rollout 状态和维护公告。App 必须坚持 pull-safe、本地缓存、last-known-good、无 secret 下发和用户可解释的降级状态。
+
+当 App 需求涉及 GeoIP package、Content feed、维护公告、节点 region、协议 rollout 状态、连接质量上报或本地缓存刷新时，应先确认这些数据是否来自 queue-driven Backend workflow。App 不得调用 Job Service，也不得接收 Job Service token、Admin token、vendor credential、node secret 或第三方 GeoIP source URL。

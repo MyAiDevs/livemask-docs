@@ -47,5 +47,8 @@
 ## 9. 控制平面闭环
 
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
+- [Job Queue Usage Matrix](../contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md)
 
 NodeAgent 后续的 binary rollout、config publish/rollback、GeoIP sync、protocol profile rollout、endpoint probe 和 health probe 都必须按 Job Service 闭环设计：Job Service 分批和重试，Backend 暴露安全 assignment/manifest，NodeAgent pull 并验证，NodeAgent report event/status，Backend 聚合，Admin 展示进度和 rollback。
+
+NodeAgent 自身不得接受 Job Service 直接命令，也不得隐藏 fleet 操作失败。所有 fleet 级动作必须由 Backend 暴露 pull-safe assignment、manifest 或 config，NodeAgent 本地执行 sha256/signature/compatibility 校验、last-known-good 回滚、redacted event/status 上报。涉及本地事件重试、GeoIP 同步、release rollout、config rollback、protocol rollout 或 endpoint probe 的任务必须先查 Job Queue Usage Matrix。

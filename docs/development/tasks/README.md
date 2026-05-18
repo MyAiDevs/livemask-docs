@@ -111,13 +111,17 @@ Draft -> Ready -> In Progress -> Review -> Done
 
 - TASK-DOC-CONTROL-PLANE-001 — [App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构](../../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)：定义 Admin 意图、Backend 授权、Job Service 执行、NodeAgent/App 回传、Backend 聚合、Admin 展示和 CI/CD 验证闭环
 - [TASK-DOC-ADMIN-JOBS-001-admin-job-center-scheduler-contract.md](TASK-DOC-ADMIN-JOBS-001-admin-job-center-scheduler-contract.md) — Admin Job Center / Scheduler 契约：独立 Job Service、DB-backed queue、worker pool、retry/backoff、runs、events、schedules、RBAC、audit、locking、GeoIP trigger migration
+- [TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md](TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md) — 全局队列使用矩阵：定义 Backend、NodeAgent、App、Content、Billing、GeoIP、CI/CD 场景何时必须使用 Job Service，明确 DB/Redis 边界和后续开发门禁
 - TASK-JOBS-SERVICE-001 — 新仓库 `livemask-job-service`：job registry、queue、worker pool、scheduler、lease、retry/backoff、locks、internal API
 - TASK-BACKEND-JOBS-GATEWAY-001 — Backend Admin Job Gateway、RBAC、audit attribution、service auth integration
 - TASK-ADMIN-JOBS-001 — Admin `/admin/jobs`、run history、schedule management、GeoIP trigger migration
 - TASK-CICD-JOBS-001 — Job Center smoke：auth/RBAC/run/schedule/events/secret leak
+- TASK-JOBS-QUEUE-002 — Job Service durable queue items、leases、retry/backoff、dead-letter、restart recovery
+- TASK-JOBS-SCHEDULER-001 — Job Service schedule storage、cron/hourly/daily evaluator、next_run_at 计算和 disable/enable
 - TASK-JOBS-GEOIP-001 — GeoIP update/verify executor 接入 Job Service
 - TASK-JOBS-NODEAGENT-001 — NodeAgent release/config rollout executor 接入 Job Service，支持 per-node queue、wave、retry/backoff
 - TASK-JOBS-CONTENT-001 — Content publish/archive schedule 接入 Job Service
+- TASK-CICD-JOBS-HARDENING-001 — CI/CD 覆盖 queue、lease、retry、lock、secret leak 和 local runtime sync
 
 ## Content System（统一内容系统）任务
 
