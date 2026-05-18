@@ -100,6 +100,20 @@ Response:
 | `ttl_seconds` | int | 是 | 推荐有效期 |
 | `fallback_action` | string | 否 | `retry_later` / `use_cached` |
 
+### GET (或 POST) `/api/v1/client/nodes/connect-config`
+
+App 选择推荐节点后，获取真实的 VPN 连接配置（connect_config）。
+
+详细契约见独立文档：[connect-config.md](connect-config.md)。
+
+| 字段变更 | 说明 |
+| --- | --- |
+| 替代占位 `endpoint: "mvp-not-issued"` | 返回真实 endpoint、port、protocol |
+| 新增 `session_id` | 会话绑定，可吊销 |
+| 新增 `expires_at` | 配置过期时间 |
+| 新增 `credentials` | session-bound 临时凭据（不含 node_secret） |
+| 新增 `platform_hints` | iOS/macOS/Android/Windows/Linux 平台适配 |
+
 ## Connection Quality API
 
 ### POST `/api/v1/client/vpn/report-connection-quality`

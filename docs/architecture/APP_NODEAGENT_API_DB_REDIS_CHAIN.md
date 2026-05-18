@@ -181,6 +181,26 @@ NodeAgent degraded / traffic / quality report
 - Dispatch 触发子仓库 CI
 - 对应 TASK 文档标记为 blocked until INFRA-001 pass
 
+### H9：Connect Config 泄露节点长期密钥
+
+**风险**：connect_config 在 Backend → App 链路上包含 `node_secret` / `node_secret_hash` / HMAC key，导致节点长期身份泄露。
+
+**必须闭环**：
+
+- connect_config 只能包含 session-bound 临时凭据，不得包含节点长期密钥。
+- App 持有的凭证必须与 `node_secret` 无关，`node_secret` 只存在于 NodeAgent 和 Backend。
+- `credentials` 字段必须绑定 session_id，支持过期和吊销。
+- 日志、Lark 通知、CI 输出不得打印 `credentials.*`、`tls.server_public_key`、`server.endpoint + server.port` 组合。
+- 协议映射表必须在 connect-config 契约中明确说明哪些字段对应 sing-box 客户端配置。
+
+**验收证据**：
+
+- connect-config.md 不包含 `node_secret` / `node_secret_hash` / HMAC key
+- credentials 是 session-bound UUID，非节点长期密钥
+- Session 吊销测试（revoke → App 收到 `CONNECT_CONFIG_SESSION_REVOKED`）
+- 日志审计无敏感字段
+- Platform_hints 覆盖 iOS/macOS/Android/Windows/Linux
+
 ## 4. 必须存在的契约字段
 
 ### App -> API
@@ -239,20 +259,23 @@ NodeAgent degraded / traffic / quality report
 | Pub/Sub 丢失 | 轮询发现新版本 | 心跳发现新版本 | 版本比对 | 配置为准 | 无通知 | 最终一致 |
 | API 不可用 | 使用 last-known-good | 本地缓存批次 | 恢复后处理 | 幂等入库 | 重建状态 | 不丢数据 |
 | Health API / CI smoke | 启动时调用 Health API | 无 | 返回连通状态 | PING 检测 | PING 检测 | 状态正确反映 DB/Redis 实际连通 |
+| Connect Config 泄露 | 只接收 session 凭据 | N/A | 不下发 node_secret | 无 | 无 | credentials 不含节点长期密钥 |
+| Connect Config 过期 | 重新请求 | 无 | 返回 `CONNECT_CONFIG_SESSION_EXPIRED` | 无 | 吊销 session | App 重新请求连接配置 |
 
 ## 7. 当前审计结论
 
 | 项目 | 状态 | 说明 |
 | --- | --- | --- |
 | 正常路径描述 | 已有 | 架构文档已有推荐、上报、监控闭环描述 |
-| 失败假设与兜底 | 本文补齐 | 覆盖 Redis stale、DB/Redis 部分失败、重复乱序、通知丢失、Health 不可用 |
-| 必需契约字段 | 本文补齐 | App、NodeAgent、API 响应字段已列出 |
+| 失败假设与兜底 | 本文补齐 | 覆盖 Redis stale、DB/Redis 部分失败、重复乱序、通知丢失、Health 不可用、Connect Config 密钥泄露 |
+| 必需契约字段 | 本文补齐 | App、NodeAgent、API 响应字段已列出，connect-config 安全规则已定义 |
 | DB / Redis 事实源规则 | 本文补齐 | 明确 PostgreSQL 与 Redis 的职责 |
 | 自动化检查 | 已接入 | `scripts/check-e2e-chain.py` 检查本文和数据一致性契约 |
 
 ## 8. 后续 TASK
 
 - `TASK-INFRA-001`：实现 Health API + CI smoke 闭环，验证链路的可运行性（前置条件）。
+- `TASK-VPN-CONFIG-001`：定义真实 VPN connect_config 契约与安全模型。
 - `TASK-DOC-006`：把本文中的字段补入真实 API / Config / Event contract 条目。
 - `TASK-BE-CHAIN-001`：实现 DB outbox + Redis Stream 事件一致性方案。
 - `TASK-NA-REPORT-001`：统一 NodeAgent `report_id`、`sequence`、补报幂等规则。

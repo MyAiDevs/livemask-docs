@@ -30,11 +30,13 @@ REQUIRED_TASKS = [
     "TASK-P3-02-quick-feedback.md",
     "TASK-P5-03-monitoring-alerting.md",
     "TASK-P5-04-deploy-runbook.md",
+    "TASK-VPN-CONFIG-001-real-connect-config-contract.md",
 ]
 
 REQUIRED_SNIPPETS = {
     "docs/contracts/api/core-mvp.md": [
         "/api/v1/client/nodes/recommend",
+        "/api/v1/client/nodes/connect-config",
         "/internal/agent/report",
         "/api/v1/payments/usdt/orders",
     ],

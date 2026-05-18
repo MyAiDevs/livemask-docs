@@ -59,3 +59,7 @@
 | `NODE_REPORT_DUPLICATE` | 200 | 否 | N/A | 停止重试该 report_id | 否 | Backend | `TASK-P3-01` |
 | `NODE_DEGRADED_REPORT_REJECTED` | 400 | 否 | N/A | 修正 payload 后重试 | P1 | NodeAgent | `TASK-P1-05` |
 | `RECOMMENDATION_STALE_STATE` | 503 | 是 | 使用 last-known-good 或稍后重试 | N/A | P1 | Backend | `TASK-P2-05` |
+| `CONNECT_CONFIG_SESSION_EXPIRED` | 401 | 是 | 重新请求 connect-config | N/A | 否 | Backend | `TASK-VPN-CONFIG-001` |
+| `CONNECT_CONFIG_SESSION_REVOKED` | 403 | 是 | 重新请求推荐 | N/A | P1 | Backend | `TASK-VPN-CONFIG-001` |
+| `CONNECT_CONFIG_NODE_UNAVAILABLE` | 503 | 是 | 请求 fallback 节点 | N/A | P1 | Backend | `TASK-VPN-CONFIG-001` |
+| `CONNECT_CONFIG_INVALID_PROTOCOL` | 400 | 否 | 上报协议不兼容 | N/A | P2 | Backend | `TASK-VPN-CONFIG-001` |

@@ -19,6 +19,7 @@ REQUIRED_CHAIN_SNIPPETS = [
     "Redis",
     "H1",
     "H7",
+    "H9",
     "DB 成功 Redis 失败",
     "Pub/Sub 丢失",
 ]

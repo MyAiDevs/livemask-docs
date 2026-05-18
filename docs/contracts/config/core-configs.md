@@ -72,6 +72,31 @@ Compatibility:
 - 非法值行为：拒绝应用，上报 `config_apply_failed`。
 - 降级模式行为：继续使用 last-known-good。
 
+### sing-box server 配置关系
+
+NodeAgent 的 `nodeagent.runtime_config` 下发后，NodeAgent 将其转换为 sing-box server 运行时配置。
+
+与 connect_config 的关系：
+
+| 角色 | 持有配置 | 包含 node_secret |
+| --- | --- | --- |
+| Backend | 完整节点配置 + node_secret hash | 是 |
+| NodeAgent | `/internal/agent/config` 下发完整 sing-box server 配置含 `node_secret` | 是 |
+| App | `connect-config` API 返回的 session-bound 临时凭据 | **否** |
+
+sing-box server 配置中与 connect_config 对应的字段：
+
+```text
+sing-box server inbounds[].type          ← connect_config.server.protocol
+sing-box server inbounds[].listen        ← 服务端监听地址（不由 App 决定）
+sing-box server inbounds[].listen_port   ← connect_config.server.port
+sing-box server inbounds[].tls.server_name     ← connect_config.tls.server_name
+sing-box server inbounds[].tls.reality.public_key  ← connect_config.tls.server_public_key
+sing-box server inbounds[].users[].uuid   ← connect_config.credentials.uuid（仅匹配）
+```
+
+NodeAgent 不向 connect_config 写入任何字段。App 的 connect_config 是 Backend 根据用户 session 生成的下行数据。
+
 ## `payment.usdt_nowpayments`
 
 - Owner：Payment / Backend

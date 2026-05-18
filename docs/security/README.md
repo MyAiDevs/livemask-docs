@@ -9,6 +9,7 @@
 安全相关历史文档目前分布在：
 
 - `docs/security/AUTH_RBAC_SECURITY_MODEL.md`
+- `docs/security/VPN_CONNECT_CONFIG_SECURITY_MODEL.md` — VPN connect_config 安全模型（TASK-VPN-CONFIG-001）
 - `docs/app/LiveMask_App客户端开发与加密安全规范_v3.6.md`
 - `docs/archive/LiveMask_统一Secret管理与灾备演练机制设计_v3.6.md`
 - `docs/archive/LiveMask_防刷机制设计_v3.6.md`
