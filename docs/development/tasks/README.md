@@ -93,10 +93,14 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-CICD-GEOIP-001 — GeoIP update and rollback smoke
 - TASK-APP-NODE-REGION-001 — App 使用 Backend 字段和本地 GeoIP cache 安全展示 region/degraded 状态
 
-## Blog / SEO 内容系统任务
+## Content System（统一内容系统）任务
 
-- [TASK-DOC-BLOG-SEO-001-blog-seo-content-contract.md](TASK-DOC-BLOG-SEO-001-blog-seo-content-contract.md) — Blog 文章数据模型、Public API、SEO 规则、sitemap/RSS、结构化数据、Website 路由和安全规则契约
-- TASK-BACKEND-BLOG-001 — Backend BlogArticle DB schema、CRUD API、sitemap/RSS 数据源
-- TASK-WEBSITE-BLOG-001 — Website blog 页面、SEO meta、JSON-LD、sitemap.xml、RSS
-- TASK-ADMIN-BLOG-001 — Admin 文章管理页面（列表/创建/编辑/发布/归档）
-- TASK-CICD-BLOG-SEO-001 — Blog/SEO 相关的 CI smoke 测试
+> 替代旧 `Blog / SEO 内容系统任务`。旧任务 `TASK-DOC-BLOG-SEO-001` 已合并升级为 `TASK-DOC-CONTENT-001`，旧 `TASK-BACKEND-BLOG-001` 等已重新编排。
+
+- [TASK-DOC-CONTENT-001-content-system-contract.md](TASK-DOC-CONTENT-001-content-system-contract.md) — 统一 Content System 契约：content_items 模型、6 种内容类型、App API、Admin API、跳转规则
+- TASK-BACKEND-CONTENT-001 — Backend 统一 content_items schema + Public Blog API + App Content API
+- TASK-BACKEND-ADMIN-CONTENT-001 — Backend Admin Content CRUD API
+- TASK-WEBSITE-BLOG-002 — Website Blog real API integration
+- TASK-ADMIN-CONTENT-001 — Admin Content Management UI（管理所有 6 种 content_type）
+- TASK-APP-CONTENT-FEED-001 — App 公告/活动/banner feed
+- TASK-CICD-CONTENT-SEO-001 — Blog SEO + App content smoke

@@ -12,7 +12,8 @@
 - [Data Consistency](data-consistency.md)：PostgreSQL、Redis、App/NodeAgent 本地缓存一致性规则
 - [NodeAgent Release Contract](nodeagent/NODEAGENT_RELEASE_CONFIG_ROLLBACK_CONTRACT.md)：NodeAgent binary 分发、配置下发、灰度、健康门禁和回滚契约
 - [GeoIP Database Sync Contract](geoip/GEOIP_DATABASE_SYNC_CONTRACT.md)：Backend 定时更新 GeoIP DB、NodeAgent 同步、App 增量同步、校验、LKG 和回滚契约
-- [Blog / SEO Content Contract](content/BLOG_SEO_CONTENT_CONTRACT.md)：Blog 文章数据模型、Public API、SEO 规则、sitemap/RSS、结构化数据、Admin API 预留和 Website 路由契约
+- [Content System Contract](content/CONTENT_SYSTEM_CONTRACT.md)：统一内容系统跨仓库契约 — content_items 模型、6 种内容类型、Public Blog API、App Content API、Admin API 预留、跳转规则和安全规则
+- [Blog / SEO Content Sub-Contract](content/BLOG_SEO_CONTENT_CONTRACT.md)：blog_article 专属 SEO 子契约 — SEO 采集规则、Website SEO 要求、JSON-LD、sitemap/RSS
 
 ## 真实 MVP 契约
 

@@ -11,6 +11,9 @@
 - AUTH-001 账号、登录、Session、RBAC 基础闭环
 - VPN-CONFIG-001 真实 VPN connect_config 契约与安全模型
 - DOC-PROTOCOL-001 NodeAgent 多协议扩展架构文档
+- DOC-NODEAGENT-RELEASE-001 NodeAgent binary 分发、配置发布与回滚契约
+- DOC-GEOIP-SYNC-001 GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约
+- DOC-CONTENT-001 统一 Content System 契约（覆盖 blog_article / announcement / campaign / app_banner）
 - P1-05 配置热更新完整闭环
 - P2-05 节点推荐与过滤
 - P3-01 App 上报连接质量
@@ -34,6 +37,8 @@
 | [TASK-INFRA-002-ai-task-sync-and-auto-marking.md](tasks/TASK-INFRA-002-ai-task-sync-and-auto-marking.md) | AI 多窗口任务同步、Issue 评论、解锁 dispatch、Lark 报告 | DevOps / Docs | INFRA-001 |
 | [TASK-VPN-CONFIG-001-real-connect-config-contract.md](tasks/TASK-VPN-CONFIG-001-real-connect-config-contract.md) | Connect Config 契约与安全模型 | Backend / Security | INFRA-001 |
 | [TASK-DOC-PROTOCOL-001-nodeagent-multi-protocol-extension-arch.md](tasks/TASK-DOC-PROTOCOL-001-nodeagent-multi-protocol-extension-arch.md) | NodeAgent 多协议扩展架构文档 | NodeAgent / Docs | INFRA-001 |
+| [TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md](tasks/TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md) | NodeAgent binary 分发、配置发布与回滚契约 | Backend / NodeAgent / Admin / DevOps | TASK-NA-CONFIG-001 |
+| [TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md](tasks/TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md) | GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约 | Backend / NodeAgent / App / Admin / DevOps | TASK-NA-CONFIG-001 |
 | [TASK-P0-03-config-center.md](tasks/TASK-P0-03-config-center.md) | 配置中心、版本、hash、Redis 通知 | Backend | INFRA-001 |
 | [TASK-ADMIN-001-config-center-management-ui.md](tasks/TASK-ADMIN-001-config-center-management-ui.md) | 配置中心管理页、草稿、发布、回滚 | Admin | P0-03 |
 | [TASK-APP-001-remote-config-cache-fallback.md](tasks/TASK-APP-001-remote-config-cache-fallback.md) | App 远程配置读取、缓存、降级 | App | P0-03 |
@@ -45,7 +50,8 @@
 | [TASK-P3-01-connection-quality-report.md](tasks/TASK-P3-01-connection-quality-report.md) | App 连接质量上报 | App / Backend | P2-05 |
 | [TASK-P3-02-quick-feedback.md](tasks/TASK-P3-02-quick-feedback.md) | 快速反馈和低优先级 appeal | App / Backend | P3-01 |
 | [TASK-P5-03-monitoring-alerting.md](tasks/TASK-P5-03-monitoring-alerting.md) | MVP 指标、告警、Dashboard | Ops / SRE | P0-P3 |
-| [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
+ | [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
+ | [TASK-DOC-CONTENT-001-content-system-contract.md](tasks/TASK-DOC-CONTENT-001-content-system-contract.md) | 统一 Content System 契约：content_items 模型、Blog/App/Admin API | Docs | 无 |
 
 ## 3. 当前 Roadmap 状态
 
@@ -54,10 +60,15 @@
 - ProtocolProfile 接口定义 + Renderer dispatcher + SecretRef 框架（TASK-DOC-PROTOCOL-001 / TASK-NODEAGENT-PROTOCOL-001）
 - Connect Config 安全契约（TASK-VPN-CONFIG-001）
 - Backend protocol_profile 命名对齐（TASK-BACKEND-PROTOCOL-001）
+- NodeAgent binary 分发、配置发布与回滚契约（TASK-DOC-NODEAGENT-RELEASE-001）
+- GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约（TASK-DOC-GEOIP-SYNC-001）
 
 ### 进行中
 
 - DOC-HYSTERIA2-CONTRACT-001 — Hysteria2 连接配置跨仓库契约（本文档）
+
+### 已完成（追加：Content System）
+- Content System 统一契约（TASK-DOC-CONTENT-001）— content_items 模型、6 种内容类型、Blog/App/Admin API、跳转规则
 
 ### 下一阶段（Hysteria2 首条真实协议链路）
 
@@ -70,6 +81,28 @@
 | TASK-CICD-PROTOCOL-SMOKE-001 | CI smoke hysteria2 API 验证 | DevOps | TASK-BACKEND-CONNECT-CONFIG-HYSTERIA2-001 |
 | TASK-APP-ANDROID-ENGINE-HYSTERIA2-001 | Android VpnService hysteria2 引擎 | App | TASK-APP-CONNECT-PROFILE-001 |
 | TASK-APP-IOS-PACKET-TUNNEL-HYSTERIA2-001 | iOS PacketTunnelProvider hysteria2 | App | TASK-APP-CONNECT-PROFILE-001 |
+
+### 下一阶段（NodeAgent binary 发布、配置下发与回滚）
+
+| TASK | 目标 | Owner | 依赖 |
+| --- | --- | --- | --- |
+| TASK-BACKEND-NODEAGENT-RELEASE-001 | Release metadata schema、version check API、upgrade event API | Backend | TASK-DOC-NODEAGENT-RELEASE-001 |
+| TASK-NODEAGENT-RELEASE-001 | Release manager、artifact download/verify/install/rollback | NodeAgent | TASK-BACKEND-NODEAGENT-RELEASE-001 |
+| TASK-BACKEND-NODEAGENT-CONFIG-ROLLBACK-001 | Per-node config assignment、schema compatibility、rollback publish flow | Backend | TASK-P0-03-config-center |
+| TASK-ADMIN-NODEAGENT-RELEASE-001 | Release/rollout UI、per-node version/config 状态和 rollback 操作 | Admin | TASK-BACKEND-NODEAGENT-RELEASE-001 |
+| TASK-CICD-NODEAGENT-RELEASE-001 | Release and rollback smoke | DevOps | Backend + NodeAgent release tasks |
+| TASK-APP-NODE-STATUS-002 | Safe node rollout/degraded status display | App | Backend exposes safe fields |
+
+### 下一阶段（GeoIP 数据库更新、NodeAgent 同步与 App 增量同步）
+
+| TASK | 目标 | Owner | 依赖 |
+| --- | --- | --- | --- |
+| TASK-BACKEND-GEOIP-001 | Source registry、scheduled update job、artifact metadata、NodeAgent check/event APIs、App manifest/event APIs | Backend | TASK-DOC-GEOIP-SYNC-001 |
+| TASK-NODEAGENT-GEOIP-001 | GeoIP sync manager、verifier、local LKG、rollback | NodeAgent | TASK-BACKEND-GEOIP-001 |
+| TASK-APP-GEOIP-001 | App GeoIP manifest client、delta/full package sync、cache、LKG、fallback | App | TASK-BACKEND-GEOIP-001 |
+| TASK-ADMIN-GEOIP-001 | GeoIP source/database/rollout UI | Admin | TASK-BACKEND-GEOIP-001 |
+| TASK-CICD-GEOIP-001 | GeoIP update and rollback smoke for NodeAgent and App packages | DevOps | Backend + NodeAgent + App GeoIP tasks |
+| TASK-APP-NODE-REGION-001 | Safe region/degraded display using Backend fields and local GeoIP cache | App | TASK-APP-GEOIP-001 |
 
 ## 4. MVP 完成标准
 
