@@ -76,14 +76,19 @@ Draft -> Ready -> In Progress -> Review -> Done
 ## Protocol & Endpoint Template Rollout 任务
 
 - [TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md](TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md) — Protocol & Endpoint Template 跨仓库契约：模板数据模型、版本化、15 个 Seed Templates、Assignment 模型、Job Service 灰度规则、NodeAgent 应用、Backend connect_config 协同、App 优雅重连和回滚策略。
+- [TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001-nodeagent-protocol-capability-sync.md](TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001-nodeagent-protocol-capability-sync.md) ✅ — NodeAgent protocol capability sync 契约：NodeAgent 上报真实协议支持，Backend 聚合 eligibility，Admin 展示支持状态并阻断 unsupported/reserved/app_pending 操作
 - TASK-BACKEND-PROTOCOL-TEMPLATE-001 — Backend 端 Protocol Template CRUD、Seed Migration、Node Selector 解析、connect_config 协同
+- TASK-BACKEND-PROTOCOL-CAPABILITY-001 — Backend 存储 NodeAgent protocol_capabilities、提供 fleet/node/template eligibility APIs、assignment gating
 - TASK-BACKEND-PROTOCOL-ROLLOUT-001 — Backend 端 Assignment 解析和 Secret 注入 Internal API
 - TASK-JOBS-PROTOCOL-ROLLOUT-001 — Job Service 端 Protocol Rollout 灰度执行器（Wave 编排、Per-Node Queue、Error Threshold）
 - TASK-NODEAGENT-PROTOCOL-ASSIGNMENT-001 — NodeAgent 端 Assignment Pull、Apply、Event Report
+- TASK-NODEAGENT-PROTOCOL-CAPABILITY-001 — NodeAgent 从本地 registry 生成 protocol capability report 并随 heartbeat/status 上报
 - TASK-ADMIN-PROTOCOL-TEMPLATE-001 — Admin 端 Template 和 Assignment 管理 UI
+- TASK-ADMIN-PROTOCOL-CAPABILITY-001 — Admin 在模板、节点、assignment wizard、rollout event 和 dashboard 中显示协议支持状态
 - TASK-BACKEND-RECONNECT-HINT-001 — Backend 端重连提示生成和 Realtime 推送
 - TASK-APP-RECONNECT-HINT-001 — App 端重连提示接收、优雅断线、connect_config 刷新
 - TASK-CICD-PROTOCOL-TEMPLATE-001 — CI/CD Protocol Template 和 Rollout Smoke
+- TASK-CICD-PROTOCOL-CAPABILITY-001 — CI/CD 验证 unsupported/reserved/app_pending 协议不能被误下发，implemented 协议可下发
 - TASK-CICD-RECONNECT-HINT-001 — CI/CD 重连提示 Smoke
 
 ## NodeAgent 发布、配置与回滚任务

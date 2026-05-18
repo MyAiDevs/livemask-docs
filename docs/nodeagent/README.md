@@ -49,6 +49,12 @@
 - [Protocol & Endpoint Template Contract](../contracts/protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — 协议端点模板管理、版本化、批量分发、Job Service 灰度规则、NodeAgent 应用（pull assignment / Validate / Render / HealthCheck / event 上报）和回滚策略。
 - [Client Reconnect Hint Contract](../contracts/realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — NodeAgent 协议变更后上报 Backend，Backend 通过 realtime 通道通知 App 优雅重连。NodeAgent 不直接通知 App。
 
+NodeAgent 必须从本地 ProtocolProfile registry 生成真实 `protocol_capabilities` 并随 heartbeat/status 上报。Backend/Admin 不得仅凭 seed templates 判断协议可用性。Reserved 或未实现协议必须上报为 `reserved` / `unsupported` / `partial`，避免 Admin 误下发模板。
+
+Required follow-up:
+
+- `TASK-NODEAGENT-PROTOCOL-CAPABILITY-001`
+
 ## 10. 控制平面闭环
 
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)

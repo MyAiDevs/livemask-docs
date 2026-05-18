@@ -55,7 +55,9 @@
 
 - [Protocol & Endpoint Template Contract](../contracts/protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — Admin 需要实现 Protocol 模板管理（系统模板 / 自定义模板）、Assignment 创建（节点选择、灰度策略）、灰度进度查看和回滚操作。模板字段白名单必须遵守安全边界，secret 永不展示。
 
-相关后续任务：`TASK-ADMIN-PROTOCOL-TEMPLATE-001`
+Admin 展示协议时必须区分 seed template、reserved roadmap protocol 和 NodeAgent 真实能力。模板列表可以展示未来协议，但 Apply / Assignment 操作必须基于 Backend 聚合的 NodeAgent `protocol_capabilities` eligibility。Unsupported、Reserved、App pending、Capability stale 都必须有明确 badge 和阻断说明。
+
+相关后续任务：`TASK-ADMIN-PROTOCOL-TEMPLATE-001`、`TASK-ADMIN-PROTOCOL-CAPABILITY-001`
 
 ## 7. Admin Navigation IA
 

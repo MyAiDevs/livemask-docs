@@ -229,6 +229,13 @@ Each per-node application attempt generates rollout events.
 
 ## 3. Built-in Seed Templates
 
+Seed templates are not the same thing as currently deployable protocols.
+
+Backend may seed templates for implemented, future, or reserved protocols, but
+Admin MUST NOT display a protocol as operational only because a seed template
+exists. Operational availability comes from NodeAgent capability reports and App
+client support status.
+
 ### 3.1 Seed Template List
 
 The following built-in templates are seeded idempotently on first Backend
@@ -294,6 +301,215 @@ The seeding migration must:
 
 Seeding is idempotent. Running the migration multiple times produces the same
 result.
+
+### 3.4 Protocol Capability Sync
+
+Protocol support is runtime data, not only static Backend template data.
+
+NodeAgent MUST report the protocol profiles it actually supports. Backend MUST
+aggregate this into a protocol support matrix. Admin MUST use the aggregated
+matrix when showing templates, creating assignments, and explaining why an
+operation is blocked.
+
+#### Capability State Model
+
+| State | Meaning | Rollout allowed |
+| --- | --- | --- |
+| `implemented` | NodeAgent supports validate, render, endpoint metadata, health checks, and event redaction for this profile. | Yes, if App/client support is also ready or assignment is server-only. |
+| `partial` | NodeAgent knows the profile but lacks one or more required operations. | No by default; only dry-run / lab mode. |
+| `reserved` | Backend knows the protocol and may seed templates, but rollout is intentionally blocked. | No. |
+| `unsupported` | NodeAgent does not know or cannot apply the protocol. | No. |
+| `app_pending` | NodeAgent and Backend support exist, but App native engine or client config support is not ready. | Server rollout may be allowed only when connect_config is blocked from clients. |
+| `unknown` | Backend has not received fresh capability data from the node. | No, unless admin explicitly targets with force dry-run. |
+
+#### NodeAgent Capability Report
+
+NodeAgent heartbeat/status MUST include a protocol capability list derived from
+the local ProtocolProfile registry, not from Backend templates.
+
+Example:
+
+```json
+{
+  "protocol_capabilities": [
+    {
+      "protocol": "mixed",
+      "state": "implemented",
+      "transports": ["tcp"],
+      "supports_validate": true,
+      "supports_render": true,
+      "supports_endpoint": true,
+      "supports_health_check": true,
+      "supports_secret_refs": false,
+      "supports_client_config": true,
+      "profile_version": "builtin",
+      "reason": null,
+      "reported_at": "2026-05-18T00:00:00Z"
+    },
+    {
+      "protocol": "hysteria2",
+      "state": "implemented",
+      "transports": ["udp"],
+      "supports_validate": true,
+      "supports_render": true,
+      "supports_endpoint": true,
+      "supports_health_check": true,
+      "supports_secret_refs": true,
+      "supports_client_config": false,
+      "profile_version": "builtin",
+      "reason": "app_native_engine_pending",
+      "reported_at": "2026-05-18T00:00:00Z"
+    },
+    {
+      "protocol": "vless_reality",
+      "state": "reserved",
+      "transports": ["tcp"],
+      "supports_validate": false,
+      "supports_render": false,
+      "supports_endpoint": false,
+      "supports_health_check": false,
+      "supports_secret_refs": true,
+      "supports_client_config": false,
+      "profile_version": null,
+      "reason": "reserved_profile_not_implemented",
+      "reported_at": "2026-05-18T00:00:00Z"
+    }
+  ]
+}
+```
+
+Required fields:
+
+| Field | Type | Required | Notes |
+| --- | --- | --- | --- |
+| `protocol` | string | yes | Must match `ProtocolProfile.Name()` or reserved protocol name. |
+| `state` | string | yes | One of `implemented`, `partial`, `reserved`, `unsupported`, `app_pending`, `unknown`. |
+| `transports` | string[] | yes | Supported transports for this node/profile. |
+| `supports_validate` | boolean | yes | Whether config validation is implemented. |
+| `supports_render` | boolean | yes | Whether sing-box render/apply path is implemented. |
+| `supports_endpoint` | boolean | yes | Whether public endpoint metadata can be reported. |
+| `supports_health_check` | boolean | yes | Whether protocol-specific health checks exist. |
+| `supports_secret_refs` | boolean | yes | Whether Backend-resolved secret refs are supported. |
+| `supports_client_config` | boolean | yes | Whether App/client connect_config can safely use this profile. |
+| `profile_version` | string | no | Profile implementation version or `"builtin"`. |
+| `reason` | string | no | Redacted operator-safe reason. |
+| `reported_at` | timestamptz | yes | Report timestamp. |
+
+#### Backend Aggregation Rules
+
+Backend MUST:
+
+1. Store the latest protocol capability report per node.
+2. Mark reports stale when older than the NodeAgent heartbeat freshness window.
+3. Expose per-node and fleet-level protocol support summaries to Admin.
+4. Resolve template eligibility from both template metadata and capability data.
+5. Reject or skip assignment targets whose capability state is not eligible.
+6. Keep reserved templates visible as roadmap/reserved, but not assignable.
+7. Avoid generating App `connect_config` for protocols whose `supports_client_config=false`.
+
+Recommended Admin APIs:
+
+```http
+GET /admin/api/v1/protocol/capabilities
+GET /admin/api/v1/nodes/{node_id}/protocol-capabilities
+GET /admin/api/v1/protocol-templates/{template_id}/eligibility
+```
+
+Example fleet summary:
+
+```json
+{
+  "items": [
+    {
+      "protocol": "hysteria2",
+      "fleet_state": "partial",
+      "implemented_nodes": 12,
+      "eligible_nodes": 0,
+      "app_client_ready": false,
+      "reserved": false,
+      "blocking_reason": "app_native_engine_pending"
+    },
+    {
+      "protocol": "vless_reality",
+      "fleet_state": "reserved",
+      "implemented_nodes": 0,
+      "eligible_nodes": 0,
+      "app_client_ready": false,
+      "reserved": true,
+      "blocking_reason": "reserved_profile_not_implemented"
+    }
+  ]
+}
+```
+
+#### Assignment Gating Rules
+
+Before creating a rollout run, Backend MUST evaluate:
+
+- template `enabled=true`
+- template `rollout_blocked=false`
+- target node capability state is `implemented`
+- target node supports the requested transport
+- profile safe fields validate for the reported NodeAgent profile
+- `supports_client_config=true` if the template is intended for App sessions
+- endpoint readiness requirement if `require_endpoint_ready=true`
+
+If any check fails:
+
+- Synchronous assignment creation MUST return a clear error.
+- Job Service rollout MUST record a redacted `protocol_unsupported` or
+  `protocol_capability_mismatch` event and skip that node.
+- Admin MUST display the reason before the operator starts rollout.
+
+Recommended error codes:
+
+| Error Code | Meaning |
+| --- | --- |
+| `PROTOCOL_UNSUPPORTED_BY_NODE` | Target node cannot apply this protocol. |
+| `PROTOCOL_RESERVED` | Protocol is known but intentionally blocked. |
+| `PROTOCOL_CAPABILITY_UNKNOWN` | Node has no fresh capability report. |
+| `PROTOCOL_CLIENT_PENDING` | Server can apply but App/client cannot consume it safely. |
+| `PROTOCOL_TRANSPORT_UNSUPPORTED` | Node supports protocol but not requested transport. |
+
+#### Admin UI Requirements
+
+Admin MUST show protocol support explicitly in:
+
+- Template list.
+- Template detail.
+- Assignment creation wizard.
+- Node list / node detail.
+- Rollout events.
+- Dashboard protocol endpoint widget.
+
+Required labels:
+
+| UI Label | Source |
+| --- | --- |
+| `Ready on N nodes` | `eligible_nodes > 0` |
+| `NodeAgent unsupported` | no target node has `implemented` support |
+| `Reserved` | template is reserved or protocol state is `reserved` |
+| `App pending` | `supports_client_config=false` or fleet summary says client pending |
+| `Capability stale` | report older than freshness window |
+
+Admin MUST NOT:
+
+- Treat seeded templates as supported.
+- Show a working "Apply" action for reserved/unsupported protocols.
+- Hide unsupported protocols completely when they are useful roadmap context.
+- Allow force rollout without a clear warning and audit log.
+
+#### Current Development Rule
+
+Until every protocol is implemented end-to-end, the recommended path is:
+
+```text
+NodeAgent reports real capabilities -> Backend aggregates eligibility -> Admin displays support state and gates operations.
+```
+
+Do not require NodeAgent to implement every seeded protocol before Admin can be
+correct. Admin correctness means showing real support and blocking unsafe
+actions.
 
 ---
 
