@@ -57,7 +57,29 @@
 
 相关后续任务：`TASK-ADMIN-PROTOCOL-TEMPLATE-001`
 
-## 7. Admin Job Center
+## 7. Admin Navigation IA
+
+- [Admin Navigation Information Architecture Contract](../contracts/admin/ADMIN_NAVIGATION_IA_CONTRACT.md)
+
+Admin 左侧菜单必须从平铺列表升级为分组、可折叠、RBAC-aware 的信息架构。菜单隐藏只是可用性优化，不是安全边界；所有路由和 API 仍由 Backend RBAC 强制控制。
+
+Required top-level groups:
+
+| Group | Scope |
+| --- | --- |
+| Dashboard | `/admin` 总览、运营态势、事件摘要 |
+| Operations | Nodes、Jobs、Protocol & Endpoint、GeoIP、Traffic、Releases |
+| Content | Blog、公告、活动、App banner、release note、help article |
+| Users & Growth | Users、角色、设备、Sponsor Ambassador、Promotion Ambassador、referral |
+| Finance | Billing、payments、subscriptions、reconciliation |
+| Observability | Logs、audit logs、incidents、metrics、node latest logs |
+| System | Config Center、feature flags、settings、integrations |
+
+功能页应通过 tabs / filters 收敛子页面，避免继续增加顶层菜单。例如 GeoIP Databases / Sources / Jobs / Events 应在一个 GeoIP 入口下展示；Content 的 blog / announcement / campaign / app_banner 应在统一 Content 入口下切换。
+
+相关后续任务：`TASK-ADMIN-NAV-IA-001`
+
+## 8. Admin Job Center
 
 - `docs/contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md`
 - `docs/contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`
@@ -69,7 +91,7 @@ Job 执行层必须从第一版开始独立为 `livemask-job-service`，由 Back
 
 功能页面可以展示状态并跳转到 Job Center，但不应长期拥有通用 scheduler/trigger 能力。例如 `/admin/geoip` 可以保留数据库状态和 source credential 配置入口，真正的 `Trigger Update` 应迁移到 `/admin/jobs?job_type=geoip_source_update`。
 
-## 8. Control Plane Operations Dashboard
+## 9. Control Plane Operations Dashboard
 
 - [Admin Control Plane Dashboard Contract](../contracts/admin/ADMIN_CONTROL_PLANE_DASHBOARD_CONTRACT.md) — 定义所有 Dashboard 路由、Real-First Data 规则、Backend API 契约、3D/traffic map 数据契约、各模块 Widget 规格和 RBAC 门禁。
 
@@ -90,7 +112,7 @@ Dashboard 路由矩阵：
 
 相关后续任务：`TASK-ADMIN-DASHBOARD-001`
 
-## 9. 日志、审计与节点监控
+## 10. 日志、审计与节点监控
 
 - [Log, Audit, Metric, And Node Observability Pipeline Contract](../contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md)
 

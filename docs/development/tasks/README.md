@@ -145,6 +145,15 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-ADMIN-DASHBOARD-001 — Admin 实现 Dashboard 前端面和 SVG/2D traffic map
 - TASK-CICD-DASHBOARD-001 — CI/CD Dashboard smoke：mock-badge enforcement、RBAC、empty/error states
 
+## Admin Navigation IA 任务
+
+> Admin 左侧菜单不能继续作为平铺功能清单增长。所有 Admin 页面必须进入分组、可折叠、RBAC-aware 的信息架构；功能页通过 tabs / filters 收敛子页面，避免一项功能一个顶层菜单。
+
+- [TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md](TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md) ✅ — Admin Navigation IA 契约：Dashboard / Operations / Content / Users & Growth / Finance / Observability / System 分组、RBAC 可见性、深链接兼容、移动端抽屉和 CI smoke
+- TASK-ADMIN-NAV-IA-001 — Admin 实现 grouped/collapsible sidebar、typed nav model、active route auto-expand、localStorage persistence、mobile drawer parity
+- TASK-BACKEND-ADMIN-PERMISSIONS-001 — Backend admin auth payload 补齐 effective permissions，支持 Admin 可靠过滤菜单
+- TASK-CICD-ADMIN-NAV-IA-001 — CI/CD Admin nav smoke：分组可见性、直接链接、低权限隐藏、直达 403 验证
+
 ## Observability / Logs / Metrics 任务
 
 > Backend、NodeAgent、Job Service、Admin 和 CI/CD 必须统一日志、审计、metrics 和 Node 最新日志查看链路。NodeAgent 不直接调用 Job Service；NodeAgent 日志通过 Backend HMAC 入口上传，Backend 验证身份后由 Job Service 队列异步入库。

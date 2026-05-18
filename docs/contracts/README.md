@@ -19,6 +19,7 @@
 - [Content System Contract](content/CONTENT_SYSTEM_CONTRACT.md) ✅ Ready：统一内容系统跨仓库契约 — content_items 模型、6 种内容类型、Public Blog API、App Content API、Admin API 预留、跳转规则和安全规则
 - [Blog / SEO Content Sub-Contract](content/BLOG_SEO_CONTENT_CONTRACT.md)：blog_article 专属 SEO 子契约 — SEO 采集规则、Website SEO 要求、JSON-LD、sitemap/RSS
 - [Log / Audit / Metric Pipeline Contract](observability/LOG_METRIC_PIPELINE_CONTRACT.md)：Backend 审计/登录/操作/系统/支付/任务日志、NodeAgent 日志上传、Job Service 队列入库、Prometheus metrics、Admin Node List 日志查看契约
+- [Admin Navigation Information Architecture Contract](admin/ADMIN_NAVIGATION_IA_CONTRACT.md)：Admin 左侧菜单分组、折叠、RBAC 可见性、路由收敛、移动端抽屉和 CI smoke 契约
 
 ## 真实 MVP 契约
 
@@ -38,6 +39,7 @@
 ## 实时 Dashboard 契约
 
 - [Admin Control Plane Dashboard Contract](admin/ADMIN_CONTROL_PLANE_DASHBOARD_CONTRACT.md) — Admin Control Plane Operations Dashboard 契约：定义 7 个 Dashboard Surface、11 个 Backend API、Real-First Data 规则、3D/traffic map 数据契约、各模块 Widget 规格、RBAC 门禁和安全规则。
+- [Admin Navigation Information Architecture Contract](admin/ADMIN_NAVIGATION_IA_CONTRACT.md) — Admin Navigation IA 契约：定义 Dashboard / Operations / Content / Users & Growth / Finance / Observability / System 分组，约束菜单收敛、权限可见性和深链接兼容。
 
 ## 2. 变更规则
 

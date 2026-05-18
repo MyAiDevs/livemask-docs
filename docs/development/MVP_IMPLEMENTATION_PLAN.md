@@ -17,6 +17,7 @@
 - DOC-CONTROL-PLANE-001 App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构
 - DOC-JOB-QUEUE-MATRIX-001 全局队列使用矩阵（Backend/NodeAgent/Job Service/DB/Redis 开发门禁）
 - DOC-OBSERVABILITY-LOGS-METRICS-001 日志、审计、metrics、NodeAgent 日志上传和 Admin Node logs 契约
+- DOC-ADMIN-NAV-IA-001 Admin 左侧菜单分组、折叠、RBAC 可见性和深链接兼容契约
 - P1-05 配置热更新完整闭环
 - P2-05 节点推荐与过滤
 - P3-01 App 上报连接质量
@@ -57,6 +58,7 @@
 | [TASK-DOC-CONTENT-001-content-system-contract.md](tasks/TASK-DOC-CONTENT-001-content-system-contract.md) | 统一 Content System 契约：content_items 模型、Blog/App/Admin API | Docs | 无 |
 | [TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md](tasks/TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md) | Protocol & Endpoint Template 契约 + 重连提示契约 + 15 seed templates + Job Service 灰度 + NodeAgent 应用 + App 优雅重连 | Docs / All | DOC-CONTROL-PLANE-001 |
 | [TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md](tasks/TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md) | 日志、审计、metrics、NodeAgent 日志上传、Job Service 队列入库和 Admin Node logs 契约 | Docs / Backend / NodeAgent / Job Service / Admin / CI-CD | DOC-CONTROL-PLANE-001 |
+| [TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md](tasks/TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md) | Admin Navigation IA 契约：分组侧边栏、RBAC 可见性、路由收敛和移动端抽屉 | Docs / Admin / Backend / CI-CD | Admin Dashboard / Job Center / Observability docs |
 | TASK-DOC-CONTROL-PLANE-001 | App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构 | Docs / All | Job Center / GeoIP / NodeAgent release docs |
 | [TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md](tasks/TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md) | 全局队列使用矩阵：定义哪些场景必须走 Job Service 队列，哪些可同步执行，DB/Redis 边界和 Backend/NodeAgent 开发门禁 | Docs / Backend / NodeAgent / Job Service | TASK-DOC-CONTROL-PLANE-001 |
 
@@ -76,6 +78,7 @@
 - Control Plane Closed Loop 架构（TASK-DOC-CONTROL-PLANE-001）— Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
 - Job Queue Usage Matrix（TASK-DOC-JOB-QUEUE-MATRIX-001）— 全局长任务、fan-out、retry/backoff、定时任务、DB/Redis 队列边界和 Backend/NodeAgent 必读门禁
 - Observability Log/Metric Pipeline（TASK-DOC-OBSERVABILITY-LOGS-METRICS-001）— Backend audit/log APIs、NodeAgent log upload、Job Service queued ingestion、Prometheus metrics、Admin Node logs
+- Admin Navigation IA（TASK-DOC-ADMIN-NAV-IA-001）— Admin 左侧菜单分组、折叠、RBAC 可见性、路由收敛和深链接兼容契约
 
 #### GeoIP 实现层（已交付）
 
@@ -103,6 +106,17 @@
 | TASK-BACKEND-DASHBOARD-001 | Backend 11 个 Dashboard API + traffic aggregation jobs + cache | Backend | TASK-DOC-ADMIN-DASHBOARD-REALTIME-001 |
 | TASK-ADMIN-DASHBOARD-001 | Admin Dashboard surfaces + SVG/2D traffic map + widget states | Admin | TASK-BACKEND-DASHBOARD-001 |
 | TASK-CICD-DASHBOARD-001 | CI/CD dashboard smoke: mock-badge, RBAC, empty/error states | DevOps | TASK-BACKEND-DASHBOARD-001 + TASK-ADMIN-DASHBOARD-001 |
+
+### 下一步 — Admin Navigation IA（菜单收敛）
+
+> Admin 菜单必须从平铺功能列表升级为分组、可折叠、RBAC-aware 的控制台导航。新增功能优先进入既有分组和页面 tabs，不应继续增加顶层菜单噪音。
+
+| TASK | 目标 | Owner | 依赖 |
+| --- | --- | --- | --- |
+| [TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md](tasks/TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md) | 定义 Admin Navigation IA 跨仓库契约 | Docs | Admin Dashboard / Job Center / Observability docs |
+| TASK-ADMIN-NAV-IA-001 | grouped/collapsible sidebar、typed nav model、active route auto-expand、RBAC filtering、mobile drawer | Admin | TASK-DOC-ADMIN-NAV-IA-001 |
+| TASK-BACKEND-ADMIN-PERMISSIONS-001 | admin auth payload 补齐 effective permissions，保障菜单过滤和页面 RBAC 一致 | Backend | AUTH-001 |
+| TASK-CICD-ADMIN-NAV-IA-001 | Admin nav smoke：分组、深链接、低权限隐藏、直达 403 | DevOps | TASK-ADMIN-NAV-IA-001 |
 
 ### 下一阶段（Hysteria2 首条真实协议链路）
 
