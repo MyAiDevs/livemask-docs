@@ -44,6 +44,8 @@ Draft -> Ready -> In Progress -> Review -> Done
 ## MVP P0/P1 任务
 
 - [TASK-DOC-PROTOCOL-001-nodeagent-multi-protocol-extension-arch.md](TASK-DOC-PROTOCOL-001-nodeagent-multi-protocol-extension-arch.md)
+- [TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md](TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md)
+- [TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md](TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md)
 - [TASK-VPN-CONFIG-001-real-connect-config-contract.md](TASK-VPN-CONFIG-001-real-connect-config-contract.md)
 - [TASK-INFRA-001-mvp-health-ci-smoke-closed-loop.md](TASK-INFRA-001-mvp-health-ci-smoke-closed-loop.md)
 - [TASK-INFRA-002-ai-task-sync-and-auto-marking.md](TASK-INFRA-002-ai-task-sync-and-auto-marking.md)
@@ -70,3 +72,31 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-CICD-PROTOCOL-SMOKE-001 — CI smoke 验证 endpoint registration → connect_config hysteria2
 - TASK-APP-ANDROID-ENGINE-HYSTERIA2-001 — Android VpnService hysteria2 原生引擎集成
 - TASK-APP-IOS-PACKET-TUNNEL-HYSTERIA2-001 — iOS/macOS PacketTunnelProvider hysteria2 适配
+
+## NodeAgent 发布、配置与回滚任务
+
+- [TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md](TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md) — NodeAgent binary 分发、配置下发、灰度、健康门禁和回滚契约
+- TASK-BACKEND-NODEAGENT-RELEASE-001 — Backend release metadata schema、version check API、upgrade event API
+- TASK-NODEAGENT-RELEASE-001 — NodeAgent release manager、artifact download/verify/install/rollback
+- TASK-BACKEND-NODEAGENT-CONFIG-ROLLBACK-001 — Backend per-node config assignment、schema compatibility、rollback publish flow
+- TASK-ADMIN-NODEAGENT-RELEASE-001 — Admin release/rollout UI、per-node version/config 状态和 rollback 操作
+- TASK-CICD-NODEAGENT-RELEASE-001 — CI smoke 验证 release 和 rollback 流程
+- TASK-APP-NODE-STATUS-002 — App 安全展示 node rollout/degraded 状态（仅当 Backend 暴露安全字段）
+
+## GeoIP 数据库更新、NodeAgent 同步与 App 增量同步任务
+
+- [TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md](TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md) — Backend 定时更新 GeoIP DB、NodeAgent 同步 verified artifact、App 增量同步 package、校验、LKG 和回滚契约
+- TASK-BACKEND-GEOIP-001 — Backend source registry、scheduled update job、artifact metadata、NodeAgent check/event APIs、App manifest/event APIs
+- TASK-NODEAGENT-GEOIP-001 — NodeAgent GeoIP sync manager、verifier、local LKG、rollback
+- TASK-APP-GEOIP-001 — App GeoIP manifest client、delta/full package sync、cache、LKG、fallback
+- TASK-ADMIN-GEOIP-001 — Admin GeoIP source/database/rollout UI
+- TASK-CICD-GEOIP-001 — GeoIP update and rollback smoke
+- TASK-APP-NODE-REGION-001 — App 使用 Backend 字段和本地 GeoIP cache 安全展示 region/degraded 状态
+
+## Blog / SEO 内容系统任务
+
+- [TASK-DOC-BLOG-SEO-001-blog-seo-content-contract.md](TASK-DOC-BLOG-SEO-001-blog-seo-content-contract.md) — Blog 文章数据模型、Public API、SEO 规则、sitemap/RSS、结构化数据、Website 路由和安全规则契约
+- TASK-BACKEND-BLOG-001 — Backend BlogArticle DB schema、CRUD API、sitemap/RSS 数据源
+- TASK-WEBSITE-BLOG-001 — Website blog 页面、SEO meta、JSON-LD、sitemap.xml、RSS
+- TASK-ADMIN-BLOG-001 — Admin 文章管理页面（列表/创建/编辑/发布/归档）
+- TASK-CICD-BLOG-SEO-001 — Blog/SEO 相关的 CI smoke 测试

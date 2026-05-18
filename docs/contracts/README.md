@@ -10,6 +10,9 @@
 - [Error Codes](error-codes.md)：统一错误码、用户可见错误和重试策略
 - [State Machines](state-machines.md)：支付、订阅、节点、申诉等状态机
 - [Data Consistency](data-consistency.md)：PostgreSQL、Redis、App/NodeAgent 本地缓存一致性规则
+- [NodeAgent Release Contract](nodeagent/NODEAGENT_RELEASE_CONFIG_ROLLBACK_CONTRACT.md)：NodeAgent binary 分发、配置下发、灰度、健康门禁和回滚契约
+- [GeoIP Database Sync Contract](geoip/GEOIP_DATABASE_SYNC_CONTRACT.md)：Backend 定时更新 GeoIP DB、NodeAgent 同步、App 增量同步、校验、LKG 和回滚契约
+- [Blog / SEO Content Contract](content/BLOG_SEO_CONTENT_CONTRACT.md)：Blog 文章数据模型、Public API、SEO 规则、sitemap/RSS、结构化数据、Admin API 预留和 Website 路由契约
 
 ## 真实 MVP 契约
 
