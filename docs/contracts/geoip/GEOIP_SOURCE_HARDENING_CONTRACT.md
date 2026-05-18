@@ -3,11 +3,16 @@
 > Task: `TASK-DOC-GEOIP-CONTRACT-002`
 > Owner: Backend / NodeAgent / App / Admin / DevOps
 > Status: Draft
-> Scope: Supplement to `TASK-BACKEND-GEOIP-SOURCE-002`. Defines GeoIP production hardening capabilities: third-party source download, source allowlist, artifact storage abstraction, manifest signature, full/delta package strategy, App API rate limit, unknown format/profile handling, MaxMind tar.gz extraction, and security boundaries.
+> Scope: Supplement to `GEOIP_DATABASE_SYNC_CONTRACT.md`. Defines GeoIP production
+> hardening capabilities: third-party source download, source allowlist, artifact
+> storage abstraction, manifest signature, full/delta package strategy, App API
+> rate limit, unknown format/profile handling, MaxMind tar.gz extraction, and
+> security boundaries.
 
 ## 1. 目标
 
-本契约补充 `TASK-BACKEND-GEOIP-SOURCE-002` 后新增的 GeoIP 生产化能力，统一约束 Backend、NodeAgent、App、Admin、CI/CD 对以下能力的理解：
+本契约补充 `GEOIP_DATABASE_SYNC_CONTRACT.md` 后新增的 GeoIP 生产化能力，统一
+约束 Backend、NodeAgent、App、Admin、CI/CD 对以下能力的理解：
 
 - 真实第三方 GeoIP source 下载
 - Source allowlist
@@ -19,9 +24,35 @@
 - MaxMind tar.gz 待办
 - 安全边界：SSRF、path traversal、secret leak、signed URL redaction
 
-## 2. Source Allowlist
+## 2. 当前实现状态总览
 
-Backend 只能从内置 allowlist source 拉取 GeoIP 数据库。
+| 仓库 | 任务 | 状态 | 说明 |
+| --- | --- | --- | --- |
+| `livemask-backend` | `TASK-BACKEND-GEOIP-001` | ✅ 已完成 | GeoIP API、Admin API、App API、NodeAgent HMAC API、source registry |
+| `livemask-backend` | `TASK-BACKEND-GEOIP-SOURCE-002` | ✅ 已完成 | Source hardening、storage abstraction、manifest signature、rate limit、delta fallback skeleton |
+| `livemask-nodeagent` | `TASK-NODEAGENT-GEOIP-001` | ✅ 已完成 | check/download/events、SHA256 校验、atomic swap、LKG、status、sync/rollback endpoint |
+| `livemask-app` | `TASK-APP-GEOIP-001` | ✅ 已完成 | manifest、package download、SHA256、local cache、LKG rollback、events、debug UI |
+| `livemask-admin` | `TASK-ADMIN-GEOIP-001` | ✅ 已完成 | databases list/detail、trigger update、activate/rollback、jobs/events、geoip:read/write RBAC |
+| `livemask-ci-cd` | `TASK-CICD-GEOIP-001` | ✅ 已完成 | 基础 GeoIP 全链路 smoke（8 域 27 节） |
+
+### 2.1 未完成增强
+
+| 领域 | 后续任务 | 状态 |
+| --- | --- | --- |
+| Manifest signature verify（NodeAgent） | `TASK-NODEAGENT-GEOIP-003` | ❌ 未开始 |
+| Delta package apply（NodeAgent） | `TASK-NODEAGENT-GEOIP-004` | ❌ 未开始 |
+| Lookup engine（NodeAgent） | `TASK-NODEAGENT-GEOIP-005` | ❌ 未开始 |
+| Lookup engine（App） | `TASK-APP-GEOIP-LOOKUP-001` | ❌ 未开始 |
+| MaxMind tar.gz extraction | `TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001` | ❌ 未开始 |
+| Signature / rate limit / delta smoke hardening | `TASK-CICD-GEOIP-HARDENING-002` | ❌ 未开始 |
+| Event retry queue（NodeAgent） | `TASK-NODEAGENT-GEOIP-002` | ❌ 未开始 |
+| Heartbeat contract extension | `TASK-NODEAGENT-GEOIP-006` | ❌ 未开始 |
+| Compatibility gate | `TASK-NODEAGENT-GEOIP-007` | ❌ 未开始 |
+| Runtime config integration | `TASK-NODEAGENT-GEOIP-008` | ❌ 未开始 |
+
+## 3. Source Allowlist
+
+Backend 只能从内置 allowlist 拉取 GeoIP 数据库。
 
 合法 source：
 
@@ -53,7 +84,7 @@ type GeoIPSourceAdapter interface {
 }
 ```
 
-## 3. Source 格式规范
+## 4. Source 格式规范
 
 不同开源 GeoIP 项目的数据库文件格式可能不一致，必须统一映射到标准 format/profile。
 
@@ -85,7 +116,7 @@ type GeoIPSourceAdapter interface {
 | 已知 source + 不支持 format | update job failed | 不影响 current/LKG | 不影响 current/LKG |
 | profile 路径含 `../` | 拒绝 | 拒绝 | 拒绝 |
 
-## 4. Hackl0us/GeoIP2-CN
+## 5. Hackl0us/GeoIP2-CN
 
 Hackl0us/GeoIP2-CN 必须作为独立 source：
 
@@ -102,9 +133,10 @@ Hackl0us/GeoIP2-CN 必须作为独立 source：
 - Backend adapter 负责识别实际文件格式。
 - Manifest 必须明确 `source`、`format`、`profile`。
 - NodeAgent/App 不通过 source 名猜格式，只信任 manifest 的标准化 format。
-- 如果 Hackl0us 源未来变更文件格式，Backend adapter 负责兼容或返回 `GEOIP_UNKNOWN_FORMAT`。
+- 如果 Hackl0us 源未来变更文件格式，Backend adapter 负责兼容或返回
+  `GEOIP_UNKNOWN_FORMAT`。
 
-## 5. Download Security
+## 6. Download Security
 
 Backend 下载第三方 source 时必须满足：
 
@@ -129,7 +161,7 @@ Backend 下载第三方 source 时必须满足：
 | --- | --- |
 | source, edition, profile, version, status, size, sha256 | license key, token, signed URL query, cloud credential |
 
-## 6. Artifact Storage
+## 7. Artifact Storage
 
 Backend 不应把本地 filesystem path 暴露给 Admin/App/NodeAgent。
 
@@ -171,7 +203,14 @@ geoip/{source}/{version}/{filename}
 - 用户传入 raw path
 - `storage_path` 出现在 API JSON
 
-## 7. Manifest Signature
+当前实现：
+
+- ✅ Backend `Database.StoragePath` 标记 `json:"-"`，不参与序列化
+- ✅ Admin 响应不包含 `storage_path`
+- ✅ package 下载通过 Backend API handler 路由，非直接路径暴露
+- ✅ `ValidatePackagePath()` 拒绝 `..` 和绝对路径
+
+## 8. Manifest Signature
 
 GeoIP manifest 支持签名字段：
 
@@ -200,7 +239,8 @@ GeoIP manifest 支持签名字段：
 - `version`/`sha256`/`size`/`source` 任一变化，signature 必须变化。
 - signing key 不得返回给任何 API。
 - signing key 不得写入 logs/audit。
-- `dev` 环境允许 unsigned manifest，但 response/status 应带 warning 或 signature 为空。
+- `dev` 环境允许 unsigned manifest，但 response/status 应带 warning 或 signature
+  为空。
 
 NodeAgent/App 行为：
 
@@ -211,7 +251,16 @@ NodeAgent/App 行为：
 | signature 缺失，dev mode | warning/degraded 可接受 | warning 可接受 |
 | signature 缺失，prod required | 拒绝 | 拒绝 |
 
-## 8. Manifest 字段
+当前实现状态：
+
+| 端 | 状态 | 说明 |
+| --- | --- | --- |
+| Backend | ✅ 已完成 | 生成/支持 signature 字段 |
+| App | ✅ 已完成 | 已兼容解析 optional signature |
+| NodeAgent | ❌ 未完成 | `TASK-NODEAGENT-GEOIP-003`：manifest signature verify |
+| CI/CD | ❌ 未覆盖 | `TASK-CICD-GEOIP-HARDENING-002`：signature hardening smoke |
+
+## 9. Manifest 字段
 
 Backend App manifest response 可包含：
 
@@ -264,7 +313,7 @@ Backend App manifest response 可包含：
 - `strategy` 缺失时默认视为 `full`。
 - `fallback_full` 缺失时默认 `false`。
 
-## 9. Full / Delta Strategy
+## 10. Full / Delta Strategy
 
 MVP 只要求 full package 可用。Delta 是协议骨架。
 
@@ -286,13 +335,22 @@ MVP 只要求 full package 可用。Delta 是协议骨架。
 | delta 文件缺失 | fallback full |
 | delta sha256 不匹配 | client 拒绝，保留 current/LKG |
 
+当前实现状态：
+
+| 端 | 状态 | 说明 |
+| --- | --- | --- |
+| Backend | ✅ 已完成 | delta fallback skeleton 已就位，`strategy`/`fallback_full` 字段已定义 |
+| App | ✅ 已完成 | 已兼容 `strategy`/`fallback_full` 字段，支持 delta→full fallback 流程 |
+| NodeAgent | ❌ 未完成 | `TASK-NODEAGENT-GEOIP-004`：delta apply 未实现 |
+| CI/CD | ❌ 未覆盖 | `TASK-CICD-GEOIP-HARDENING-002`：delta fallback hardening smoke |
+
 NodeAgent/App：
 
 - delta 未实现时必须 fallback full 或拒绝并保持 current。
 - delta apply 失败不能覆盖 current。
 - full package 校验成功后才能 promote current。
 
-## 10. Rate Limit
+## 11. Rate Limit
 
 Backend 对 App GeoIP API 启用 rate limit：
 
@@ -329,7 +387,157 @@ Backend 对 App GeoIP API 启用 rate limit：
 - key 优先 `user_id`，其次 IP。
 - App 收到 429 后不得无限重试。
 
-## 11. Admin 可见字段
+## 12. App GeoIP Contract — 当前实现
+
+### 12.1 App 端 API 调用
+
+App 通过 `GET /api/v1/geoip/manifest` 获取 manifest，通过
+`GET /api/v1/geoip/package/{database_id}` 下载 package，通过
+`POST /api/v1/geoip/events` 上报事件。
+
+所有请求使用 authenticated Dio 实例（`AuthTokenInterceptor` 自动注入
+`Authorization: Bearer <JWT>`）。
+
+### 12.2 当前实现状态
+
+| 功能 | 状态 | 说明 |
+| --- | --- | --- |
+| Manifest fetch + parse | ✅ 已完成 | `RealGeoIPApiClient.fetchManifest()` |
+| Package download + size cap | ✅ 已完成 | 100MB cap via `kGeoIPMaxPackageBytes` |
+| SHA-256 checksum verification | ✅ 已完成 | `GeoIPVerifier.verify()` |
+| Local cache (current + LKG) | ✅ 已完成 | `GeoIPCacheStorage` — `current/` + `previous/` |
+| LKG rollback | ✅ 已完成 | SHA256 mismatch 时保留 current，不覆盖 |
+| Event reporting（best-effort） | ✅ 已完成 | 失败不阻塞主流程 |
+| Debug UI | ✅ 已完成 | 开发调试页面 |
+| compatibility/expiration check | ✅ 已完成 | `compatibility.app_min_version`、`expires_at` |
+| `strategy`/`fallback_full` 兼容 | ✅ 已完成 | MVP 只处理 `full`，骨架兼容 delta |
+| `signature` 字段兼容解析 | ✅ 已完成 | optional 字段，不校验 |
+| GeoIP sync 失败不影响核心功能 | ✅ 已完成 | 不阻塞登录、连接、计费 |
+
+### 12.3 未完成
+
+| 功能 | 后续任务 | 说明 |
+| --- | --- | --- |
+| GeoIPLookupService | `TASK-APP-GEOIP-LOOKUP-001` | 尚未实现 lookup 引擎 |
+| Web 平台 path_provider/storage | 后续适配 | 需要 platform-specific storage 处理 |
+| Windows/Linux 构建验证 | 后续适配 | 需对应系统验证 |
+
+### 12.4 App 端强制规则
+
+App 必须：
+
+- 只从 Backend `/api/v1/geoip/*` 同步。
+- 不直接访问第三方 GeoIP source。
+- 使用用户 JWT。
+- 校验 sha256。
+- checksum mismatch 不覆盖 current。
+- unknown format 不 crash。
+- rate limit 429 不无限重试。
+- GeoIP sync 失败不影响登录、连接、计费等核心功能。
+- event 上报失败不得阻塞主流程。
+- 不展示完整 `package_url`/token/path/signature。
+
+## 13. NodeAgent GeoIP Contract — 当前实现
+
+### 13.1 NodeAgent 端 API
+
+NodeAgent 通过 HMAC-signed 的 internal API 与 Backend 通信：
+
+| 操作 | Method | Path |
+| --- | --- | --- |
+| Check for update | GET | `/internal/agent/geoip/check` |
+| Download package | GET | `/internal/agent/geoip/package/{database_id}` |
+| Report event | POST | `/internal/agent/geoip/events` |
+
+HMAC 算法（两层）：
+
+1. `SHA-256(rawNodeSecret)` → hex → 用作 HMAC key
+2. `HMAC-SHA256(key=secretHashHex, msg=nodeID + ":" + timestamp)`
+
+NodeAgent 自身暴露的状态端点：
+
+| 端点 | 内容 |
+| --- | --- |
+| `GET /geoip/status` | 完整 `GeoIPStatus` JSON |
+| `POST /geoip/sync` | 触发即时同步 |
+| `POST /geoip/rollback` | 触发 LKG 回滚 |
+| `GET /agent/status` | 含 `geoip` 字段 |
+| `GET /healthz` | GeoIP stale/failed 时 degraded（不 crash） |
+
+### 13.2 当前实现状态
+
+| 功能 | 状态 | 说明 |
+| --- | --- | --- |
+| Manifest check + Download | ✅ 已完成 | `Client.Check()` + `Client.DownloadPackage()` |
+| SHA-256 in-memory verify（写盘前） | ✅ 已完成 | `verifyBytesSHA256()` |
+| Known format allowlist（5种） | ✅ 已完成 | `format == ""` 或未知格式拒绝 |
+| Package URL schema 验证 | ✅ 已完成 | 只允许 http/https |
+| Profile/format 一致性检查 | ✅ 已完成 | 必须匹配 manager 配置 |
+| Atomic symlink swap（不覆盖 current） | ✅ 已完成 | `current → previous`，`current → new` |
+| Cleanup temp on failure | ✅ 已完成 | `CleanupTemp()` |
+| LKG fallback on swap failure | ✅ 已完成 | `attemptLKGFallback()` |
+| Event reporting（async） | ✅ 已完成 | 10s timeout，不阻塞 sync |
+| Error redaction（node_secret 等） | ✅ 已完成 | `redactError()` 覆盖 7+ 敏感模式 |
+| Path traversal 防护（profile + version） | ✅ 已完成 | `sanitizeFilename()` 替换 `..`/`/`/`\`/`~` |
+| Download size cap（100MB） | ✅ 已完成 | `io.LimitReader` |
+| LKG persist + rollback | ✅ 已完成 | 版本化目录 + `lkg.json` |
+| Status hooks + OnStatusChange | ✅ 已完成 | 外部 consumer 可监听状态变化 |
+
+### 13.3 未完成
+
+| 功能 | 后续任务 | 说明 |
+| --- | --- | --- |
+| Manifest signature verify | `TASK-NODEAGENT-GEOIP-003` | 需实现 HMAC verify + key rotation |
+| Delta package apply | `TASK-NODEAGENT-GEOIP-004` | delta 下载/校验/应用 全流程 |
+| Lookup engine | `TASK-NODEAGENT-GEOIP-005` | GeoIP database lookup 接口 |
+| Event retry queue | `TASK-NODEAGENT-GEOIP-002` | event 上报失败后持久化重试 |
+| Heartbeat contract extension | `TASK-NODEAGENT-GEOIP-006` | GeoIP 状态心跳字段扩展 |
+| Compatibility gate | `TASK-NODEAGENT-GEOIP-007` | manifest compatibility.field 校验 |
+| Runtime config integration | `TASK-NODEAGENT-GEOIP-008` | config center 动态配置接入 |
+
+### 13.4 NodeAgent 端强制规则
+
+NodeAgent 必须：
+
+- 只从 Backend manifest/package API 同步。
+- 不直接访问第三方 GeoIP source。
+- HMAC 调用 internal API。
+- sha256 必须匹配。
+- corrupted package 不覆盖 current。
+- rollback 使用 LKG。
+- status/error redaction（不泄露 signature/token/path）。
+- unknown format 拒绝。
+- 下载失败不覆盖 current。
+- 校验签名（prod required 时）。
+- 校验 compatibility。
+
+## 14. Admin GeoIP Contract — 当前实现
+
+### 14.1 Admin 端 API
+
+Admin 通过 admin JWT + permission 控制访问：
+
+| 操作 | Method | Path | 所需权限 |
+| --- | --- | --- | --- |
+| List databases | GET | `/admin/api/v1/geoip/databases` | `geoip:read` 或 `audit:read` |
+| Get database detail | GET | `/admin/api/v1/geoip/databases/{id}` | `geoip:read` |
+| Activate database | POST | `/admin/api/v1/geoip/databases/{id}/activate` | `geoip:write` |
+| Rollback database | POST | `/admin/api/v1/geoip/databases/{id}/rollback` | `geoip:write` |
+| Trigger update | POST | `/admin/api/v1/geoip/update` | `geoip:write` |
+
+### 14.2 当前实现状态
+
+| 功能 | 状态 | 说明 |
+| --- | --- | --- |
+| Types & Interfaces | ✅ 已完成 | `src/types/geoip.ts` — 完整类型定义 |
+| API client（5 endpoints） | ✅ 已完成 | `src/lib/geoip-api.ts` |
+| Mock data（6 DBs、4 jobs、3 events） | ✅ 已完成 | `src/lib/geoip-mock.ts` |
+| React Query hooks（5 hooks） | ✅ 已完成 | `src/hooks/use-geoip.ts` |
+| RBAC permissions（geoip:read/write） | ✅ 已完成 | 权限已注册，role→permission mapping 已定义 |
+| Admin UI pages | ❌ 未开始 | TASK-ADMIN-GEOIP-001 前端页面（databases、app-packages、sources、rollouts） |
+| Config management UI | ❌ 未开始 | GeoIP 运行时配置管理尚未建设 |
+
+### 14.3 Admin 可见字段
 
 Admin 可以查看：
 
@@ -351,106 +559,96 @@ Admin 可以查看：
 | update job status | |
 | rollout event | |
 
-## 12. NodeAgent 行为要求
+### 14.4 Admin RBAC 权限映射
 
-NodeAgent 必须：
-
-- 只从 Backend manifest/package API 同步。
-- 不直接访问第三方 GeoIP source。
-- 校验 sha256。
-- 校验 signature，如果 prod 要求开启。
-- 拒绝 unknown format。
-- 检查 compatibility。
-- 下载失败不覆盖 current。
-- 校验失败不覆盖 current。
-- 支持 LKG rollback。
-- error/status 不泄露 signature/token/path。
-
-状态建议：
-
-| Status | Description |
-| --- | --- |
-| `disabled` | GeoIP sync disabled |
-| `ready` | Current package is valid |
-| `syncing` | Download in progress |
-| `stale` | Current package out of date |
-| `failed` | Sync failed |
-| `unsupported` | Unknown format |
-| `signature_failed` | Signature verification failed |
-| `incompatible` | Version compatibility check failed |
-
-## 13. App 行为要求
-
-App 必须：
-
-- 只从 Backend `/api/v1/geoip/*` 同步。
-- 不直接访问第三方 GeoIP source。
-- 使用用户 JWT。
-- 解析 optional `signature`、`strategy`、`fallback_full`。
-- sha256 mismatch 不覆盖 current。
-- unsupported format 不 crash。
-- rate limit 429 不无限重试。
-- GeoIP sync 失败不影响登录、连接、计费等核心功能。
-- 本地缓存需要 `current` + `LKG`。
-- event 上报失败不得阻塞主流程。
-
-## 14. CI/CD 验收矩阵
-
-`TASK-CICD-GEOIP-001` 或后续 smoke 必须覆盖：
-
-| # | Test case | Expected |
+| 角色 | `geoip:read` | `geoip:write` |
 | --- | --- | --- |
-| 1 | Backend manifest returns active database | 200 OK |
-| 2 | App manifest requires JWT | 401 without token |
-| 3 | NodeAgent check requires HMAC | 401 without HMAC |
-| 4 | Wrong HMAC rejected | 403 |
-| 5 | Expired timestamp rejected | 403 |
-| 6 | Package download works | 200 OK, valid content |
-| 7 | SHA256 matches | Verification passes |
-| 8 | Corrupted package rejected | Verification fails, LKG preserved |
-| 9 | Unknown source rejected | Error returned |
-| 10 | Unknown format rejected | Error returned |
-| 11 | Path traversal rejected | Error returned |
-| 12 | Admin list/detail requires `geoip:read` | 403 without permission |
-| 13 | Admin update/activate/rollback requires `geoip:write` | 403 without permission |
-| 14 | No storage_path leak | Response redacts storage path |
-| 15 | No signing key leak | Response/log redacts signing key |
-| 16 | No token/hmac/private_key leak | Response/log redacts secrets |
-| 17 | Rate limit returns 429 | 429 after exceeding limit |
-| 18 | Delta unavailable falls back to full | `fallback_full=true` |
+| SuperAdmin | ✅ | ✅ |
+| Admin | ✅ | ✅ |
+| Auditor | ✅ | ❌ |
+| Operator | ✅ | ✅ |
 
-## 15. MaxMind tar.gz 待办
+## 15. CI/CD GeoIP Smoke Contract — 当前实现
 
-当前 `maxmind_geolite2` 需要特别说明：
+### 15.1 TASK-CICD-GEOIP-001 已覆盖
 
-- MaxMind 官方下载通常可能是压缩包格式，例如 `.tar.gz`。
-- Backend adapter 需要解压并提取 `.mmdb`。
-- 当前 `TASK-BACKEND-GEOIP-SOURCE-002` 已标记待办：`tar.gz extraction not implemented`。
+| # | 测试域 | 测试小节数 | 涵盖内容 |
+| --- | --- | --- | --- |
+| 1 | Backend GeoIP manifest | 4 | App manifest JWT auth、no-token 401、package download、event reporting |
+| 2 | NodeAgent HMAC check/package/events | 5 | HMAC auth、wrong HMAC 401、expired timestamp 401、package download、event |
+| 3 | App GeoIP manifest auth | 2 | website audience、admin audience mismatch |
+| 4 | Admin GeoIP RBAC | 6 | admin list/detail/update、no-token 401、user-token 403、write permission |
+| 5 | Package SHA256 校验 | 3 | hex 格式验证、长度 64、NodeAgent SHA256 字段存在性 |
+| 6 | Corrupted package 保护 | 1 | SHA256 mismatch detection contract 验证 |
+| 7 | Source/profile/format validation | 3 | unknown source rejection（400）、known source acceptance、format field |
+| 8 | Path traversal / secret leak | 3 | storage_path leak check、7 敏感字段 pattern、internal path exposure |
 
-在提取实现完成前：
+### 15.2 TASK-CICD-GEOIP-HARDENING-002 待覆盖
 
-- MaxMind source 可以返回明确错误；
-- 不得把 `.tar.gz` 直接标记为可用 `maxmind-mmdb`；
-- 不得向 App/NodeAgent 下发不可直接读取的 tar 包，除非 manifest 明确 `compression=tar.gz` 且客户端支持。
+以下 hardening smoke 尚未实现：
 
-后续建议任务：
+| # | 测试域 | 说明 |
+| --- | --- | --- |
+| 1 | Manifest signature verify | signature 存在但错误时拒绝下载 |
+| 2 | App 429 rate limit | 超过 limit 后返回 429，App 不无限重试 |
+| 3 | Delta fallback | delta 不可用时 fallback full |
+| 4 | MaxMind tar.gz | 未解压的 tar.gz 不被当作 mmdb 下发 |
+| 5 | Storage path leak regression | 确保 storage_path 始终不出现 |
+
+### 15.3 集成方式
+
+- `scripts/geoip-smoke.sh` — 独立可执行的 smoke 脚本
+- `scripts/smoke.sh` — 编排器，在 content smoke 后调用
+- `.github/workflows/staging-smoke.yml` — CI workflow step
+- `scripts/api-smoke-cases.tsv` — 附加 3 个 API case（manifest、admin RBAC）
+
+## 16. MaxMind tar.gz 待办
+
+当前 `TASK-BACKEND-GEOIP-SOURCE-002` **未实现** MaxMind tar.gz extraction。
+
+规则：
+
+- 不得把 `.tar.gz` 直接当 `maxmind-mmdb` 下发。
+- 未实现前必须返回明确错误（adapter 返回 `not implemented`）。
+
+后续任务：
 
 | Task ID | Goal |
 | --- | --- |
 | `TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001` | Implement MaxMind tar.gz decompression and .mmdb extraction |
 
-## 16. 后续任务
+`TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001` 必须：
+
+- 下载 tar.gz
+- 安全解压（防 zip-slip / path traversal）
+- 提取 `.mmdb`
+- 校验 sha256
+- normalize 为 `maxmind-mmdb`
+
+## 17. 后续任务索引
 
 | Task ID | Repo | Goal |
 | --- | --- | --- |
-| `TASK-APP-GEOIP-001` | `livemask-app` | App GeoIP manifest/package sync, cache, sha256, LKG, events |
-| `TASK-DOC-GEOIP-CONTRACT-002` | `livemask-docs` | 补充本契约 |
-| `TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001` | `livemask-backend` | 实现 MaxMind tar.gz 解压和 .mmdb 提取 |
+| `TASK-APP-GEOIP-001` | `livemask-app` | App GeoIP manifest/package sync, cache, sha256, LKG, events ✅ |
+| `TASK-APP-GEOIP-LOOKUP-001` | `livemask-app` | App GeoIP lookup engine 实现 |
+| `TASK-ADMIN-GEOIP-001` | `livemask-admin` | Admin GeoIP databases/update/rollout UI ✅ |
+| `TASK-BACKEND-GEOIP-001` | `livemask-backend` | GeoIP source registry, update job, APIs ✅ |
+| `TASK-BACKEND-GEOIP-SOURCE-002` | `livemask-backend` | Source hardening, storage, signature, rate limit, delta ✅ |
+| `TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001` | `livemask-backend` | MaxMind tar.gz decompression + .mmdb extraction |
+| `TASK-NODEAGENT-GEOIP-001` | `livemask-nodeagent` | GeoIP sync manager, verifier, LKG, rollback ✅ |
+| `TASK-NODEAGENT-GEOIP-002` | `livemask-nodeagent` | Event retry queue |
 | `TASK-NODEAGENT-GEOIP-003` | `livemask-nodeagent` | Manifest signature verify + key rotation |
 | `TASK-NODEAGENT-GEOIP-004` | `livemask-nodeagent` | Delta package apply |
-| `TASK-CICD-GEOIP-HARDENING-002` | `livemask-ci-cd` | 覆盖 signature/rate-limit/delta fallback/source hardening smoke |
+| `TASK-NODEAGENT-GEOIP-005` | `livemask-nodeagent` | Lookup engine |
+| `TASK-NODEAGENT-GEOIP-006` | `livemask-nodeagent` | Heartbeat contract extension |
+| `TASK-NODEAGENT-GEOIP-007` | `livemask-nodeagent` | Compatibility gate |
+| `TASK-NODEAGENT-GEOIP-008` | `livemask-nodeagent` | Runtime config integration |
+| `TASK-CICD-GEOIP-001` | `livemask-ci-cd` | GeoIP update and rollback smoke ✅ |
+| `TASK-CICD-GEOIP-HARDENING-002` | `livemask-ci-cd` | Signature/rate-limit/delta-fallback/source-hardening smoke |
+| `TASK-APP-NODE-REGION-001` | `livemask-app` | Safe region display using Backend fields + local GeoIP |
+| `TASK-DOC-GEOIP-CONTRACT-002` | `livemask-docs` | 本契约 |
 
-## 17. 完成标准
+## 18. 完成标准
 
 本契约完成后，必须满足：
 
@@ -463,3 +661,5 @@ App 必须：
 - [ ] 明确 MaxMind tar.gz 当前限制。
 - [ ] 明确 unknown format/profile 处理。
 - [ ] 不引入任何真实 secret、license key、token、URL credential。
+- [ ] 各仓库当前实现状态已记录。
+- [ ] 未完成项已登记后续任务。

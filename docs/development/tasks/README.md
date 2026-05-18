@@ -86,12 +86,24 @@ Draft -> Ready -> In Progress -> Review -> Done
 ## GeoIP 数据库更新、NodeAgent 同步与 App 增量同步任务
 
 - [TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md](TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md) — Backend 定时更新 GeoIP DB、NodeAgent 同步 verified artifact、App 增量同步 package、校验、LKG 和回滚契约
-- TASK-BACKEND-GEOIP-001 — Backend source registry、scheduled update job、artifact metadata、NodeAgent check/event APIs、App manifest/event APIs
-- TASK-NODEAGENT-GEOIP-001 — NodeAgent GeoIP sync manager、verifier、local LKG、rollback
-- TASK-APP-GEOIP-001 — App GeoIP manifest client、delta/full package sync、cache、LKG、fallback
-- TASK-ADMIN-GEOIP-001 — Admin GeoIP source/database/rollout UI
-- TASK-CICD-GEOIP-001 — GeoIP update and rollback smoke
+- TASK-BACKEND-GEOIP-001 — Backend source registry、scheduled update job、artifact metadata、NodeAgent check/event APIs、App manifest/event APIs ✅
+- TASK-BACKEND-GEOIP-SOURCE-002 — Backend source hardening、storage abstraction、manifest signature、rate limit、delta fallback skeleton ✅
+- TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001 — Backend MaxMind tar.gz decompression + .mmdb extraction
+- TASK-NODEAGENT-GEOIP-001 — NodeAgent GeoIP sync manager、verifier、local LKG、rollback ✅
+- TASK-NODEAGENT-GEOIP-002 — NodeAgent event retry queue
+- TASK-NODEAGENT-GEOIP-003 — NodeAgent manifest signature verify + key rotation
+- TASK-NODEAGENT-GEOIP-004 — NodeAgent delta package apply
+- TASK-NODEAGENT-GEOIP-005 — NodeAgent lookup engine
+- TASK-NODEAGENT-GEOIP-006 — NodeAgent heartbeat contract extension
+- TASK-NODEAGENT-GEOIP-007 — NodeAgent compatibility gate
+- TASK-NODEAGENT-GEOIP-008 — NodeAgent runtime config integration
+- TASK-APP-GEOIP-001 — App GeoIP manifest client、delta/full package sync、cache、LKG、fallback ✅
+- TASK-APP-GEOIP-LOOKUP-001 — App GeoIP lookup engine
+- TASK-ADMIN-GEOIP-001 — Admin GeoIP source/database/rollout UI ✅
+- TASK-CICD-GEOIP-001 — GeoIP update and rollback smoke ✅
+- TASK-CICD-GEOIP-HARDENING-002 — CI/CD signature/rate-limit/delta-fallback/source-hardening smoke
 - TASK-APP-NODE-REGION-001 — App 使用 Backend 字段和本地 GeoIP cache 安全展示 region/degraded 状态
+- [TASK-DOC-GEOIP-CONTRACT-002] — GeoIP source hardening 契约（本文档）
 
 ## Content System（统一内容系统）任务
 
