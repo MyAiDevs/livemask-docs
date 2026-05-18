@@ -113,9 +113,17 @@ Manual workflow inputs:
 | Input | Required | Example |
 | --- | --- | --- |
 | `task_id` | yes | `TASK-P0-03` |
-| `result` | yes | `completed` / `partial` / `blocked` |
+| `result` | yes | `implemented` / `verified` / `completed` / `completed_with_skip` / `blocked` / `deferred` |
+| `repo` | no | `livemask-backend` |
+| `parent_task_id` | no | `TASK-INFRA-002` |
 | `summary` | yes | `Config center Backend core is implemented and CI passed.` |
 | `verification` | no | `Backend CI #25966150751 success` |
+| `implementation_status` | no | `Backend code implemented and pushed.` |
+| `verification_status` | no | `Unit/build/smoke passed.` |
+| `skip_count` | no | `0` |
+| `blockers` | no | `None` |
+| `issue_action` | no | `comment_only` |
+| `should_close_issue` | no | `false` |
 | `unlocked_repos` | no | `livemask-admin,livemask-app,livemask-nodeagent` |
 | `blocked_repos` | no | `livemask-ci-cd` |
 | `next_steps` | no | `Add config smoke in livemask-ci-cd.` |
@@ -128,14 +136,30 @@ The workflow posts a comment to the TASK Issue:
 ## AI Task Sync
 
 **TASK ID**: TASK-P0-03
-**Result**: completed
+**Parent TASK ID**: TASK-INFRA-002
+**Repo**: livemask-backend
+**Result**: implemented
 **Source**: workflow_dispatch
+**Issue Action**: comment_only
+**Should Close Issue**: false
 
 ### Summary
 ...
 
 ### Verification
 ...
+
+### Implementation Status
+...
+
+### Verification Status
+...
+
+### Skip Count
+0
+
+### Blockers
+None
 
 ### Unlocked Repositories
 - livemask-admin
@@ -160,11 +184,15 @@ Payload:
 ```json
 {
   "task_id": "TASK-P0-03",
-  "result": "completed",
+  "parent_task_id": "TASK-INFRA-002",
+  "repo": "livemask-backend",
+  "result": "implemented",
   "source_repo": "livemask-docs",
   "target_branch": "dev",
   "source_run_id": "123456",
-  "summary": "Config center Backend core is implemented and CI passed."
+  "summary": "Config center Backend core is implemented and CI passed.",
+  "issue_action": "comment_only",
+  "should_close_issue": "false"
 }
 ```
 

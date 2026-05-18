@@ -10,6 +10,10 @@
 4. 关键代码注释必须清晰且包含 `TASK-XXXX`。
 5. 跨仓库变更必须先做影响分析，再做实现。
 6. 完成前必须执行闭环验证，不能只完成单仓库改动。
+7. 完成报告只是状态事件，不是 GitHub Issue 关闭信号。
+8. 多窗口必须遵守 task lease：一个窗口同一时间只能拥有一个 active task，开始第二个任务前必须结束第一个任务的报告、提交和 task-sync。
+
+详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
 
 ## 2. 日常多窗口开发工作流
 
@@ -74,3 +78,5 @@
 - [ ] 失败、重试、降级、回滚路径已说明
 - [ ] 文档中的验收标准已更新
 - [ ] 已执行 `bash scripts/check-docs.sh`
+- [ ] 若任务是跨仓库 Epic，所有 child task 与最终 smoke 已完成；单个 repo 的 `implemented` 不能关闭 Epic
+- [ ] 若 CI/CD 仍有 SKIP，状态必须写为 `completed_with_skip` 或 `verified_with_skip`，不得写成完整 `completed`

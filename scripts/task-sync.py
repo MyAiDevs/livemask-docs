@@ -14,7 +14,23 @@ import urllib.request
 
 
 TASK_RE = re.compile(r"TASK-[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*")
-VALID_RESULTS = {"completed", "partial", "blocked"}
+VALID_RESULTS = {
+    "implemented",
+    "verified",
+    "completed",
+    "completed_with_skip",
+    "blocked",
+    "deferred",
+    # Backward-compatible legacy values.
+    "partial",
+}
+VALID_ISSUE_ACTIONS = {
+    "comment_only",
+    "ready_for_review",
+    "close_child_issue",
+    "keep_parent_open",
+    "reopen_required",
+}
 DOCS_REPO = "livemask-docs"
 REPO_ALLOWLIST = {
     "livemask-docs",
@@ -100,8 +116,16 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--task-id", required=True)
     parser.add_argument("--result", required=True, choices=sorted(VALID_RESULTS))
+    parser.add_argument("--repo", default="")
+    parser.add_argument("--parent-task-id", default="")
     parser.add_argument("--summary", required=True)
     parser.add_argument("--verification", default="")
+    parser.add_argument("--implementation-status", default="")
+    parser.add_argument("--verification-status", default="")
+    parser.add_argument("--skip-count", default="0")
+    parser.add_argument("--blockers", default="")
+    parser.add_argument("--issue-action", default="comment_only", choices=sorted(VALID_ISSUE_ACTIONS))
+    parser.add_argument("--should-close-issue", default="false", choices=["true", "false"])
     parser.add_argument("--unlocked-repos", default="")
     parser.add_argument("--blocked-repos", default="")
     parser.add_argument("--next-steps", default="")
@@ -121,16 +145,32 @@ def build_comment(args: argparse.Namespace, unlocked: list[str], blocked: list[s
     return f"""## AI Task Sync
 
 **TASK ID**: {args.task_id}
+**Parent TASK ID**: {args.parent_task_id or "N/A"}
+**Repo**: {args.repo or "N/A"}
 **Result**: {args.result}
 **Source**: {args.source}
 **Run ID**: {args.run_id or "N/A"}
 **Commit**: {args.sha[:12] if args.sha else "N/A"}
+**Issue Action**: {args.issue_action}
+**Should Close Issue**: {args.should_close_issue}
 
 ### Summary
 {args.summary}
 
 ### Verification
 {args.verification or "Not provided"}
+
+### Implementation Status
+{args.implementation_status or "Not provided"}
+
+### Verification Status
+{args.verification_status or "Not provided"}
+
+### Skip Count
+{args.skip_count or "0"}
+
+### Blockers
+{args.blockers or "None"}
 
 ### Unlocked Repositories
 {markdown_list(unlocked)}
@@ -201,12 +241,20 @@ def main() -> int:
 
     payload = {
         "task_id": args.task_id,
+        "parent_task_id": args.parent_task_id,
+        "repo": args.repo,
         "result": args.result,
         "source_repo": "livemask-docs",
         "target_branch": "dev",
         "source_run_id": args.run_id,
         "summary": args.summary,
         "verification": args.verification,
+        "implementation_status": args.implementation_status,
+        "verification_status": args.verification_status,
+        "skip_count": args.skip_count,
+        "blockers": args.blockers,
+        "issue_action": args.issue_action,
+        "should_close_issue": args.should_close_issue,
         "next_steps": args.next_steps,
     }
     for repo in dispatch_targets:
@@ -214,7 +262,11 @@ def main() -> int:
 
     report_tasks = (
         f"TASK: {args.task_id}\n"
+        f"Repo: {args.repo or 'N/A'}\n"
+        f"Parent: {args.parent_task_id or 'N/A'}\n"
         f"Result: {args.result}\n"
+        f"Issue action: {args.issue_action}\n"
+        f"Should close issue: {args.should_close_issue}\n"
         f"Unlocked: {', '.join(unlocked) if unlocked else 'None'}\n"
         f"Blocked: {', '.join(blocked) if blocked else 'None'}"
     )
@@ -224,12 +276,17 @@ def main() -> int:
             "report_title": f"LiveMask Task Sync: {args.task_id} {args.result}",
             "report_summary": args.summary,
             "report_tasks": report_tasks,
-            "report_risks": f"Blocked repos: {', '.join(blocked) if blocked else 'None'}",
+            "report_risks": (
+                f"Blocked repos: {', '.join(blocked) if blocked else 'None'}; "
+                f"Blockers: {args.blockers or 'None'}; "
+                f"Skip count: {args.skip_count or '0'}"
+            ),
             "report_next_steps": args.next_steps or "Not provided",
         }
     )
 
     print(f"Synced {args.task_id} to issue #{issue_number}")
+    print(f"Issue action: {args.issue_action}; should_close_issue={args.should_close_issue}")
     if dispatch_targets:
         print(f"Dispatched task-unlocked to: {', '.join(dispatch_targets)}")
     return 0

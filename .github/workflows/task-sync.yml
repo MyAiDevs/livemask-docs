@@ -7,14 +7,25 @@ on:
         description: TASK ID, for example TASK-P0-03
         required: true
       result:
-        description: completed / partial / blocked
+        description: implemented / verified / completed / completed_with_skip / blocked / deferred
         required: true
-        default: partial
+        default: implemented
         type: choice
         options:
+          - implemented
+          - verified
           - completed
-          - partial
+          - completed_with_skip
           - blocked
+          - deferred
+      repo:
+        description: Repository producing this status event, for example livemask-backend
+        required: false
+        default: ""
+      parent_task_id:
+        description: Parent/Epic TASK ID if this is a child task
+        required: false
+        default: ""
       summary:
         description: Summary of completed work
         required: true
@@ -22,6 +33,41 @@ on:
         description: Tests, CI, smoke, or manual evidence
         required: false
         default: ""
+      implementation_status:
+        description: Implementation state, commit, files, or no-code reason
+        required: false
+        default: ""
+      verification_status:
+        description: Unit/build/smoke/docs verification status
+        required: false
+        default: ""
+      skip_count:
+        description: Number of smoke/verification SKIP paths
+        required: false
+        default: "0"
+      blockers:
+        description: Concrete blockers or none
+        required: false
+        default: ""
+      issue_action:
+        description: comment_only / ready_for_review / close_child_issue / keep_parent_open / reopen_required
+        required: false
+        default: comment_only
+        type: choice
+        options:
+          - comment_only
+          - ready_for_review
+          - close_child_issue
+          - keep_parent_open
+          - reopen_required
+      should_close_issue:
+        description: Defaults false. Automation does not close issues in this workflow.
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
       unlocked_repos:
         description: Comma-separated repos to notify, for example livemask-admin,livemask-app
         required: false
@@ -56,6 +102,14 @@ jobs:
       result: ${{ steps.parse.outputs.result }}
       summary: ${{ steps.parse.outputs.summary }}
       verification: ${{ steps.parse.outputs.verification }}
+      repo: ${{ steps.parse.outputs.repo }}
+      parent_task_id: ${{ steps.parse.outputs.parent_task_id }}
+      implementation_status: ${{ steps.parse.outputs.implementation_status }}
+      verification_status: ${{ steps.parse.outputs.verification_status }}
+      skip_count: ${{ steps.parse.outputs.skip_count }}
+      blockers: ${{ steps.parse.outputs.blockers }}
+      issue_action: ${{ steps.parse.outputs.issue_action }}
+      should_close_issue: ${{ steps.parse.outputs.should_close_issue }}
       unlocked_repos: ${{ steps.parse.outputs.unlocked_repos }}
       blocked_repos: ${{ steps.parse.outputs.blocked_repos }}
       next_steps: ${{ steps.parse.outputs.next_steps }}
@@ -72,11 +126,19 @@ jobs:
 
           body = os.environ["COMMENT_BODY"]
           task = re.search(r"TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*", body)
-          result = re.search(r"\*\*Result\*\*:\s*(completed|partial|blocked)", body, re.I)
+          result = re.search(r"\*\*Result\*\*:\s*(implemented|verified|completed|completed_with_skip|partial|blocked|deferred)", body, re.I)
           if not result:
-              result = re.search(r"\*\*结果\*\*:\s*(completed|partial|blocked|已完成|部分完成|阻塞)", body, re.I)
-          result_map = {"已完成": "completed", "部分完成": "partial", "阻塞": "blocked"}
-          result_value = result_map.get(result.group(1), result.group(1).lower()) if result else "partial"
+              result = re.search(r"\*\*结果\*\*:\s*(implemented|verified|completed|completed_with_skip|partial|blocked|deferred|已实现|已验证|已完成|带跳过完成|部分完成|阻塞|延期)", body, re.I)
+          result_map = {
+              "已实现": "implemented",
+              "已验证": "verified",
+              "已完成": "completed",
+              "带跳过完成": "completed_with_skip",
+              "部分完成": "implemented",
+              "阻塞": "blocked",
+              "延期": "deferred",
+          }
+          result_value = result_map.get(result.group(1), result.group(1).lower()) if result else "implemented"
 
           def section(title):
               pattern = rf"### {re.escape(title)}\n(.*?)(?=\n### |\Z)"
@@ -90,6 +152,19 @@ jobs:
 
           summary = section("Summary") or section("已完成内容") or body[:500]
           verification = section("Verification") or section("测试与验证")
+          implementation_status = section("Implementation Status") or section("实现状态")
+          verification_status = section("Verification Status") or section("验证状态")
+          blockers = section("Blockers") or section("blockers") or section("阻塞项")
+          skip_count_match = re.search(r"\*\*Skip Count\*\*:\s*(\d+)", body, re.I) or re.search(r"skip_count:\s*(\d+)", body, re.I)
+          skip_count = skip_count_match.group(1) if skip_count_match else "0"
+          repo_match = re.search(r"\*\*Repo\*\*:\s*(livemask-[a-z-]+)", body, re.I) or re.search(r"repo:\s*(livemask-[a-z-]+)", body, re.I)
+          repo = repo_match.group(1) if repo_match else ""
+          parent_match = re.search(r"\*\*Parent TASK ID\*\*:\s*(TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*)", body, re.I) or re.search(r"parent_task_id:\s*(TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*)", body, re.I)
+          parent_task_id = parent_match.group(1) if parent_match else ""
+          issue_action_match = re.search(r"\*\*Issue Action\*\*:\s*(comment_only|ready_for_review|close_child_issue|keep_parent_open|reopen_required)", body, re.I) or re.search(r"issue_action:\s*(comment_only|ready_for_review|close_child_issue|keep_parent_open|reopen_required)", body, re.I)
+          issue_action = issue_action_match.group(1).lower() if issue_action_match else "comment_only"
+          should_close_match = re.search(r"\*\*Should Close Issue\*\*:\s*(true|false)", body, re.I) or re.search(r"should_close_issue:\s*(true|false)", body, re.I)
+          should_close_issue = should_close_match.group(1).lower() if should_close_match else "false"
           next_steps = section("Next Steps") or section("下一步建议")
           unlocked = repos("Unlocked Repositories") or repos("已解锁的后续开发窗口")
           blocked = repos("Blocked Repositories") or repos("仍然阻塞的窗口")
@@ -112,8 +187,16 @@ jobs:
           values = {
               "task_id": task.group(0) if task else "",
               "result": result_value,
+              "repo": repo,
+              "parent_task_id": parent_task_id,
               "summary": summary,
               "verification": verification,
+              "implementation_status": implementation_status,
+              "verification_status": verification_status,
+              "skip_count": skip_count,
+              "blockers": blockers,
+              "issue_action": issue_action,
+              "should_close_issue": should_close_issue,
               "unlocked_repos": unlocked,
               "blocked_repos": blocked,
               "next_steps": next_steps,
@@ -146,8 +229,16 @@ jobs:
           python3 scripts/task-sync.py \
             --task-id "${{ inputs.task_id }}" \
             --result "${{ inputs.result }}" \
+            --repo "${{ inputs.repo }}" \
+            --parent-task-id "${{ inputs.parent_task_id }}" \
             --summary "${{ inputs.summary }}" \
             --verification "${{ inputs.verification }}" \
+            --implementation-status "${{ inputs.implementation_status }}" \
+            --verification-status "${{ inputs.verification_status }}" \
+            --skip-count "${{ inputs.skip_count }}" \
+            --blockers "${{ inputs.blockers }}" \
+            --issue-action "${{ inputs.issue_action }}" \
+            --should-close-issue "${{ inputs.should_close_issue }}" \
             --unlocked-repos "${{ inputs.unlocked_repos }}" \
             --blocked-repos "${{ inputs.blocked_repos }}" \
             --next-steps "${{ inputs.next_steps }}" \
@@ -174,8 +265,16 @@ jobs:
           python3 scripts/task-sync.py \
             --task-id "${{ needs.parse-comment.outputs.task_id }}" \
             --result "${{ needs.parse-comment.outputs.result }}" \
+            --repo "${{ needs.parse-comment.outputs.repo }}" \
+            --parent-task-id "${{ needs.parse-comment.outputs.parent_task_id }}" \
             --summary "${{ needs.parse-comment.outputs.summary }}" \
             --verification "${{ needs.parse-comment.outputs.verification }}" \
+            --implementation-status "${{ needs.parse-comment.outputs.implementation_status }}" \
+            --verification-status "${{ needs.parse-comment.outputs.verification_status }}" \
+            --skip-count "${{ needs.parse-comment.outputs.skip_count }}" \
+            --blockers "${{ needs.parse-comment.outputs.blockers }}" \
+            --issue-action "${{ needs.parse-comment.outputs.issue_action }}" \
+            --should-close-issue "${{ needs.parse-comment.outputs.should_close_issue }}" \
             --unlocked-repos "${{ needs.parse-comment.outputs.unlocked_repos }}" \
             --blocked-repos "${{ needs.parse-comment.outputs.blocked_repos }}" \
             --next-steps "${{ needs.parse-comment.outputs.next_steps }}" \

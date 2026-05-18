@@ -19,6 +19,7 @@
 - DOC-JOB-QUEUE-MATRIX-001 全局队列使用矩阵（Backend/NodeAgent/Job Service/DB/Redis 开发门禁）
 - DOC-OBSERVABILITY-LOGS-METRICS-001 日志、审计、metrics、NodeAgent 日志上传和 Admin Node logs 契约
 - DOC-ADMIN-NAV-IA-001 Admin 左侧菜单分组、折叠、RBAC 可见性和深链接兼容契约
+- DOC-ISSUE-TASK-SYNC-GOVERNANCE-001 多项目 Issue/TASK/task-sync 状态治理契约
 - P1-05 配置热更新完整闭环
 - P2-05 节点推荐与过滤
 - P3-01 App 上报连接质量
@@ -62,6 +63,7 @@
 | [TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001-nodeagent-protocol-capability-sync.md](tasks/TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001-nodeagent-protocol-capability-sync.md) | NodeAgent 真实协议能力上报、Backend eligibility 聚合、Admin 支持状态展示和 unsafe rollout gating | Docs / Backend / NodeAgent / Admin / CI-CD | TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001 |
 | [TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md](tasks/TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md) | 日志、审计、metrics、NodeAgent 日志上传、Job Service 队列入库和 Admin Node logs 契约 | Docs / Backend / NodeAgent / Job Service / Admin / CI-CD | DOC-CONTROL-PLANE-001 |
 | [TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md](tasks/TASK-DOC-ADMIN-NAV-IA-001-admin-navigation-information-architecture.md) | Admin Navigation IA 契约：分组侧边栏、RBAC 可见性、路由收敛和移动端抽屉 | Docs / Admin / Backend / CI-CD | Admin Dashboard / Job Center / Observability docs |
+| [TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001-issue-task-sync-governance.md](tasks/TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001-issue-task-sync-governance.md) | Issue / Task Sync Governance：Epic/Child/Verification Issue、multi-window lease、structured result states、close/reopen rules | Docs / CI-CD / All repos | TASK-INFRA-002 |
 | TASK-DOC-CONTROL-PLANE-001 | App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构 | Docs / All | Job Center / GeoIP / NodeAgent release docs |
 | [TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md](tasks/TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md) | 全局队列使用矩阵：定义哪些场景必须走 Job Service 队列，哪些可同步执行，DB/Redis 边界和 Backend/NodeAgent 开发门禁 | Docs / Backend / NodeAgent / Job Service | TASK-DOC-CONTROL-PLANE-001 |
 
@@ -84,6 +86,7 @@
 - Job Queue Usage Matrix（TASK-DOC-JOB-QUEUE-MATRIX-001）— 全局长任务、fan-out、retry/backoff、定时任务、DB/Redis 队列边界和 Backend/NodeAgent 必读门禁
 - Observability Log/Metric Pipeline（TASK-DOC-OBSERVABILITY-LOGS-METRICS-001）— Backend audit/log APIs、NodeAgent log upload、Job Service queued ingestion、Prometheus metrics、Admin Node logs
 - Admin Navigation IA（TASK-DOC-ADMIN-NAV-IA-001）— Admin 左侧菜单分组、折叠、RBAC 可见性、路由收敛和深链接兼容契约
+- Issue / Task Sync Governance（TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001）— Epic/Child/Verification Issue、multi-window lease、structured statuses、Issue close/reopen rules
 
 #### GeoIP 实现层（已交付）
 

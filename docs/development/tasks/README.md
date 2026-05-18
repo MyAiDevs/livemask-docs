@@ -62,6 +62,15 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-P5-03-monitoring-alerting.md](TASK-P5-03-monitoring-alerting.md)
 - [TASK-P5-04-deploy-runbook.md](TASK-P5-04-deploy-runbook.md)
 
+## Issue / Task Sync Governance 任务
+
+> 多项目、多窗口下，完成报告只是状态事件，不是 Issue 关闭信号。必须区分 Epic / Child / Verification Issue，并使用 `implemented`、`verified`、`completed`、`completed_with_skip` 等结构化状态。
+
+- [TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001-issue-task-sync-governance.md](TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001-issue-task-sync-governance.md) ✅ — Issue / Task Sync Governance：多窗口 lease、completion report 模板、Issue close/reopen 规则、CI/CD SKIP 规则
+- TASK-CICD-TASK-SYNC-GOVERNANCE-001 — task-sync workflow/script 结构化字段、comment-only default、result 状态扩展和 parser hardening
+- TASK-DOC-AI-RULES-SYNC-001 — 将治理规则同步到所有仓库 `.cursorrules` / Copilot instructions
+- TASK-CICD-ISSUE-CLOSE-GUARD-001 — 可选：Issue close/reopen guard automation，必须受 final verification gate 控制
+
 ## 下一阶段任务
 
 - [TASK-DOC-HYSTERIA2-CONTRACT-001] — Hysteria2 连接配置跨仓库契约（当前任务）

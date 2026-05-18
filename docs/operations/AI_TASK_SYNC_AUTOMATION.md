@@ -29,10 +29,17 @@ Every AI window must:
 5. Explicitly declare unlocked and blocked repositories.
 6. Never claim another repo is unblocked unless the API / config / DB / Redis
    contract it depends on is stable enough to implement against.
+7. Treat completion reports as status events, not Issue close signals.
+8. Use structured result states: `implemented`, `verified`, `completed`,
+   `completed_with_skip`, `blocked`, or `deferred`.
+9. End the current task lease before starting a second task in the same window.
 
 `task-unlocked` is a development coordination event. It must not be treated as
 a staging or production deployment event. Staging promotion happens only after
 `dev` is merged into `main`; production happens only from a versioned release.
+
+For full governance rules, see
+[Issue, Task Sync, And Multi-Window Governance](../development/ISSUE_TASK_SYNC_GOVERNANCE.md).
 
 ## 3. Manual Sync Flow
 
@@ -43,9 +50,17 @@ gh workflow run task-sync.yml \
   --repo MyAiDevs/livemask-docs \
   --ref dev \
   -f task_id=TASK-P0-03 \
-  -f result=completed \
+  -f result=implemented \
+  -f repo=livemask-backend \
+  -f parent_task_id=TASK-INFRA-002 \
   -f summary="Backend config center core implemented and CI passed." \
   -f verification="Backend CI 25966150751 success." \
+  -f implementation_status="Backend code implemented and pushed." \
+  -f verification_status="Unit/build/smoke passed." \
+  -f skip_count="0" \
+  -f blockers="" \
+  -f issue_action="comment_only" \
+  -f should_close_issue="false" \
   -f unlocked_repos="livemask-admin,livemask-app,livemask-nodeagent" \
   -f blocked_repos="livemask-ci-cd" \
   -f next_steps="Add config center staging smoke."
@@ -57,6 +72,8 @@ The workflow will:
 - add a status comment,
 - dispatch `task-unlocked` to each unlocked repo,
 - send a Lark project report,
+- default to `issue_action=comment_only`,
+- never close an Issue automatically,
 - skip Project movement unless Project variables are configured.
 
 The dispatch payload includes `target_branch=dev` so child repository CI checks
@@ -82,6 +99,19 @@ When a developer posts a standard AI completion report to a TASK issue,
 Unrelated comments are ignored. Comments from GitHub bot users are ignored to
 avoid automation feedback loops. The workflow-generated `AI Task Sync` audit
 comment is intentionally not a trigger phrase.
+
+Required result vocabulary:
+
+| Result | Meaning |
+| --- | --- |
+| `implemented` | Repo-local implementation is complete but downstream/final verification may remain. |
+| `verified` | Repo-local verification passed. |
+| `completed` | Child task is fully done. |
+| `completed_with_skip` | Verification exists, but some implementation-dependent SKIP paths remain. |
+| `blocked` | Task cannot proceed. |
+| `deferred` | Explicitly postponed. |
+
+`completed_with_skip` must not close a parent/Epic issue.
 
 ## 5. Child Repo Consumer Contract
 
@@ -155,9 +185,12 @@ gh workflow run task-sync.yml \
   --repo MyAiDevs/livemask-docs \
   --ref dev \
   -f task_id=TASK-INFRA-002 \
-  -f result=partial \
+  -f result=verified \
+  -f repo=livemask-docs \
   -f summary="Task sync closure validation." \
   -f verification="Expect repository_dispatch to start livemask-backend CI." \
+  -f issue_action="comment_only" \
+  -f should_close_issue="false" \
   -f unlocked_repos="livemask-backend" \
   -f blocked_repos="" \
   -f next_steps="Confirm backend task-unlocked run."
