@@ -57,3 +57,15 @@
 NodeAgent 后续的 binary rollout、config publish/rollback、GeoIP sync、protocol profile rollout、endpoint probe 和 health probe 都必须按 Job Service 闭环设计：Job Service 分批和重试，Backend 暴露安全 assignment/manifest，NodeAgent pull 并验证，NodeAgent report event/status，Backend 聚合，Admin 展示进度和 rollback。
 
 NodeAgent 自身不得接受 Job Service 直接命令，也不得隐藏 fleet 操作失败。所有 fleet 级动作必须由 Backend 暴露 pull-safe assignment、manifest 或 config，NodeAgent 本地执行 sha256/signature/compatibility 校验、last-known-good 回滚、redacted event/status 上报。涉及本地事件重试、GeoIP 同步、release rollout、config rollback、protocol rollout 或 endpoint probe 的任务必须先查 Job Queue Usage Matrix。
+
+## 11. 日志与 Metrics
+
+- [Log, Audit, Metric, And Node Observability Pipeline Contract](../contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md)
+
+NodeAgent 必须提供本地日志队列、Backend HMAC 日志上传和 Prometheus-compatible `/metrics`。NodeAgent 不直接调用 Job Service；日志批次必须通过 Backend `/internal/agent/logs` 入口上传，由 Backend 验证 node 身份后投递 Job Service 队列入库。
+
+Required follow-up:
+
+- `TASK-NODEAGENT-METRICS-LOGS-001`
+
+Required NodeAgent metrics include endpoint readiness、config degraded、sing-box running、GeoIP status、release version、event/log queue depth 和 active job state。Metrics labels 必须低基数，不得包含 raw endpoint、IP、token、node_secret、session_id、user email 或完整 URL。

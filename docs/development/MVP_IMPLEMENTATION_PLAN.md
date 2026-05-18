@@ -16,6 +16,7 @@
 - DOC-CONTENT-001 统一 Content System 契约（覆盖 blog_article / announcement / campaign / app_banner）
 - DOC-CONTROL-PLANE-001 App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构
 - DOC-JOB-QUEUE-MATRIX-001 全局队列使用矩阵（Backend/NodeAgent/Job Service/DB/Redis 开发门禁）
+- DOC-OBSERVABILITY-LOGS-METRICS-001 日志、审计、metrics、NodeAgent 日志上传和 Admin Node logs 契约
 - P1-05 配置热更新完整闭环
 - P2-05 节点推荐与过滤
 - P3-01 App 上报连接质量
@@ -55,6 +56,7 @@
  | [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
 | [TASK-DOC-CONTENT-001-content-system-contract.md](tasks/TASK-DOC-CONTENT-001-content-system-contract.md) | 统一 Content System 契约：content_items 模型、Blog/App/Admin API | Docs | 无 |
 | [TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md](tasks/TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md) | Protocol & Endpoint Template 契约 + 重连提示契约 + 15 seed templates + Job Service 灰度 + NodeAgent 应用 + App 优雅重连 | Docs / All | DOC-CONTROL-PLANE-001 |
+| [TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md](tasks/TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md) | 日志、审计、metrics、NodeAgent 日志上传、Job Service 队列入库和 Admin Node logs 契约 | Docs / Backend / NodeAgent / Job Service / Admin / CI-CD | DOC-CONTROL-PLANE-001 |
 | TASK-DOC-CONTROL-PLANE-001 | App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构 | Docs / All | Job Center / GeoIP / NodeAgent release docs |
 | [TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md](tasks/TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md) | 全局队列使用矩阵：定义哪些场景必须走 Job Service 队列，哪些可同步执行，DB/Redis 边界和 Backend/NodeAgent 开发门禁 | Docs / Backend / NodeAgent / Job Service | TASK-DOC-CONTROL-PLANE-001 |
 
@@ -73,6 +75,7 @@
 - Content System 统一契约（TASK-DOC-CONTENT-001）— content_items 模型、6 种内容类型、Blog/App/Admin API、跳转规则
 - Control Plane Closed Loop 架构（TASK-DOC-CONTROL-PLANE-001）— Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
 - Job Queue Usage Matrix（TASK-DOC-JOB-QUEUE-MATRIX-001）— 全局长任务、fan-out、retry/backoff、定时任务、DB/Redis 队列边界和 Backend/NodeAgent 必读门禁
+- Observability Log/Metric Pipeline（TASK-DOC-OBSERVABILITY-LOGS-METRICS-001）— Backend audit/log APIs、NodeAgent log upload、Job Service queued ingestion、Prometheus metrics、Admin Node logs
 
 #### GeoIP 实现层（已交付）
 

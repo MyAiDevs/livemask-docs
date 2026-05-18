@@ -145,6 +145,17 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-ADMIN-DASHBOARD-001 — Admin 实现 Dashboard 前端面和 SVG/2D traffic map
 - TASK-CICD-DASHBOARD-001 — CI/CD Dashboard smoke：mock-badge enforcement、RBAC、empty/error states
 
+## Observability / Logs / Metrics 任务
+
+> Backend、NodeAgent、Job Service、Admin 和 CI/CD 必须统一日志、审计、metrics 和 Node 最新日志查看链路。NodeAgent 不直接调用 Job Service；NodeAgent 日志通过 Backend HMAC 入口上传，Backend 验证身份后由 Job Service 队列异步入库。
+
+- [TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md](TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md) — 日志、审计、metrics、NodeAgent 日志上传、Job Service 队列入库、Admin Node logs 契约
+- TASK-BACKEND-OBSERVABILITY-LOGS-001 — Backend observability schema、NodeAgent log ingestion API、Admin logs/audit APIs、Backend `/metrics`
+- TASK-JOBS-OBSERVABILITY-INGEST-001 — Job Service `observability_log_ingest` job、retry/backoff、dead-letter、batch idempotency
+- TASK-NODEAGENT-METRICS-LOGS-001 — NodeAgent local log queue、Backend upload、Prometheus `/metrics`
+- TASK-ADMIN-LOGS-METRICS-001 — Admin `/admin/logs`、`/admin/audit-logs`、Node latest logs、node metric summary
+- TASK-CICD-OBSERVABILITY-SMOKE-001 — CI/CD observability smoke：metrics、log ingestion、RBAC、secret leak
+
 ## Content System（统一内容系统）任务
 
 > 替代旧 `Blog / SEO 内容系统任务`。旧任务 `TASK-DOC-BLOG-SEO-001` 已合并升级为 `TASK-DOC-CONTENT-001`，旧 `TASK-BACKEND-BLOG-001` 等已重新编排。

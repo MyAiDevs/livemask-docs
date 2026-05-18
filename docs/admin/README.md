@@ -89,3 +89,23 @@ Dashboard 路由矩阵：
 所有数据必须 Real-First。Production 不得静默展示 mock 数据。Local/dev 环境允许 mock fallback 但必须展示 Mock/Stale 徽章。
 
 相关后续任务：`TASK-ADMIN-DASHBOARD-001`
+
+## 9. 日志、审计与节点监控
+
+- [Log, Audit, Metric, And Node Observability Pipeline Contract](../contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md)
+
+Admin 必须通过 Backend API 查看日志、审计和节点监控摘要，不得从浏览器直接访问 NodeAgent、Job Service 或 Prometheus。
+
+Required follow-up:
+
+- `TASK-ADMIN-LOGS-METRICS-001`
+
+Required routes:
+
+| Route | Purpose |
+| --- | --- |
+| `/admin/logs` | 全局 redacted logs 搜索 |
+| `/admin/audit-logs` | 登录/操作/任务/支付等审计日志 |
+| `/admin/nodes/{node_id}` | 节点详情中的 latest logs 和 metric summary |
+
+Node List 应提供某个 node 的最新日志入口，支持按 `singbox`、`geoip`、`release`、`config`、`protocol`、`health` 过滤组件日志。所有 metadata 必须经过 redaction 后展示。

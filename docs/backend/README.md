@@ -73,3 +73,24 @@ Data must be real-first. Production must never silently serve mock data.
 Local/dev env mock fallback must show visible Mock/Stale badge.
 
 相关后续任务：`TASK-BACKEND-DASHBOARD-001`
+
+## 9. 日志、审计与指标
+
+- [Log, Audit, Metric, And Node Observability Pipeline Contract](../contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md)
+
+Backend 必须提供统一日志和审计入口，覆盖登录日志、操作日志、任务日志、系统日志、Node 日志、支付日志和安全日志。NodeAgent 日志通过 Backend HMAC API 接收，Backend 验证 node 身份并投递到 Job Service 队列异步入库，不得在 HTTP request path 中同步写入大批量日志。
+
+Required follow-up:
+
+- `TASK-BACKEND-OBSERVABILITY-LOGS-001`
+
+Required APIs:
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| POST | `/internal/agent/logs` | NodeAgent HMAC log batch ingestion |
+| GET | `/admin/api/v1/logs` | Redacted global log search |
+| GET | `/admin/api/v1/nodes/{node_id}/logs` | Latest logs for one node |
+| GET | `/admin/api/v1/audit-logs` | Audit log search |
+| GET | `/admin/api/v1/logs/ingestion/health` | Log ingestion backlog/dead-letter health |
+| GET | `/metrics` | Prometheus-compatible Backend metrics |
