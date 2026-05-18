@@ -69,7 +69,15 @@ Android、Windows、Linux 和 Web 的编译/运行验证结果。不能用 Apple
 
 相关后续任务：`TASK-APP-RECONNECT-HINT-001`
 
-## 8. 控制平面闭环
+## 8. I18N / 中文本地化
+
+- [I18N Localization Contract](../contracts/i18n/I18N_LOCALIZATION_CONTRACT.md)
+
+App 默认必须支持 `zh-CN`，并保留 `en-US` fallback。用户可见文案不得继续散落在 Widget 中；登录、连接、节点、计费、Profile、Diagnostics、Content feed、GeoIP debug、Reconnect 状态和错误提示都必须通过 Flutter localization 渲染。Backend error 必须按 `message_key` / `code` 映射成本地化文案。
+
+相关后续任务：`TASK-APP-I18N-001`
+
+## 9. 控制平面闭环
 
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
 - [Job Queue Usage Matrix](../contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md)

@@ -181,3 +181,14 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-ADMIN-CONTENT-001 — Admin Content Management UI（管理所有 6 种 content_type）
 - TASK-APP-CONTENT-FEED-001 — App 公告/活动/banner feed
 - TASK-CICD-CONTENT-SEO-001 — Blog SEO + App content smoke
+
+## I18N / 中文本地化任务
+
+> 前后端、Website 和 App 必须支持中文。不要逐页硬替换英文；必须建立统一 i18n layer、Backend `message_key`、Content locale、Website SEO hreflang 和 App/Admin 语言切换。
+
+- [TASK-DOC-I18N-001-i18n-localization-contract.md](TASK-DOC-I18N-001-i18n-localization-contract.md) ✅ — I18N 契约：`zh-CN` 默认、`en-US` fallback、Backend error `message_key`、Content locale、Website SEO、Admin/App 本地化
+- TASK-BACKEND-I18N-001 — Backend locale parser、error `message_key`、Content locale/fallback、user `preferred_locale`
+- TASK-ADMIN-I18N-001 — Admin i18n layer、中文默认、语言切换、localized errors/toasts
+- TASK-WEBSITE-I18N-001 — Website 中文 SEO、locale routes/hreflang、Blog/Content locale、中文默认导航
+- TASK-APP-I18N-001 — Flutter localization、Profile language setting、localized errors、Content feed locale
+- TASK-CICD-I18N-001 — i18n smoke：Backend message_key、Admin/Website 中文、App localization tests、hreflang/sitemap

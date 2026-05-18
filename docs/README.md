@@ -45,6 +45,7 @@
 4. App → NodeAgent → API → DB/Redis 链路变化，请先阅读 `architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md`。
    如果变化涉及 Admin 触发、Backend 调度、Job Service 执行、NodeAgent/App 状态回传，请先阅读 `architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md`。
    如果变化涉及长任务、批处理、fan-out、外部 vendor 调用、retry/backoff、定时任务或回滚，请先阅读 `contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`，确认是否必须进入 `livemask-job-service`。
+   如果变化涉及前后端可见文案、错误提示、Content locale、Website SEO 语言、Admin/App 语言切换或中文支持，请先阅读 `contracts/i18n/I18N_LOCALIZATION_CONTRACT.md`。
    如果变化涉及日志、审计、metrics、NodeAgent 日志上传、Job Service 队列入库或 Admin Node logs，请先阅读 `contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md`。
 5. 每个跨仓库任务请在 `development/tasks/` 创建独立任务单。
 6. 不同角色请先阅读对应目录 README，并对照 `development/ROLE_READINESS_ASSESSMENT.md`。

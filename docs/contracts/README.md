@@ -18,6 +18,7 @@
 - [GeoIP Source Hardening Contract](geoip/GEOIP_SOURCE_HARDENING_CONTRACT.md) ✅ Ready：GeoIP 生产化加固契约 — source allowlist、artifact storage、manifest signature、rate limit、delta/full strategy、unknown format、MaxMind tar.gz、安全边界 + 各仓库实现状态
 - [Content System Contract](content/CONTENT_SYSTEM_CONTRACT.md) ✅ Ready：统一内容系统跨仓库契约 — content_items 模型、6 种内容类型、Public Blog API、App Content API、Admin API 预留、跳转规则和安全规则
 - [Blog / SEO Content Sub-Contract](content/BLOG_SEO_CONTENT_CONTRACT.md)：blog_article 专属 SEO 子契约 — SEO 采集规则、Website SEO 要求、JSON-LD、sitemap/RSS
+- [I18N Localization Contract](i18n/I18N_LOCALIZATION_CONTRACT.md)：中文默认、英文 fallback、Backend `message_key`、Content locale、Website SEO hreflang、Admin/App 本地化和 CI smoke 契约
 - [Log / Audit / Metric Pipeline Contract](observability/LOG_METRIC_PIPELINE_CONTRACT.md)：Backend 审计/登录/操作/系统/支付/任务日志、NodeAgent 日志上传、Job Service 队列入库、Prometheus metrics、Admin Node List 日志查看契约
 - [Admin Navigation Information Architecture Contract](admin/ADMIN_NAVIGATION_IA_CONTRACT.md)：Admin 左侧菜单分组、折叠、RBAC 可见性、路由收敛、移动端抽屉和 CI smoke 契约
 

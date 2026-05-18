@@ -49,7 +49,17 @@ Backend 在未来控制平面中是 Admin API Gateway 和 domain authority，不
 - [Protocol & Endpoint Template Contract](../contracts/protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — Protocol 模板版本化、节点选择策略、Job Service 灰度规则、NodeAgent assignment API、Backend connect_config 协同和回滚策略。
 - [Client Reconnect Hint Contract](../contracts/realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — Backend 在协议端点变更时生成重连提示，通过 realtime 通道推送给 App，App 优雅重连并拉取最新 connect_config。
 
-## 8. Control Plane Dashboard
+## 8. I18N / 中文本地化
+
+- [I18N Localization Contract](../contracts/i18n/I18N_LOCALIZATION_CONTRACT.md)
+
+Backend 不应让 Admin/Website/App 依赖 raw English `message`。新增或修改 API 错误时必须提供稳定 `code` 和 `message_key`，并保证 `params` 不包含 secret。Content、Blog、公告、活动和 App banner 必须支持 `locale` 查询和 fallback。
+
+Required follow-up:
+
+- `TASK-BACKEND-I18N-001`
+
+## 9. Control Plane Dashboard
 
 - [Admin Control Plane Dashboard Contract](../contracts/admin/ADMIN_CONTROL_PLANE_DASHBOARD_CONTRACT.md) — Backend 必须实现 11 个 Dashboard API，提供真实聚合数据进行可视化。
 
@@ -74,7 +84,7 @@ Local/dev env mock fallback must show visible Mock/Stale badge.
 
 相关后续任务：`TASK-BACKEND-DASHBOARD-001`
 
-## 9. 日志、审计与指标
+## 10. 日志、审计与指标
 
 - [Log, Audit, Metric, And Node Observability Pipeline Contract](../contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md)
 

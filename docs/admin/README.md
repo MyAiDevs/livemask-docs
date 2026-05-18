@@ -81,7 +81,15 @@ Required top-level groups:
 
 相关后续任务：`TASK-ADMIN-NAV-IA-001`
 
-## 8. Admin Job Center
+## 8. I18N / 中文本地化
+
+- [I18N Localization Contract](../contracts/i18n/I18N_LOCALIZATION_CONTRACT.md)
+
+Admin 默认必须支持中文，英文作为 fallback。不要在页面里继续散落硬编码英文文案；所有导航、Dashboard、Jobs、GeoIP、Content、Users、Logs/Audit、按钮、弹窗和 toast 都应进入统一 i18n layer。API 错误优先按 Backend `message_key` / `code` 显示本地化文案。
+
+相关后续任务：`TASK-ADMIN-I18N-001`
+
+## 9. Admin Job Center
 
 - `docs/contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md`
 - `docs/contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`
@@ -93,7 +101,7 @@ Job 执行层必须从第一版开始独立为 `livemask-job-service`，由 Back
 
 功能页面可以展示状态并跳转到 Job Center，但不应长期拥有通用 scheduler/trigger 能力。例如 `/admin/geoip` 可以保留数据库状态和 source credential 配置入口，真正的 `Trigger Update` 应迁移到 `/admin/jobs?job_type=geoip_source_update`。
 
-## 9. Control Plane Operations Dashboard
+## 10. Control Plane Operations Dashboard
 
 - [Admin Control Plane Dashboard Contract](../contracts/admin/ADMIN_CONTROL_PLANE_DASHBOARD_CONTRACT.md) — 定义所有 Dashboard 路由、Real-First Data 规则、Backend API 契约、3D/traffic map 数据契约、各模块 Widget 规格和 RBAC 门禁。
 
@@ -114,7 +122,7 @@ Dashboard 路由矩阵：
 
 相关后续任务：`TASK-ADMIN-DASHBOARD-001`
 
-## 10. 日志、审计与节点监控
+## 11. 日志、审计与节点监控
 
 - [Log, Audit, Metric, And Node Observability Pipeline Contract](../contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md)
 

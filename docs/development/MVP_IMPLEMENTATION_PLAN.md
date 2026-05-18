@@ -14,6 +14,7 @@
 - DOC-NODEAGENT-RELEASE-001 NodeAgent binary 分发、配置发布与回滚契约
 - DOC-GEOIP-SYNC-001 GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约
 - DOC-CONTENT-001 统一 Content System 契约（覆盖 blog_article / announcement / campaign / app_banner）
+- DOC-I18N-001 中文本地化契约（Backend message_key、Content locale、Admin/Website/App 中文默认）
 - DOC-CONTROL-PLANE-001 App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构
 - DOC-JOB-QUEUE-MATRIX-001 全局队列使用矩阵（Backend/NodeAgent/Job Service/DB/Redis 开发门禁）
 - DOC-OBSERVABILITY-LOGS-METRICS-001 日志、审计、metrics、NodeAgent 日志上传和 Admin Node logs 契约
@@ -56,6 +57,7 @@
 | [TASK-P5-03-monitoring-alerting.md](tasks/TASK-P5-03-monitoring-alerting.md) | MVP 指标、告警、Dashboard | Ops / SRE | P0-P3 |
  | [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
 | [TASK-DOC-CONTENT-001-content-system-contract.md](tasks/TASK-DOC-CONTENT-001-content-system-contract.md) | 统一 Content System 契约：content_items 模型、Blog/App/Admin API | Docs | 无 |
+| [TASK-DOC-I18N-001-i18n-localization-contract.md](tasks/TASK-DOC-I18N-001-i18n-localization-contract.md) | I18N 契约：中文默认、英文 fallback、Backend message_key、Content locale、Website SEO、Admin/App 本地化 | Docs / Backend / Admin / Website / App / CI-CD | Content System / Website SEO / App UX |
 | [TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md](tasks/TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md) | Protocol & Endpoint Template 契约 + 重连提示契约 + 15 seed templates + Job Service 灰度 + NodeAgent 应用 + App 优雅重连 | Docs / All | DOC-CONTROL-PLANE-001 |
 | [TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001-nodeagent-protocol-capability-sync.md](tasks/TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001-nodeagent-protocol-capability-sync.md) | NodeAgent 真实协议能力上报、Backend eligibility 聚合、Admin 支持状态展示和 unsafe rollout gating | Docs / Backend / NodeAgent / Admin / CI-CD | TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001 |
 | [TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md](tasks/TASK-DOC-OBSERVABILITY-LOGS-METRICS-001-log-metric-pipeline.md) | 日志、审计、metrics、NodeAgent 日志上传、Job Service 队列入库和 Admin Node logs 契约 | Docs / Backend / NodeAgent / Job Service / Admin / CI-CD | DOC-CONTROL-PLANE-001 |
@@ -76,6 +78,7 @@
 - GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约（TASK-DOC-GEOIP-SYNC-001）— 已升级为 Ready
 - GeoIP Source Hardening 契约（TASK-DOC-GEOIP-CONTRACT-002）— Source allowlist、storage abstraction、manifest signature、rate limit、delta/full strategy、unknown format、MaxMind tar.gz、安全边界 + 各仓库实现状态
 - Content System 统一契约（TASK-DOC-CONTENT-001）— content_items 模型、6 种内容类型、Blog/App/Admin API、跳转规则
+- I18N Localization（TASK-DOC-I18N-001）— `zh-CN` 默认、`en-US` fallback、Backend `message_key`、Content locale、Website SEO、Admin/App 本地化
 - Protocol Capability Sync（TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001）— NodeAgent 上报真实协议支持，Backend 聚合 eligibility，Admin 显示支持状态并阻断 unsafe rollout
 - Control Plane Closed Loop 架构（TASK-DOC-CONTROL-PLANE-001）— Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
 - Job Queue Usage Matrix（TASK-DOC-JOB-QUEUE-MATRIX-001）— 全局长任务、fan-out、retry/backoff、定时任务、DB/Redis 队列边界和 Backend/NodeAgent 必读门禁
@@ -119,6 +122,19 @@
 | TASK-ADMIN-NAV-IA-001 | grouped/collapsible sidebar、typed nav model、active route auto-expand、RBAC filtering、mobile drawer | Admin | TASK-DOC-ADMIN-NAV-IA-001 |
 | TASK-BACKEND-ADMIN-PERMISSIONS-001 | admin auth payload 补齐 effective permissions，保障菜单过滤和页面 RBAC 一致 | Backend | AUTH-001 |
 | TASK-CICD-ADMIN-NAV-IA-001 | Admin nav smoke：分组、深链接、低权限隐藏、直达 403 | DevOps | TASK-ADMIN-NAV-IA-001 |
+
+### 下一步 — I18N / 中文本地化
+
+> 中文必须成为默认用户体验。Backend 输出稳定 `message_key`，Admin/Website/App 使用各自 i18n layer 渲染中文，Website 必须输出 SEO 可采集的中文 HTML。
+
+| TASK | 目标 | Owner | 依赖 |
+| --- | --- | --- | --- |
+| [TASK-DOC-I18N-001-i18n-localization-contract.md](tasks/TASK-DOC-I18N-001-i18n-localization-contract.md) | 定义跨仓库 i18n 契约 | Docs | Content System / Website SEO / App UX |
+| TASK-BACKEND-I18N-001 | locale parser、error `message_key`、Content locale/fallback、user `preferred_locale` | Backend | TASK-DOC-I18N-001 |
+| TASK-ADMIN-I18N-001 | Admin i18n layer、中文默认、语言切换、localized errors/toasts | Admin | TASK-BACKEND-I18N-001 |
+| TASK-WEBSITE-I18N-001 | Website 中文 SEO、locale routes/hreflang、Blog/Content locale、中文默认导航 | Website | TASK-BACKEND-I18N-001 |
+| TASK-APP-I18N-001 | Flutter localization、Profile language setting、localized errors、Content feed locale | App | TASK-BACKEND-I18N-001 |
+| TASK-CICD-I18N-001 | i18n smoke：Backend message_key、Admin/Website 中文、App localization tests、hreflang/sitemap | DevOps | Backend/Admin/Website/App i18n tasks |
 
 ### 下一步 — Protocol Capability Sync（协议支持状态对齐）
 
