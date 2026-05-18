@@ -25,3 +25,8 @@
 - [ ] 旧配置和异常配置处理已确认
 - [ ] 降级模式行为已说明
 - [ ] 验证结果写入 PR 或任务记录
+
+## 5. 架构文档索引
+
+- [NODEAGENT_PROTOCOL_EXTENSION_ARCHITECTURE.md](NODEAGENT_PROTOCOL_EXTENSION_ARCHITECTURE.md) — 多协议扩展架构（ProtocolProfile 接口、SecretRef、Renderer dispatch、HealthCheck hook、路线图）
+- [PROTOCOL_PROFILE_DEVELOPMENT_GUIDE.md](PROTOCOL_PROFILE_DEVELOPMENT_GUIDE.md) — 协议插件开发指南（实现步骤、测试要求、安全审查清单）
