@@ -7,7 +7,7 @@
 ## 目录结构
 
 - **architecture/** — 系统架构、数据库设计、技术架构
-- **contracts/** — API、配置、事件、错误码、状态机契约
+- **contracts/** — API、配置、事件、错误码、状态机契约（含 protocol-endpoint、realtime 重连提示）
 - **data/** — PostgreSQL、Redis、一致性、迁移与缓存策略
 - **development/** — 开发规范、任务清单、测试策略、AI开发规则
 - **nodeagent/** — NodeAgent 架构、代码示例、一键安装脚本

@@ -63,7 +63,13 @@ Android、Windows、Linux 和 Web 的编译/运行验证结果。不能用 Apple
 本地编译、运行、日志排查、Flutter/Xcode/Gradle/CocoaPods 注意事项详见
 [`APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md`](APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md)。
 
-## 7. 控制平面闭环
+## 7. 协议端点变更与优雅重连
+
+- [Client Reconnect Hint Contract](../contracts/realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — App 通过 Backend realtime 通道接收协议/端点变更通知，优雅断线后拉取最新 connect_config，使用更新后的协议/端点重新连接。App 需处理 graceful_reconnect / reconnect_if_idle / reconnect_now 三种提示级别，并上报 ACK/result 事件。同时支持 fallback polling 模式。
+
+相关后续任务：`TASK-APP-RECONNECT-HINT-001`
+
+## 8. 控制平面闭环
 
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
 - [Job Queue Usage Matrix](../contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md)

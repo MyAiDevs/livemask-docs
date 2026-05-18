@@ -44,7 +44,12 @@
 - [GeoIP Database Update, NodeAgent Sync and App Incremental Sync Contract](../contracts/geoip/GEOIP_DATABASE_SYNC_CONTRACT.md) — Backend 定时更新 GeoIP DB、NodeAgent 同步 verified artifact、App 增量同步轻量 package、校验、last-known-good 和回滚契约。
 - [GeoIP Source Hardening Contract](../contracts/geoip/GEOIP_SOURCE_HARDENING_CONTRACT.md) — GeoIP 生产化加固契约：source allowlist、manifest signature、storage abstraction、rate limit、delta/full strategy、unknown format 处理、MaxMind tar.gz、安全边界及 NodeAgent 职责。
 
-## 9. 控制平面闭环
+## 9. 协议端点模板与灰度下发
+
+- [Protocol & Endpoint Template Contract](../contracts/protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — 协议端点模板管理、版本化、批量分发、Job Service 灰度规则、NodeAgent 应用（pull assignment / Validate / Render / HealthCheck / event 上报）和回滚策略。
+- [Client Reconnect Hint Contract](../contracts/realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — NodeAgent 协议变更后上报 Backend，Backend 通过 realtime 通道通知 App 优雅重连。NodeAgent 不直接通知 App。
+
+## 10. 控制平面闭环
 
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
 - [Job Queue Usage Matrix](../contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md)

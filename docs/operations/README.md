@@ -51,3 +51,8 @@ Job Service runs through Backend gateway instead of embedding long work inside
 GitHub Actions or Admin feature pages. Local dev runtime sync must remain
 targeted and must not stop the long-lived local stack unless explicitly
 requested.
+
+## 6. 协议端点模板与重连提示运营
+
+- [Protocol & Endpoint Template Contract](../contracts/protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — 协议端点模板的 CI/CD smoke 矩阵、回滚策略和运营观察需求。
+- [Client Reconnect Hint Contract](../contracts/realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — App 重连提示的运营监控、事件聚合和故障排查指南。
