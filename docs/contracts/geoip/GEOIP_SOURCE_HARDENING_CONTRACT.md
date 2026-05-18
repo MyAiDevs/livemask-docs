@@ -34,6 +34,7 @@
 | `livemask-app` | `TASK-APP-GEOIP-001` | ✅ 已完成 | manifest、package download、SHA256、local cache、LKG rollback、events、debug UI |
 | `livemask-admin` | `TASK-ADMIN-GEOIP-001` | ✅ 已完成 | databases list/detail、trigger update、activate/rollback、jobs/events、geoip:read/write RBAC |
 | `livemask-ci-cd` | `TASK-CICD-GEOIP-001` | ✅ 已完成 | 基础 GeoIP 全链路 smoke（8 域 27 节） |
+| `livemask-ci-cd` | `TASK-CICD-GEOIP-CREDENTIALS-001` | ✅ 已完成 | GeoIP credentials smoke（15 域） |
 
 ### 2.1 未完成增强
 
@@ -647,8 +648,16 @@ Admin 可以查看：
 | `TASK-CICD-GEOIP-HARDENING-002` | `livemask-ci-cd` | Signature/rate-limit/delta-fallback/source-hardening smoke |
 | `TASK-APP-NODE-REGION-001` | `livemask-app` | Safe region display using Backend fields + local GeoIP |
 | `TASK-DOC-GEOIP-CONTRACT-002` | `livemask-docs` | 本契约 |
+| `TASK-DOC-GEOIP-CREDENTIALS-001` | `livemask-docs` | GeoIP credential management contract — credential priority, encryption key, Admin API, secret redaction, audit, env fallback |
 
-## 18. 完成标准
+## 18. Companion Contracts
+
+此文档是 GeoIP 相关合同系列的一部分：
+
+- [GEOIP_DATABASE_SYNC_CONTRACT.md](GEOIP_DATABASE_SYNC_CONTRACT.md) — 基础 GeoIP 数据库同步、版本分发、回滚
+- [GEOIP_CREDENTIAL_MANAGEMENT_CONTRACT.md](GEOIP_CREDENTIAL_MANAGEMENT_CONTRACT.md) — Credential 管理：优先级、加密、Admin API、redaction、audit
+
+## 19. 完成标准
 
 本契约完成后，必须满足：
 
