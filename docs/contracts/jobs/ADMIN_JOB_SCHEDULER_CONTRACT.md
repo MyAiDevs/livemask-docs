@@ -251,6 +251,39 @@ Rules:
 
 Job Service must be asynchronous from the first implementation.
 
+### 6.0 Independent Service Configuration
+
+`livemask-job-service` must have its own configuration file. Environment-only
+startup is allowed as fallback for local tests, but local/staging/production
+runtime should set `JOB_SERVICE_CONFIG`.
+
+Minimum config sections:
+
+| Section | Required Content |
+| --- | --- |
+| `service` | mode, bind address, port, read-header timeout |
+| `database` | driver, Postgres DSN, connection pool, fallback-to-memory policy |
+| `redis` | enabled flag, address, database index, TLS, password env reference |
+| `backend` | Backend internal URL, timeout, service auth mode, token/HMAC env references |
+| `auth.internal_api` | Backend -> Job Service auth mode: local `none`, staging/prod `bearer` or `hmac` |
+| `worker` | worker enabled, worker count, poll interval, lease TTL |
+| `queue` | max attempts, backoff, jitter, max concurrent runs, dead-letter retention |
+| `observability` | log level and redaction controls |
+
+Rules:
+
+- Config file owns non-secret defaults.
+- Secrets must use env references such as `*_env`; do not commit real tokens,
+  DSNs with real passwords, Redis passwords, service tokens, or HMAC keys.
+- Environment variables may override config file values in Docker/CI.
+- Local runtime may disable internal API auth until Backend Gateway is wired.
+- Staging/production must enable internal auth before public or shared network
+  exposure.
+- Health output may include safe config summary only; never print raw DSN,
+  token, HMAC secret, Redis password, or signed URLs.
+- PostgreSQL is the durable source of truth for queue/run/event/schedule state.
+  Redis is optional optimization for notification, rate-limit, cache, or locks.
+
 ### 6.1 Queue Item
 
 ```json
