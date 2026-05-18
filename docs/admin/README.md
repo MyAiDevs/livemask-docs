@@ -51,7 +51,13 @@
 
 该文档用于 Admin Console、赞助节点、推广大使、收益配置、收益计算、追溯重算与 Website 的前端设计输入，包含 Atoms 可直接使用的 Prompt、页面结构、组件要求、状态设计和验收清单。
 
-## 6. Admin Job Center
+## 6. 协议端点模板与灰度管理
+
+- [Protocol & Endpoint Template Contract](../contracts/protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — Admin 需要实现 Protocol 模板管理（系统模板 / 自定义模板）、Assignment 创建（节点选择、灰度策略）、灰度进度查看和回滚操作。模板字段白名单必须遵守安全边界，secret 永不展示。
+
+相关后续任务：`TASK-ADMIN-PROTOCOL-TEMPLATE-001`
+
+## 7. Admin Job Center
 
 - `docs/contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md`
 - `docs/contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`
@@ -62,3 +68,24 @@
 Job 执行层必须从第一版开始独立为 `livemask-job-service`，由 Backend 作为 Admin API Gateway 做认证、授权、审计归因和 service auth 转发。Admin 不直接调用 Job Service，也不在功能页面内重复实现 scheduler。
 
 功能页面可以展示状态并跳转到 Job Center，但不应长期拥有通用 scheduler/trigger 能力。例如 `/admin/geoip` 可以保留数据库状态和 source credential 配置入口，真正的 `Trigger Update` 应迁移到 `/admin/jobs?job_type=geoip_source_update`。
+
+## 8. Control Plane Operations Dashboard
+
+- [Admin Control Plane Dashboard Contract](../contracts/admin/ADMIN_CONTROL_PLANE_DASHBOARD_CONTRACT.md) — 定义所有 Dashboard 路由、Real-First Data 规则、Backend API 契约、3D/traffic map 数据契约、各模块 Widget 规格和 RBAC 门禁。
+
+Dashboard 路由矩阵：
+
+| Surface | Route | Data Source |
+| --- | --- | --- |
+| 全局总览 | `/admin` | `GET /admin/api/v1/dashboard/overview` + `control-plane` |
+| 流量地图 | `/admin/traffic` | `GET /admin/api/v1/dashboard/traffic/flows` + `countries` |
+| Job 中心 | `/admin/jobs` | `GET /admin/api/v1/dashboard/jobs/summary` |
+| GeoIP | `/admin/geoip` | `GET /admin/api/v1/dashboard/geoip/summary` |
+| 协议端点模板 | `/admin/protocol-endpoints` | `GET /admin/api/v1/dashboard/protocol-endpoint/summary` |
+| NodeAgent 发布 | `/admin/nodeagent/releases` | `GET /admin/api/v1/dashboard/nodeagent/summary` |
+| 内容管理 | `/admin/content` | `GET /admin/api/v1/dashboard/content/summary` |
+| 事件/告警 | embedded in `/admin` | `GET /admin/api/v1/dashboard/incidents` |
+
+所有数据必须 Real-First。Production 不得静默展示 mock 数据。Local/dev 环境允许 mock fallback 但必须展示 Mock/Stale 徽章。
+
+相关后续任务：`TASK-ADMIN-DASHBOARD-001`

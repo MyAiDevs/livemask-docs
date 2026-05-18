@@ -43,3 +43,33 @@
 Backend 在未来控制平面中是 Admin API Gateway 和 domain authority，不是长任务执行器。涉及 Admin 触发的发布、回滚、GeoIP、内容、Dashboard、计费、NodeAgent 操作时，Backend 必须负责 Admin JWT/RBAC、owner-domain permission、audit attribution、domain validation 和 service auth 转发；长任务执行、queue、worker、retry/backoff、lease 和 per-target lock 由独立 `livemask-job-service` 负责。
 
 任何 Backend 新增 Admin action、cron、批处理、外部 vendor 调用、NodeAgent fan-out、Dashboard 聚合、账单对账、内容定时发布、GeoIP 下载、CI smoke 触发或需要 retry/backoff 的工作前，必须先对照 Job Queue Usage Matrix。命中 `queue_required` 的场景不得在 HTTP handler 内同步执行，必须通过 Backend Job Gateway 创建 Job Service run，并返回 `202 + run_id`。
+
+## 7. 协议端点模板与重连提示
+
+- [Protocol & Endpoint Template Contract](../contracts/protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — Protocol 模板版本化、节点选择策略、Job Service 灰度规则、NodeAgent assignment API、Backend connect_config 协同和回滚策略。
+- [Client Reconnect Hint Contract](../contracts/realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — Backend 在协议端点变更时生成重连提示，通过 realtime 通道推送给 App，App 优雅重连并拉取最新 connect_config。
+
+## 8. Control Plane Dashboard
+
+- [Admin Control Plane Dashboard Contract](../contracts/admin/ADMIN_CONTROL_PLANE_DASHBOARD_CONTRACT.md) — Backend 必须实现 11 个 Dashboard API，提供真实聚合数据进行可视化。
+
+Required Dashboard API endpoints:
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/admin/api/v1/dashboard/overview` | Global health and business status |
+| GET | `/admin/api/v1/dashboard/control-plane` | Per-module control plane health |
+| GET | `/admin/api/v1/dashboard/traffic/flows` | Traffic flow arcs for map rendering |
+| GET | `/admin/api/v1/dashboard/traffic/countries` | Per-country traffic aggregates |
+| GET | `/admin/api/v1/dashboard/jobs/summary` | Job Service health and job status |
+| GET | `/admin/api/v1/dashboard/geoip/summary` | GeoIP database version and rollout |
+| GET | `/admin/api/v1/dashboard/nodeagent/summary` | NodeAgent release and endpoint readiness |
+| GET | `/admin/api/v1/dashboard/protocol-endpoint/summary` | Protocol template rollout status |
+| GET | `/admin/api/v1/dashboard/content/summary` | Content feed lifecycle |
+| GET | `/admin/api/v1/dashboard/reconnect/summary` | Client reconnect hint delivery health |
+| GET | `/admin/api/v1/dashboard/incidents` | Active alerts and Sentry summary |
+
+Data must be real-first. Production must never silently serve mock data.
+Local/dev env mock fallback must show visible Mock/Stale badge.
+
+相关后续任务：`TASK-BACKEND-DASHBOARD-001`

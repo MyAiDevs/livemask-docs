@@ -73,6 +73,19 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-APP-ANDROID-ENGINE-HYSTERIA2-001 — Android VpnService hysteria2 原生引擎集成
 - TASK-APP-IOS-PACKET-TUNNEL-HYSTERIA2-001 — iOS/macOS PacketTunnelProvider hysteria2 适配
 
+## Protocol & Endpoint Template Rollout 任务
+
+- [TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md](TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md) — Protocol & Endpoint Template 跨仓库契约：模板数据模型、版本化、15 个 Seed Templates、Assignment 模型、Job Service 灰度规则、NodeAgent 应用、Backend connect_config 协同、App 优雅重连和回滚策略。
+- TASK-BACKEND-PROTOCOL-TEMPLATE-001 — Backend 端 Protocol Template CRUD、Seed Migration、Node Selector 解析、connect_config 协同
+- TASK-BACKEND-PROTOCOL-ROLLOUT-001 — Backend 端 Assignment 解析和 Secret 注入 Internal API
+- TASK-JOBS-PROTOCOL-ROLLOUT-001 — Job Service 端 Protocol Rollout 灰度执行器（Wave 编排、Per-Node Queue、Error Threshold）
+- TASK-NODEAGENT-PROTOCOL-ASSIGNMENT-001 — NodeAgent 端 Assignment Pull、Apply、Event Report
+- TASK-ADMIN-PROTOCOL-TEMPLATE-001 — Admin 端 Template 和 Assignment 管理 UI
+- TASK-BACKEND-RECONNECT-HINT-001 — Backend 端重连提示生成和 Realtime 推送
+- TASK-APP-RECONNECT-HINT-001 — App 端重连提示接收、优雅断线、connect_config 刷新
+- TASK-CICD-PROTOCOL-TEMPLATE-001 — CI/CD Protocol Template 和 Rollout Smoke
+- TASK-CICD-RECONNECT-HINT-001 — CI/CD 重连提示 Smoke
+
 ## NodeAgent 发布、配置与回滚任务
 
 - [TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md](TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md) — NodeAgent binary 分发、配置下发、灰度、健康门禁和回滚契约
@@ -123,11 +136,20 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-JOBS-CONTENT-001 — Content publish/archive schedule 接入 Job Service
 - TASK-CICD-JOBS-HARDENING-001 — CI/CD 覆盖 queue、lease、retry、lock、secret leak 和 local runtime sync
 
+## Admin Control Plane Dashboard 任务
+
+> Mock Dashboard 升级为真实 Control Plane Operations Dashboard，覆盖所有运营模块的实时数据可视化。
+
+- [TASK-DOC-ADMIN-DASHBOARD-REALTIME-001-admin-control-plane-dashboard.md](TASK-DOC-ADMIN-DASHBOARD-REALTIME-001-admin-control-plane-dashboard.md) ✅ — Admin Control Plane Dashboard 契约：定义 7 个 Dashboard Surface、11 个 Backend Dashboard API、Real-First Data 规则、3D/traffic map 数据契约、各模块 Widget 规格、RBAC 门禁
+- TASK-BACKEND-DASHBOARD-001 — Backend 实现所有 11 个 Dashboard API + traffic aggregation jobs + cache strategy
+- TASK-ADMIN-DASHBOARD-001 — Admin 实现 Dashboard 前端面和 SVG/2D traffic map
+- TASK-CICD-DASHBOARD-001 — CI/CD Dashboard smoke：mock-badge enforcement、RBAC、empty/error states
+
 ## Content System（统一内容系统）任务
 
 > 替代旧 `Blog / SEO 内容系统任务`。旧任务 `TASK-DOC-BLOG-SEO-001` 已合并升级为 `TASK-DOC-CONTENT-001`，旧 `TASK-BACKEND-BLOG-001` 等已重新编排。
 
-- [TASK-DOC-CONTENT-001-content-system-contract.md](TASK-DOC-CONTENT-001-content-system-contract.md) — 统一 Content System 契约：content_items 模型、6 种内容类型、App API、Admin API、跳转规则
+- [TASK-DOC-CONTENT-001-content-system-contract.md](TASK-DOC-CONTENT-001-content-system-contract.md) ✅ — 统一 Content System 契约：content_items 模型、6 种内容类型、App API、Admin API、跳转规则
 - TASK-BACKEND-CONTENT-001 — Backend 统一 content_items schema + Public Blog API + App Content API
 - TASK-BACKEND-ADMIN-CONTENT-001 — Backend Admin Content CRUD API
 - TASK-WEBSITE-BLOG-002 — Website Blog real API integration

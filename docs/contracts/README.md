@@ -13,10 +13,10 @@
 - [Admin Job Center / Scheduler Contract](jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md)：Admin 统一任务中心契约 — 手动触发、定时任务、重试、取消、运行历史、事件日志、RBAC、审计和跨模块 Job 类型
 - [Job Queue Usage Matrix](jobs/JOB_QUEUE_USAGE_MATRIX.md)：全局队列使用矩阵 — 定义哪些 Backend、NodeAgent、App、Content、Billing、GeoIP、CI/CD 场景必须进入 Job Service 队列，哪些可同步执行，DB/Redis 边界和后续开发门禁
 - [Control Plane Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)：App / NodeAgent / Job Service / Backend / Admin 闭环架构 — Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
-- [NodeAgent Release Contract](nodeagent/NODEAGENT_RELEASE_CONFIG_ROLLBACK_CONTRACT.md)：NodeAgent binary 分发、配置下发、灰度、健康门禁和回滚契约
-- [GeoIP Database Sync Contract](geoip/GEOIP_DATABASE_SYNC_CONTRACT.md)：Backend 定时更新 GeoIP DB、NodeAgent 同步、App 增量同步、校验、LKG 和回滚契约
-- [GeoIP Source Hardening Contract](geoip/GEOIP_SOURCE_HARDENING_CONTRACT.md)：GeoIP 生产化加固契约 — source allowlist、artifact storage、manifest signature、rate limit、delta/full strategy、unknown format、MaxMind tar.gz、安全边界 + 各仓库实现状态
-- [Content System Contract](content/CONTENT_SYSTEM_CONTRACT.md)：统一内容系统跨仓库契约 — content_items 模型、6 种内容类型、Public Blog API、App Content API、Admin API 预留、跳转规则和安全规则
+- [NodeAgent Release Contract](nodeagent/NODEAGENT_RELEASE_CONFIG_ROLLBACK_CONTRACT.md) ✅ Ready：NodeAgent binary 分发、配置下发、灰度、健康门禁和回滚契约
+- [GeoIP Database Sync Contract](geoip/GEOIP_DATABASE_SYNC_CONTRACT.md) ✅ Ready：Backend 定时更新 GeoIP DB、NodeAgent 同步、App 增量同步、校验、LKG 和回滚契约
+- [GeoIP Source Hardening Contract](geoip/GEOIP_SOURCE_HARDENING_CONTRACT.md) ✅ Ready：GeoIP 生产化加固契约 — source allowlist、artifact storage、manifest signature、rate limit、delta/full strategy、unknown format、MaxMind tar.gz、安全边界 + 各仓库实现状态
+- [Content System Contract](content/CONTENT_SYSTEM_CONTRACT.md) ✅ Ready：统一内容系统跨仓库契约 — content_items 模型、6 种内容类型、Public Blog API、App Content API、Admin API 预留、跳转规则和安全规则
 - [Blog / SEO Content Sub-Contract](content/BLOG_SEO_CONTENT_CONTRACT.md)：blog_article 专属 SEO 子契约 — SEO 采集规则、Website SEO 要求、JSON-LD、sitemap/RSS
 
 ## 真实 MVP 契约
@@ -28,6 +28,15 @@
 ## 协议契约
 
 - [Hysteria2 Connect Config Contract](vpn/HYSTERIA2_CONNECT_CONFIG_CONTRACT.md) — Hysteria2 首个真实扩展协议的跨仓库字段边界、安全边界和后续任务
+- [Protocol & Endpoint Template Contract](protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) — 多协议端点模板管理、版本化、批量分发、Job Service 灰度、NodeAgent 应用、Backend connect_config 协同和回滚契约
+
+## 实时通知契约
+
+- [Client Reconnect Hint Contract](realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — App 断线重连提示跨仓库契约。NodeAgent 不直接通知 App，NodeAgent → Backend event → Backend → App realtime hint → App 拉取 connect_config → 优雅重连 → ACK/event 报告 + fallback polling 模式和安全边界
+
+## 实时 Dashboard 契约
+
+- [Admin Control Plane Dashboard Contract](admin/ADMIN_CONTROL_PLANE_DASHBOARD_CONTRACT.md) — Admin Control Plane Operations Dashboard 契约：定义 7 个 Dashboard Surface、11 个 Backend API、Real-First Data 规则、3D/traffic map 数据契约、各模块 Widget 规格、RBAC 门禁和安全规则。
 
 ## 2. 变更规则
 

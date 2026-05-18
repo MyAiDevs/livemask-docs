@@ -54,6 +54,7 @@
 | [TASK-P5-03-monitoring-alerting.md](tasks/TASK-P5-03-monitoring-alerting.md) | MVP 指标、告警、Dashboard | Ops / SRE | P0-P3 |
  | [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
 | [TASK-DOC-CONTENT-001-content-system-contract.md](tasks/TASK-DOC-CONTENT-001-content-system-contract.md) | 统一 Content System 契约：content_items 模型、Blog/App/Admin API | Docs | 无 |
+| [TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md](tasks/TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md) | Protocol & Endpoint Template 契约 + 重连提示契约 + 15 seed templates + Job Service 灰度 + NodeAgent 应用 + App 优雅重连 | Docs / All | DOC-CONTROL-PLANE-001 |
 | TASK-DOC-CONTROL-PLANE-001 | App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构 | Docs / All | Job Center / GeoIP / NodeAgent release docs |
 | [TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md](tasks/TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md) | 全局队列使用矩阵：定义哪些场景必须走 Job Service 队列，哪些可同步执行，DB/Redis 边界和 Backend/NodeAgent 开发门禁 | Docs / Backend / NodeAgent / Job Service | TASK-DOC-CONTROL-PLANE-001 |
 
@@ -61,25 +62,44 @@
 
 ### 已完成 / 稳定
 
+#### Docs 契约层
+
 - ProtocolProfile 接口定义 + Renderer dispatcher + SecretRef 框架（TASK-DOC-PROTOCOL-001 / TASK-NODEAGENT-PROTOCOL-001）
 - Connect Config 安全契约（TASK-VPN-CONFIG-001）
 - Backend protocol_profile 命名对齐（TASK-BACKEND-PROTOCOL-001）
-- NodeAgent binary 分发、配置发布与回滚契约（TASK-DOC-NODEAGENT-RELEASE-001）
-- GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约（TASK-DOC-GEOIP-SYNC-001）
-- GeoIP Source Hardening 契约（TASK-DOC-GEOIP-CONTRACT-002）
+- NodeAgent binary 分发、配置发布与回滚契约（TASK-DOC-NODEAGENT-RELEASE-001）— 已升级为 Ready
+- GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约（TASK-DOC-GEOIP-SYNC-001）— 已升级为 Ready
+- GeoIP Source Hardening 契约（TASK-DOC-GEOIP-CONTRACT-002）— Source allowlist、storage abstraction、manifest signature、rate limit、delta/full strategy、unknown format、MaxMind tar.gz、安全边界 + 各仓库实现状态
+- Content System 统一契约（TASK-DOC-CONTENT-001）— content_items 模型、6 种内容类型、Blog/App/Admin API、跳转规则
 - Control Plane Closed Loop 架构（TASK-DOC-CONTROL-PLANE-001）— Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
 - Job Queue Usage Matrix（TASK-DOC-JOB-QUEUE-MATRIX-001）— 全局长任务、fan-out、retry/backoff、定时任务、DB/Redis 队列边界和 Backend/NodeAgent 必读门禁
+
+#### GeoIP 实现层（已交付）
+
+| TASK | 仓库 | 目标 | 状态 |
+| --- | --- | --- | --- |
+| TASK-BACKEND-GEOIP-001 | livemask-backend | Source registry、scheduled update job、artifact metadata、NodeAgent check/event APIs、App manifest/event APIs | ✅ |
+| TASK-BACKEND-GEOIP-SOURCE-002 | livemask-backend | Source hardening、storage abstraction、manifest signature、rate limit、delta fallback skeleton | ✅ |
+| TASK-NODEAGENT-GEOIP-001 | livemask-nodeagent | GeoIP sync manager、verifier、local LKG、rollback | ✅ |
+| TASK-APP-GEOIP-001 | livemask-app | App GeoIP manifest client、delta/full package sync、cache、LKG、fallback | ✅ |
+| TASK-ADMIN-GEOIP-001 | livemask-admin | GeoIP source/database/rollout UI（API client + hooks + RBAC 就绪，UI 页面待 TASK-ADMIN-GEOIP-001 后续迭代） | ✅ |
+| TASK-CICD-GEOIP-001 | livemask-ci-cd | GeoIP update and rollback smoke（8 域 27 节） | ✅ |
+| TASK-CICD-GEOIP-CREDENTIALS-001 | livemask-ci-cd | GeoIP credentials smoke（15 域） | ✅ |
 
 ### 进行中
 
 - DOC-HYSTERIA2-CONTRACT-001 — Hysteria2 连接配置跨仓库契约（本文档）
 
-### 已完成（追加：GeoIP 生产化加固）
+### 下一步 — Admin Control Plane Dashboard（实时运营数据大盘）
 
-- GeoIP Source Hardening 契约（TASK-DOC-GEOIP-CONTRACT-002）— Source allowlist、storage abstraction、manifest signature、rate limit、delta/full strategy、unknown format、MaxMind tar.gz、安全边界 + 各仓库实现状态
+> Mock Dashboard 需升级为真实 Control Plane Operations Dashboard，覆盖所有运营模块的实时数据可视化。
 
-### 已完成（追加：Content System）
-- Content System 统一契约（TASK-DOC-CONTENT-001）— content_items 模型、6 种内容类型、Blog/App/Admin API、跳转规则
+| TASK | 目标 | Owner | 依赖 |
+| --- | --- | --- | --- |
+| [TASK-DOC-ADMIN-DASHBOARD-REALTIME-001-admin-control-plane-dashboard.md](tasks/TASK-DOC-ADMIN-DASHBOARD-REALTIME-001-admin-control-plane-dashboard.md) | 定义 Admin Control Plane Dashboard 跨仓库契约 | Docs | DOC-CONTROL-PLANE-001, JOB-QUEUE-MATRIX-001 |
+| TASK-BACKEND-DASHBOARD-001 | Backend 11 个 Dashboard API + traffic aggregation jobs + cache | Backend | TASK-DOC-ADMIN-DASHBOARD-REALTIME-001 |
+| TASK-ADMIN-DASHBOARD-001 | Admin Dashboard surfaces + SVG/2D traffic map + widget states | Admin | TASK-BACKEND-DASHBOARD-001 |
+| TASK-CICD-DASHBOARD-001 | CI/CD dashboard smoke: mock-badge, RBAC, empty/error states | DevOps | TASK-BACKEND-DASHBOARD-001 + TASK-ADMIN-DASHBOARD-001 |
 
 ### 下一阶段（Hysteria2 首条真实协议链路）
 
@@ -106,25 +126,26 @@
 
 ### 下一阶段（GeoIP 数据库更新、NodeAgent 同步与 App 增量同步）
 
-| TASK | 目标 | Owner | 依赖 |
-| --- | --- | --- | --- |
-| TASK-BACKEND-GEOIP-001 | Source registry、scheduled update job、artifact metadata、NodeAgent check/event APIs、App manifest/event APIs | Backend | TASK-DOC-GEOIP-SYNC-001 |
-| TASK-BACKEND-GEOIP-SOURCE-002 | Source hardening、storage abstraction、manifest signature、rate limit、delta fallback skeleton | Backend | TASK-BACKEND-GEOIP-001 |
-| TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001 | MaxMind tar.gz decompression + .mmdb extraction | Backend | TASK-BACKEND-GEOIP-SOURCE-002 |
-| TASK-NODEAGENT-GEOIP-001 | GeoIP sync manager、verifier、local LKG、rollback | NodeAgent | TASK-BACKEND-GEOIP-001 |
-| TASK-NODEAGENT-GEOIP-002 | Event retry queue | NodeAgent | TASK-NODEAGENT-GEOIP-001 |
-| TASK-NODEAGENT-GEOIP-003 | Manifest signature verify + key rotation | NodeAgent | TASK-NODEAGENT-GEOIP-001 |
-| TASK-NODEAGENT-GEOIP-004 | Delta package apply | NodeAgent | TASK-NODEAGENT-GEOIP-001 |
-| TASK-NODEAGENT-GEOIP-005 | Lookup engine | NodeAgent | TASK-NODEAGENT-GEOIP-001 |
-| TASK-NODEAGENT-GEOIP-006 | Heartbeat contract extension | NodeAgent | TASK-NODEAGENT-GEOIP-001 |
-| TASK-NODEAGENT-GEOIP-007 | Compatibility gate | NodeAgent | TASK-NODEAGENT-GEOIP-001 |
-| TASK-NODEAGENT-GEOIP-008 | Runtime config integration | NodeAgent | TASK-NODEAGENT-GEOIP-001 |
-| TASK-APP-GEOIP-001 | App GeoIP manifest client、delta/full package sync、cache、LKG、fallback | App | TASK-BACKEND-GEOIP-001 |
-| TASK-APP-GEOIP-LOOKUP-001 | App GeoIP lookup engine | App | TASK-APP-GEOIP-001 |
-| TASK-ADMIN-GEOIP-001 | GeoIP source/database/rollout UI | Admin | TASK-BACKEND-GEOIP-001 |
-| TASK-CICD-GEOIP-001 | GeoIP update and rollback smoke for NodeAgent and App packages | DevOps | Backend + NodeAgent + App GeoIP tasks |
-| TASK-CICD-GEOIP-HARDENING-002 | Signature/rate-limit/delta-fallback/source-hardening smoke | DevOps | TASK-CICD-GEOIP-001 |
-| TASK-APP-NODE-REGION-001 | Safe region/degraded display using Backend fields and local GeoIP cache | App | TASK-APP-GEOIP-001 |
+| TASK | 目标 | Owner | 依赖 | 状态 |
+| --- | --- | --- | --- | --- |
+| TASK-BACKEND-GEOIP-001 | Source registry、scheduled update job、artifact metadata、NodeAgent check/event APIs、App manifest/event APIs | Backend | TASK-DOC-GEOIP-SYNC-001 | ✅ |
+| TASK-BACKEND-GEOIP-SOURCE-002 | Source hardening、storage abstraction、manifest signature、rate limit、delta fallback skeleton | Backend | TASK-BACKEND-GEOIP-001 | ✅ |
+| TASK-BACKEND-GEOIP-MAXMIND-EXTRACT-001 | MaxMind tar.gz decompression + .mmdb extraction | Backend | TASK-BACKEND-GEOIP-SOURCE-002 | |
+| TASK-NODEAGENT-GEOIP-001 | GeoIP sync manager、verifier、local LKG、rollback | NodeAgent | TASK-BACKEND-GEOIP-001 | ✅ |
+| TASK-NODEAGENT-GEOIP-002 | Event retry queue | NodeAgent | TASK-NODEAGENT-GEOIP-001 | |
+| TASK-NODEAGENT-GEOIP-003 | Manifest signature verify + key rotation | NodeAgent | TASK-NODEAGENT-GEOIP-001 | |
+| TASK-NODEAGENT-GEOIP-004 | Delta package apply | NodeAgent | TASK-NODEAGENT-GEOIP-001 | |
+| TASK-NODEAGENT-GEOIP-005 | Lookup engine | NodeAgent | TASK-NODEAGENT-GEOIP-001 | |
+| TASK-NODEAGENT-GEOIP-006 | Heartbeat contract extension | NodeAgent | TASK-NODEAGENT-GEOIP-001 | |
+| TASK-NODEAGENT-GEOIP-007 | Compatibility gate | NodeAgent | TASK-NODEAGENT-GEOIP-001 | |
+| TASK-NODEAGENT-GEOIP-008 | Runtime config integration | NodeAgent | TASK-NODEAGENT-GEOIP-001 | |
+| TASK-APP-GEOIP-001 | App GeoIP manifest client、delta/full package sync、cache、LKG、fallback | App | TASK-BACKEND-GEOIP-001 | ✅ |
+| TASK-APP-GEOIP-LOOKUP-001 | App GeoIP lookup engine | App | TASK-APP-GEOIP-001 | |
+| TASK-ADMIN-GEOIP-001 | GeoIP source/database/rollout UI | Admin | TASK-BACKEND-GEOIP-001 | ✅ |
+| TASK-CICD-GEOIP-001 | GeoIP update and rollback smoke for NodeAgent and App packages | DevOps | Backend + NodeAgent + App GeoIP tasks | ✅ |
+| TASK-CICD-GEOIP-CREDENTIALS-001 | GeoIP credentials smoke | DevOps | TASK-CICD-GEOIP-001 | ✅ |
+| TASK-CICD-GEOIP-HARDENING-002 | Signature/rate-limit/delta-fallback/source-hardening smoke | DevOps | TASK-CICD-GEOIP-001 | |
+| TASK-APP-NODE-REGION-001 | Safe region/degraded display using Backend fields and local GeoIP cache | App | TASK-APP-GEOIP-001 | |
 
 ## 4. MVP 完成标准
 
