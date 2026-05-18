@@ -105,6 +105,20 @@ Draft -> Ready -> In Progress -> Review -> Done
 - TASK-APP-NODE-REGION-001 — App 使用 Backend 字段和本地 GeoIP cache 安全展示 region/degraded 状态
 - [TASK-DOC-GEOIP-CONTRACT-002] — GeoIP source hardening 契约（本文档）
 
+## Admin Job Center / Scheduler 任务
+
+> `Trigger Update` 不应长期作为 GeoIP 页面内的孤立按钮存在。GeoIP 更新只是统一任务中心的第一类 job；后续 NodeAgent 发布、配置回滚、内容发布、Dashboard 聚合、账单对账和 CI smoke 都必须进入统一 Admin Job Center。Job 执行服务从第一版开始独立为 `livemask-job-service`，避免多 NodeAgent 后再拆造成架构债。
+
+- TASK-DOC-CONTROL-PLANE-001 — [App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构](../../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)：定义 Admin 意图、Backend 授权、Job Service 执行、NodeAgent/App 回传、Backend 聚合、Admin 展示和 CI/CD 验证闭环
+- [TASK-DOC-ADMIN-JOBS-001-admin-job-center-scheduler-contract.md](TASK-DOC-ADMIN-JOBS-001-admin-job-center-scheduler-contract.md) — Admin Job Center / Scheduler 契约：独立 Job Service、DB-backed queue、worker pool、retry/backoff、runs、events、schedules、RBAC、audit、locking、GeoIP trigger migration
+- TASK-JOBS-SERVICE-001 — 新仓库 `livemask-job-service`：job registry、queue、worker pool、scheduler、lease、retry/backoff、locks、internal API
+- TASK-BACKEND-JOBS-GATEWAY-001 — Backend Admin Job Gateway、RBAC、audit attribution、service auth integration
+- TASK-ADMIN-JOBS-001 — Admin `/admin/jobs`、run history、schedule management、GeoIP trigger migration
+- TASK-CICD-JOBS-001 — Job Center smoke：auth/RBAC/run/schedule/events/secret leak
+- TASK-JOBS-GEOIP-001 — GeoIP update/verify executor 接入 Job Service
+- TASK-JOBS-NODEAGENT-001 — NodeAgent release/config rollout executor 接入 Job Service，支持 per-node queue、wave、retry/backoff
+- TASK-JOBS-CONTENT-001 — Content publish/archive schedule 接入 Job Service
+
 ## Content System（统一内容系统）任务
 
 > 替代旧 `Blog / SEO 内容系统任务`。旧任务 `TASK-DOC-BLOG-SEO-001` 已合并升级为 `TASK-DOC-CONTENT-001`，旧 `TASK-BACKEND-BLOG-001` 等已重新编排。

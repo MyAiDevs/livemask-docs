@@ -33,3 +33,10 @@
 - `docs/backend/LIVEMASK_BACKEND_IMPLEMENTATION_BRIEF.md`
 
 该文档用于后端 AI 辅助开发，包含 MVP 模块边界、API / DB / Redis / 状态机 / 幂等 / 错误模型 / 测试矩阵和可直接使用的 AI 实现 Prompt。
+
+## 6. 控制平面与 Job Gateway
+
+- [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
+- [Admin Job Center / Scheduler Contract](../contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md)
+
+Backend 在未来控制平面中是 Admin API Gateway 和 domain authority，不是长任务执行器。涉及 Admin 触发的发布、回滚、GeoIP、内容、Dashboard、计费、NodeAgent 操作时，Backend 必须负责 Admin JWT/RBAC、owner-domain permission、audit attribution、domain validation 和 service auth 转发；长任务执行、queue、worker、retry/backoff、lease 和 per-target lock 由独立 `livemask-job-service` 负责。

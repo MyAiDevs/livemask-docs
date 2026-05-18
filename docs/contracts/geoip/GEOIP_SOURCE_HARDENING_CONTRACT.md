@@ -526,6 +526,10 @@ Admin 通过 admin JWT + permission 控制访问：
 | Rollback database | POST | `/admin/api/v1/geoip/databases/{id}/rollback` | `geoip:write` |
 | Trigger update | POST | `/admin/api/v1/geoip/update` | `geoip:write` |
 
+长期目标：`Trigger update` 应迁移到
+[Admin Job Center / Scheduler Contract](../jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md)
+中的 `geoip_source_update` job。`/admin/geoip` 只保留状态展示和跳转入口。
+
 ### 14.2 当前实现状态
 
 | 功能 | 状态 | 说明 |
@@ -649,6 +653,7 @@ Admin 可以查看：
 | `TASK-APP-NODE-REGION-001` | `livemask-app` | Safe region display using Backend fields + local GeoIP |
 | `TASK-DOC-GEOIP-CONTRACT-002` | `livemask-docs` | 本契约 |
 | `TASK-DOC-GEOIP-CREDENTIALS-001` | `livemask-docs` | GeoIP credential management contract — credential priority, encryption key, Admin API, secret redaction, audit, env fallback |
+| `TASK-DOC-ADMIN-JOBS-001` | `livemask-docs` | Admin Job Center / Scheduler contract — GeoIP trigger 迁移到统一 job center |
 
 ## 18. Companion Contracts
 
@@ -656,6 +661,7 @@ Admin 可以查看：
 
 - [GEOIP_DATABASE_SYNC_CONTRACT.md](GEOIP_DATABASE_SYNC_CONTRACT.md) — 基础 GeoIP 数据库同步、版本分发、回滚
 - [GEOIP_CREDENTIAL_MANAGEMENT_CONTRACT.md](GEOIP_CREDENTIAL_MANAGEMENT_CONTRACT.md) — Credential 管理：优先级、加密、Admin API、redaction、audit
+- [../jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md](../jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md) — 通用任务中心：GeoIP update/verify、NodeAgent rollout、Content publish 等统一 trigger/schedule/run history
 
 ## 19. 完成标准
 

@@ -43,6 +43,7 @@
 2. NodeAgent、App、Backend 开发者请重点阅读对应目录。
 3. 跨仓库字段、配置、事件或错误码变化，请先更新 `contracts/`。
 4. App → NodeAgent → API → DB/Redis 链路变化，请先阅读 `architecture/APP_NODEAGENT_API_DB_REDIS_CHAIN.md`。
+   如果变化涉及 Admin 触发、Backend 调度、Job Service 执行、NodeAgent/App 状态回传，请先阅读 `architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md`。
 5. 每个跨仓库任务请在 `development/tasks/` 创建独立任务单。
 6. 不同角色请先阅读对应目录 README，并对照 `development/ROLE_READINESS_ASSESSMENT.md`。
 7. 跨角色任务必须对照 `development/ROLE_HANDOFF_CHAINS.md` 填写交接证据。
@@ -64,5 +65,6 @@
 ## 未来模块链路入口
 
 - `architecture/future-chains/README.md`
+- `architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md`
 
 最后更新：2026年

@@ -50,3 +50,14 @@
 - `docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md`
 
 该文档用于 Admin Console、赞助节点、推广大使、收益配置、收益计算、追溯重算与 Website 的前端设计输入，包含 Atoms 可直接使用的 Prompt、页面结构、组件要求、状态设计和验收清单。
+
+## 6. Admin Job Center
+
+- `docs/contracts/jobs/ADMIN_JOB_SCHEDULER_CONTRACT.md`
+- `docs/architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md`
+
+通用触发器、定时任务、重试、取消、运行历史、事件日志、审计和 RBAC 必须归入独立的 Admin Job Center。GeoIP 更新、NodeAgent 发布/回滚、内容发布、Dashboard 聚合、账单对账、CI smoke 等任务都应通过 `/admin/jobs` 统一管理。
+
+Job 执行层必须从第一版开始独立为 `livemask-job-service`，由 Backend 作为 Admin API Gateway 做认证、授权、审计归因和 service auth 转发。Admin 不直接调用 Job Service，也不在功能页面内重复实现 scheduler。
+
+功能页面可以展示状态并跳转到 Job Center，但不应长期拥有通用 scheduler/trigger 能力。例如 `/admin/geoip` 可以保留数据库状态和 source credential 配置入口，真正的 `Trigger Update` 应迁移到 `/admin/jobs?job_type=geoip_source_update`。

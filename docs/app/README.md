@@ -62,3 +62,9 @@ Android、Windows、Linux 和 Web 的编译/运行验证结果。不能用 Apple
 
 本地编译、运行、日志排查、Flutter/Xcode/Gradle/CocoaPods 注意事项详见
 [`APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md`](APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md)。
+
+## 7. 控制平面闭环
+
+- [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
+
+App 不直接参与 Admin 任务调度，但会消费 Job Service 驱动后由 Backend 暴露的结果，例如 GeoIP 增量包、Content feed、节点 region/degraded 状态、协议 profile rollout 状态和维护公告。App 必须坚持 pull-safe、本地缓存、last-known-good、无 secret 下发和用户可解释的降级状态。
