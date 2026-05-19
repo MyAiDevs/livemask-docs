@@ -20,6 +20,7 @@
     禁止手写批量合并循环。
 12. 运行时代码仓库不得直接修改 `../livemask-docs` 或自行运行 task-sync；它们只输出
     完成证据，由 `livemask-docs` 窗口统一更新任务台账。
+13. 用户只用普通文本描述需求或 bug 时，必须先执行 TASK intake，不能直接改代码。
 
 详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
 
@@ -34,24 +35,27 @@
 
 ### 开发阶段
 
-1. 在主影响仓库中进行修改。
-2. 修改前使用影响分析 Checklist。
-3. 如涉及 API、配置、事件、错误码或状态机，先让 `livemask-docs` 窗口更新
+1. 如果用户只给自然语言需求 / bug，先执行 TASK intake：
+   类型识别、仓库归属、TASK ID、mini task brief、验证计划和 docs handoff 判断。
+2. 在主影响仓库中进行修改。
+3. 修改前使用影响分析 Checklist。
+4. 如涉及 API、配置、事件、错误码或状态机，先让 `livemask-docs` 窗口更新
    `docs/contracts/`；运行时代码仓库不要直接写 `../livemask-docs`。
-4. 如属于跨仓库任务，由 `livemask-docs` 窗口在 `docs/development/tasks/`
+5. 如属于跨仓库任务，由 `livemask-docs` 窗口在 `docs/development/tasks/`
    建立或更新独立任务单。
-5. 修改后更新关键代码注释，必须包含 `TASK-XXXX`。
-6. 如涉及架构、接口或配置变更，在完成报告中给出 docs handoff evidence，
+6. 修改后更新关键代码注释，必须包含 `TASK-XXXX`。
+7. 如涉及架构、接口或配置变更，在完成报告中给出 docs handoff evidence，
    由 `livemask-docs` 窗口同步更新台账和契约。
-7. 在受影响仓库中完成兼容性检查。
-8. 提交时 commit message 必须包含 `TASK-XXXX`。
-9. 如果使用任务分支，验证通过后通过 `dev-merge-guard.sh` 合并到 `dev`。
-10. 在合并后的 `dev` 上重新验证，并推送 `origin/dev`。
-11. 需要 CI/CD / smoke 的任务，只能以 `dev` ref 作为最终 smoke 来源。
+8. 在受影响仓库中完成兼容性检查。
+9. 提交时 commit message 必须包含 `TASK-XXXX`。
+10. 如果使用任务分支，验证通过后通过 `dev-merge-guard.sh` 合并到 `dev`。
+11. 在合并后的 `dev` 上重新验证，并推送 `origin/dev`。
+12. 需要 CI/CD / smoke 的任务，只能以 `dev` ref 作为最终 smoke 来源。
 
 ## 3. 变更影响分析 Checklist
 
 - [ ] 已确认当前 `TASK-XXXX`
+- [ ] 如果需求来自普通文本，已完成 TASK intake 和 mini task brief
 - [ ] 已分析本次变更会影响哪些仓库（Backend / NodeAgent / App / Payment / Admin）
 - [ ] 已确认是否需要同步更新架构、接口、配置或运维文档
 - [ ] 已确认是否影响配置热更新、FeatureFlag、支付风控或降级模式
@@ -98,5 +102,6 @@
 - [ ] CI/CD smoke / staging validation 使用的是 `dev`，不是 `task/*` 分支
 - [ ] 运行时代码仓库没有直接修改 `../livemask-docs`；docs 状态由 `livemask-docs`
       窗口根据完成证据统一更新
+- [ ] 如果任务来自自然语言需求 / bug，完成报告包含 Task intake summary
 - [ ] 若任务是跨仓库 Epic，所有 child task 与最终 smoke 已完成；单个 repo 的 `implemented` 不能关闭 Epic
 - [ ] 若 CI/CD 仍有 SKIP，状态必须写为 `completed_with_skip` 或 `verified_with_skip`，不得写成完整 `completed`

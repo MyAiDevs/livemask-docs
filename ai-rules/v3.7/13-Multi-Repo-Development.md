@@ -37,21 +37,62 @@
 
 ## 3. 标准流程
 
-1. 在 `livemask-docs` 中确认或创建 `TASK-XXXX`。
-2. 在每个相关仓库执行 `git fetch origin main dev`，然后切换到 `dev`。
-3. 如果本地没有 `dev`，从 `origin/dev` 创建；如果远端也没有，再从 `origin/main` 创建并推送。
-4. 执行“任务-仓库匹配门禁”，确认当前仓库允许处理当前任务。
-5. 在匹配的主影响仓库或明确授权的受影响仓库开发。
-6. 开发后检查其他受影响仓库是否需要同步修改。
-7. 在所有相关仓库的 commit message 中包含 `TASK-XXXX`。
-8. 任务分支验证通过后，切回 `dev`、更新 `origin/dev`、合并任务分支、解决冲突。
-9. 在 `dev` 上重新执行该仓库必需的测试 / build / smoke 验证。
-10. 将 `dev` 推送到 `origin/dev`，并在完成报告中记录 task branch commit、
+1. 如果用户只用自然语言描述需求或 bug，先执行第 3.1 节的 TASK intake，不要直接改代码。
+2. 在 `livemask-docs` 中确认或创建 `TASK-XXXX`。
+3. 在每个相关仓库执行 `git fetch origin main dev`，然后切换到 `dev`。
+4. 如果本地没有 `dev`，从 `origin/dev` 创建；如果远端也没有，再从 `origin/main` 创建并推送。
+5. 执行“任务-仓库匹配门禁”，确认当前仓库允许处理当前任务。
+6. 在匹配的主影响仓库或明确授权的受影响仓库开发。
+7. 开发后检查其他受影响仓库是否需要同步修改。
+8. 在所有相关仓库的 commit message 中包含 `TASK-XXXX`。
+9. 任务分支验证通过后，切回 `dev`、更新 `origin/dev`、合并任务分支、解决冲突。
+10. 在 `dev` 上重新执行该仓库必需的测试 / build / smoke 验证。
+11. 将 `dev` 推送到 `origin/dev`，并在完成报告中记录 task branch commit、
     dev merge commit、远端 `origin/dev` ref 和验证结果。
-11. 运行时代码仓库停止在完成报告，不得直接修改 `../livemask-docs` 或运行 task-sync
+12. 运行时代码仓库停止在完成报告，不得直接修改 `../livemask-docs` 或运行 task-sync
     来关闭跨仓库任务；由 `livemask-docs` 窗口依据完成报告更新 MVP、tasks、handoff 和契约索引。
-12. 在 PR 描述中说明影响范围、验证结果、回滚策略和未完成项。
-13. 只有 `dev` 合并到 `main` 才能触发远程预发布 CI/CD；只有 release 才能触发生产 CI/CD。
+13. 在 PR 描述中说明影响范围、验证结果、回滚策略和未完成项。
+14. 只有 `dev` 合并到 `main` 才能触发远程预发布 CI/CD；只有 release 才能触发生产 CI/CD。
+
+### 3.1 自然语言需求 / Bug Intake
+
+当用户只用普通文本描述需求、bug、页面问题或“帮我修一下”时，Cursor / AI 不得直接改代码。
+必须先执行 TASK intake：
+
+1. 识别类型：`bugfix` / `feature` / `docs-only` / `test-smoke` / `refactor` / `investigation`。
+2. 推断主影响仓库和受影响仓库，并执行任务-仓库匹配门禁。
+3. 如果当前仓库不匹配，停止并报告：
+
+```text
+BLOCKED: current repository does not match inferred TASK scope.
+Current repo: <repo>
+Inferred task scope: <expected repos>
+No files changed.
+```
+
+4. 如果当前仓库匹配，生成临时 TASK ID：
+
+```text
+TASK-<REPO-DOMAIN>-<SHORT-NAME>-<YYYYMMDD>
+```
+
+5. 从最新 `origin/dev` 创建 `task/<TASK-ID>`。
+6. 实现前输出 mini task brief：
+
+```text
+TASK ID:
+Repo:
+Problem:
+Scope:
+Likely files:
+Validation plan:
+Cross-repo impact:
+Docs handoff needed: yes/no
+```
+
+7. 实现、测试、提交，并用 `dev-merge-guard.sh` 合并到 `dev`。
+8. 输出标准完成报告和 `Docs handoff evidence`。
+9. 不得直接修改 `../livemask-docs`；由 docs 窗口根据 handoff 生成或更新任务文档。
 
 ## 4. 任务-仓库匹配门禁
 

@@ -115,6 +115,7 @@
 | [TASK-DOC-USER-GROWTH-REVENUE-001-user-growth-revenue-contract.md](tasks/TASK-DOC-USER-GROWTH-REVENUE-001-user-growth-revenue-contract.md) | 用户收款资料、推广链接、推广/赞助收益规则、收益报表、结算报表、异常反馈和登录收益引流推送契约 | Docs / Backend / Admin / App / Website / Job Service / CI-CD | AUTH-001 / Billing / User Contact |
 | [TASK-DOC-GROWTH-REWARD-NOTIFICATION-001-login-earnings-incentive.md](tasks/TASK-DOC-GROWTH-REWARD-NOTIFICATION-001-login-earnings-incentive.md) | 登录/前台收益激励通知：Backend 事实来源、App 横幅/Toast、Admin 模板预览、Job digest、CI smoke | Docs / Backend / Admin / App / Website / Job Service / CI-CD | TASK-DOC-USER-GROWTH-REVENUE-001 / User Contact |
 | [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](tasks/TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) | 固化 runtime repo 只输出完成证据、livemask-docs 统一更新任务台账和 task-sync 的规则 | Docs / All repos | TASK-CICD-DEV-MERGE-GUARD-001 |
+| [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](tasks/TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) | 固化普通文本需求 / bug 的 TASK intake、guard merge、docs handoff 和 docs-led task record 生成规则 | Docs / All repos | TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001 |
 | TASK-DOCS-GOVERNANCE-SYNC-BATCH-001 | Contract index、Cursor handoffs、tasks/MVP plan、auth-rbac permission index 同步 | Docs / All repos | TASK-CICD-CLOSED-LOOP-BATCH-001 |
 | TASK-CICD-CLOSED-LOOP-BATCH-001 | Dashboard、System Settings/Scheduler、App Release、Observability、I18N、Jobs Hardening smoke 集成 | CI-CD / QA | Backend/Admin/App/Job Service contracts |
 | TASK-DOC-CONTROL-PLANE-001 | App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构 | Docs / All | Job Center / GeoIP / NodeAgent release docs |
@@ -151,6 +152,7 @@
 - User Growth & Revenue（TASK-DOC-USER-GROWTH-REVENUE-001）— USDT 收款资料、预留支付宝/微信/银行卡、推广链接、推广/赞助收益规则、邀请/赞助/结算报表、收益异常反馈和登录收益激励通知
 - Growth Reward Notification（TASK-DOC-GROWTH-REWARD-NOTIFICATION-001）— 推广/赞助收益入账后的登录横幅、App Toast、Admin 模板预览、Job digest 和通知偏好闭环
 - Cursor Rules Docs Sync Boundary（TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001）— 运行时代码仓库只交完成证据，`livemask-docs` 统一更新 MVP、tasks、handoff、contract index 和 task-sync
+- Natural Language Task Intake（TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001）— 用户只给文本需求或 bug 时，先生成 TASK ID、mini task brief、验证计划和 docs handoff，再开发、测试、guard 合并到 dev
 
 #### 2026-05-20 — Docs 完整性核验 + 补救（TASK-DOCS-TASK-LEDGER-RECONCILE-001）
 
@@ -176,6 +178,7 @@
 | Backend Observability | TASK-BACKEND-PAYMENT-LOGS-001 | `livemask-backend` | ✅ Done | Payment order log schema/API with provider payload summary and redaction. | Admin payment log timeline. |
 | Backend Observability | TASK-BACKEND-NOTIFICATION-LOGS-001 | `livemask-backend` | ✅ Done | Notification delivery log schema/API with masked recipients and provider callback events. | Admin notification log UI. |
 | Backend Smoke Fix | TASK-BACKEND-OBSERVABILITY-SMOKE-FIX-001 | `livemask-backend` | ✅ Done | Logs family routes fixed, `/admin/api/v1/observability/sentry*` aliases registered, `system_settings` table split from configcenter. | CI/CD rerun smoke to full PASS. |
+| CI/CD Governance | TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001 | `livemask-ci-cd` | ✅ Completed | Task branch commit `716209c`, integration merge `37c763a`, dev merge `e18ddf0`, remote dev ref at completion `e18ddf0`. `dev-merge-guard.sh` now uses `cd -- "${repo}"` and `pwd -P`; `run_validation` also uses `cd -- "${repo}"`; dry-run output includes resolved path, task ref, rescue branch, integration branch, and push mode. Validation PASS: `bash -n scripts/dev-merge-guard.sh`, `bash scripts/dev-merge-guard.sh --help`, dry-run from spaced path, full merge run with `--push`, integration validation, dev validation, and push `origin/dev`. | No blockers. `origin/dev` may now be newer due later `.cursorrules` governance commit. |
 | CI/CD Observability | TASK-CICD-SENTRY-CONFIG-SMOKE-001 | `livemask-ci-cd` | ✅ Passed | Backend health, Admin login, App-facing Sentry config disabled response, forbidden-field check, Admin Sentry settings, RBAC, and secret leak scan all pass. App fallback evidence is an expected SKIP because CI/CD does not run App runtime tests. | Admin and App may rely on Sentry config contract. |
 | CI/CD Observability | TASK-CICD-OBSERVABILITY-SMOKE-001 | `livemask-ci-cd` | ✅ Passed | All 23 sections executed with 0 failures. Backend/Job Service/NodeAgent reachable; all `/metrics` endpoints expose required metrics; NodeAgent log upload returns 202; global/agent/payment/notification/audit logs return 200; Sentry summary/events/performance return 200; RBAC 401/403 checks pass; secret leak scan has 0 leaks. Expected SKIPs: cosmetic Job Service health JSON response and payment order logs when no order data exists. | Unlock Admin Observability UI and keep CI regression in `scripts/smoke.sh`. |
 | Job Service Observability | TASK-JOBS-OBSERVABILITY-INGEST-001 | `livemask-job-service` | ✅ Pass (Reconciled) | `observability_log_ingest` executor, 16 tests, Backend executor path, forbidden key rejection, secret leak scan. Reconciled on `task/TASK-JOBS-OBSERVABILITY-INGEST-001-reconcile` (`1f999c3`), merged `fad4982`, validation on dev PASS: `go test ./... -count=1` PASS, `go vet ./...` PASS, `go build ./cmd/job-service` PASS, `git diff --check` PASS. | Verify Backend async queue path in CI/CD. |
@@ -222,8 +225,8 @@ Current priority order:
    - TASK-APP-IOS-CODESIGN-ENV-001: iOS simulator/device blocked by Sequoia
      xattr/codesign and signing/physical device.
    - Windows/Linux: pending environment verification (Parallels VM).
-   - TASK-CICD-DEV-MERGE-GUARD-PATH-FIX-001: dev-merge-guard.sh has path-with-spaces
-     issue in `/Users/sammytan/Documents/New project 2`.
+   - TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001: completed; dev merge guard path-with-spaces
+     handling verified in `/Users/sammytan/Documents/New project 2`.
    Run full-platform build matrix after blockers resolved.
 3. Keep `TASK-CICD-SENTRY-CONFIG-SMOKE-001` and
    `TASK-CICD-OBSERVABILITY-SMOKE-001` in `scripts/smoke.sh` as regression gates.

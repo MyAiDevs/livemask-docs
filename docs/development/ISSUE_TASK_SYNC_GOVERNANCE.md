@@ -276,6 +276,12 @@ run task-sync as a substitute for updating the docs ledger. They must hand off
 completion evidence to `livemask-docs`; the docs window updates MVP/task/handoff
 state and then triggers task-sync when appropriate.
 
+When a TASK starts from a plain-language request or bug report, task-sync must
+not be used as the first record. The runtime repo must first perform TASK intake,
+generate a TASK ID, implement and merge through dev, then hand off completion
+evidence to `livemask-docs`. The docs window creates or updates the TASK file
+and only then runs task-sync.
+
 ## 8. CI/CD SKIP Rules
 
 CI/CD smoke tasks may report:
@@ -310,6 +316,7 @@ Do not unlock downstream repos unless the contract they depend on is stable.
 Runtime repos must not edit ../livemask-docs directly.
 Only the livemask-docs window updates MVP/task/handoff/contract ledger state and
 runs task-sync.
+Plain-language user requests must go through TASK intake before code changes.
 ```
 
 ## 10. Follow-Up Tasks

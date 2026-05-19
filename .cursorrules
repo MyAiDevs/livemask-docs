@@ -47,6 +47,27 @@ Runtime repositories hand off completion evidence to this docs window. This docs
 window updates the MVP plan, task index, task files, cursor handoffs, contract
 indexes, and then runs task-sync when appropriate.
 
+## Natural Language Task Intake
+
+When the user describes a requirement or bug in plain text and no TASK file
+exists yet, this docs window owns the documentation side of intake.
+
+For runtime repo reports, generate or update the TASK document only after the
+runtime completion report includes:
+
+- generated TASK ID
+- source request summary
+- inferred task type
+- repository and affected repos
+- task branch commit
+- dev merge commit
+- remote dev ref
+- validation on dev
+- blockers / follow-up tasks
+
+If any merge evidence is missing, create or update the task as `partial` or
+`evidence_missing`, never `completed`.
+
 ## Mandatory Task Finish / Dev Merge Gate
 
 A task is not complete while its changes exist only on `task/*`, `codex/*`, or

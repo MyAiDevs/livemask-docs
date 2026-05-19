@@ -89,7 +89,9 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-CICD-CLOSED-LOOP-BATCH-001.md](TASK-CICD-CLOSED-LOOP-BATCH-001.md) — ⚠️ partial / evidence_missing
 - [TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md](TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md) — ⚠️ partial / evidence_missing
 - [TASK-CICD-DEV-MERGE-GUARD-001.md](TASK-CICD-DEV-MERGE-GUARD-001.md) — ✅ Done (dev evidence present)
+- [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md](TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md) — ✅ Completed (dev evidence present)
 - [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
+- [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
 
 ### 跨仓库实现任务
 
@@ -260,7 +262,7 @@ PR order:
 | --- | --- | --- | --- |
 | [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001] | `livemask-app` | Fix sentry_flutter Kotlin JVM target compatibility for Android debug/release builds | Open |
 | [TASK-APP-IOS-CODESIGN-ENV-001] | `livemask-app` | Resolve Sequoia xattr/codesign and signing Identity for iOS device builds | Open |
-| [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001] | `livemask-ci-cd` | Fix dev-merge-guard.sh path handling for spaces in "New project 2" directory name | Open |
+| [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md](TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md) | `livemask-ci-cd` | Fix dev-merge-guard.sh path handling for spaces in "New project 2" directory name | ✅ Completed |
 
 ## Content System（统一内容系统）任务
 
