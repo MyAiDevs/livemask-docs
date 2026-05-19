@@ -2,6 +2,18 @@
 
 > 每个跨仓库任务都应该有独立任务单。大里程碑表负责排期，任务单负责闭环证据。
 
+> **⚠️ 2026-05-20 — Process Violation Record (retained)**
+> Website dev (`livemask-website`) 曾出现手工 merge `task/*` 到 `dev` 的历史记录
+> （参见 `dc48f1f`、`1ff9190` 等直接 merge task branch 到 dev 的 commit）。
+> 根据 `dev-merge-guard.sh` 规则（`livemask-ci-cd/scripts/dev-merge-guard.sh`），
+> 所有 task 分支合并到 `dev` 必须通过 guard 脚本执行。
+>
+> **Remediation**: `TASK-WEBSITE-HELP-ARTICLE-001` (commit `93f3cab`) was merged
+> to `dev` via integration branch through `dev-merge-guard.sh` (merge commit
+> `9ce1a88`), proving the guard workflow is now properly in use.
+>
+> 后续所有补救任务必须使用 `dev-merge-guard.sh` 进行合并。禁止直接 git merge task/* → dev。
+
 ## 0. 多窗口同步要求
 
 所有 Cursor / Codex / 人工开发窗口完成任务后，必须同步提交 TASK 记录。
@@ -86,15 +98,17 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-ADMIN-USER-GROWTH-REVENUE-001.md](TASK-ADMIN-USER-GROWTH-REVENUE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md](TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-WEBSITE-REFERRAL-LANDING-001.md](TASK-WEBSITE-REFERRAL-LANDING-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
-| [TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md](TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md](TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md) | ✅ completed (remediated via TASK-WEBSITE-HELP-ARTICLE-001) | ❌ original not merged | ❌ original not merged |
 | [TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md](TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-APP-RELEASE-CHECK-REGRESSION-001.md](TASK-APP-RELEASE-CHECK-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
-| [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md) | ❌ MISSING / reconcile required | ❌ missing (never merged) | ❌ missing |
 | [TASK-ADMIN-APP-RELEASE-001.md](TASK-ADMIN-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-RELEASE-CONTROL-IA-001.md](TASK-ADMIN-RELEASE-CONTROL-IA-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+|| [TASK-WEBSITE-HELP-ARTICLE-001.md](TASK-WEBSITE-HELP-ARTICLE-001.md) | ✅ completed | ✅ `9ce1a88` (via guard) | ✅ `origin/dev` |
+|| [TASK-BACKEND-DEV-RECONCILE-001.md](TASK-BACKEND-DEV-RECONCILE-001.md) | 🔴 OPEN | ❌ missing | ❌ missing |
 
 ### Docs 契约任务
 
@@ -126,8 +140,13 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-P5-03-monitoring-alerting.md](TASK-P5-03-monitoring-alerting.md)
 - [TASK-P5-04-deploy-runbook.md](TASK-P5-04-deploy-runbook.md)
 - [TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md](TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md)
+- [TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md](TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md) — ⚠️ PARTIAL (handlers exist but routes not wired)
+- [TASK-BACKEND-I18N-001] — ❌ MISSING / next phase (no message_key/i18n error on dev)
+- [TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001] — ❌ MISSING (wiring not confirmed live on dev)
 
 > 🔒 TASK-JOBS-SENTRY-CONFIG-SUPPORT-001: closed/no-op. Task branch was zero commits (HEAD == dev divergence point). Sentry exception handling is owned by Backend (`TASK-BACKEND-SENTRY-SUMMARY-001`) via Sentry webhook summary, not Job Service. No implementation needed.
+
+> ✅ TASK-JOBS-OBSERVABILITY-INGEST-001: Pass (Reconciled). `observability_log_ingest` executor implemented on `livemask-job-service`. Reconciled via `task/TASK-JOBS-OBSERVABILITY-INGEST-001-reconcile` (`1f999c3`), merged `fad4982` on `dev`, pushed `origin/dev`. Validation: `go test ./... -count=1` PASS, `go vet ./...` PASS, `go build ./cmd/job-service` PASS, `git diff --check` PASS.
 
 ## 下一阶段任务
 
