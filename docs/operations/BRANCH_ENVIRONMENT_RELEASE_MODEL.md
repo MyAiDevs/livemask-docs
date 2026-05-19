@@ -49,7 +49,7 @@ AI / developer window
   -> implement TASK-XXXX
   -> run local Go / frontend / Docker verification
   -> commit with TASK-XXXX
-  -> merge task branch into dev if one was used
+  -> merge task branch into dev with livemask-ci-cd/scripts/dev-merge-guard.sh
   -> re-run validation on dev
   -> push dev
   -> CI validates dev
@@ -59,6 +59,10 @@ AI / developer window
 `task/*`, `codex/*`, and other feature branches may run prechecks, but their
 results are not final acceptance evidence. Final smoke must run after merge to
 `dev` and push to `origin/dev`.
+
+Manual batch merging is forbidden. `dev-merge-guard.sh` merges one task branch
+at a time, creates a rescue branch, validates an integration branch first, and
+pushes `dev` only after merged-dev validation passes.
 
 `task-sync` is a coordination signal, not a staging deployment signal. It may
 dispatch `task-unlocked` to child repositories, but it must not deploy staging
@@ -113,7 +117,19 @@ only validate and notify. It must still be triggered only by release events.
 | Staging fails | Do not create release; revert/fix `main` | Lark + CI failure |
 | Production fails | Keep previous release active | versioned release rollback |
 
-## 8. Repair Record
+## 8. Branch Protection Baseline
+
+`dev` and `main` branches must have GitHub branch protection enabled at minimum
+for:
+
+- force pushes disabled
+- branch deletion disabled
+
+The baseline is applied through `livemask-ci-cd/scripts/apply-branch-protection.sh`.
+Required status checks can be added after each repository has stable, consistently
+named checks on `dev`.
+
+## 9. Repair Record
 
 | Date | Change | Evidence |
 | --- | --- | --- |
@@ -124,3 +140,4 @@ only validate and notify. It must still be triggered only by release events.
 | 2026-05-17 | Split CI/CD staging smoke from production release gate | `livemask-ci-cd@1eae151` |
 | 2026-05-17 | Updated docs, AI rules, and branch bootstrap script | `livemask-docs@cbc3869`, `livemask-docs@8673a8f` |
 | 2026-05-19 | Required task branches to merge into `dev` before completion and required CI/CD smoke to validate `dev` only | `TASK-DOCS-DEV-MERGE-GATE-001`, `TASK-RULES-CICD-DEV-REF-001` |
+| 2026-05-20 | Added guarded task-to-dev merge script, task-sync dev evidence gate, and branch protection baseline | `TASK-CICD-DEV-MERGE-GUARD-001` |

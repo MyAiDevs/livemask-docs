@@ -16,6 +16,8 @@
    `task/*` 或其它功能分支不能报告为完成。
 10. CI/CD smoke / staging validation 必须从 `dev` 运行。task 分支 smoke 只能作为预检，
     不能作为最终验收证据。
+11. task 分支合并到 `dev` 必须通过 `livemask-ci-cd/scripts/dev-merge-guard.sh`。
+    禁止手写批量合并循环。
 
 详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
 
@@ -38,7 +40,7 @@
 6. 如涉及架构、接口或配置变更，同步更新 `livemask-docs`。
 7. 在受影响仓库中完成兼容性检查。
 8. 提交时 commit message 必须包含 `TASK-XXXX`。
-9. 如果使用任务分支，验证通过后合并到 `dev`。
+9. 如果使用任务分支，验证通过后通过 `dev-merge-guard.sh` 合并到 `dev`。
 10. 在合并后的 `dev` 上重新验证，并推送 `origin/dev`。
 11. 需要 CI/CD / smoke 的任务，只能以 `dev` ref 作为最终 smoke 来源。
 
@@ -87,6 +89,7 @@
 - [ ] 已执行 `bash scripts/check-docs.sh`
 - [ ] 任务分支已合并到 `dev`，并已推送 `origin/dev`
 - [ ] 合并后的 `dev` 已重新执行本仓库必需验证
+- [ ] task 分支合并使用了 `dev-merge-guard.sh`，或报告中说明了等价 guard evidence
 - [ ] CI/CD smoke / staging validation 使用的是 `dev`，不是 `task/*` 分支
 - [ ] 若任务是跨仓库 Epic，所有 child task 与最终 smoke 已完成；单个 repo 的 `implemented` 不能关闭 Epic
 - [ ] 若 CI/CD 仍有 SKIP，状态必须写为 `completed_with_skip` 或 `verified_with_skip`，不得写成完整 `completed`

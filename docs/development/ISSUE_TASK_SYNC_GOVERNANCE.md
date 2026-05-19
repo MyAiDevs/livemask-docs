@@ -158,6 +158,10 @@ task_id:
 repo:
 branch:
 commit:
+task_branch:
+task_branch_commit:
+dev_merge_commit:
+remote_dev_ref:
 parent_task_id:
 result: implemented | verified | completed | completed_with_skip | blocked | deferred
 implementation_status:
@@ -240,6 +244,10 @@ Task sync must carry structured fields:
 | `repo` | recommended | Repo that produced the event. |
 | `parent_task_id` | recommended | Epic/cross-repo parent. |
 | `result` | yes | One of implemented/verified/completed/completed_with_skip/blocked/deferred. |
+| `task_branch` | required for completed when a task branch was used | Task branch merged through `dev-merge-guard.sh`. |
+| `task_branch_commit` | recommended | Commit on the task branch. |
+| `dev_merge_commit` | required for completed | Merge commit or dev commit after guarded merge. |
+| `remote_dev_ref` | required for completed | `origin/dev` ref after push. |
 | `implementation_status` | recommended | Free-form repo implementation state. |
 | `verification_status` | recommended | Unit/build/smoke/docs state. |
 | `skip_count` | recommended | Number of SKIP paths. |
@@ -258,6 +266,10 @@ issue_action=comment_only
 
 Automation must not close issues unless explicit future implementation adds a
 guarded close path and the close conditions in this document are satisfied.
+
+For `completed`, task-sync must reject reports that do not include
+`dev_merge_commit` and `remote_dev_ref`. A feature branch test or smoke result is
+not sufficient completion evidence.
 
 ## 8. CI/CD SKIP Rules
 

@@ -141,8 +141,9 @@ git checkout dev
 git pull --ff-only origin dev
 ```
 
-3. 将已验证的任务分支合并到 `dev`。除非仓库维护者明确要求 fast-forward，
-   默认保留 merge commit，便于追溯多窗口任务。
+3. 将已验证的任务分支合并到 `dev` 必须通过
+   `livemask-ci-cd/scripts/dev-merge-guard.sh` 执行。禁止手写批量 merge 循环，
+   例如 `for branch in task/*; do git merge ...; done`。
 4. 如果发生冲突，只能解决当前仓库职责范围内的冲突；不得顺手改其它端代码。
 5. 合并后必须在 `dev` 上重新运行本仓库必需的验证，例如：
    `go test` / `go build` / `npm build` / `vitest` / `flutter test` / smoke。
@@ -166,6 +167,7 @@ git push origin dev
 - CI/CD smoke 使用了 `task/*`、`codex/*` 或其它功能分支 ref，而不是 `dev`。
 - 仍存在 merge conflict、未提交改动或未说明的 dirty worktree。
 - 为了合并而使用 `git reset --hard`、删除 volume、清理他人改动等破坏性操作。
+- 绕过 `dev-merge-guard.sh` 直接把任务分支合并到 `dev`。
 
 如果任务本身直接在 `dev` 上完成，也必须提交、验证、推送 `origin/dev`，并在报告中说明
 `Task Branch: none, developed on dev`。

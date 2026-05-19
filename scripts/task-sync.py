@@ -122,6 +122,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--verification", default="")
     parser.add_argument("--implementation-status", default="")
     parser.add_argument("--verification-status", default="")
+    parser.add_argument("--task-branch", default="")
+    parser.add_argument("--task-branch-commit", default="")
+    parser.add_argument("--dev-merge-commit", default="")
+    parser.add_argument("--remote-dev-ref", default="")
     parser.add_argument("--skip-count", default="0")
     parser.add_argument("--blockers", default="")
     parser.add_argument("--issue-action", default="comment_only", choices=sorted(VALID_ISSUE_ACTIONS))
@@ -133,6 +137,30 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--run-id", default=os.getenv("GITHUB_RUN_ID", ""))
     parser.add_argument("--sha", default=os.getenv("GITHUB_SHA", ""))
     return parser.parse_args()
+
+
+def validate_completion_evidence(args: argparse.Namespace) -> None:
+    if args.result != "completed":
+        return
+
+    missing = []
+    if not args.dev_merge_commit:
+        missing.append("--dev-merge-commit")
+    if not args.remote_dev_ref:
+        missing.append("--remote-dev-ref")
+    if missing:
+        raise ValueError(
+            "completed status requires dev merge evidence: "
+            + ", ".join(missing)
+            + ". Merge the task branch into dev with dev-merge-guard, push origin/dev, "
+            "then rerun task-sync."
+        )
+
+    hex_re = re.compile(r"^[0-9a-fA-F]{7,40}$")
+    if not hex_re.fullmatch(args.dev_merge_commit):
+        raise ValueError("--dev-merge-commit must be a 7-40 character git SHA")
+    if not hex_re.fullmatch(args.remote_dev_ref):
+        raise ValueError("--remote-dev-ref must be a 7-40 character git SHA")
 
 
 def markdown_list(items: list[str]) -> str:
@@ -151,6 +179,10 @@ def build_comment(args: argparse.Namespace, unlocked: list[str], blocked: list[s
 **Source**: {args.source}
 **Run ID**: {args.run_id or "N/A"}
 **Commit**: {args.sha[:12] if args.sha else "N/A"}
+**Task Branch**: {args.task_branch or "N/A"}
+**Task Branch Commit**: {args.task_branch_commit or "N/A"}
+**Dev Merge Commit**: {args.dev_merge_commit or "N/A"}
+**Remote dev Ref**: {args.remote_dev_ref or "N/A"}
 **Issue Action**: {args.issue_action}
 **Should Close Issue**: {args.should_close_issue}
 
@@ -219,6 +251,12 @@ def main() -> int:
         return 2
 
     try:
+        validate_completion_evidence(args)
+    except ValueError as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
+
+    try:
         unlocked = split_csv(args.unlocked_repos)
         blocked = split_csv(args.blocked_repos)
     except ValueError as exc:
@@ -251,6 +289,10 @@ def main() -> int:
         "verification": args.verification,
         "implementation_status": args.implementation_status,
         "verification_status": args.verification_status,
+        "task_branch": args.task_branch,
+        "task_branch_commit": args.task_branch_commit,
+        "dev_merge_commit": args.dev_merge_commit,
+        "remote_dev_ref": args.remote_dev_ref,
         "skip_count": args.skip_count,
         "blockers": args.blockers,
         "issue_action": args.issue_action,

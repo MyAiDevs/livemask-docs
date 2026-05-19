@@ -41,6 +41,22 @@ on:
         description: Unit/build/smoke/docs verification status
         required: false
         default: ""
+      task_branch:
+        description: Task branch merged into dev, or none if developed directly on dev
+        required: false
+        default: ""
+      task_branch_commit:
+        description: Commit on the task branch
+        required: false
+        default: ""
+      dev_merge_commit:
+        description: Required for completed. Merge commit or dev commit after guarded merge
+        required: false
+        default: ""
+      remote_dev_ref:
+        description: Required for completed. origin/dev ref after push
+        required: false
+        default: ""
       skip_count:
         description: Number of smoke/verification SKIP paths
         required: false
@@ -106,6 +122,10 @@ jobs:
       parent_task_id: ${{ steps.parse.outputs.parent_task_id }}
       implementation_status: ${{ steps.parse.outputs.implementation_status }}
       verification_status: ${{ steps.parse.outputs.verification_status }}
+      task_branch: ${{ steps.parse.outputs.task_branch }}
+      task_branch_commit: ${{ steps.parse.outputs.task_branch_commit }}
+      dev_merge_commit: ${{ steps.parse.outputs.dev_merge_commit }}
+      remote_dev_ref: ${{ steps.parse.outputs.remote_dev_ref }}
       skip_count: ${{ steps.parse.outputs.skip_count }}
       blockers: ${{ steps.parse.outputs.blockers }}
       issue_action: ${{ steps.parse.outputs.issue_action }}
@@ -157,6 +177,18 @@ jobs:
           blockers = section("Blockers") or section("blockers") or section("阻塞项")
           skip_count_match = re.search(r"\*\*Skip Count\*\*:\s*(\d+)", body, re.I) or re.search(r"skip_count:\s*(\d+)", body, re.I)
           skip_count = skip_count_match.group(1) if skip_count_match else "0"
+          task_branch_match = re.search(r"\*\*Task Branch(?: / Commit)?\*\*:\s*([^\n]+)", body, re.I) or re.search(r"task_branch:\s*([^\n]+)", body, re.I)
+          task_branch_value = task_branch_match.group(1).strip() if task_branch_match else ""
+          task_branch = task_branch_value.split()[0] if task_branch_value else ""
+          task_branch_commit_match = re.search(r"\*\*Task Branch Commit\*\*:\s*([0-9a-f]{7,40})", body, re.I) or re.search(r"task_branch_commit:\s*([0-9a-f]{7,40})", body, re.I)
+          task_branch_commit = task_branch_commit_match.group(1) if task_branch_commit_match else ""
+          if not task_branch_commit and task_branch_value:
+              commit_in_branch = re.search(r"\b([0-9a-f]{7,40})\b", task_branch_value, re.I)
+              task_branch_commit = commit_in_branch.group(1) if commit_in_branch else ""
+          dev_merge_match = re.search(r"\*\*Dev Merge Commit\*\*:\s*([0-9a-f]{7,40})", body, re.I) or re.search(r"dev_merge_commit:\s*([0-9a-f]{7,40})", body, re.I)
+          dev_merge_commit = dev_merge_match.group(1) if dev_merge_match else ""
+          remote_dev_match = re.search(r"\*\*Remote dev Ref\*\*:\s*([0-9a-f]{7,40})", body, re.I) or re.search(r"remote_dev_ref:\s*([0-9a-f]{7,40})", body, re.I)
+          remote_dev_ref = remote_dev_match.group(1) if remote_dev_match else ""
           repo_match = re.search(r"\*\*Repo\*\*:\s*(livemask-[a-z-]+)", body, re.I) or re.search(r"repo:\s*(livemask-[a-z-]+)", body, re.I)
           repo = repo_match.group(1) if repo_match else ""
           parent_match = re.search(r"\*\*Parent TASK ID\*\*:\s*(TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*)", body, re.I) or re.search(r"parent_task_id:\s*(TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*)", body, re.I)
@@ -193,6 +225,10 @@ jobs:
               "verification": verification,
               "implementation_status": implementation_status,
               "verification_status": verification_status,
+              "task_branch": task_branch,
+              "task_branch_commit": task_branch_commit,
+              "dev_merge_commit": dev_merge_commit,
+              "remote_dev_ref": remote_dev_ref,
               "skip_count": skip_count,
               "blockers": blockers,
               "issue_action": issue_action,
@@ -235,6 +271,10 @@ jobs:
             --verification "${{ inputs.verification }}" \
             --implementation-status "${{ inputs.implementation_status }}" \
             --verification-status "${{ inputs.verification_status }}" \
+            --task-branch "${{ inputs.task_branch }}" \
+            --task-branch-commit "${{ inputs.task_branch_commit }}" \
+            --dev-merge-commit "${{ inputs.dev_merge_commit }}" \
+            --remote-dev-ref "${{ inputs.remote_dev_ref }}" \
             --skip-count "${{ inputs.skip_count }}" \
             --blockers "${{ inputs.blockers }}" \
             --issue-action "${{ inputs.issue_action }}" \
@@ -271,6 +311,10 @@ jobs:
             --verification "${{ needs.parse-comment.outputs.verification }}" \
             --implementation-status "${{ needs.parse-comment.outputs.implementation_status }}" \
             --verification-status "${{ needs.parse-comment.outputs.verification_status }}" \
+            --task-branch "${{ needs.parse-comment.outputs.task_branch }}" \
+            --task-branch-commit "${{ needs.parse-comment.outputs.task_branch_commit }}" \
+            --dev-merge-commit "${{ needs.parse-comment.outputs.dev_merge_commit }}" \
+            --remote-dev-ref "${{ needs.parse-comment.outputs.remote_dev_ref }}" \
             --skip-count "${{ needs.parse-comment.outputs.skip_count }}" \
             --blockers "${{ needs.parse-comment.outputs.blockers }}" \
             --issue-action "${{ needs.parse-comment.outputs.issue_action }}" \
