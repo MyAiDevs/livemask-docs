@@ -53,6 +53,7 @@ when they need one stable list of contract ownership.
 | GeoIP | [Source Hardening](geoip/GEOIP_SOURCE_HARDENING_CONTRACT.md) | Stable | `TASK-DOC-GEOIP-CONTRACT-002` | Backend / Job Service / CI-CD |
 | GeoIP | [Credential Management](geoip/GEOIP_CREDENTIAL_MANAGEMENT_CONTRACT.md) | Ready | `TASK-DOC-GEOIP-CREDENTIALS-001` | Backend / Admin / Job Service / CI-CD |
 | VPN | [Hysteria2 Connect Config](vpn/HYSTERIA2_CONNECT_CONFIG_CONTRACT.md) | Ready | `TASK-VPN-CONFIG-001` | Backend / NodeAgent / App / Admin / CI-CD |
+| VPN | [NAT Sharing / Device-as-Router Abuse Guard](vpn/NAT_SHARING_GUARD_CONTRACT.md) | Ready | `TASK-DOC-NAT-SHARING-GUARD-001` | Backend / NodeAgent / App / Admin / CI-CD |
 | Protocol Endpoint | [Template & Rollout](protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md) | Ready | `TASK-DOC-PROTOCOL-ENDPOINT-001` | Backend / NodeAgent / Admin / Job Service / App / CI-CD |
 | Protocol Endpoint | [Capability & Negotiation](protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md#34-protocol-capability-sync) | Ready | `TASK-DOC-PROTOCOL-CAPABILITY-001` | Backend / NodeAgent / Admin / CI-CD |
 | Protocol Endpoint | [Stability Gate](../development/tasks/TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md) | Ready | `TASK-DOC-PROTOCOL-STABILITY-GATE-001` | Backend / NodeAgent / Admin / App / Job Service / CI-CD |

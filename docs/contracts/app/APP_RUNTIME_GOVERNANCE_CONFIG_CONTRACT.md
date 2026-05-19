@@ -13,6 +13,7 @@ Related contracts:
 - [Admin System Settings Contract](../admin/ADMIN_SYSTEM_SETTINGS_CONTRACT.md)
 - [Log / Audit / Metric Pipeline Contract](../observability/LOG_METRIC_PIPELINE_CONTRACT.md)
 - [App Release Distribution Contract](APP_RELEASE_DISTRIBUTION_CONTRACT.md)
+- [NAT Sharing / Device-as-Router Abuse Guard](../vpn/NAT_SHARING_GUARD_CONTRACT.md)
 
 ## 1. Why This Exists
 
@@ -29,6 +30,9 @@ This config controls:
 - Memory and buffer limits for platform-native tunnel runtimes.
 - Platform-specific overrides for iOS, Android, macOS, Windows, Linux, and Web.
 - Safe performance sampling that complements, but does not replace, Sentry.
+- Optional `nat_sharing_guard` policy for best-effort prevention of device-as-
+  router abuse. The policy must use aggregate counters only and must not store
+  browsing history, raw destination lists, domains, URLs, or packet payloads.
 
 It is separate from App Sentry config:
 
@@ -283,6 +287,7 @@ The config may tune behavior but must not:
 - Change user subscription entitlements.
 - Disable required security checks such as certificate pinning.
 - Hide failures from the user when connection quality degrades.
+- Enable VPN sharing, LAN proxy mode, or router mode.
 
 ## 8. Observability
 

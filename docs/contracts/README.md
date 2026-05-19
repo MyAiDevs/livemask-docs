@@ -32,6 +32,7 @@
 | | [Capability & Negotiation](protocol-endpoint/PROTOCOL_ENDPOINT_TEMPLATE_CONTRACT.md#34-protocol-capability-sync) | ✅ Ready | TASK-DOC-PROTOCOL-CAPABILITY-001 |
 | | [Stability Gate](../development/tasks/TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md) | ✅ Ready | TASK-DOC-PROTOCOL-STABILITY-GATE-001 |
 | **VPN** | [Hysteria2 Connect Config](vpn/HYSTERIA2_CONNECT_CONFIG_CONTRACT.md) | ✅ Ready | TASK-VPN-CONFIG-001 |
+| | [NAT Sharing / Device-as-Router Abuse Guard](vpn/NAT_SHARING_GUARD_CONTRACT.md) | ✅ Ready | TASK-DOC-NAT-SHARING-GUARD-001 |
 | **Users** | [Contact / Notification](users/USER_CONTACT_NOTIFICATION_CONTRACT.md) | ✅ Ready | TASK-DOC-USER-CONTACT-001 |
 | | [Growth / Revenue](users/USER_GROWTH_REVENUE_CONTRACT.md) | ✅ Ready | TASK-DOC-USER-GROWTH-REVENUE-001 |
 | **Realtime** | [Client Reconnect Hint](realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) | ✅ Ready | TASK-DOC-RECONNECT-001 |

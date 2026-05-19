@@ -101,6 +101,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
 - [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
 - [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)
+- [TASK-DOC-NAT-SHARING-GUARD-001.md](TASK-DOC-NAT-SHARING-GUARD-001.md) — Ready (NAT/device-as-router abuse guard contract and follow-up tasks)
 
 ### 跨仓库实现任务
 
@@ -123,6 +124,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md](TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md) | ✅ Completed (CI/CD smoke follow-up retained) | ✅ `3b95111` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-JOB-CENTER-UI-001.md](TASK-ADMIN-JOB-CENTER-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `99d7360` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md](TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `e541485` (via guard) | ✅ `e541485` |
+| [TASK-ADMIN-TEST-EXPANSION-001.md](TASK-ADMIN-TEST-EXPANSION-001.md) | ✅ Completed | ✅ `0698238` (via guard) | ✅ `0698238` |
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md) | ✅ Completed (syntax + wiring; runtime blocked) | ✅ `63dcdaa` (via guard) | ✅ `63dcdaa` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
@@ -171,6 +173,12 @@ Draft -> Ready -> In Progress -> Review -> Done
 ## 下一阶段任务
 
 - [TASK-DOC-HYSTERIA2-CONTRACT-001] — Hysteria2 连接配置跨仓库契约（当前任务）
+- [TASK-DOC-NAT-SHARING-GUARD-001](TASK-DOC-NAT-SHARING-GUARD-001.md) — 防止客户端设备作为 NAT/路由器共享 VPN 的跨仓库安全契约
+- TASK-BACKEND-NAT-SHARING-GUARD-001 — Backend session risk policy、Admin API、warn/throttle/revoke
+- TASK-NODEAGENT-NAT-SHARING-GUARD-001 — NodeAgent aggregate counters、redacted risk events、enforcement hooks
+- TASK-APP-NAT-SHARING-GUARD-001 — App native runtime no-sharing posture、warning UI、Sentry redaction
+- TASK-ADMIN-NAT-SHARING-GUARD-001 — Admin settings/risk event UI
+- TASK-CICD-NAT-SHARING-GUARD-001 — NAT sharing guard smoke + privacy leak scan
 - TASK-NODEAGENT-HYSTERIA2-001 — NodeAgent 端 hysteria2 ProtocolProfile 实现（Render / Validate / HealthCheck / Endpoint / Redact）
 - TASK-BACKEND-CONNECT-CONFIG-HYSTERIA2-001 — Backend 端 hysteria2 connect_config 生成 + profile dispatch + skeleton fallback
 - TASK-ADMIN-ENDPOINT-002 — Admin endpoint editor hysteria2 字段支持

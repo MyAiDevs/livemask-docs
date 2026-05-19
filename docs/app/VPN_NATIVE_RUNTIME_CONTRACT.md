@@ -55,6 +55,8 @@ Flutter must not:
 - fake connected state without native confirmation
 - store raw node private secrets in plain text
 - expose visited domains, destination IP history, or traffic content
+- expose a LAN-facing proxy/listener for sharing the VPN upstream
+- ship a "router mode", "hotspot VPN sharing", or "share VPN to LAN" feature
 - implement platform entitlement / permission flows only as UI mockups and call
   the task complete
 
@@ -85,6 +87,8 @@ Any TASK that claims VPN connection runtime completion must include:
 - config hash/version used for the connection
 - failure path tested: permission denied, invalid config, tunnel start failed
 - privacy check: no browsing history or traffic content logged
+- NAT sharing check: no App-created LAN proxy/listener and no intentional VPN
+  sharing/router mode
 - rollback: how to disable the native runtime path and keep account/config UI
   available
 
@@ -101,3 +105,14 @@ completion status is:
 Flutter UI/interface ready; native VPN runtime remains blocked for <platform>.
 ```
 
+## 7. NAT Sharing Guard
+
+The native runtime must follow
+`docs/contracts/vpn/NAT_SHARING_GUARD_CONTRACT.md`.
+
+This is a best-effort product/security control:
+
+- App must not intentionally expose local VPN sharing capability.
+- Backend and NodeAgent own session risk scoring and enforcement actions.
+- Rooted/admin-controlled devices or external routers cannot be perfectly
+  prevented by App code alone.

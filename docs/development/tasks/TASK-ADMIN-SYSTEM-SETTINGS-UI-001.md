@@ -52,4 +52,4 @@ git diff --check PASS
 ## 6. Follow-up
 
 - Backend settings APIs must be verified with CI/CD smoke before mock fallback can be retired.
-- `TASK-ADMIN-TEST-EXPANSION-001` should cover settings page load, RBAC, empty states, and validation errors.
+- `TASK-ADMIN-TEST-EXPANSION-001` completed at Admin dev ref `0698238`, covering settings route existence, RBAC, mock fallback, permission block, and API client pattern tests.
