@@ -126,6 +126,17 @@
 - TASK-OP-028：建立 Error Budget 管理机制
 - TASK-OP-029：建设「系统健康度大盘」（见 Phase 3.6）
 
+**Admin 节点详情可观测性闭环（TASK-ADMIN-NODE-DETAIL-OBSERVABILITY-FIX-001）已完成**
+| 任务 ID | 任务名称 | 具体子任务拆解 | 负责人 | 预计工期 | 优先级 | 依赖 | 状态 | 关联分支 | 关联 Commit | 测试状态 | 验证人 | 落地日期 |
+|---------|----------|----------------|--------|----------|--------|------|------|----------|-------------|----------|--------|----------|
+| ADMIN-OBS-003 | 节点详情可观测性三数据管线 | 1. Latest Logs 区块（useNodeLogs → `GET /admin/api/v1/nodes/{id}/logs`）<br>2. Node Metrics 区块（useNodeMetricSummary → `GET /admin/api/v1/nodes/{id}/metrics-summary`）<br>3. Protocol Capabilities 区块（useNodeProtocolCapabilities → `GET /admin/api/v1/protocol/nodes/{id}/capabilities`）<br>4. RBAC 守卫（node:read + logs:read/metrics:read，admin/super_admin 提升）<br>5. Mock fallback 降级模式 | Frontend Dev | 2天 | P0 | ADMIN-LOGS-001 | ✅ 已完成 | `task/TASK-ADMIN-OBSERVABILITY-LOGS-001` | `132ce09` | 45+52 tests passed | — | 2026-05-19 |
+
+**Backend 待实现**：
+- `GET /admin/api/v1/nodes/{node_id}/logs`
+- `GET /admin/api/v1/nodes/{node_id}/metrics-summary`
+- `GET /admin/api/v1/protocol/nodes/{node_id}/capabilities`
+- NodeAgent heartbeat 需上报 Protocol Capabilities 到 `node_protocol_capabilities` 表
+
 **目标**：完成积分 earning、消费、C2C 交易、后台配置、定时任务、风控的完整闭环
 
 | 任务 ID     | 任务名称                              | 具体子任务拆解                                                                 | 负责人          | 预计工期 | 优先级 | 依赖          | 状态     | 备注 |
