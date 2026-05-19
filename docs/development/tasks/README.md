@@ -128,6 +128,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md) | ✅ Completed (runtime fixed by follow-up) | ✅ `63dcdaa` + runtime fix `1f630f0` | ✅ `1f630f0` |
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md) | ✅ Completed | ✅ `1f630f0` (via guard) | ✅ `1f630f0` |
 | [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md](TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md) | ✅ Completed | ✅ `5ce5c6c` (via guard) | ✅ `5ce5c6c` |
+| [TASK-APP-IOS-CODESIGN-ENV-001.md](TASK-APP-IOS-CODESIGN-ENV-001.md) | ⚠️ Partial — simulator PASS via safe workdir, device signing BLOCKED | ✅ `a5243cd` (via guard) | ✅ `a5243cd` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
@@ -288,7 +289,8 @@ PR order:
 | TASK | Repo | Scope | Status |
 | --- | --- | --- | --- |
 | [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md](TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md) | `livemask-app` | Fix sentry_flutter Kotlin JVM target compatibility for Android debug/release builds | ✅ Completed (`5ce5c6c`) |
-| [TASK-APP-IOS-CODESIGN-ENV-001] | `livemask-app` | Resolve Sequoia xattr/codesign and signing Identity for iOS device builds | Open |
+| [TASK-APP-IOS-CODESIGN-ENV-001.md](TASK-APP-IOS-CODESIGN-ENV-001.md) | `livemask-app` | Resolve Sequoia xattr/codesign and signing Identity for iOS builds | ⚠️ Partial (`a5243cd`) — simulator safe workdir PASS, device signing BLOCKED |
+| TASK-APP-IOS-DEVICE-SIGNING-001 | `livemask-app` / CI-CD | Configure Apple Developer Team ID, signing identity, provisioning profiles, and physical-device validation | Proposed |
 | TASK-APP-ANDROID-RELEASE-SIGNING-001 | `livemask-app` / CI-CD | Configure real Android release signing keys; current release build passes with debug signing config | Proposed |
 | [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md](TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md) | `livemask-ci-cd` | Fix dev-merge-guard.sh path handling for spaces in "New project 2" directory name | ✅ Completed |
 

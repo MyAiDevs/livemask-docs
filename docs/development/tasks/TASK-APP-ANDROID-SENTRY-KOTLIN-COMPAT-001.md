@@ -85,13 +85,15 @@ Implemented fixes:
 | Android release | PASS | Build succeeds, but uses debug signing config because no release signing key is configured. |
 | macOS arm64/x64 | PASS | macOS build passes. |
 | Web | PASS | Web build passes. |
-| iOS simulator/device | BLOCKED | Sequoia xattr/codesign and signing environment still require `TASK-APP-IOS-CODESIGN-ENV-001`. |
+| iOS simulator | PASS with safe workdir | Resolved by `TASK-APP-IOS-CODESIGN-ENV-001`; use `/private/tmp` safe workdir. |
+| iOS device | BLOCKED | Requires signing identity, Team ID, provisioning, and physical device. |
 | Windows/Linux | BLOCKED | Requires Parallels VM validation. |
 
 ## 7. Remaining Follow-Ups
 
 | TASK | Status | Scope |
 | --- | --- | --- |
-| TASK-APP-IOS-CODESIGN-ENV-001 | Open | Resolve iOS Sequoia xattr/codesign and signing identity / physical-device validation. |
+| TASK-APP-IOS-CODESIGN-ENV-001 | Partial | iOS simulator safe-workdir build passes; iOS device signing remains blocked. |
+| TASK-APP-IOS-DEVICE-SIGNING-001 | Proposed | Configure Apple Developer Team ID, signing identities, provisioning profiles, and physical-device validation. |
 | TASK-APP-ANDROID-RELEASE-SIGNING-001 | Proposed | Configure real Android release signing instead of relying on debug signing for release build validation. |
 | Windows/Linux Parallels validation | Environment dependent | Validate App builds inside Windows and Linux VMs. |
