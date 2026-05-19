@@ -108,11 +108,16 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md) | ✅ Completed / reconciled | ✅ via `TASK-BACKEND-DEV-RECONCILE-001` | ✅ `1c1ebf4` |
 | [TASK-ADMIN-APP-RELEASE-001.md](TASK-ADMIN-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-RELEASE-CONTROL-IA-001.md](TASK-ADMIN-RELEASE-CONTROL-IA-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001.md](TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001.md) | ✅ Completed | ✅ `d355242` (via guard) | ✅ `e541485` |
+| [TASK-ADMIN-NODEAGENT-RELEASE-UI-001.md](TASK-ADMIN-NODEAGENT-RELEASE-UI-001.md) | ✅ Completed | ✅ `e67c4c7` (via guard) | ✅ `e541485` |
+| [TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md](TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md) | ✅ Completed (Backend capability blocker retained) | ✅ `3b95111` (via guard) | ✅ `e541485` |
+| [TASK-ADMIN-JOB-CENTER-UI-001.md](TASK-ADMIN-JOB-CENTER-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `99d7360` (via guard) | ✅ `e541485` |
+| [TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md](TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `e541485` (via guard) | ✅ `e541485` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
-|| [TASK-WEBSITE-HELP-ARTICLE-001.md](TASK-WEBSITE-HELP-ARTICLE-001.md) | ✅ completed | ✅ `9ce1a88` (via guard) | ✅ `origin/dev` |
-|| [TASK-BACKEND-DEV-RECONCILE-001.md](TASK-BACKEND-DEV-RECONCILE-001.md) | ✅ Completed | ✅ Backend reconcile evidence received | ✅ `1c1ebf4` |
+| [TASK-WEBSITE-HELP-ARTICLE-001.md](TASK-WEBSITE-HELP-ARTICLE-001.md) | ✅ completed | ✅ `9ce1a88` (via guard) | ✅ `origin/dev` |
+| [TASK-BACKEND-DEV-RECONCILE-001.md](TASK-BACKEND-DEV-RECONCILE-001.md) | ✅ Completed | ✅ Backend reconcile evidence received | ✅ `1c1ebf4` |
 
 ### Docs 契约任务
 

@@ -99,7 +99,7 @@
 | [TASK-P3-01-connection-quality-report.md](tasks/TASK-P3-01-connection-quality-report.md) | App 连接质量上报 | App / Backend | P2-05 |
 | [TASK-P3-02-quick-feedback.md](tasks/TASK-P3-02-quick-feedback.md) | 快速反馈和低优先级 appeal | App / Backend | P3-01 |
 | [TASK-P5-03-monitoring-alerting.md](tasks/TASK-P5-03-monitoring-alerting.md) | MVP 指标、告警、Dashboard | Ops / SRE | P0-P3 |
- | [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
+| [TASK-P5-04-deploy-runbook.md](tasks/TASK-P5-04-deploy-runbook.md) | 部署、迁移、回滚 Runbook | DevOps | P0-P3 |
 | [TASK-DOC-CONTENT-001-content-system-contract.md](tasks/TASK-DOC-CONTENT-001-content-system-contract.md) | 统一 Content System 契约：content_items 模型、Blog/App/Admin API | Docs | 无 |
 | [TASK-DOC-I18N-001-i18n-localization-contract.md](tasks/TASK-DOC-I18N-001-i18n-localization-contract.md) | I18N 契约：中文默认、英文 fallback、Backend message_key、Content locale、Website SEO、Admin/App 本地化 | Docs / Backend / Admin / Website / App / CI-CD | Content System / Website SEO / App UX |
 | [TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md](tasks/TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001-protocol-endpoint-template-rollout.md) | Protocol & Endpoint Template 契约 + 重连提示契约 + 15 seed templates + Job Service 灰度 + NodeAgent 应用 + App 优雅重连 | Docs / All | DOC-CONTROL-PLANE-001 |
@@ -163,12 +163,12 @@
 > 状态标记规则见第 0 节「状态规则定义」。
 > 列表中的 ✅ Done / ✅ Verified dev-local 仅说明 dev-local 验证通过，
 > **不代表 task 分支已合并到 dev**。
-> 缺少 `dev merge commit` 的任务已标注 ⚠️ evidence_missing。|
+> 缺少 `dev merge commit` 的任务已标注 ⚠️ evidence_missing。
 >
 > **Process Violation — 2026-05-20**: Website dev (`livemask-website`) 曾出现手工
 > merge `task/*` 到 `dev` 的历史记录（`dc48f1f`、`1ff9190` 等直接 merge task branch
 > 到 dev）。后续所有补救任务必须使用 `livemask-ci-cd/scripts/dev-merge-guard.sh` 执行合并。
-> 禁止直接 git merge task/* → dev。|
+> 禁止直接 git merge task/* → dev。
 
 | Domain | TASK | Repo | Status | Evidence / Notes | Next Window |
 | --- | --- | --- | --- | --- | --- |
@@ -200,7 +200,6 @@
 | Website Referral Landing | TASK-WEBSITE-REFERRAL-LANDING-001 | `livemask-website` | ✅ Done | Branch `task/TASK-WEBSITE-REFERRAL-LANDING-001`, commit `c778c5d`. RegisterPage reads `?ref=CODE`, sanitizes to uppercase alphanumeric, auto-fills the invitation code input, shows a lightweight zh-CN/en-US referral prompt, hides inviter identity, and prevents open redirect behavior. | CI/CD growth revenue smoke should verify `/register?ref=CODE` attribution preservation. |
 | Website Public Growth | TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001 | `livemask-website` | ✅ Completed | Original branch `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001`, commit `9d8c144`. All subtasks PASS: Downloads ✅, I18N ✅, Blog ✅, SEO rebuild ✅, Help article rendering ✅ (via TASK-WEBSITE-HELP-ARTICLE-001 merged at `9ce1a88`). Remediation merged through `dev-merge-guard.sh`. `tsc -b`, `npm run build`, sitemap/RSS generation, mock mode, and `git diff --check` pass. | CI/CD should run Website downloads/sitemap/RSS real integration smoke. |
 | Website Help Article | TASK-WEBSITE-HELP-ARTICLE-001 | `livemask-website` | ✅ Completed | Branch `task/TASK-WEBSITE-HELP-ARTICLE-001`, commit `93f3cab`. `/support` list page, `/:locale/support/:slug` detail page, category filtering, 404, SEO metadata, Markdown rendering, mock mode. Dev merge commit `9ce1a88`, remote `origin/dev`. Merged via integration branch through `dev-merge-guard.sh`. All validation PASS. | CI/CD should add website help-article smoke once real Content API data is deployed. |
-
 | Website Release Control | TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001 | `livemask-website` | ✅ Verified / ready for real integration smoke | Regression branch `task/TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001`, commit `5edaada`. Verified `/download`, `GET /api/v1/app/releases/latest` client integration, latest stable per platform, release notes URL typing, zh-CN default / en-US fallback, hreflang, build-time sitemap/RSS, production `VITE_API_MOCK_MODE=false`, no hardcoded artifact URL, no signed URL query exposure, and no per-request sitemap/RSS generation. `tsc -b`, `npm run build`, and `git diff --check` pass. | Backend latest endpoint is now implemented by `TASK-BACKEND-APP-RELEASE-LATEST-001`; run real integration smoke against deployed Backend. |
 | System Settings / Scheduler | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 | `livemask-docs` | ✅ Ready | GeoIP credentials, IM provider settings, report templates, subscription config, scheduler CRUD. | Backend/Admin/Job Service implementation and smoke. |
 | User Growth Revenue | TASK-DOC-USER-GROWTH-REVENUE-001 | `livemask-docs` | ✅ Ready | Contract defines payout methods, referral links, promotion/sponsor reward rules, earnings ledger, settlement reports, and revenue feedback. | Backend implementation starts with `TASK-BACKEND-USER-GROWTH-REVENUE-001`. |
@@ -247,10 +246,11 @@ Current priority order:
 
 ### Admin 实现状态（livemask-admin）
 
-> livemask-admin 整体状态：**PARTIAL** — 核心路由已收敛、Growth 和 App Release 通过验证，
-> 但 System Settings、Job Center、NodeAgent Release 深度链接、Protocol Capability UI、
-> Sentry Settings 仍有缺口。缺少 `TASK-ADMIN-TEST-EXPANSION-001` 系统测试覆盖。
-> 缺口任务已登记为独立 TASK 条目。
+> livemask-admin 整体状态：**PASS with follow-up** — System Settings、Job Center、
+> NodeAgent Release 深度链接、Protocol Capability UI、Sentry Settings 已通过
+> `dev-merge-guard.sh` 合入 `origin/dev`，当前 remote dev ref 为 `e541485`。
+> 仍需 `TASK-ADMIN-TEST-EXPANSION-001` 扩展系统测试覆盖；部分页面仍依赖
+> Backend API 完整实现后移除 mock fallback。
 
 #### 已完成（TASK-ADMIN-SIDEBAR-ROUTES-RECONCILE-001）
 
@@ -262,32 +262,74 @@ Current priority order:
 | **dev merge commit** | `b45def0` |
 | **remote dev ref** | `b45def0` |
 
-#### 缺口任务 / 待开启
+#### Admin UI 补救任务（已合入 dev）
 
 | TASK | 目标 | Owner | 依赖 |
 | --- | --- | --- | --- |
-| TASK-ADMIN-SYSTEM-SETTINGS-UI-001 | Admin System Settings 设置页面（GeoIP 凭证、IM Provider、简报模板、订阅配置） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
-| TASK-ADMIN-JOB-CENTER-UI-001 | Admin Job Center 页面（scheduler CRUD、job run status、execution logs） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
-| TASK-ADMIN-NODEAGENT-RELEASE-UI-001 | Admin NodeAgent Release 深度链接 UI（/admin/releases、NodeAgent tab、deep link 兼容） | Admin | TASK-DOC-APP-RELEASE-DISTRIBUTION-001 |
-| TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001 | Admin Protocol Capability 页面（节点真实协议能力展示、unsafe rollout 阻断提示） | Admin | TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001 |
-| TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001 | Admin Sentry 设置路由/UI reconcile（guard 前旧分支 origin/task/TASK-ADMIN-SENTRY-SETTINGS-001，不允许直接 merge） | Admin | TASK-BACKEND-APP-SENTRY-CONFIG-001 |
+| [TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001.md](tasks/TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001.md) | Admin Sentry 设置路由/UI reconcile | Admin | TASK-BACKEND-APP-SENTRY-CONFIG-001 |
+| [TASK-ADMIN-NODEAGENT-RELEASE-UI-001.md](tasks/TASK-ADMIN-NODEAGENT-RELEASE-UI-001.md) | Admin NodeAgent Release 深度链接 UI（/admin/releases、NodeAgent tab、deep link 兼容） | Admin | TASK-DOC-APP-RELEASE-DISTRIBUTION-001 |
+| [TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md](tasks/TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md) | Admin Protocol Capability 页面（节点真实协议能力展示、unsafe rollout 阻断提示） | Admin | TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001 |
+| [TASK-ADMIN-JOB-CENTER-UI-001.md](tasks/TASK-ADMIN-JOB-CENTER-UI-001.md) | Admin Job Center 页面（scheduler CRUD、job run status、execution logs） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
+| [TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md](tasks/TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md) | Admin System Settings 设置页面（GeoIP 凭证、IM Provider、简报模板、订阅配置） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
 | TASK-ADMIN-TEST-EXPANSION-001 | Admin 系统测试覆盖：页面加载、RBAC、mock 数据、空状态、deep link 导航 | Admin / QA | 所有以上 Admin TASK |
+
+Dev merge evidence:
+
+| TASK | Task branch commit | Dev merge commit | Remote dev ref | Validation |
+| --- | --- | --- | --- | --- |
+| TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001 | `d36f667` | `d355242` | `d355242` | PASS |
+| TASK-ADMIN-NODEAGENT-RELEASE-UI-001 | `bd03ba4` | `e67c4c7` | `e67c4c7` | PASS |
+| TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001 | `7194055` | `3b95111` | `3b95111` | PASS |
+| TASK-ADMIN-JOB-CENTER-UI-001 | `d927169` | `99d7360` | `99d7360` | PASS |
+| TASK-ADMIN-SYSTEM-SETTINGS-UI-001 | `4593289` | `e541485` | `e541485` | PASS |
+
+Final dev validation on `e541485`:
+
+```text
+npx vitest run PASS (72 passed, 2 files)
+npx next build PASS (53 pages compiled)
+git diff --check PASS
+```
 
 #### Admin 子域状态
 
 | 子域 | 状态 | 说明 |
 | --- | --- | --- |
-| Core Admin routes | **partial** | 侧边栏已收敛，部分路由已整合，仍有缺口页面 |
+| Core Admin routes | **pass with follow-up** | 侧边栏已收敛，关键路由已构建输出确认 |
 | Growth | **pass** | TASK-ADMIN-USER-GROWTH-REVENUE-001 / TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001 已验证 |
 | App Release | **pass** | TASK-ADMIN-APP-RELEASE-001 / TASK-ADMIN-RELEASE-CONTROL-IA-001 已验证 |
-| Node detail real data UI | **pass** | TASK-ADMIN-NODE-DETAIL-OBSERVABILITY-FIX-001 已验证，backend route still under reconcile |
-| System Settings | **missing** | UI 未实现，仅契约完成 |
-| Job Center | **missing** | UI 未实现，仅契约完成 |
-| NodeAgent release deep link | **missing** | /admin/releases 概览已就绪，NodeAgent tab 和 deep link 未实现 |
+| Node detail real data UI | **pass with capability blocker** | logs/metrics UI 已验证；Protocol capabilities 仍等待 Backend capability wiring |
+| System Settings | **pass with backend dependency** | 10 个 settings 页面已存在；部分接口仍需 Backend 实现后移除 mock fallback |
+| Job Center | **pass with backend dependency** | Job pages 已存在；真实 scheduler/job API smoke 仍需 CI/CD 验证 |
+| NodeAgent release deep link | **pass** | `/admin/nodeagent/releases` 和详情页已存在 |
+| Protocol Capability UI | **pass with backend blocker** | UI 已存在；真实能力数据仍依赖 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` |
+| Sentry Settings | **pass** | `/admin/settings/observability` 已恢复并合入 dev |
 
-> **风险记录**：`origin/task/TASK-ADMIN-SENTRY-SETTINGS-001` 是 guard 前旧分支，
-> 不允许直接 merge。需要创建新分支 `task/TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001`，
-> 基于当前 `dev` 重建 Sentry 设置路由。
+关键页面构建输出已确认存在：
+
+```text
+/admin/settings
+/admin/settings/geoip
+/admin/settings/notifications
+/admin/settings/reports
+/admin/settings/subscriptions
+/admin/settings/payments
+/admin/settings/app-releases
+/admin/settings/observability
+/admin/settings/app-runtime
+/admin/settings/scheduler
+/admin/jobs
+/admin/jobs/runs
+/admin/jobs/runs/[id]
+/admin/jobs/schedules
+/admin/jobs/schedules/[id]
+/admin/nodeagent/releases
+/admin/nodeagent/releases/[id]
+/admin/protocol-templates
+/admin/protocol-templates/[id]
+/admin/protocol-assignments
+/admin/protocol-assignments/[id]
+```
 
 ### 进行中
 
