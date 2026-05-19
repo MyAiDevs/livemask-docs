@@ -4,7 +4,7 @@
 > Repo: `livemask-website`
 > Branch: `task/TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001`
 > Commit: `5edaada`
-> Status: Verified dev-local; waiting Backend deployment for real integration
+> Status: Verified dev-local; waiting Backend deployment for real integration — partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -56,7 +56,21 @@ git diff --check PASS
 - Mock fallback is allowed for local development only; production must fail
   closed when Backend metadata is unavailable.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-website` |
+| **Task branch** | `task/TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001` |
+| **Task branch commit** | `5edaada` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-website` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `tsc -b` PASS, `npm run build` PASS, `git diff --check` PASS |
+| **Evidence status** | **missing** — pending Website window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-website` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Website release client integration is verified.
 - Download page and SEO artifacts are verified.

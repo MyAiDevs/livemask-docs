@@ -4,7 +4,7 @@
 > Repo: `livemask-admin`
 > Branch: `task/TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001`
 > Commit: `74fdb6a`
-> Status: Completed dev-local
+> Status: partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -63,7 +63,21 @@ Global prohibition checks:
 - Real data depends on Backend seeded or runtime-created notification rows.
 - CI/CD smoke still needs to verify Admin page/API against a running stack.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-admin` |
+| **Task branch** | `task/TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001` |
+| **Task branch commit** | `74fdb6a` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-admin` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `npx vitest run` PASS, `npx next build` PASS |
+| **Evidence status** | **missing** — pending Admin window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-admin` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Admin Growth Notification page regression is documented.
 - Masking, USDT copy, RBAC, and mock fallback behavior are documented.

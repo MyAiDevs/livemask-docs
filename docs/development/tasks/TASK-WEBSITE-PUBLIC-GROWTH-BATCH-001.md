@@ -4,7 +4,7 @@
 > Repo: `livemask-website`
 > Branch: `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001`
 > Commit: `9d8c144`
-> Status: Completed dev-local
+> Status: partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 >
 > Regression branch: `task/TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001`
@@ -95,7 +95,21 @@ Release-control regression evidence:
   Website Content System URL.
 - Production zh-CN content requires Backend content seed/translation coverage.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-website` |
+| **Task branch** | `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001` |
+| **Task branch commit** | `9d8c144` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-website` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `tsc -b` PASS, `npm run build` PASS, `git diff --check` PASS, sitemap/RSS generation PASS |
+| **Evidence status** | **missing** — pending Website window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-website` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Website downloads page no longer hardcodes artifact URLs.
 - Blog pages consume public Content APIs.

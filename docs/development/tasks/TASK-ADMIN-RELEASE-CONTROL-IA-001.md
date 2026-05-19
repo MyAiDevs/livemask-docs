@@ -4,7 +4,7 @@
 > Repo: `livemask-admin`
 > Branch: `task/TASK-ADMIN-RELEASE-CONTROL-IA-001`
 > Commit: `fea9f48`
-> Status: Completed dev-local
+> Status: partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -50,7 +50,21 @@ npx next build PASS
 - CI/CD smoke still needs to cover permissions for mixed App/NodeAgent release
   access.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-admin` |
+| **Task branch** | `task/TASK-ADMIN-RELEASE-CONTROL-IA-001` |
+| **Task branch commit** | `fea9f48` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-admin` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `npx vitest run` PASS, `npx next build` PASS |
+| **Evidence status** | **missing** — pending Admin window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-admin` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Shared `/admin/releases` route exists.
 - App and NodeAgent release deep links are preserved.
