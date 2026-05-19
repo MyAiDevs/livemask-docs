@@ -14,6 +14,14 @@
 >
 > 后续所有补救任务必须使用 `dev-merge-guard.sh` 进行合并。禁止直接 git merge task/* → dev。
 
+> **CI/CD Smoke Script Discovery Rule**
+> CI/CD 任务不得假设聊天中出现的脚本名已经存在。写入前必须先列出现有
+> `scripts/*.sh` 和相关 workflow，明确选择“增强现有脚本”或“新建脚本”。
+> 如果建议脚本（例如 `scripts/admin-control-plane-smoke.sh`）不存在，任务说明和完成报告
+> 必须写明 `MISSING -> created`，或者改为增强现有分域脚本
+> （如 `system-settings-smoke.sh`、`jobs-smoke.sh`、`protocol-capability-smoke.sh`、
+> `release-control-smoke.sh`）。`scripts/smoke.sh` / workflow 不得引用不存在的路径。
+
 ## 0. 多窗口同步要求
 
 所有 Cursor / Codex / 人工开发窗口完成任务后，必须同步提交 TASK 记录。
@@ -92,6 +100,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md](TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md) — ✅ Completed (dev evidence present)
 - [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
 - [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
+- [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)
 
 ### 跨仓库实现任务
 

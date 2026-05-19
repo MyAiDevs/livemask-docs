@@ -150,7 +150,35 @@ Backend/API/DB/Go 字样，并不代表 Admin/Website/App 窗口可以写 Backen
 | `livemask-ci-cd` | Compose, workflows, runtime scripts, smoke tests | Product code unless explicitly scoped to CI templates |
 | `livemask-docs` | Contracts, tasks, handoff docs, rules, design source | Runtime implementation code |
 
-### 5.1 Docs 台账写入边界
+### 5.2 CI/CD Smoke Script Discovery Gate
+
+CI/CD 窗口收到 smoke / workflow / 脚本任务时，必须先发现现有脚本，不能把聊天中的
+建议文件名当成已存在文件。
+
+在写入任何 CI/CD 脚本前必须执行：
+
+```bash
+ls scripts | sort
+rg -n "<domain>|<task>|<endpoint>" scripts .github/workflows
+test -f scripts/<suggested-script>.sh && echo EXISTS || echo MISSING
+```
+
+规则：
+
+1. 如果建议脚本不存在，必须在 mini task brief 中明确写：
+   `scripts/<name>.sh does not exist; implementation will create it`。
+2. 如果已有相近分域脚本，优先增强现有脚本；只有需要跨域聚合时才新增聚合脚本。
+3. 不得在完成报告中声称更新了不存在的脚本。
+4. 不得因为脚本不存在而伪造 PASS；应报告 `created` / `enhanced` / `SKIP with reason`。
+5. `scripts/smoke.sh` 和 `.github/workflows/*` 的集成必须基于实际存在的脚本路径。
+6. CI/CD smoke 的最终验收仍必须基于 `dev`，不能以 task 分支预检代替。
+
+示例：如果用户或任务建议 `scripts/admin-control-plane-smoke.sh`，但仓库中不存在，
+CI/CD 窗口必须先确认现有 `system-settings-smoke.sh`、`jobs-smoke.sh`、
+`protocol-capability-smoke.sh`、`release-control-smoke.sh` 等是否可复用，再决定
+新增聚合脚本或增强现有分域脚本。
+
+### 5.3 Docs 台账写入边界
 
 `livemask-docs` 拥有跨仓库任务台账和文档状态的唯一写入权。除非当前仓库就是
 `livemask-docs`，否则不得写入 `../livemask-docs` 下的 MVP、tasks、handoff、
