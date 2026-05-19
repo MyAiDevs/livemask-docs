@@ -3,7 +3,19 @@
 > 本计划把“可落地开发”的第一批任务收敛到最小闭环：配置中心、节点上报、App 推荐/反馈、USDT 支付、部署监控。
 > 它也是当前项目的总任务视图和跨仓库实现状态快照。
 
-## 0. 同步规则
+## 0. 状态规则定义
+
+本文档中使用以下状态规则。所有任务在标记为 `Completed` 前必须满足对应证据要求。
+
+| 状态 | 含义 | 证据要求 |
+|------|------|---------|
+| **Completed** | 全部实现完成，任务分支已验证通过 dev merge guard 合并到 `dev`，并已推送 `origin/dev` | 必须有 `dev merge commit` + `remote dev ref` + `validation on dev` |
+| **Ready** | 契约/任务设计已完成，可以开始实现 | 文档就绪、无设计阻塞 |
+| **Draft** | 设计或任务仍未闭环 | 文档/计划不完整 |
+| **Partial** | 部分实现存在，但缺页面/API/测试/merge evidence | 明确列出缺失项 |
+| **Evidence missing** | 文档声称完成，但缺 dev merge evidence，需重新核验 | 需对应 repo Cursor 补证据后升级状态 |
+
+### 0.1 同步规则
 
 `MVP_IMPLEMENTATION_PLAN.md` 是 LiveMask 当前阶段的总任务视图，但不是唯一任务记录。
 所有 Cursor 窗口、Codex 窗口和人工开发者完成任务时，必须同步以下四层记录：
@@ -111,8 +123,8 @@
 
 #### Docs 契约层
 
-- ProtocolProfile 接口定义 + Renderer dispatcher + SecretRef 框架（TASK-DOC-PROTOCOL-001 / TASK-NODEAGENT-PROTOCOL-001）
-- Connect Config 安全契约（TASK-VPN-CONFIG-001）
+- ProtocolProfile 接口定义 + Renderer dispatcher + SecretRef 框架（TASK-DOC-PROTOCOL-001 / TASK-NODEAGENT-PROTOCOL-001）— Draft：契约文档已存在，TASK 待实现/验收
+- Connect Config 安全契约（TASK-VPN-CONFIG-001）— Draft：契约文档已存在，TASK 待实现/验收
 - Backend protocol_profile 命名对齐（TASK-BACKEND-PROTOCOL-001）
 - NodeAgent binary 分发、配置发布与回滚契约（TASK-DOC-NODEAGENT-RELEASE-001）— 已升级为 Ready
 - GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约（TASK-DOC-GEOIP-SYNC-001）— 已升级为 Ready
@@ -135,7 +147,7 @@
 - User Growth & Revenue（TASK-DOC-USER-GROWTH-REVENUE-001）— USDT 收款资料、预留支付宝/微信/银行卡、推广链接、推广/赞助收益规则、邀请/赞助/结算报表、收益异常反馈和登录收益激励通知
 - Growth Reward Notification（TASK-DOC-GROWTH-REWARD-NOTIFICATION-001）— 推广/赞助收益入账后的登录横幅、App Toast、Admin 模板预览、Job digest 和通知偏好闭环
 
-#### 2026-05-19 实现同步快照
+#### 2026-05-20 — Job Service 完整性核验 + 补救
 
 > 本节用于防止 MVP 计划只停留在契约层。每次 Backend / Admin /
 > App / NodeAgent / Job Service / CI-CD 完成跨仓库闭环任务后，必须在这里同步
@@ -151,7 +163,7 @@
 | Backend Smoke Fix | TASK-BACKEND-OBSERVABILITY-SMOKE-FIX-001 | `livemask-backend` | ✅ Done | Logs family routes fixed, `/admin/api/v1/observability/sentry*` aliases registered, `system_settings` table split from configcenter. | CI/CD rerun smoke to full PASS. |
 | CI/CD Observability | TASK-CICD-SENTRY-CONFIG-SMOKE-001 | `livemask-ci-cd` | ✅ Passed | Backend health, Admin login, App-facing Sentry config disabled response, forbidden-field check, Admin Sentry settings, RBAC, and secret leak scan all pass. App fallback evidence is an expected SKIP because CI/CD does not run App runtime tests. | Admin and App may rely on Sentry config contract. |
 | CI/CD Observability | TASK-CICD-OBSERVABILITY-SMOKE-001 | `livemask-ci-cd` | ✅ Passed | All 23 sections executed with 0 failures. Backend/Job Service/NodeAgent reachable; all `/metrics` endpoints expose required metrics; NodeAgent log upload returns 202; global/agent/payment/notification/audit logs return 200; Sentry summary/events/performance return 200; RBAC 401/403 checks pass; secret leak scan has 0 leaks. Expected SKIPs: cosmetic Job Service health JSON response and payment order logs when no order data exists. | Unlock Admin Observability UI and keep CI regression in `scripts/smoke.sh`. |
-| Job Service Observability | TASK-JOBS-OBSERVABILITY-INGEST-001 | `livemask-job-service` | ✅ Done | `observability_log_ingest` executor, SQL writer, idempotency, retry/dead-letter, metrics, sqlstore build pass. | Verify Backend async queue path in CI/CD. |
+| Job Service Observability | TASK-JOBS-OBSERVABILITY-INGEST-001 | `livemask-job-service` | ✅ Done / Reconciled | `observability_log_ingest` executor, 16 tests, Backend executor path, forbidden key rejection, secret leak scan. Reconciled on `task/TASK-JOBS-OBSERVABILITY-INGEST-001-reconcile` (`1f999c3`), merged `fad4982`, validation on dev PASS. Was missing on origin/dev despite docs claiming Done. | Verify Backend async queue path in CI/CD. |
 | NodeAgent Observability | TASK-NODEAGENT-METRICS-LOGS-001 + TASK-NODEAGENT-OBSERVABILITY-UPLOAD-INTEGRATION-001 + TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001 | `livemask-nodeagent` | ✅ Verified dev-local | Local log queue, HMAC upload client, `/metrics`, `/agent/status` observability block implemented. HMAC headers/signature, `batch_id`, retry/backoff/exhaustion/overflow, redaction/truncation all verified. Fixed `nodeSecret` redaction by normalizing sensitive key map entry to lowercase `nodesecret`. Upload client now accepts Backend `202 Accepted` and current response shape `{accepted:true, accepted_count}`; dev-local NodeAgent log shows `log upload success` after targeted restart. | CI/CD observability smoke regression + Admin logs UI. |
 | App Sentry | TASK-APP-SENTRY-OBSERVABILITY-001 + TASK-APP-SENTRY-RUNTIME-CONFIG-001 | `livemask-app` | ✅ Done / ⚠️ Platform build blockers | Backend runtime config client/model/cache/service/providers and initialization flow integrated. Backend `enabled:false` is authoritative and no longer falls through to cache or dart-define; dart-define remains only Backend-unreachable fallback. Forbidden Sentry secrets dropped at parse time. `flutter analyze` PASS, `flutter test` 429 PASS, observability config tests 28 PASS, macOS ARM64 and web builds PASS. iOS simulator blocked by pre-existing Sequoia xattr/codesign issue; Android debug blocked by pre-existing sentry_flutter Kotlin mismatch. | CI/CD Sentry config smoke regression + fix Android/iOS environment/dependency blockers. |
 | App Ops Batch | TASK-APP-CLIENT-OPS-BATCH-001 | `livemask-app` | ✅ Done | Release check, i18n, Sentry base, content feed, GeoIP lookup, node region badge; analyze/test pass. | Full-platform build matrix + Backend integration follow-ups. |

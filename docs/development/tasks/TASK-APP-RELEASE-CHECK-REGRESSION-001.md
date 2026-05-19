@@ -2,7 +2,7 @@
 
 > Owner: App / App Release / Backend / CI-CD / Docs
 > Repo: `livemask-app`
-> Status: Completed dev-local with platform blockers recorded
+> Status: Completed dev-local with platform blockers recorded — partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -74,7 +74,21 @@ Full-platform compile matrix:
 - Production release pipelines must inject the correct `APP_ARCH` value for
   iOS and Android builds.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-app` |
+| **Task branch** | Not specified in task file |
+| **Task branch commit** | Not specified |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-app` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `flutter analyze` PASS, `flutter test` PASS (401 tests), macOS/iOS simulator/web builds PASS |
+| **Evidence status** | **missing** — pending App window dev merge; platform blockers (Android/iOS device/Windows/Linux) remain |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-app` window to verify dev merge |
+
+## 7. Done Criteria
 
 - App release-check safety checks are recorded.
 - Full-platform compile matrix is recorded with honest blockers.

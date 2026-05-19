@@ -1,6 +1,6 @@
 # TASK-BACKEND-USER-GROWTH-REVENUE-001
 
-> Status: Done dev-local
+> Status: Done dev-local — partial / evidence_missing (task branch not merged to dev)
 > Owner: Backend / Product / Finance / Growth
 > Contract: `docs/contracts/users/USER_GROWTH_REVENUE_CONTRACT.md`
 > Date: 2026-05-19
@@ -141,7 +141,21 @@ If rollback is required:
 4. Keep database tables in place unless an explicit data cleanup task is
    approved.
 
-## 7. Done Criteria
+## 7. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-backend` |
+| **Task branch** | Not specified in task file |
+| **Task branch commit** | Not specified |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-backend` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `go test ./internal/growth ./internal/auth` PASS, `go build ./...` PASS, dev-local HTTP verification PASS |
+| **Evidence status** | **missing** — pending Backend window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-backend` window to verify dev merge |
+
+## 8. Done Criteria
 
 - Backend schema and APIs exist.
 - Default rules are seeded.

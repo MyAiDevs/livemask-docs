@@ -61,7 +61,20 @@ README 和核心规则引用了缺失文档，导致新开发者和 AI 窗口无
 - [x] 各角色开工条件、输出证据、阻断条件、回流路径已形成就绪评估表
 - [x] MVP P0/P1 任务已拆分为独立 TASK，真实契约和上线门禁已补齐
 
-## 6. Follow-up
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-docs` |
+| **Task branch** | None — developed directly on the branch |
+| **Task branch commit** | N/A |
+| **Dev merge commit** | Multiple docs commits present on `origin/dev` (see git log for earliest docs entries) |
+| **Remote dev ref** | `origin/dev` at `0a5d984` |
+| **Validation** | Docs check PASS at time of creation |
+| **Evidence status** | **Complete for docs** — docs-only task, content present on dev |
+| **Runtime repo evidence** | not applicable, docs-only |
+
+## 7. Follow-up
 
 - `TASK-DOC-002`：同步各业务仓库 `.cursorrules` / `.github/copilot-instructions.md`
 - `TASK-DOC-003`：为 archive 文档标注 Active / Superseded / Historical 状态

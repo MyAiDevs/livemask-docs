@@ -4,7 +4,7 @@
 > Repo: `livemask-admin`
 > Branch: `task/TASK-ADMIN-USER-GROWTH-REVENUE-001`
 > Commit: `e675a64`
-> Status: Completed dev-local
+> Status: partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -68,7 +68,21 @@ Security validation:
 - End-to-end settlement execution still depends on Backend executor APIs and
   CI/CD smoke.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-admin` |
+| **Task branch** | `task/TASK-ADMIN-USER-GROWTH-REVENUE-001` |
+| **Task branch commit** | `e675a64` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-admin` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `npx vitest run` PASS, `npx next build` PASS |
+| **Evidence status** | **missing** — pending Admin window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-admin` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Growth Admin pages exist.
 - API client covers required Growth endpoints.
