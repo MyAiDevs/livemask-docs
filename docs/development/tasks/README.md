@@ -72,13 +72,47 @@ Draft -> Ready -> In Progress -> Review -> Done
 
 ## MVP P0/P1 任务
 
-- [TASK-DOC-PROTOCOL-001-nodeagent-multi-protocol-extension-arch.md](TASK-DOC-PROTOCOL-001-nodeagent-multi-protocol-extension-arch.md)
-- [TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md](TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md)
-- [TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md](TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md)
-- [TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md](TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md)
-- [TASK-VPN-CONFIG-001-real-connect-config-contract.md](TASK-VPN-CONFIG-001-real-connect-config-contract.md)
-- [TASK-INFRA-001-mvp-health-ci-smoke-closed-loop.md](TASK-INFRA-001-mvp-health-ci-smoke-closed-loop.md)
-- [TASK-INFRA-002-ai-task-sync-and-auto-marking.md](TASK-INFRA-002-ai-task-sync-and-auto-marking.md)
+### 治理 / Batch 任务
+
+- [TASK-CICD-CLOSED-LOOP-BATCH-001.md](TASK-CICD-CLOSED-LOOP-BATCH-001.md) — ⚠️ partial / evidence_missing
+- [TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md](TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md) — ⚠️ partial / evidence_missing
+- [TASK-CICD-DEV-MERGE-GUARD-001.md](TASK-CICD-DEV-MERGE-GUARD-001.md) — ✅ Done (dev evidence present)
+
+### 跨仓库实现任务（⚠️ evidence_missing — 需各 repo Cursor 补 dev merge evidence）
+
+| TASK | 当前状态 | Dev Merge Evidence | Remote dev ref |
+|------|---------|------------------|---------------|
+| [TASK-BACKEND-USER-GROWTH-REVENUE-001.md](TASK-BACKEND-USER-GROWTH-REVENUE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-ADMIN-USER-GROWTH-REVENUE-001.md](TASK-ADMIN-USER-GROWTH-REVENUE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md](TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-WEBSITE-REFERRAL-LANDING-001.md](TASK-WEBSITE-REFERRAL-LANDING-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md](TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md](TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-APP-RELEASE-CHECK-REGRESSION-001.md](TASK-APP-RELEASE-CHECK-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-ADMIN-APP-RELEASE-001.md](TASK-ADMIN-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-ADMIN-RELEASE-CONTROL-IA-001.md](TASK-ADMIN-RELEASE-CONTROL-IA-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+
+### Docs 契约任务
+
+| TASK | 当前状态 | Dev Merge Evidence | Remote dev ref |
+|------|---------|------------------|---------------|
+| [TASK-DOC-PROTOCOL-001](TASK-DOC-PROTOCOL-001-nodeagent-multi-protocol-extension-arch.md) | Draft | N/A (Draft) | N/A |
+| [TASK-DOC-PROTOCOL-STABILITY-GATE-001](TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md) | Ready | N/A (Ready — docs-only) | N/A |
+| [TASK-DOC-NODEAGENT-RELEASE-001](TASK-DOC-NODEAGENT-RELEASE-001-nodeagent-release-config-rollback-contract.md) | Ready | N/A (Ready — docs-only) | N/A |
+| [TASK-DOC-GEOIP-SYNC-001](TASK-DOC-GEOIP-SYNC-001-geoip-database-update-nodeagent-sync-contract.md) | Ready | N/A (Ready — docs-only) | N/A |
+| [TASK-VPN-CONFIG-001](TASK-VPN-CONFIG-001-real-connect-config-contract.md) | Draft | N/A (Draft) | N/A |
+| [TASK-INFRA-001](TASK-INFRA-001-mvp-health-ci-smoke-closed-loop.md) | Done | ✅ `2c3e66d` on dev | `origin/dev` |
+| [TASK-INFRA-002](TASK-INFRA-002-ai-task-sync-and-auto-marking.md) | Ready | N/A (Ready — docs-only) | N/A |
+| [TASK-DOC-USER-GROWTH-REVENUE-001](TASK-DOC-USER-GROWTH-REVENUE-001-user-growth-revenue-contract.md) | Ready | N/A (Ready — docs-only) | N/A |
+| [TASK-DOC-GROWTH-REWARD-NOTIFICATION-001](TASK-DOC-GROWTH-REWARD-NOTIFICATION-001-login-earnings-incentive.md) | Ready | N/A (Ready — docs-only) | N/A |
+| [TASK-DOC-001](TASK-DOC-001-doc-closure.md) | Done | ✅ docs commits on dev | `origin/dev` |
+
+### 其他任务（未在 Docs 中核验）
+
 - [TASK-P0-03-config-center.md](TASK-P0-03-config-center.md)
 - [TASK-ADMIN-001-config-center-management-ui.md](TASK-ADMIN-001-config-center-management-ui.md)
 - [TASK-APP-001-remote-config-cache-fallback.md](TASK-APP-001-remote-config-cache-fallback.md)
@@ -92,23 +126,6 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-P5-03-monitoring-alerting.md](TASK-P5-03-monitoring-alerting.md)
 - [TASK-P5-04-deploy-runbook.md](TASK-P5-04-deploy-runbook.md)
 - [TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md](TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md)
-- [TASK-DOC-USER-GROWTH-REVENUE-001-user-growth-revenue-contract.md](TASK-DOC-USER-GROWTH-REVENUE-001-user-growth-revenue-contract.md)
-- [TASK-BACKEND-USER-GROWTH-REVENUE-001.md](TASK-BACKEND-USER-GROWTH-REVENUE-001.md)
-- [TASK-ADMIN-USER-GROWTH-REVENUE-001.md](TASK-ADMIN-USER-GROWTH-REVENUE-001.md)
-- [TASK-DOC-GROWTH-REWARD-NOTIFICATION-001-login-earnings-incentive.md](TASK-DOC-GROWTH-REWARD-NOTIFICATION-001-login-earnings-incentive.md)
-- [TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md](TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md)
-- [TASK-WEBSITE-REFERRAL-LANDING-001.md](TASK-WEBSITE-REFERRAL-LANDING-001.md)
-- [TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md](TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md)
-- [TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md](TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md)
-- [TASK-APP-RELEASE-CHECK-REGRESSION-001.md](TASK-APP-RELEASE-CHECK-REGRESSION-001.md)
-- [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md)
-- [TASK-ADMIN-APP-RELEASE-001.md](TASK-ADMIN-APP-RELEASE-001.md)
-- [TASK-ADMIN-RELEASE-CONTROL-IA-001.md](TASK-ADMIN-RELEASE-CONTROL-IA-001.md)
-- [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md)
-- [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md)
-- [TASK-JOBS-OBSERVABILITY-INGEST-001.md](TASK-JOBS-OBSERVABILITY-INGEST-001.md)
-- [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md)
-- [TASK-CICD-DEV-MERGE-GUARD-001.md](TASK-CICD-DEV-MERGE-GUARD-001.md)
 
 > 🔒 TASK-JOBS-SENTRY-CONFIG-SUPPORT-001: closed/no-op. Task branch was zero commits (HEAD == dev divergence point). Sentry exception handling is owned by Backend (`TASK-BACKEND-SENTRY-SUMMARY-001`) via Sentry webhook summary, not Job Service. No implementation needed.
 
