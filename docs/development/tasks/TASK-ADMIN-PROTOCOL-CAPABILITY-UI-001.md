@@ -44,6 +44,11 @@ npx next build PASS (53 pages compiled)
 git diff --check PASS
 ```
 
-## 6. Blocker Retained
+## 6. Follow-up
 
-- `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` remains required before Admin can display real protocol capabilities from Backend dev.
+- Backend real capability wiring has been completed by
+  `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` at Backend remote dev ref
+  `68f04ac`.
+- CI/CD should add protocol capability smoke to verify Admin can consume the real
+  Backend capability endpoints.
+- Rollout eligibility/gating remains a separate protocol stability follow-up.
