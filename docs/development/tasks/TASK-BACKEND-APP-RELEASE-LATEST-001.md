@@ -4,8 +4,10 @@
 > Repo: `livemask-backend`
 > Branch: `task/TASK-BACKEND-APP-RELEASE-LATEST-001`
 > Commit: `449786b`
-> Status: partial / evidence_missing (task branch not merged to dev)
+> Status: Completed (reconciled on Backend dev)
 > Created: 2026-05-19
+> Reconciled: 2026-05-20
+> Backend remote dev ref: `1c1ebf4`
 
 ## 1. Background
 
@@ -59,10 +61,10 @@ Public response excludes:
 Validation evidence from Backend window:
 
 ```text
-go test ./internal/apprelease/... PASS (14 tests)
-go vet ./internal/apprelease/... clean
-go build ./internal/apprelease/... clean
-git diff --check clean
+go test ./... -count=1 PASS
+go vet ./... PASS
+go build ./... PASS
+git diff --check PASS
 ```
 
 ## 4. Cross-Repo Impact
@@ -79,8 +81,8 @@ git diff --check clean
 
 - Broader App Release Admin APIs and storage adapters remain separate Backend
   tasks.
-- Website real integration smoke still needs to run against the deployed local
-  Backend stack.
+- Website real integration smoke can now run against Backend dev after pulling
+  remote dev ref `1c1ebf4`.
 
 ## 6. Dev Merge Evidence
 
@@ -89,12 +91,12 @@ git diff --check clean
 | **Repository** | `livemask-backend` |
 | **Task branch** | `task/TASK-BACKEND-APP-RELEASE-LATEST-001` |
 | **Task branch commit** | `449786b` |
-| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-backend` dev |
-| **Remote dev ref** | **Evidence missing** |
-| **Validation** | `go test ./internal/apprelease/...` PASS (14 tests), `go vet` clean, `go build` clean |
-| **Evidence status** | **missing** — pending Backend window dev merge |
-| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
-| **Runtime repo evidence** | pending external repo audit — requires `livemask-backend` window to verify dev merge |
+| **Dev merge commit** | Backend reconcile completed under `TASK-BACKEND-DEV-RECONCILE-001` |
+| **Remote dev ref** | `1c1ebf4` |
+| **Validation** | `go test ./... -count=1` PASS, `go vet ./...` PASS, `go build ./...` PASS, `git diff --check` PASS |
+| **Evidence status** | completed |
+| **Last verified at** | 2026-05-20 |
+| **Runtime repo evidence** | Backend window reported `GET /api/v1/app/releases/latest` restored on dev |
 
 ## 7. Done Criteria
 
