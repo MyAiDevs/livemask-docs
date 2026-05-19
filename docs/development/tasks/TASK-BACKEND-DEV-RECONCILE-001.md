@@ -28,7 +28,7 @@
 - [ ] **Step 4 (Docs):** Docs 窗口在收到证据后，将对应任务状态升级为 Completed / Verified。
 - [ ] **Step 5 (Docs):** 从本 TASK 中勾除已完成的子项。
 
-## 4. 验证标准
+## 5. 验证标准
 
 每个子任务必须满足：
 
@@ -37,7 +37,7 @@
 3. dev merge commit 已推送 `origin/dev`。
 4. Git tag 或 commit hash 可供 docs 引用。
 
-## 5. Cross-Repo Impact
+## 4. Cross-Repo Impact
 
 | 仓库 | 影响 |
 | --- | --- |
