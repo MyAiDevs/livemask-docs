@@ -147,11 +147,16 @@
 - User Growth & Revenue（TASK-DOC-USER-GROWTH-REVENUE-001）— USDT 收款资料、预留支付宝/微信/银行卡、推广链接、推广/赞助收益规则、邀请/赞助/结算报表、收益异常反馈和登录收益激励通知
 - Growth Reward Notification（TASK-DOC-GROWTH-REWARD-NOTIFICATION-001）— 推广/赞助收益入账后的登录横幅、App Toast、Admin 模板预览、Job digest 和通知偏好闭环
 
-#### 2026-05-20 — Job Service 完整性核验 + 补救
+#### 2026-05-20 — Docs 完整性核验 + 补救（TASK-DOCS-TASK-LEDGER-RECONCILE-001）
 
 > 本节用于防止 MVP 计划只停留在契约层。每次 Backend / Admin /
 > App / NodeAgent / Job Service / CI-CD 完成跨仓库闭环任务后，必须在这里同步
 > 当前实现状态、剩余阻塞和下一步窗口。
+>
+> 状态标记规则见第 0 节「状态规则定义」。
+> 列表中的 ✅ Done / ✅ Verified dev-local 仅说明 dev-local 验证通过，
+> **不代表 task 分支已合并到 dev**。
+> 缺少 `dev merge commit` 的任务已标注 ⚠️ evidence_missing。|
 
 | Domain | TASK | Repo | Status | Evidence / Notes | Next Window |
 | --- | --- | --- | --- | --- | --- |
