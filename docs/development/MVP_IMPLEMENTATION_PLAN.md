@@ -110,6 +110,7 @@
 | [TASK-DOC-ADMIN-SYSTEM-SETTINGS-001-admin-system-settings-contract.md](tasks/TASK-DOC-ADMIN-SYSTEM-SETTINGS-001-admin-system-settings-contract.md) | Admin System Settings + Scheduler CRUD 契约：GeoIP 凭证、IM Provider、简报模板、订阅配置、计划任务新增/修改/删除 | Docs / Backend / Admin / Job Service / CI-CD | Job Center / User Contact / GeoIP Credentials |
 | [TASK-DOC-APP-RELEASE-DISTRIBUTION-001-app-release-distribution-contract.md](tasks/TASK-DOC-APP-RELEASE-DISTRIBUTION-001-app-release-distribution-contract.md) | App 版本发布契约：Admin 发布台、Backend metadata、S3/OSS/COS/GCS/local storage、App update-check、Website downloads、CI/CD build/sign/upload/register | Docs / Backend / Admin / App / Website / Job Service / CI-CD | Admin System Settings / Content release_note |
 | [TASK-DOC-APP-RUNTIME-GOVERNANCE-001-app-runtime-governance-config.md](tasks/TASK-DOC-APP-RUNTIME-GOVERNANCE-001-app-runtime-governance-config.md) | App Runtime Governance 契约：多端性能/资源/重连治理、LKG、平台覆盖、Admin preview/publish/rollback | Docs / Backend / Admin / App / CI-CD | Config Center / Admin System Settings |
+| [TASK-DOC-NAT-SHARING-GUARD-001.md](tasks/TASK-DOC-NAT-SHARING-GUARD-001.md) | NAT Sharing Guard 契约：防止客户端设备作为 NAT/路由器共享 VPN 的隐私保护风控闭环 | Docs / Security / Backend / NodeAgent / App / Admin / CI-CD | VPN Native Runtime / App Runtime Governance / NodeAgent |
 | [TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001-issue-task-sync-governance.md](tasks/TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001-issue-task-sync-governance.md) | Issue / Task Sync Governance：Epic/Child/Verification Issue、multi-window lease、structured result states、close/reopen rules | Docs / CI-CD / All repos | TASK-INFRA-002 |
 | [TASK-DOC-USER-CONTACT-NOTIFICATION-001-user-contact-notification-contract.md](tasks/TASK-DOC-USER-CONTACT-NOTIFICATION-001-user-contact-notification-contract.md) | 用户 IM 联系方式、通知偏好、机器人邀请、delivery logs 和 Job Service 通知投递契约 | Docs / Backend / Admin / Job Service / Support / CI-CD | AUTH-001 / Job Center / Observability |
 | [TASK-DOC-USER-GROWTH-REVENUE-001-user-growth-revenue-contract.md](tasks/TASK-DOC-USER-GROWTH-REVENUE-001-user-growth-revenue-contract.md) | 用户收款资料、推广链接、推广/赞助收益规则、收益报表、结算报表、异常反馈和登录收益引流推送契约 | Docs / Backend / Admin / App / Website / Job Service / CI-CD | AUTH-001 / Billing / User Contact |
@@ -145,6 +146,7 @@
 - Admin System Settings + Scheduler CRUD（TASK-DOC-ADMIN-SYSTEM-SETTINGS-001）— `/admin/settings` GeoIP 凭证、IM Provider、简报模板、订阅配置、支付/调度设置；`/admin/jobs/schedules` 新增/修改/删除/预览/立即运行
 - App Release Distribution（TASK-DOC-APP-RELEASE-DISTRIBUTION-001）— `/admin/app/releases`、App release metadata、S3/OSS/COS/GCS/local artifact storage、App update-check、Website downloads、CI/CD build/sign/upload/register
 - App Runtime Governance（TASK-DOC-APP-RUNTIME-GOVERNANCE-001）— 旧 `vpn_client_governance` 升级为 `/api/v1/app/runtime-config`，覆盖内存、健康检查、重连、Circuit Breaker、缓存和平台 override
+- NAT Sharing Guard（TASK-DOC-NAT-SHARING-GUARD-001）— 防止客户端设备被当作 NAT/路由器共享 VPN 的隐私保护风控契约。结论：可做 best-effort 检测/限流/吊销，但不能宣称 NodeAgent 单点 100% 阻止 rooted/admin 设备或外部路由器。
 - CI/CD Closed-Loop Smoke Batch（TASK-CICD-CLOSED-LOOP-BATCH-001）— Dashboard、System Settings/Scheduler、App Release、Observability、I18N、Jobs Hardening 六域 smoke 已统一接入 `scripts/smoke.sh` 和 staging workflow
 - Docs Governance Sync Batch（TASK-DOCS-GOVERNANCE-SYNC-BATCH-001）— contract index、Cursor handoff、tasks/MVP plan、auth-rbac 权限索引闭环
 - Issue / Task Sync Governance（TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001）— Epic/Child/Verification Issue、multi-window lease、structured statuses、Issue close/reopen rules
@@ -247,11 +249,10 @@ Current priority order:
 
 ### Admin 实现状态（livemask-admin）
 
-> livemask-admin 整体状态：**PASS with follow-up** — System Settings、Job Center、
+> livemask-admin 整体状态：**PASS with backend/smoke follow-up** — System Settings、Job Center、
 > NodeAgent Release 深度链接、Protocol Capability UI、Sentry Settings 已通过
-> `dev-merge-guard.sh` 合入 `origin/dev`，当前 remote dev ref 为 `e541485`。
-> 仍需 `TASK-ADMIN-TEST-EXPANSION-001` 扩展系统测试覆盖；部分页面仍依赖
-> Backend API 完整实现后移除 mock fallback。
+> `dev-merge-guard.sh` 合入 `origin/dev`；`TASK-ADMIN-TEST-EXPANSION-001`
+> 已完成并合入 `origin/dev` at `0698238`。部分页面仍依赖 Backend API 完整实现后移除 mock fallback。
 
 #### 已完成（TASK-ADMIN-SIDEBAR-ROUTES-RECONCILE-001）
 
@@ -272,7 +273,7 @@ Current priority order:
 | [TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md](tasks/TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md) | Admin Protocol Capability 页面（节点真实协议能力展示、unsafe rollout 阻断提示） | Admin | TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001 |
 | [TASK-ADMIN-JOB-CENTER-UI-001.md](tasks/TASK-ADMIN-JOB-CENTER-UI-001.md) | Admin Job Center 页面（scheduler CRUD、job run status、execution logs） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
 | [TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md](tasks/TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md) | Admin System Settings 设置页面（GeoIP 凭证、IM Provider、简报模板、订阅配置） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
-| TASK-ADMIN-TEST-EXPANSION-001 | Admin 系统测试覆盖：页面加载、RBAC、mock 数据、空状态、deep link 导航 | Admin / QA | 所有以上 Admin TASK |
+| [TASK-ADMIN-TEST-EXPANSION-001.md](tasks/TASK-ADMIN-TEST-EXPANSION-001.md) | Admin 系统测试覆盖：页面加载、RBAC、mock fallback、route existence、permission blocks、deep link 导航 | Admin / QA | 所有以上 Admin TASK |
 
 Dev merge evidence:
 
@@ -283,12 +284,13 @@ Dev merge evidence:
 | TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001 | `7194055` | `3b95111` | `3b95111` | PASS |
 | TASK-ADMIN-JOB-CENTER-UI-001 | `d927169` | `99d7360` | `99d7360` | PASS |
 | TASK-ADMIN-SYSTEM-SETTINGS-UI-001 | `4593289` | `e541485` | `e541485` | PASS |
+| TASK-ADMIN-TEST-EXPANSION-001 | `a037974` | `0698238` | `0698238` | PASS |
 
-Final dev validation on `e541485`:
+Final dev validation after test expansion on `0698238`:
 
 ```text
-npx vitest run PASS (72 passed, 2 files)
-npx next build PASS (53 pages compiled)
+npx vitest run PASS (168 passed, 9 files)
+npx next build PASS (57 pages compiled)
 git diff --check PASS
 ```
 
