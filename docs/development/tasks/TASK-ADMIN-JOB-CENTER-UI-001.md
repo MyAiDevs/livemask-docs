@@ -46,4 +46,4 @@ git diff --check PASS
 ## 6. Follow-up
 
 - CI/CD should verify real Job Service scheduler/run APIs.
-- `TASK-ADMIN-TEST-EXPANSION-001` should add page, RBAC, empty-state, and deep-link tests.
+- `TASK-ADMIN-TEST-EXPANSION-001` completed at Admin dev ref `0698238`, adding route existence, RBAC, mock fallback, permission block, and API client pattern tests.

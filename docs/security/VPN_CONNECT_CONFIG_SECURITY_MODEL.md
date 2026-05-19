@@ -13,6 +13,7 @@
 | 日志 / Lark / CI 泄露敏感字段 | Medium | Medium | 日志必须过滤 `credentials.*`、`tls.server_public_key`、`server.endpoint + port` |
 | 批量枚举有效 session_id | Low | Medium | session_id 使用 `crypto/rand` 生成，足够熵；Rate limit connect-config API |
 | 离线破解 session 凭据 | Low | Low | 凭据使用随机 UUID，与节点密钥独立；过期后自动失效 |
+| 客户端设备被当作 NAT / 路由器共享 VPN 给多设备 | Medium | Medium/High | App 原生层不提供 LAN sharing/router mode；Backend session policy + NodeAgent 聚合检测 + 限流/吊销；详见 `docs/contracts/vpn/NAT_SHARING_GUARD_CONTRACT.md` |
 
 ## 2. 密钥分层
 
@@ -158,10 +159,14 @@ active ──→ expired（expires_at 到达）
 - [ ] iOS/macOS Keychain 存储测试通过
 - [ ] Android EncryptedSharedPreferences 存储测试通过
 - [ ] `node_secret` 只存在于 NodeAgent 和 Backend，从未进入 App 网络路径
+- [ ] NAT sharing guard 不记录 raw destination IP/domain/URL、DNS 历史或 packet payload
+- [ ] App native runtime 不提供 LAN-facing proxy、VPN sharing 或 router mode
+- [ ] NodeAgent 仅上报 aggregate per-session counters 和 redacted risk event
 
 ## 9. 相关文档
 
 - `docs/contracts/api/connect-config.md` — connect_config 契约
+- `docs/contracts/vpn/NAT_SHARING_GUARD_CONTRACT.md` — NAT sharing / device-as-router abuse guard
 - `docs/contracts/api/core-mvp.md` — API 索引
 - `docs/contracts/data-consistency.md` — 数据一致性规则
 - `docs/security/AUTH_RBAC_SECURITY_MODEL.md` — 认证授权安全模型
