@@ -45,7 +45,19 @@ from SKIP to PASS.
 - [ ] Secret leak scan passes for all 6 domains.
 - [ ] CI/CD smoke runs from `dev` branch (not task branches).
 
-## 4. Current Status
+## 4. Cross-Repo Impact
+
+| Repo | Impact |
+|------|--------|
+| `livemask-backend` | Must implement APIs before smoke transitions from SKIP to PASS |
+| `livemask-admin` | Must implement Admin UI before smoke transitions from SKIP to PASS |
+| `livemask-job-service` | Must implement executor APIs before smoke transitions from SKIP to PASS |
+| `livemask-website` | Must implement content/release pages before smoke transitions from SKIP to PASS |
+| `livemask-app` | App localization smoke may require App deployment |
+| `livemask-ci-cd` | Owns smoke scripts and workflow |
+| `livemask-docs` | Tracks evidence and records status in MVP plan |
+
+## 5. Current Status
 
 Per `MVP_IMPLEMENTATION_PLAN.md` section 3 and `scripts/smoke.sh` integration:
 
@@ -53,18 +65,7 @@ Per `MVP_IMPLEMENTATION_PLAN.md` section 3 and `scripts/smoke.sh` integration:
 - `TASK-CICD-SENTRY-CONFIG-SMOKE-001` — ✅ Passed
 - Remaining 5 subtasks: actual CI/CD smoke run evidence against deployed stack is not yet documented in `livemask-docs`.
 
-## 5. Dev Merge Evidence
-
-| Field | Value |
-|-------|-------|
-| **Repository** | `livemask-ci-cd` |
-| **Task branch** | Not applicable (batch task — subtasks each have their own branches) |
-| **Task branch commit** | Needs audit per subtask |
-| **Dev merge commit** | **Evidence missing** — need `livemask-ci-cd` dev commit that merged the smoke scripts |
-| **Remote dev ref** | **Evidence missing** |
-| **Validation** | Partial — Observability smoke PASS, others unevaluated in docs |
-
-## 6. Cross-Repo Impact
+## 6. Dev Merge Evidence
 
 | Repo | Impact |
 |------|--------|
