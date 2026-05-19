@@ -119,7 +119,8 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-ADMIN-RELEASE-CONTROL-IA-001.md](TASK-ADMIN-RELEASE-CONTROL-IA-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001.md](TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001.md) | ✅ Completed | ✅ `d355242` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-NODEAGENT-RELEASE-UI-001.md](TASK-ADMIN-NODEAGENT-RELEASE-UI-001.md) | ✅ Completed | ✅ `e67c4c7` (via guard) | ✅ `e541485` |
-| [TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md](TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md) | ✅ Completed (Backend capability blocker retained) | ✅ `3b95111` (via guard) | ✅ `e541485` |
+| [TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001.md](TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001.md) | ✅ Completed / reconciled | ✅ `68f04ac` (via guard) | ✅ `68f04ac` |
+| [TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md](TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md) | ✅ Completed (CI/CD smoke follow-up retained) | ✅ `3b95111` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-JOB-CENTER-UI-001.md](TASK-ADMIN-JOB-CENTER-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `99d7360` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md](TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `e541485` (via guard) | ✅ `e541485` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
@@ -158,9 +159,9 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-P5-03-monitoring-alerting.md](TASK-P5-03-monitoring-alerting.md)
 - [TASK-P5-04-deploy-runbook.md](TASK-P5-04-deploy-runbook.md)
 - [TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md](TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md)
-- [TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md](TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md) — ✅ completed for logs/metrics at Backend dev ref `1c1ebf4`; protocol capabilities remain blocked separately
+- [TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md](TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md) — ✅ completed for logs/metrics at Backend dev ref `1c1ebf4`; protocol capability wiring completed separately at Backend dev ref `68f04ac`
 - [TASK-BACKEND-I18N-001] — ❌ MISSING / next phase (no message_key/i18n error on dev)
-- [TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001] — ❌ BLOCKED / not completed (wiring not confirmed live on dev)
+- [TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001](TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001.md) — ✅ completed / reconciled at Backend dev ref `68f04ac`
 
 > 🔒 TASK-JOBS-SENTRY-CONFIG-SUPPORT-001: closed/no-op. Task branch was zero commits (HEAD == dev divergence point). Sentry exception handling is owned by Backend (`TASK-BACKEND-SENTRY-SUMMARY-001`) via Sentry webhook summary, not Job Service. No implementation needed.
 
