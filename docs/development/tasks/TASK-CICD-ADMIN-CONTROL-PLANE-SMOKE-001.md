@@ -2,7 +2,7 @@
 
 > Owner: CI/CD / QA
 > Repo: `livemask-ci-cd`
-> Status: Completed (syntax + wiring), runtime regression pending
+> Status: Completed (runtime fixed by follow-up)
 > Task branch commit: `5e23b1c`
 > Dev merge commit: `63dcdaa`
 > Remote dev ref: `63dcdaa`
@@ -98,10 +98,30 @@ Follow-up smoke attempt found runtime/script/API issues, not a stopped runtime:
 - protocol-capability-smoke.sh: failed locally on macOS bash with `declare -A: invalid option`
 ```
 
-## 6. Follow-up
+## 6. Runtime Follow-Up Completed
 
-- Fix the runtime smoke blockers above, then rerun the enhanced domain smoke
-  scripts against dev-local or staging and update this task from "syntax + wiring"
-  to "runtime PASS".
-- Ensure protocol capability smoke is rerun after Backend `68f04ac` is deployed
-  into the runtime.
+Runtime smoke blockers were fixed by
+[`TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001`](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md).
+
+Follow-up evidence:
+
+```text
+livemask-ci-cd task branch commit: 71a4869
+integration commit: 82ef948
+dev merge commit: 1f630f0
+remote dev ref: 1f630f0
+```
+
+Runtime results against Docker dev-local:
+
+- `jobs-smoke.sh` PASS
+- `sentry-config-smoke.sh` PASS
+- `release-control-smoke.sh` PASS
+- `system-settings-smoke.sh` PASS
+- `protocol-capability-smoke.sh` PASS
+
+Remaining SKIPs are real runtime/API gaps, not script failures:
+
+- Admin container returns `HTTP 500` for several new Admin pages.
+- Some Backend Admin Jobs/Scheduler/Protocol Template endpoints are not deployed.
+- Legacy config-center read endpoint is public/read-only in this runtime.
