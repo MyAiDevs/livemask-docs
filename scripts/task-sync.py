@@ -39,6 +39,7 @@ REPO_ALLOWLIST = {
     "livemask-app",
     "livemask-admin",
     "livemask-website",
+    "livemask-job-service",
     "livemask-ci-cd",
 }
 
