@@ -123,6 +123,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md](TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001.md) | ✅ Completed (CI/CD smoke follow-up retained) | ✅ `3b95111` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-JOB-CENTER-UI-001.md](TASK-ADMIN-JOB-CENTER-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `99d7360` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md](TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `e541485` (via guard) | ✅ `e541485` |
+| [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md) | ✅ Completed (syntax + wiring; runtime blocked) | ✅ `63dcdaa` (via guard) | ✅ `63dcdaa` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
@@ -216,6 +217,7 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 | TASK-CICD-OBSERVABILITY-SMOKE-001 | `observability-smoke.sh` | NodeAgent logs → Backend → JobService → DB → Admin、Sentry/Payment/Notification logs |
 | TASK-CICD-I18N-001 | `i18n-smoke.sh` | Backend message_key、Admin zh-CN、Website hreflang/sitemap、App localization |
 | TASK-CICD-JOBS-HARDENING-001 | `jobs-hardening-smoke.sh` | Queue lease/retry/backoff/dead-letter/duplicate lock/run events/secret leak |
+| TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001 | existing domain scripts | Admin settings/jobs/protocol/release/sentry route/API regression |
 
 集成入口: `scripts/smoke.sh` + `.github/workflows/staging-smoke.yml`。
 
