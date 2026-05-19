@@ -370,15 +370,16 @@ Validation:
 - `flutter test test/observability_config_test.dart`: 28 tests PASS.
 - `flutter build macos`: PASS for universal binary.
 - `flutter build web`: PASS.
-- iOS simulator build: BLOCKED by pre-existing macOS Sequoia xattr/codesign
-  issue.
+- iOS simulator build: PASS when run from the safe workdir path verified by
+  `TASK-APP-IOS-CODESIGN-ENV-001`.
 - Android debug APK: PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`
   (`livemask-app` dev merge `5ce5c6c`).
 
 Next:
 
-- App window has fixed the Android Kotlin mismatch; iOS codesign/xattr remains
-  the platform blocker before claiming full-platform completion.
+- App window has fixed the Android Kotlin mismatch and iOS simulator safe
+  workdir path. iOS device signing remains the platform blocker before claiming
+  full-platform completion.
 
 ## 9. Admin Cursor Prompt
 

@@ -49,8 +49,8 @@ Full-platform compile matrix:
 | --- | --- | --- |
 | macOS arm64 | PASS | Universal binary includes arm64. |
 | macOS x64 | PASS | Universal binary includes x86_64; slice verified with `lipo -archs`. |
-| iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` generated. |
-| iOS device | BLOCKED | Requires Xcode signing and physical device. |
+| iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` generated; safe workdir path verified by `TASK-APP-IOS-CODESIGN-ENV-001`. |
+| iOS device | BLOCKED | Requires Apple signing identity, Team ID, provisioning, and physical device. |
 | Android debug | PASS | Kotlin language-version blocker resolved by `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001` at App dev merge `5ce5c6c`. |
 | Android release | PASS | Build succeeds after Kotlin compatibility fix; real release signing key remains a separate follow-up. |
 | Windows | BLOCKED | Requires Parallels VM. |
@@ -70,7 +70,9 @@ Full-platform compile matrix:
 - Android debug/release Kotlin blocker has been resolved by
   `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; Android release still needs real
   release-signing configuration before production distribution.
-- iOS device validation requires signing and a physical device.
+- iOS simulator builds pass when run from the safe workdir path; iOS device
+  validation still requires signing identity, Team ID, provisioning, and a
+  physical device.
 - Windows/Linux validation requires Parallels-hosted environments.
 - Production release pipelines must inject the correct `APP_ARCH` value for
   iOS and Android builds.
@@ -84,10 +86,10 @@ Full-platform compile matrix:
 | **Task branch commit** | `24fc984` for App integrity reconcile; `77447b6` for Android Kotlin follow-up |
 | **Dev merge commit** | `0bf40ee` for App integrity reconcile; `5ce5c6c` for Android Kotlin follow-up |
 | **Remote dev ref** | `5ce5c6c` after Android Kotlin follow-up |
-| **Validation** | `flutter analyze` PASS, `flutter test` PASS (401 tests), macOS/iOS simulator/web builds PASS; Android debug/release PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001` |
-| **Evidence status** | **dev-contained** — App dev merge evidence now exists via `TASK-APP-INTEGRITY-RECONCILE-001` and Android Kotlin follow-up; iOS device/Windows/Linux blockers remain |
+| **Validation** | `flutter analyze` PASS, `flutter test` PASS (401 tests), macOS/iOS simulator/web builds PASS; Android debug/release PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS simulator safe workdir PASS after `TASK-APP-IOS-CODESIGN-ENV-001` |
+| **Evidence status** | **dev-contained / partial platform** — App dev merge evidence exists; iOS device/Windows/Linux blockers remain |
 | **Last verified at** | 2026-05-19 (dev-local on task branch only) |
-| **Runtime repo evidence** | App window reported dev merge `5ce5c6c` with Android debug/release, web, macOS, analyze, and test validation passing |
+| **Runtime repo evidence** | App window reported Android dev merge `5ce5c6c` and iOS safe-workdir dev merge `a5243cd`; Android debug/release, iOS simulator safe workdir, web, macOS, analyze, and test validation pass |
 
 ## 7. Done Criteria
 
