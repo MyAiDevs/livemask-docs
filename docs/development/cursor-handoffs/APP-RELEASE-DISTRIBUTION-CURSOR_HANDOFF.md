@@ -261,8 +261,8 @@ Regression platform matrix:
 | iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` generated. |
 | iOS device | BLOCKED | Requires Xcode signing configuration and a physical device. |
 | Web | PASS | `build/web` generated successfully. |
-| Android debug | BLOCKED | Pre-existing `sentry_flutter` Kotlin language version issue. |
-| Android release | BLOCKED | Same Kotlin issue. |
+| Android debug | PASS | Kotlin language-version blocker resolved by `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`. |
+| Android release | PASS | Build succeeds after Kotlin fix; real release signing key remains separate production-readiness work. |
 | Windows | BLOCKED | Requires Parallels VM. |
 | Linux | BLOCKED | Requires Parallels VM. |
 

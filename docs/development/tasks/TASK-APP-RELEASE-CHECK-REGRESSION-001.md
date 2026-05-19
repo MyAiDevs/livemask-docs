@@ -51,8 +51,8 @@ Full-platform compile matrix:
 | macOS x64 | PASS | Universal binary includes x86_64; slice verified with `lipo -archs`. |
 | iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` generated. |
 | iOS device | BLOCKED | Requires Xcode signing and physical device. |
-| Android debug | BLOCKED | Pre-existing `sentry_flutter` Kotlin language version issue. |
-| Android release | BLOCKED | Same Kotlin issue. |
+| Android debug | PASS | Kotlin language-version blocker resolved by `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001` at App dev merge `5ce5c6c`. |
+| Android release | PASS | Build succeeds after Kotlin compatibility fix; real release signing key remains a separate follow-up. |
 | Windows | BLOCKED | Requires Parallels VM. |
 | Linux | BLOCKED | Requires Parallels VM. |
 | Web | PASS | `build/web` generated. |
@@ -67,8 +67,9 @@ Full-platform compile matrix:
 
 ## 5. Remaining Risks
 
-- Android debug/release remain blocked by the existing `sentry_flutter` Kotlin
-  language version mismatch.
+- Android debug/release Kotlin blocker has been resolved by
+  `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; Android release still needs real
+  release-signing configuration before production distribution.
 - iOS device validation requires signing and a physical device.
 - Windows/Linux validation requires Parallels-hosted environments.
 - Production release pipelines must inject the correct `APP_ARCH` value for
@@ -79,14 +80,14 @@ Full-platform compile matrix:
 | Field | Value |
 |-------|-------|
 | **Repository** | `livemask-app` |
-| **Task branch** | Not specified in task file |
-| **Task branch commit** | Not specified |
-| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-app` dev |
-| **Remote dev ref** | **Evidence missing** |
-| **Validation** | `flutter analyze` PASS, `flutter test` PASS (401 tests), macOS/iOS simulator/web builds PASS |
-| **Evidence status** | **missing** — pending App window dev merge; platform blockers (Android/iOS device/Windows/Linux) remain |
+| **Task branch** | Covered by `TASK-APP-INTEGRITY-RECONCILE-001` plus Android follow-up |
+| **Task branch commit** | `24fc984` for App integrity reconcile; `77447b6` for Android Kotlin follow-up |
+| **Dev merge commit** | `0bf40ee` for App integrity reconcile; `5ce5c6c` for Android Kotlin follow-up |
+| **Remote dev ref** | `5ce5c6c` after Android Kotlin follow-up |
+| **Validation** | `flutter analyze` PASS, `flutter test` PASS (401 tests), macOS/iOS simulator/web builds PASS; Android debug/release PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001` |
+| **Evidence status** | **dev-contained** — App dev merge evidence now exists via `TASK-APP-INTEGRITY-RECONCILE-001` and Android Kotlin follow-up; iOS device/Windows/Linux blockers remain |
 | **Last verified at** | 2026-05-19 (dev-local on task branch only) |
-| **Runtime repo evidence** | pending external repo audit — requires `livemask-app` window to verify dev merge |
+| **Runtime repo evidence** | App window reported dev merge `5ce5c6c` with Android debug/release, web, macOS, analyze, and test validation passing |
 
 ## 7. Done Criteria
 
