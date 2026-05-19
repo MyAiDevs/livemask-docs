@@ -34,6 +34,14 @@ Backend 修改配置结构时，必须同步检查：
 
 所有跨仓库变更必须在代码注释、commit message 和 PR 描述中标注同一个 `TASK-XXXX`。
 
+### 5. Docs 台账归属
+
+`livemask-docs` 是跨仓库任务台账、契约索引、MVP 状态和 Cursor handoff 的唯一写入窗口。
+
+运行时代码仓库完成任务后，只能输出完成证据，不得直接修改 `../livemask-docs`，
+也不得用 task-sync 代替 docs 台账更新。只有 `livemask-docs` 窗口可以更新
+MVP、tasks、handoff、contract index，并在台账更新后触发 task-sync。
+
 ## 多窗口开发时的 AI 行为要求
 
 - 每个窗口的 AI 都必须加载本文件。

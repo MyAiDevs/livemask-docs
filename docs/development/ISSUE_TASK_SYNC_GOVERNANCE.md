@@ -271,6 +271,11 @@ For `completed`, task-sync must reject reports that do not include
 `dev_merge_commit` and `remote_dev_ref`. A feature branch test or smoke result is
 not sufficient completion evidence.
 
+Task-sync is owned by the `livemask-docs` window. Runtime repositories must not
+run task-sync as a substitute for updating the docs ledger. They must hand off
+completion evidence to `livemask-docs`; the docs window updates MVP/task/handoff
+state and then triggers task-sync when appropriate.
+
 ## 8. CI/CD SKIP Rules
 
 CI/CD smoke tasks may report:
@@ -302,6 +307,9 @@ Never treat CI SKIP as feature completion.
 Before starting a second task in the same window, end the current task lease
 with commit/test/blocker evidence.
 Do not unlock downstream repos unless the contract they depend on is stable.
+Runtime repos must not edit ../livemask-docs directly.
+Only the livemask-docs window updates MVP/task/handoff/contract ledger state and
+runs task-sync.
 ```
 
 ## 10. Follow-Up Tasks

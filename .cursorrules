@@ -35,6 +35,18 @@ No files changed.
 - Production is triggered only by GitHub Release / `v*` tag.
 - `task-unlocked` is only a development coordination signal; never use it to trigger `livemask-ci-cd`.
 
+## Docs Ledger Ownership
+
+This repository is the only repo allowed to update cross-repo task ledger state.
+When another repo reports completion, verify task branch commit, dev merge
+commit, remote dev ref, validation evidence on dev, and remaining blockers.
+If any evidence is missing, mark the task as `partial`, `blocked`, or
+`evidence_missing`; do not mark it `completed`.
+
+Runtime repositories hand off completion evidence to this docs window. This docs
+window updates the MVP plan, task index, task files, cursor handoffs, contract
+indexes, and then runs task-sync when appropriate.
+
 ## Mandatory Task Finish / Dev Merge Gate
 
 A task is not complete while its changes exist only on `task/*`, `codex/*`, or
@@ -43,12 +55,11 @@ another feature branch.
 After implementation and required validation pass:
 
 1. Commit the task changes with the `TASK-XXXX` ID.
-2. Switch to `dev` and update from `origin/dev`.
-3. Merge the completed task branch into `dev`.
-4. Resolve conflicts inside the current repository boundary only.
-5. Re-run the repository-required validation on `dev`.
-6. Push `dev` to `origin/dev`.
-7. Include the task branch commit, dev merge commit, pushed remote ref, and
+2. Merge the completed task branch into `dev` through
+   `../livemask-ci-cd/scripts/dev-merge-guard.sh`.
+3. If the guard stops on conflicts or validation failure, do not continue
+   manually; report blocked with the guard output.
+4. Include the task branch commit, dev merge commit, pushed remote ref, and
    validation evidence in the completion report.
 
 Do not report `completed` if the task branch has not been merged into `dev`, if

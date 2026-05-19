@@ -13,6 +13,8 @@
 7. `main` 只代表远程预发布；生产只能由 GitHub Release / `v*` tag 触发。
 8. 每个 `TASK-XXXX` 通过验证后必须合并并推送到 `dev`；只停留在 `task/*`
    或其它功能分支不能报告为 `completed`。
+9. 运行时代码仓库只提交当前仓库代码和完成证据；跨仓库任务台账只能由
+   `livemask-docs` 窗口更新。
 
 ## 2. 推荐窗口布局
 
@@ -46,8 +48,10 @@
 9. 在 `dev` 上重新执行该仓库必需的测试 / build / smoke 验证。
 10. 将 `dev` 推送到 `origin/dev`，并在完成报告中记录 task branch commit、
     dev merge commit、远端 `origin/dev` ref 和验证结果。
-11. 在 PR 描述中说明影响范围、验证结果、回滚策略和未完成项。
-12. 只有 `dev` 合并到 `main` 才能触发远程预发布 CI/CD；只有 release 才能触发生产 CI/CD。
+11. 运行时代码仓库停止在完成报告，不得直接修改 `../livemask-docs` 或运行 task-sync
+    来关闭跨仓库任务；由 `livemask-docs` 窗口依据完成报告更新 MVP、tasks、handoff 和契约索引。
+12. 在 PR 描述中说明影响范围、验证结果、回滚策略和未完成项。
+13. 只有 `dev` 合并到 `main` 才能触发远程预发布 CI/CD；只有 release 才能触发生产 CI/CD。
 
 ## 4. 任务-仓库匹配门禁
 
@@ -104,6 +108,16 @@ Backend/API/DB/Go 字样，并不代表 Admin/Website/App 窗口可以写 Backen
 | `livemask-nodeagent` | Go NodeAgent runtime、agent config/cache/reporting、agent tests | Backend API handlers, Admin/Website/App UI |
 | `livemask-ci-cd` | Compose, workflows, runtime scripts, smoke tests | Product code unless explicitly scoped to CI templates |
 | `livemask-docs` | Contracts, tasks, handoff docs, rules, design source | Runtime implementation code |
+
+### 5.1 Docs 台账写入边界
+
+`livemask-docs` 拥有跨仓库任务台账和文档状态的唯一写入权。除非当前仓库就是
+`livemask-docs`，否则不得写入 `../livemask-docs` 下的 MVP、tasks、handoff、
+contract index、AI rules 或 `.cursorrules`。
+
+运行时代码仓库完成任务后，只能在完成报告中交付 `TASK ID`、repository、task branch
+commit、dev merge commit、remote dev ref、validation on dev 和 blockers 给 docs 窗口。
+非 docs 窗口不得运行 task-sync 来更新或关闭跨仓库任务台账。
 
 如果一个任务需要 Backend 和 Admin 同时改：
 
