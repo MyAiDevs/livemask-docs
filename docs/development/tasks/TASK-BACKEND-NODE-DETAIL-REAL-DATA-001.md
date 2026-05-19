@@ -1,13 +1,13 @@
 # TASK-BACKEND-NODE-DETAIL-REAL-DATA-001 — Backend Node Detail Real Data Validation
 
-- 状态：Completed for logs/metrics; protocol capability blocker retained
+- 状态：Completed
 - Owner：Backend
 - 创建日期：2026-05-19
 - 目标完成日期：2026-05-21
 - 主影响仓库：`livemask-backend`
 - 受影响仓库：`livemask-admin`, `livemask-docs`
 - 关联里程碑：Phase 4 Admin 后台核心页面
-- Backend remote dev ref：`1c1ebf4`
+- Backend remote dev ref：`1c1ebf4` (logs/metrics), `68f04ac` (protocol capabilities)
 - Reconciled：2026-05-20
 
 ## 1. Background
@@ -38,14 +38,15 @@ git diff --check PASS
 ```
 
 `GET /admin/api/v1/protocol/nodes/{node_id}/capabilities` 不在本次完成范围内，
-仍由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 作为 blocker 跟踪。
+已由后续 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` 完成，Backend remote dev ref
+为 `68f04ac`。
 
 **任务目标不是"接口存在"**，而是确认：
 1. 对于数据库中存在的 node_id，logs 与 metrics-summary 端点能返回真实数据
 2. 权限检查正确（401/403 返回标准错误码）
 3. 空数据时返回明确原因（如 `node_not_found`, `no_logs_available`, `no_capability_report`）
 4. 数据源链路上报完整：NodeAgent -> Backend -> Admin
-5. Protocol capabilities 真实数据另由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 关闭 blocker
+5. Protocol capabilities 真实数据已由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` 关闭 blocker
 
 ## 2. Scope
 
@@ -232,7 +233,7 @@ git diff --check PASS
 
 | 仓库 | 影响 | 必须修改 | 验证方式 |
 | --- | --- | --- | --- |
-| `livemask-backend` | 实现/验证 logs 与 metrics-summary 端点在真实 node_id 下有数据，权限正确，错误码规范；capabilities 另由 protocol capability blocker 跟踪 | 是 | Backend API tests + manual curl |
+| `livemask-backend` | 实现/验证 logs、metrics-summary 与 protocol capabilities 端点在真实 node_id 下有数据，权限正确，错误码规范 | 是 | Backend API tests + manual curl |
 | `livemask-admin` | 更新 README，修复 contract 路径，添加空数据/权限测试 | 是 | UI smoke + unit tests |
 | `livemask-docs` | 修复 LOG_METRIC_PIPELINE_CONTRACT 路径不一致 | 是 | `bash scripts/check-docs.sh` |
 | `livemask-nodeagent` | NodeAgent 上报 protocol capabilities 和 metrics | 后续 TASK | N/A |
@@ -254,7 +255,7 @@ git diff --check PASS
   - [x] 接通 `/admin/api/v1/nodes/{node_id}/logs`
   - [x] 接通 `/admin/api/v1/nodes/{node_id}/metrics-summary`
   - [x] 验证 Backend 全量测试、vet、build、diff check
-  - [ ] `node_protocol_capabilities` / capabilities route wiring 仍由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 跟踪
+  - [x] `node_protocol_capabilities` / capabilities route wiring 已由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` 完成
 
 ## 7. Validation Plan
 
@@ -270,7 +271,7 @@ git diff --check PASS
 - [x] Backend reconcile validation: `go vet ./...` PASS
 - [x] Backend reconcile validation: `go build ./...` PASS
 - [x] Backend reconcile validation: `git diff --check` PASS
-- [ ] Protocol capabilities endpoint remains blocked by `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE`
+- [x] Protocol capabilities endpoint unblocked by `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` at Backend remote dev ref `68f04ac`
 
 ## 8. Risks
 
@@ -289,7 +290,7 @@ git diff --check PASS
 ## 10. Completion Evidence
 
 - PR：Backend 端提交 + Admin 端提交
-- Commit：Backend remote dev ref `1c1ebf4`
+- Commit：Backend remote dev ref `1c1ebf4` (logs/metrics) and `68f04ac` (protocol capabilities)
 - Test output：`go test ./... -count=1` PASS; `go vet ./...` PASS; `go build ./...` PASS; `git diff --check` PASS
 - 文档链接：`docs/development/tasks/TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md`
 - API 验证：
@@ -304,8 +305,8 @@ curl -H "Authorization: Bearer $ADMIN_TOKEN" \
   "http://localhost:8080/admin/api/v1/protocol/nodes/{real_node_id}/capabilities"
 ```
 
-Note: the capabilities curl remains a follow-up blocker until
-`TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` is completed.
+Note: the capabilities endpoint blocker was closed by
+`TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` at Backend remote dev ref `68f04ac`.
 
 ## 11. Follow-up
 

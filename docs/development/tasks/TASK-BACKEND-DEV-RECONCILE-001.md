@@ -34,16 +34,18 @@ git diff --check PASS
 
 以下任务仍为 blocker，不随本 TASK 关闭：
 
-- `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE`
 - `TASK-BACKEND-I18N-001`
+
+2026-05-20 后续补救：`TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001`
+已由 Backend 窗口独立完成并合入 `origin/dev`，remote dev ref `68f04ac`。
 
 ## 2. 受影响的 TASK
 
 | TASK | 当前状态 | 问题 | 补救要求 |
 | --- | --- | --- | --- |
 | TASK-BACKEND-APP-RELEASE-LATEST-001 | ✅ Completed | `GET /api/v1/app/releases/latest` 已恢复到 Backend dev；remote dev ref `1c1ebf4` | Website/downloads 可进入真实 Backend 集成 smoke |
-| TASK-BACKEND-NODE-DETAIL-REAL-DATA-001 | ✅ Completed / partial capability blocker retained | `/admin/api/v1/nodes/{id}/logs` 和 `/admin/api/v1/nodes/{id}/metrics-summary` 已接通；protocol capabilities 仍由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 跟踪 | Admin Node Detail logs/metrics 可对接真实数据；capabilities 不标 completed |
-| TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001 | ❌ BLOCKED / not completed | Capability wiring 仍未完成 reconcile；不允许使用 verified 标签 | 继续由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 跟踪 |
+| TASK-BACKEND-NODE-DETAIL-REAL-DATA-001 | ✅ Completed | `/admin/api/v1/nodes/{id}/logs` 和 `/admin/api/v1/nodes/{id}/metrics-summary` 已接通；protocol capability wiring 后续已由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` 完成 | Admin Node Detail logs/metrics/capabilities 可进入真实集成 smoke |
+| TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001 | ✅ Completed / reconciled | Capability heartbeat ingest、DB persistence、Admin read APIs 已合入 Backend dev；remote dev ref `68f04ac` | CI/CD 增加 protocol capability smoke；rollout eligibility/gating 另行跟踪 |
 | TASK-BACKEND-I18N-001 | ❌ MISSING / next phase | dev 上无 `message_key` 或 i18n error response 实现 | 仍为后续 blocker，本次 reconcile 不关闭 |
 
 ## 3. 补救步骤
@@ -68,12 +70,12 @@ git diff --check PASS
 | 仓库 | 影响 |
 | --- | --- |
 | `livemask-website` | `/download` 和 release-control smoke 需要 `TASK-BACKEND-APP-RELEASE-LATEST-001` 修复后才能跑真实集成 |
-| `livemask-admin` | Admin Node Detail logs/metrics 已解除 Backend route blocker；protocol capabilities 仍等待 Backend capability wiring blocker |
+| `livemask-admin` | Admin Node Detail logs/metrics/protocol capabilities 已解除 Backend route blocker；rollout gating 仍为后续 protocol stability 任务 |
 | `livemask-ci-cd` | 对应 smoke 需要 Backend 端点 live 后才能 pass |
 | `livemask-docs` | 本 TASK 维护核验状态和补救进度 |
 
 ## 6. Follow-up
 
 - 本 TASK 已关闭，引用 Backend remote dev ref `1c1ebf4`。
-- `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 继续保持 blocker。
+- `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001` 已独立关闭，引用 Backend remote dev ref `68f04ac`。
 - `TASK-BACKEND-I18N-001` 继续保持 blocker / next phase。
