@@ -89,18 +89,20 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-CICD-CLOSED-LOOP-BATCH-001.md](TASK-CICD-CLOSED-LOOP-BATCH-001.md) — ⚠️ partial / evidence_missing
 - [TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md](TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md) — ⚠️ partial / evidence_missing
 - [TASK-CICD-DEV-MERGE-GUARD-001.md](TASK-CICD-DEV-MERGE-GUARD-001.md) — ✅ Done (dev evidence present)
+- [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
 
-### 跨仓库实现任务（⚠️ evidence_missing — 需各 repo Cursor 补 dev merge evidence）
+### 跨仓库实现任务
 
 | TASK | 当前状态 | Dev Merge Evidence | Remote dev ref |
 |------|---------|------------------|---------------|
+| [TASK-APP-INTEGRITY-RECONCILE-001.md](TASK-APP-INTEGRITY-RECONCILE-001.md) | ✅ Completed (dev-contained, not all-platform) | ✅ `0bf40ee` (via guard) | ✅ `origin/dev` |
 | [TASK-BACKEND-USER-GROWTH-REVENUE-001.md](TASK-BACKEND-USER-GROWTH-REVENUE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-USER-GROWTH-REVENUE-001.md](TASK-ADMIN-USER-GROWTH-REVENUE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md](TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-WEBSITE-REFERRAL-LANDING-001.md](TASK-WEBSITE-REFERRAL-LANDING-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md](TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md) | ✅ completed (remediated via TASK-WEBSITE-HELP-ARTICLE-001) | ❌ original not merged | ❌ original not merged |
 | [TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md](TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
-| [TASK-APP-RELEASE-CHECK-REGRESSION-001.md](TASK-APP-RELEASE-CHECK-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
+| [TASK-APP-RELEASE-CHECK-REGRESSION-001.md](TASK-APP-RELEASE-CHECK-REGRESSION-001.md) | ✅ dev-contained (verified by TASK-APP-INTEGRITY-RECONCILE-001) | ⚠️ platform blockers retained | ⚠️ platform blockers retained |
 | [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md) | ❌ MISSING / reconcile required | ❌ missing (never merged) | ❌ missing |
 | [TASK-ADMIN-APP-RELEASE-001.md](TASK-ADMIN-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-RELEASE-CONTROL-IA-001.md](TASK-ADMIN-RELEASE-CONTROL-IA-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
@@ -244,13 +246,21 @@ PR order:
 - TASK-NODEAGENT-GEOIP-006 — NodeAgent heartbeat contract extension
 - TASK-NODEAGENT-GEOIP-007 — NodeAgent compatibility gate
 - TASK-NODEAGENT-GEOIP-008 — NodeAgent runtime config integration
-- TASK-APP-GEOIP-001 — App GeoIP manifest client、delta/full package sync、cache、LKG、fallback ✅
-- TASK-APP-GEOIP-LOOKUP-001 — App GeoIP lookup engine
+- TASK-APP-GEOIP-001 — App GeoIP manifest client、delta/full package sync、cache、LKG、fallback ✅ (dev-contained, verified TASK-APP-INTEGRITY-RECONCILE-001)
+- TASK-APP-GEOIP-LOOKUP-001 — App GeoIP lookup engine ✅ (dev-contained, verified TASK-APP-INTEGRITY-RECONCILE-001)
 - TASK-ADMIN-GEOIP-001 — Admin GeoIP source/database/rollout UI ✅
 - TASK-CICD-GEOIP-001 — GeoIP update and rollback smoke ✅
 - TASK-CICD-GEOIP-HARDENING-002 — CI/CD signature/rate-limit/delta-fallback/source-hardening smoke
-- TASK-APP-NODE-REGION-001 — App 使用 Backend 字段和本地 GeoIP cache 安全展示 region/degraded 状态
+- TASK-APP-NODE-REGION-001 — App 使用 Backend 字段和本地 GeoIP cache 安全展示 region/degraded 状态 ✅ (dev-contained, verified TASK-APP-INTEGRITY-RECONCILE-001)
 - [TASK-DOC-GEOIP-CONTRACT-002] — GeoIP source hardening 契约（本文档）
+
+## App Integrity Reconcile 后续任务
+
+| TASK | Repo | Scope | Status |
+| --- | --- | --- | --- |
+| [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001] | `livemask-app` | Fix sentry_flutter Kotlin JVM target compatibility for Android debug/release builds | Open |
+| [TASK-APP-IOS-CODESIGN-ENV-001] | `livemask-app` | Resolve Sequoia xattr/codesign and signing Identity for iOS device builds | Open |
+| [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001] | `livemask-ci-cd` | Fix dev-merge-guard.sh path handling for spaces in "New project 2" directory name | Open |
 
 ## Content System（统一内容系统）任务
 
