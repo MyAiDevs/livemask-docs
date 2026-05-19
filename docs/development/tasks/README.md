@@ -125,7 +125,8 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-ADMIN-JOB-CENTER-UI-001.md](TASK-ADMIN-JOB-CENTER-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `99d7360` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md](TASK-ADMIN-SYSTEM-SETTINGS-UI-001.md) | ✅ Completed (Backend API/smoke follow-up retained) | ✅ `e541485` (via guard) | ✅ `e541485` |
 | [TASK-ADMIN-TEST-EXPANSION-001.md](TASK-ADMIN-TEST-EXPANSION-001.md) | ✅ Completed | ✅ `0698238` (via guard) | ✅ `0698238` |
-| [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md) | ✅ Completed (syntax + wiring; runtime blocked) | ✅ `63dcdaa` (via guard) | ✅ `63dcdaa` |
+| [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md) | ✅ Completed (runtime fixed by follow-up) | ✅ `63dcdaa` + runtime fix `1f630f0` | ✅ `1f630f0` |
+| [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md) | ✅ Completed | ✅ `1f630f0` (via guard) | ✅ `1f630f0` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
