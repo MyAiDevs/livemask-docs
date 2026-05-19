@@ -116,6 +116,7 @@
 | TASK-CICD-CLOSED-LOOP-BATCH-001 | Dashboard、System Settings/Scheduler、App Release、Observability、I18N、Jobs Hardening smoke 集成 | CI-CD / QA | Backend/Admin/App/Job Service contracts |
 | TASK-DOC-CONTROL-PLANE-001 | App / NodeAgent / Job Service / Backend / Admin 控制平面闭环架构 | Docs / All | Job Center / GeoIP / NodeAgent release docs |
 | [TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md](tasks/TASK-DOC-JOB-QUEUE-MATRIX-001-job-queue-usage-matrix.md) | 全局队列使用矩阵：定义哪些场景必须走 Job Service 队列，哪些可同步执行，DB/Redis 边界和 Backend/NodeAgent 开发门禁 | Docs / Backend / NodeAgent / Job Service | TASK-DOC-CONTROL-PLANE-001 |
+| [TASK-BACKEND-DEV-RECONCILE-001.md](tasks/TASK-BACKEND-DEV-RECONCILE-001.md) | Backend dev 补救追踪：恢复 endpoint、route wiring、capability wiring | Docs / Backend | 无 |
 
 ## 3. 当前 Roadmap 状态
 
@@ -130,7 +131,7 @@
 - GeoIP 数据库更新、NodeAgent 同步与 App 增量同步契约（TASK-DOC-GEOIP-SYNC-001）— 已升级为 Ready
 - GeoIP Source Hardening 契约（TASK-DOC-GEOIP-CONTRACT-002）— Source allowlist、storage abstraction、manifest signature、rate limit、delta/full strategy、unknown format、MaxMind tar.gz、安全边界 + 各仓库实现状态
 - Content System 统一契约（TASK-DOC-CONTENT-001）— content_items 模型、6 种内容类型、Blog/App/Admin API、跳转规则
-- I18N Localization（TASK-DOC-I18N-001）— `zh-CN` 默认、`en-US` fallback、Backend `message_key`、Content locale、Website SEO、Admin/App 本地化
+- I18N Localization（TASK-DOC-I18N-001）— `zh-CN` 默认、`en-US` fallback、Backend `message_key`、Content locale、Website SEO、Admin/App 本地化。⚠️ **Backend 实现为 MISSING / next phase** — dev 无 `message_key`/i18n error response
 - Protocol Capability Sync（TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001）— NodeAgent 上报真实协议支持，Backend 聚合 eligibility，Admin 显示支持状态并阻断 unsafe rollout
 - Protocol Endpoint Stability Gate（TASK-DOC-PROTOCOL-STABILITY-GATE-001）— NodeAgent 多协议多端点、Backend-owned App reconnect hint、Admin Node Detail 真接口、LKG/rollback 和 QA/CI 稳定性门禁
 - Control Plane Closed Loop 架构（TASK-DOC-CONTROL-PLANE-001）— Admin 意图、Backend 授权、Job Service 队列执行、NodeAgent/App 回传、Admin 展示和回滚
@@ -157,6 +158,11 @@
 > 列表中的 ✅ Done / ✅ Verified dev-local 仅说明 dev-local 验证通过，
 > **不代表 task 分支已合并到 dev**。
 > 缺少 `dev merge commit` 的任务已标注 ⚠️ evidence_missing。|
+>
+> **Process Violation — 2026-05-20**: Website dev (`livemask-website`) 曾出现手工
+> merge `task/*` 到 `dev` 的历史记录（`dc48f1f`、`1ff9190` 等直接 merge task branch
+> 到 dev）。后续所有补救任务必须使用 `livemask-ci-cd/scripts/dev-merge-guard.sh` 执行合并。
+> 禁止直接 git merge task/* → dev。|
 
 | Domain | TASK | Repo | Status | Evidence / Notes | Next Window |
 | --- | --- | --- | --- | --- | --- |
@@ -168,23 +174,25 @@
 | Backend Smoke Fix | TASK-BACKEND-OBSERVABILITY-SMOKE-FIX-001 | `livemask-backend` | ✅ Done | Logs family routes fixed, `/admin/api/v1/observability/sentry*` aliases registered, `system_settings` table split from configcenter. | CI/CD rerun smoke to full PASS. |
 | CI/CD Observability | TASK-CICD-SENTRY-CONFIG-SMOKE-001 | `livemask-ci-cd` | ✅ Passed | Backend health, Admin login, App-facing Sentry config disabled response, forbidden-field check, Admin Sentry settings, RBAC, and secret leak scan all pass. App fallback evidence is an expected SKIP because CI/CD does not run App runtime tests. | Admin and App may rely on Sentry config contract. |
 | CI/CD Observability | TASK-CICD-OBSERVABILITY-SMOKE-001 | `livemask-ci-cd` | ✅ Passed | All 23 sections executed with 0 failures. Backend/Job Service/NodeAgent reachable; all `/metrics` endpoints expose required metrics; NodeAgent log upload returns 202; global/agent/payment/notification/audit logs return 200; Sentry summary/events/performance return 200; RBAC 401/403 checks pass; secret leak scan has 0 leaks. Expected SKIPs: cosmetic Job Service health JSON response and payment order logs when no order data exists. | Unlock Admin Observability UI and keep CI regression in `scripts/smoke.sh`. |
-| Job Service Observability | TASK-JOBS-OBSERVABILITY-INGEST-001 | `livemask-job-service` | ✅ Done / Reconciled | `observability_log_ingest` executor, 16 tests, Backend executor path, forbidden key rejection, secret leak scan. Reconciled on `task/TASK-JOBS-OBSERVABILITY-INGEST-001-reconcile` (`1f999c3`), merged `fad4982`, validation on dev PASS. Was missing on origin/dev despite docs claiming Done. | Verify Backend async queue path in CI/CD. |
+| Job Service Observability | TASK-JOBS-OBSERVABILITY-INGEST-001 | `livemask-job-service` | ✅ Pass (Reconciled) | `observability_log_ingest` executor, 16 tests, Backend executor path, forbidden key rejection, secret leak scan. Reconciled on `task/TASK-JOBS-OBSERVABILITY-INGEST-001-reconcile` (`1f999c3`), merged `fad4982`, validation on dev PASS: `go test ./... -count=1` PASS, `go vet ./...` PASS, `go build ./cmd/job-service` PASS, `git diff --check` PASS. | Verify Backend async queue path in CI/CD. |
 | NodeAgent Observability | TASK-NODEAGENT-METRICS-LOGS-001 + TASK-NODEAGENT-OBSERVABILITY-UPLOAD-INTEGRATION-001 + TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001 | `livemask-nodeagent` | ✅ Verified dev-local | Local log queue, HMAC upload client, `/metrics`, `/agent/status` observability block implemented. HMAC headers/signature, `batch_id`, retry/backoff/exhaustion/overflow, redaction/truncation all verified. Fixed `nodeSecret` redaction by normalizing sensitive key map entry to lowercase `nodesecret`. Upload client now accepts Backend `202 Accepted` and current response shape `{accepted:true, accepted_count}`; dev-local NodeAgent log shows `log upload success` after targeted restart. | CI/CD observability smoke regression + Admin logs UI. |
 | App Sentry | TASK-APP-SENTRY-OBSERVABILITY-001 + TASK-APP-SENTRY-RUNTIME-CONFIG-001 | `livemask-app` | ✅ Done / ⚠️ Platform build blockers | Backend runtime config client/model/cache/service/providers and initialization flow integrated. Backend `enabled:false` is authoritative and no longer falls through to cache or dart-define; dart-define remains only Backend-unreachable fallback. Forbidden Sentry secrets dropped at parse time. `flutter analyze` PASS, `flutter test` 429 PASS, observability config tests 28 PASS, macOS ARM64 and web builds PASS. iOS simulator blocked by pre-existing Sequoia xattr/codesign issue; Android debug blocked by pre-existing sentry_flutter Kotlin mismatch. | CI/CD Sentry config smoke regression + fix Android/iOS environment/dependency blockers. |
 | App Ops Batch | TASK-APP-CLIENT-OPS-BATCH-001 | `livemask-app` | ✅ Done | Release check, i18n, Sentry base, content feed, GeoIP lookup, node region badge; analyze/test pass. | Full-platform build matrix + Backend integration follow-ups. |
 | Protocol Capability | TASK-NODEAGENT-PROTOCOL-CAPABILITY-001 | `livemask-nodeagent` | ✅ Done | Capabilities derived from local protocol registry and included in heartbeat/status. | Backend capability storage and Admin display. |
-| Protocol Capability Heartbeat | TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001 | `livemask-backend` | ✅ Verified dev-local | `nodeService.SetCapabilityProcessor(protocolService)` now forwards NodeAgent heartbeat `protocol_capabilities` into `node_protocol_capabilities`; `connectService.SetCapabilityProvider(protocolService)` now enables connect_config gating from stored capability state. After targeted Backend/NodeAgent restart, node `4877168a-8c89-436e-9209-e265faf41bd6` has 8 capability rows: mixed/socks/tun implemented, hysteria2 app_pending, vless_reality/trojan/shadowtls/wireguard reserved. | Admin Node Detail can display real protocol capabilities. |
-| Admin Node Detail Observability | TASK-ADMIN-NODE-DETAIL-OBSERVABILITY-FIX-001 + TASK-BACKEND-NODE-DETAIL-REAL-DATA-001 | `livemask-admin` / `livemask-backend` | ✅ Verified dev-local | Node Detail logs now accept Backend `entries`, metrics uses `/nodes/{node_id}/metrics-summary`, and protocol capabilities uses `/protocol/nodes/{node_id}/capabilities` instead of stale mock-only route. Backend real-data endpoints return 200 for the local node and 404 `NODE_NOT_FOUND` for missing nodes across logs, metrics summary, and protocol capabilities. MetaMask extension noise is silenced before Next dev overlay. | Refresh Admin page and keep CI/UI smoke as regression. |
+| Protocol Capability Heartbeat | TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001 | `livemask-backend` | ❌ MISSING | Code changes exist on task branch but not confirmed merged to dev or live on `origin/dev`. Setting MISSING — no `verified` label allowed until endpoint is live and guard-merged. | Admin Node Detail cannot display real protocol capabilities until Backend dev wiring is restored. |
+| Admin Node Detail Observability | TASK-ADMIN-NODE-DETAIL-OBSERVABILITY-FIX-001 + TASK-BACKEND-NODE-DETAIL-REAL-DATA-001 | `livemask-admin` / `livemask-backend` | ⚠️ PARTIAL | Admin-side (TASK-ADMIN-NODE-DETAIL-OBSERVABILITY-FIX-001) handles exist and accept Backend `entries`, metrics, and capabilities. Backend-side (TASK-BACKEND-NODE-DETAIL-REAL-DATA-001) handlers exist but **routes not wired** on Backend dev — `/nodes/{node_id}/logs`, `/nodes/{node_id}/metrics-summary`, and `/protocol/nodes/{node_id}/capabilities` are not live. | Backend dev must wire three routes into main router and confirm live on dev. |
 | Protocol Rollout | TASK-JOBS-PROTOCOL-ENDPOINT-001 | `livemask-job-service` | ✅ Done | Protocol rollout/rollback executor with waves, locks, retry/backoff, redacted events. | Backend executor endpoints and Admin rollout UI. |
 | Protocol Stability Gate | TASK-DOC-PROTOCOL-STABILITY-GATE-001 | `livemask-docs` | ✅ Ready | Implementation gate, Admin real API list, Backend-owned reconnect hint rule, Cursor handoff. | Backend/Admin/NodeAgent/App/CI-CD stability tasks. |
 | App Release | TASK-DOC-APP-RELEASE-DISTRIBUTION-001 | `livemask-docs` | ✅ Ready | App release contract covers S3/OSS/COS/GCS/local storage, Backend metadata, App update-check, Website downloads, and Admin Release Control IA where App Release and NodeAgent Release share one Operations menu/page while keeping separate tabs, permissions, APIs, data models, and audit events. | Backend/Admin/App/Website/CI-CD implementation; Admin should use `/admin/releases` overview with `/admin/app/releases` and `/admin/nodeagent/releases` deep links. |
-| App Release | TASK-BACKEND-APP-RELEASE-LATEST-001 | `livemask-backend` | ✅ Done | Branch `task/TASK-BACKEND-APP-RELEASE-LATEST-001`, commit `449786b`. Added `GET /api/v1/app/releases/latest` with optional `channel` and `platform` filters, public-safe response types, latest published release lookup, artifact listing, input validation, and 14 apprelease tests. Response excludes sensitive fields such as `storage_key`, `created_by`, `updated_by`, `target_regions`, and `target_locales`. `go test ./internal/apprelease/...`, `go vet ./internal/apprelease/...`, `go build ./internal/apprelease/...`, and `git diff --check` pass. | Website downloads/release-control regression can move from Backend-blocked to real integration smoke. |
+| App Release | TASK-BACKEND-APP-RELEASE-LATEST-001 | `livemask-backend` | ❌ MISSING / reconcile required | Endpoint `GET /api/v1/app/releases/latest` exists on task branch `task/TASK-BACKEND-APP-RELEASE-LATEST-001` (`449786b`) but **never merged to dev** and not confirmed live on `origin/dev`. Backend dev must restore endpoint and pass guard merge. | Website/downloads blocked on Backend dev reconcile; see TASK-BACKEND-DEV-RECONCILE-001. |
 | App Release | TASK-ADMIN-APP-RELEASE-001 | `livemask-admin` | ✅ Done | Branch `task/TASK-ADMIN-APP-RELEASE-001`, commit `5729c2a`. Added App Release types/meta helpers, real-first API client, safe mock seed, React Query hooks, `/admin/app/releases` list page, and `/admin/app/releases/{releaseId}` detail page with metadata cards, artifact list, timeline, status filters, expand/collapse, confirmations, zh-CN default UI, `MockBadge`, and `app_release:read/write` RBAC. | Backend App Release APIs and CI/CD release-control smoke remain required for real end-to-end publish flow. |
 | App Release | TASK-ADMIN-RELEASE-CONTROL-IA-001 | `livemask-admin` | ✅ Done | Branch `task/TASK-ADMIN-RELEASE-CONTROL-IA-001`, commit `fea9f48`. Added shared Operations `Releases` sidebar entry, `/admin/releases` overview with App/NodeAgent tabs, separate App `app_release:*` and NodeAgent `node:read` permissions, preserved deep links `/admin/app/releases` and `/admin/nodeagent/releases`, and added tabs UI component. | Release Control IA is ready for Backend real data and CI/CD smoke. |
 | App Release | TASK-JOBS-APP-RELEASE-001 | `livemask-job-service` | ✅ Done | Branch `task/TASK-JOBS-APP-RELEASE-001`, commit `5f87d6d`. Added executors for `app_release_artifact_verify`, `app_release_publish`, `app_release_revoke`, `app_release_storage_verify`, `app_release_adoption_aggregate`, and `website_downloads_refresh`. Jobs call Backend internal executor APIs, use owner domain `app_release`, reject storage credential/private-key params, and pass `go test ./...`, `go vet ./...`, `go build ./cmd/job-service`, and `git diff --check`. | Backend must implement `/internal/job-executors/app-release/*` executor APIs; CI/CD release-control smoke can verify once Backend APIs exist. |
 | App Release | TASK-APP-RELEASE-CHECK-REGRESSION-001 | `livemask-app` | ✅ Done / ⚠️ platform blockers | App release-check regression aligned with `APP_RELEASE_DISTRIBUTION_CONTRACT.md` section 7.1. Security checks pass: `download_url` is not sent to Sentry breadcrumbs, signed query strings are only passed to `launchUrl`, forced update uses non-dismissible `PopScope(canPop:false)`, optional update can be dismissed, sha256/signature stay local, and release notes use locale from `localeProvider`. `flutter analyze` PASS, `flutter test` 401 PASS, macOS universal build PASS with arm64/x86_64 slices, iOS simulator build PASS, and web build PASS. iOS device is blocked by signing/physical-device requirements. Android debug/release remain blocked by pre-existing `sentry_flutter` Kotlin language version issue; Windows/Linux require Parallels VMs. `PlatformInfo._hostArchitecture()` uses compile-time `APP_ARCH` on iOS/Android, so release pipelines must inject it correctly. | Keep Backend `GET /api/v1/app/releases/check` available or mock-compatible; next App tasks are User Growth Revenue entry and Growth Reward Push regression. |
 | Website Referral Landing | TASK-WEBSITE-REFERRAL-LANDING-001 | `livemask-website` | ✅ Done | Branch `task/TASK-WEBSITE-REFERRAL-LANDING-001`, commit `c778c5d`. RegisterPage reads `?ref=CODE`, sanitizes to uppercase alphanumeric, auto-fills the invitation code input, shows a lightweight zh-CN/en-US referral prompt, hides inviter identity, and prevents open redirect behavior. | CI/CD growth revenue smoke should verify `/register?ref=CODE` attribution preservation. |
-| Website Public Growth | TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001 | `livemask-website` | ✅ Done | Original branch `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001`, commit `9d8c144`. Downloads page consumes `GET /api/v1/app/releases/latest` with safe mock fallback, zh-CN default route and hreflang are implemented, Blog pages use Content APIs, `help_article` and `release_note` are supported, and build-time sitemap/RSS generation avoids per-request CPU spikes. `tsc -b`, `npm run build`, sitemap/RSS generation, mock mode, and `git diff --check` pass. | Backend latest endpoint is now implemented by `TASK-BACKEND-APP-RELEASE-LATEST-001`; CI/CD should run Website downloads/sitemap/RSS real integration smoke. |
+| Website Public Growth | TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001 | `livemask-website` | ✅ Completed | Original branch `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001`, commit `9d8c144`. All subtasks PASS: Downloads ✅, I18N ✅, Blog ✅, SEO rebuild ✅, Help article rendering ✅ (via TASK-WEBSITE-HELP-ARTICLE-001 merged at `9ce1a88`). Remediation merged through `dev-merge-guard.sh`. `tsc -b`, `npm run build`, sitemap/RSS generation, mock mode, and `git diff --check` pass. | CI/CD should run Website downloads/sitemap/RSS real integration smoke. |
+| Website Help Article | TASK-WEBSITE-HELP-ARTICLE-001 | `livemask-website` | ✅ Completed | Branch `task/TASK-WEBSITE-HELP-ARTICLE-001`, commit `93f3cab`. `/support` list page, `/:locale/support/:slug` detail page, category filtering, 404, SEO metadata, Markdown rendering, mock mode. Dev merge commit `9ce1a88`, remote `origin/dev`. Merged via integration branch through `dev-merge-guard.sh`. All validation PASS. | CI/CD should add website help-article smoke once real Content API data is deployed. |
+
 | Website Release Control | TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001 | `livemask-website` | ✅ Verified / ready for real integration smoke | Regression branch `task/TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001`, commit `5edaada`. Verified `/download`, `GET /api/v1/app/releases/latest` client integration, latest stable per platform, release notes URL typing, zh-CN default / en-US fallback, hreflang, build-time sitemap/RSS, production `VITE_API_MOCK_MODE=false`, no hardcoded artifact URL, no signed URL query exposure, and no per-request sitemap/RSS generation. `tsc -b`, `npm run build`, and `git diff --check` pass. | Backend latest endpoint is now implemented by `TASK-BACKEND-APP-RELEASE-LATEST-001`; run real integration smoke against deployed Backend. |
 | System Settings / Scheduler | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 | `livemask-docs` | ✅ Ready | GeoIP credentials, IM provider settings, report templates, subscription config, scheduler CRUD. | Backend/Admin/Job Service implementation and smoke. |
 | User Growth Revenue | TASK-DOC-USER-GROWTH-REVENUE-001 | `livemask-docs` | ✅ Ready | Contract defines payout methods, referral links, promotion/sponsor reward rules, earnings ledger, settlement reports, and revenue feedback. | Backend implementation starts with `TASK-BACKEND-USER-GROWTH-REVENUE-001`. |
@@ -223,6 +231,50 @@ Current priority order:
 | TASK-CICD-GEOIP-001 | livemask-ci-cd | GeoIP update and rollback smoke（8 域 27 节） | ✅ |
 | TASK-CICD-GEOIP-CREDENTIALS-001 | livemask-ci-cd | GeoIP credentials smoke（15 域） | ✅ |
 
+### Admin 实现状态（livemask-admin）
+
+> livemask-admin 整体状态：**PARTIAL** — 核心路由已收敛、Growth 和 App Release 通过验证，
+> 但 System Settings、Job Center、NodeAgent Release 深度链接、Protocol Capability UI、
+> Sentry Settings 仍有缺口。缺少 `TASK-ADMIN-TEST-EXPANSION-001` 系统测试覆盖。
+> 缺口任务已登记为独立 TASK 条目。
+
+#### 已完成（TASK-ADMIN-SIDEBAR-ROUTES-RECONCILE-001）
+
+| 项目 | 值 |
+| --- | --- |
+| **TASK** | TASK-ADMIN-SIDEBAR-ROUTES-RECONCILE-001 |
+| **Status** | ✅ Completed |
+| **task branch commit** | `850b9e9` |
+| **dev merge commit** | `b45def0` |
+| **remote dev ref** | `b45def0` |
+
+#### 缺口任务 / 待开启
+
+| TASK | 目标 | Owner | 依赖 |
+| --- | --- | --- | --- |
+| TASK-ADMIN-SYSTEM-SETTINGS-UI-001 | Admin System Settings 设置页面（GeoIP 凭证、IM Provider、简报模板、订阅配置） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
+| TASK-ADMIN-JOB-CENTER-UI-001 | Admin Job Center 页面（scheduler CRUD、job run status、execution logs） | Admin | TASK-DOC-ADMIN-SYSTEM-SETTINGS-001 |
+| TASK-ADMIN-NODEAGENT-RELEASE-UI-001 | Admin NodeAgent Release 深度链接 UI（/admin/releases、NodeAgent tab、deep link 兼容） | Admin | TASK-DOC-APP-RELEASE-DISTRIBUTION-001 |
+| TASK-ADMIN-PROTOCOL-CAPABILITY-UI-001 | Admin Protocol Capability 页面（节点真实协议能力展示、unsafe rollout 阻断提示） | Admin | TASK-DOC-PROTOCOL-CAPABILITY-SYNC-001 |
+| TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001 | Admin Sentry 设置路由/UI reconcile（guard 前旧分支 origin/task/TASK-ADMIN-SENTRY-SETTINGS-001，不允许直接 merge） | Admin | TASK-BACKEND-APP-SENTRY-CONFIG-001 |
+| TASK-ADMIN-TEST-EXPANSION-001 | Admin 系统测试覆盖：页面加载、RBAC、mock 数据、空状态、deep link 导航 | Admin / QA | 所有以上 Admin TASK |
+
+#### Admin 子域状态
+
+| 子域 | 状态 | 说明 |
+| --- | --- | --- |
+| Core Admin routes | **partial** | 侧边栏已收敛，部分路由已整合，仍有缺口页面 |
+| Growth | **pass** | TASK-ADMIN-USER-GROWTH-REVENUE-001 / TASK-ADMIN-GROWTH-NOTIFICATION-REGRESSION-001 已验证 |
+| App Release | **pass** | TASK-ADMIN-APP-RELEASE-001 / TASK-ADMIN-RELEASE-CONTROL-IA-001 已验证 |
+| Node detail real data UI | **pass** | TASK-ADMIN-NODE-DETAIL-OBSERVABILITY-FIX-001 已验证，backend route still under reconcile |
+| System Settings | **missing** | UI 未实现，仅契约完成 |
+| Job Center | **missing** | UI 未实现，仅契约完成 |
+| NodeAgent release deep link | **missing** | /admin/releases 概览已就绪，NodeAgent tab 和 deep link 未实现 |
+
+> **风险记录**：`origin/task/TASK-ADMIN-SENTRY-SETTINGS-001` 是 guard 前旧分支，
+> 不允许直接 merge。需要创建新分支 `task/TASK-ADMIN-SENTRY-SETTINGS-RECONCILE-001`，
+> 基于当前 `dev` 重建 Sentry 设置路由。
+
 ### 进行中
 
 - DOC-HYSTERIA2-CONTRACT-001 — Hysteria2 连接配置跨仓库契约（本文档）
@@ -256,7 +308,7 @@ Current priority order:
 | TASK | 目标 | Owner | 依赖 |
 | --- | --- | --- | --- |
 | [TASK-DOC-I18N-001-i18n-localization-contract.md](tasks/TASK-DOC-I18N-001-i18n-localization-contract.md) | 定义跨仓库 i18n 契约 | Docs | Content System / Website SEO / App UX |
-| TASK-BACKEND-I18N-001 | locale parser、error `message_key`、Content locale/fallback、user `preferred_locale` | Backend | TASK-DOC-I18N-001 |
+| TASK-BACKEND-I18N-001 ❌ MISSING / next phase | locale parser、error `message_key`、Content locale/fallback、user `preferred_locale`. Backend dev has no `message_key` or i18n error response on `dev`. | Backend | TASK-DOC-I18N-001 |
 | TASK-ADMIN-I18N-001 | Admin i18n layer、中文默认、语言切换、localized errors/toasts | Admin | TASK-BACKEND-I18N-001 |
 | TASK-WEBSITE-I18N-001 | Website 中文 SEO、locale routes/hreflang、Blog/Content locale、中文默认导航 | Website | TASK-BACKEND-I18N-001 |
 | TASK-APP-I18N-001 | Flutter localization、Profile language setting、localized errors、Content feed locale | App | TASK-BACKEND-I18N-001 |
