@@ -2,7 +2,7 @@
 
 > Owner: CI/CD / QA
 > Repo: `livemask-ci-cd`
-> Status: Completed (syntax + wiring), runtime smoke blocked by local runtime not running
+> Status: Completed (syntax + wiring), runtime regression pending
 > Task branch commit: `5e23b1c`
 > Dev merge commit: `63dcdaa`
 > Remote dev ref: `63dcdaa`
@@ -81,16 +81,27 @@ git diff --check PASS
 dev-merge-guard PASS
 ```
 
-Runtime smoke:
+Runtime smoke correction (2026-05-20):
 
 ```text
-BLOCKED / SKIP report: local dev runtime was not running.
-No docker compose down, volume deletion, or runtime teardown was performed.
+Docker dev-local runtime was actually running:
+- backend: http://127.0.0.1:18080 -> HTTP 200
+- admin: http://127.0.0.1:3001/admin -> HTTP 200
+- job-service: http://127.0.0.1:19191/healthz -> HTTP 200
+- nodeagent: http://127.0.0.1:19090/metrics -> HTTP 200
+
+Follow-up smoke attempt found runtime/script/API issues, not a stopped runtime:
+- system-settings-smoke.sh: BLOCKER "Backend not ready after 30 attempts"
+- release-control-smoke.sh: BLOCKER "Backend not ready after 30 attempts"
+- sentry-config-smoke.sh: BLOCKER "Backend not ready after 30 attempts"
+- jobs-smoke.sh: core Job Service checks PASS, but Admin job APIs returned 404 and RBAC checks failed because 404 was returned where 401/403 was expected
+- protocol-capability-smoke.sh: failed locally on macOS bash with `declare -A: invalid option`
 ```
 
 ## 6. Follow-up
 
-- Run the enhanced domain smoke scripts against a running dev-local or staging
-  runtime and update this task from "syntax + wiring" to "runtime PASS".
+- Fix the runtime smoke blockers above, then rerun the enhanced domain smoke
+  scripts against dev-local or staging and update this task from "syntax + wiring"
+  to "runtime PASS".
 - Ensure protocol capability smoke is rerun after Backend `68f04ac` is deployed
   into the runtime.
