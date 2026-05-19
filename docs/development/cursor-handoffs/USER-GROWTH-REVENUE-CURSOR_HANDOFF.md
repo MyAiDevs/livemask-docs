@@ -270,10 +270,10 @@ Build matrix:
 | Target | Status | Notes |
 | --- | --- | --- |
 | macOS arm64/x64 | PASS | Universal binary verified with `lipo -archs`. |
-| iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` built. |
+| iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` built; safe workdir path verified by `TASK-APP-IOS-CODESIGN-ENV-001`. |
 | Web | PASS | `build/web` built. |
 | Android debug/release | PASS | Kotlin language-version blocker resolved by `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; Android release signing key still needs production configuration. |
-| iOS device | BLOCKED | Requires signing and physical device. |
+| iOS device | BLOCKED | Requires Apple signing identity, Team ID, provisioning, and physical device. |
 | Windows/Linux | BLOCKED | Requires Parallels hosts. |
 
 Still required under broader user growth task:

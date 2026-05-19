@@ -258,8 +258,8 @@ Regression platform matrix:
 | --- | --- | --- |
 | macOS arm64 | PASS | Universal binary built; arm64 slice verified. |
 | macOS x64 | PASS | x86_64 slice verified through universal binary. |
-| iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` generated. |
-| iOS device | BLOCKED | Requires Xcode signing configuration and a physical device. |
+| iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` generated; safe workdir path verified by `TASK-APP-IOS-CODESIGN-ENV-001`. |
+| iOS device | BLOCKED | Requires Apple signing identity, Team ID, provisioning, and physical device. |
 | Web | PASS | `build/web` generated successfully. |
 | Android debug | PASS | Kotlin language-version blocker resolved by `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`. |
 | Android release | PASS | Build succeeds after Kotlin fix; real release signing key remains separate production-readiness work. |
