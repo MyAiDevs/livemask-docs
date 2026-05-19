@@ -372,13 +372,13 @@ Validation:
 - `flutter build web`: PASS.
 - iOS simulator build: BLOCKED by pre-existing macOS Sequoia xattr/codesign
   issue.
-- Android debug APK: BLOCKED by pre-existing Kotlin version mismatch in
-  `sentry_flutter`.
+- Android debug APK: PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`
+  (`livemask-app` dev merge `5ce5c6c`).
 
 Next:
 
-- App window should fix the Android Kotlin mismatch and iOS codesign/xattr
-  environment blocker before claiming full-platform completion.
+- App window has fixed the Android Kotlin mismatch; iOS codesign/xattr remains
+  the platform blocker before claiming full-platform completion.
 
 ## 9. Admin Cursor Prompt
 

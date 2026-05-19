@@ -29,7 +29,9 @@ client ops batch），但这些任务未经过统一的验证和状态核验，�
 
 ### Out of Scope
 
-- 修复 Android sentry_flutter Kotlin 兼容性（见后续任务）
+- Android `sentry_flutter` Kotlin 兼容性已由
+  `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001` 补救完成（App dev merge
+  `5ce5c6c`）
 - 修复 iOS Sequoia xattr/codesign / signing 环境（见后续任务）
 - CI/CD dev-merge-guard 路径空格修复（见后续任务）
 - Windows/Linux 构建（依赖 Parallels VM，不在本任务范围）
@@ -48,15 +50,15 @@ client ops batch），但这些任务未经过统一的验证和状态核验，�
 
 | TASK | 任务分支 | 分支 commit | Dev-local 验证 | 平台状态 |
 | --- | --- | --- | --- | --- |
-| TASK-APP-SENTRY-RUNTIME-CONFIG-001 + TASK-APP-SENTRY-OBSERVABILITY-001 | (part of Ops Batch) | — | flutter analyze PASS (429 tests), macOS arm64 PASS, Web PASS | Android BLOCKED (sentry_flutter Kotlin); iOS BLOCKED (Sequoia xattr/codesign) |
-| TASK-APP-RELEASE-CHECK-001 | TASK-APP-RELEASE-CHECK-REGRESSION-001 | — | flutter analyze PASS, flutter test 401 PASS, macOS universal PASS, iOS simulator PASS, Web PASS | Android BLOCKED (sentry_flutter Kotlin); iOS device BLOCKED (signing); Windows/Linux BLOCKED (Parallels) |
-| TASK-APP-GROWTH-REWARD-PUSH-001 | (part of growth batch) | — | flutter analyze PASS, flutter test 401 PASS, macOS universal PASS, iOS simulator PASS, Web PASS | Android BLOCKED (sentry_flutter Kotlin); Windows/Linux BLOCKED (Parallels) |
-| TASK-APP-USER-GROWTH-REVENUE-001 | (pending App implementation) | — | flutter analyze PASS, flutter test PASS (pending detail) | Android BLOCKED (sentry_flutter Kotlin); iOS BLOCKED (signing) |
-| TASK-APP-CONTENT-FEED-002-and-GEOIP-LOOKUP-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS | Android BLOCKED (sentry_flutter Kotlin); iOS BLOCKED (signing) |
-| TASK-APP-GEOIP-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS, macOS arm64 PASS, Web PASS | Android BLOCKED (sentry_flutter Kotlin); iOS BLOCKED (signing) |
-| TASK-APP-I18N-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS | Android BLOCKED (sentry_flutter Kotlin); iOS BLOCKED (signing) |
-| TASK-APP-NODE-REGION-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS | Android BLOCKED (sentry_flutter Kotlin); iOS BLOCKED (signing) |
-| TASK-APP-CLIENT-OPS-BATCH-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS, macOS arm64 PASS, Web PASS | Android BLOCKED (sentry_flutter Kotlin); iOS BLOCKED (signing) |
+| TASK-APP-SENTRY-RUNTIME-CONFIG-001 + TASK-APP-SENTRY-OBSERVABILITY-001 | (part of Ops Batch) | — | flutter analyze PASS (429 tests), macOS arm64 PASS, Web PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS BLOCKED (Sequoia xattr/codesign) |
+| TASK-APP-RELEASE-CHECK-001 | TASK-APP-RELEASE-CHECK-REGRESSION-001 | — | flutter analyze PASS, flutter test 401 PASS, macOS universal PASS, iOS simulator PASS, Web PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS device BLOCKED (signing); Windows/Linux BLOCKED (Parallels) |
+| TASK-APP-GROWTH-REWARD-PUSH-001 | (part of growth batch) | — | flutter analyze PASS, flutter test 401 PASS, macOS universal PASS, iOS simulator PASS, Web PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; Windows/Linux BLOCKED (Parallels) |
+| TASK-APP-USER-GROWTH-REVENUE-001 | (pending App implementation) | — | flutter analyze PASS, flutter test PASS (pending detail) | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS BLOCKED (signing) |
+| TASK-APP-CONTENT-FEED-002-and-GEOIP-LOOKUP-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS BLOCKED (signing) |
+| TASK-APP-GEOIP-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS, macOS arm64 PASS, Web PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS BLOCKED (signing) |
+| TASK-APP-I18N-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS BLOCKED (signing) |
+| TASK-APP-NODE-REGION-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS BLOCKED (signing) |
+| TASK-APP-CLIENT-OPS-BATCH-001 | (part of Ops Batch) | — | flutter analyze PASS, flutter test PASS, macOS arm64 PASS, Web PASS | Android PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; iOS BLOCKED (signing) |
 
 ## 5. Platform Build Matrix
 
@@ -75,8 +77,8 @@ client ops batch），但这些任务未经过统一的验证和状态核验，�
 
 | Platform | Status | Root Cause | Follow-up |
 | --- | --- | --- | --- |
-| Android debug | 🔴 BLOCKED | sentry_flutter Kotlin JVM target compatibility (pre-existing) | TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001 |
-| Android release | 🔴 BLOCKED | same as debug — Kotlin language version mismatch prevents AOT compilation | TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001 |
+| Android debug | ✅ PASS | Kotlin language-version blocker resolved by `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001` | Done — App dev merge `5ce5c6c` |
+| Android release | ✅ PASS | Build succeeds; real release signing key still not configured | Proposed `TASK-APP-ANDROID-RELEASE-SIGNING-001` |
 | iOS debug (device) | 🔴 BLOCKED | Sequoia xattr quarantine + codesign Identity not found for signing | TASK-APP-IOS-CODESIGN-ENV-001 |
 | iOS release (device) | 🔴 BLOCKED | same signing / provisioning environment issue | TASK-APP-IOS-CODESIGN-ENV-001 |
 | iOS simulator | ✅ PASS | Simulator builds bypass signing | — |
@@ -94,7 +96,7 @@ client ops batch），但这些任务未经过统一的验证和状态核验，�
 | git diff --check | PASS |
 | macOS arm64/x64 | PASS |
 | Web | PASS |
-| Android debug/release | BLOCKED by sentry_flutter Kotlin compatibility |
+| Android debug/release | PASS after `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001` (`5ce5c6c`) |
 | iOS | BLOCKED by Sequoia xattr/codesign / signing |
 | Windows/Linux | BLOCKED pending Parallels VM |
 
@@ -114,7 +116,7 @@ client ops batch），但这些任务未经过统一的验证和状态核验，�
 
 | # | 阻塞项 | 状态 | 原因 | 后续任务 |
 | --- | --- | --- | --- | --- |
-| 1 | Android debug/release | 🔴 BLOCKED / follow-up required | sentry_flutter Kotlin JVM target compatibility (pre-existing) | TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001 |
+| 1 | Android debug/release | ✅ RESOLVED | sentry_flutter Kotlin JVM target compatibility fixed; release build still uses debug signing config | TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001 completed; propose TASK-APP-ANDROID-RELEASE-SIGNING-001 |
 | 2 | iOS device debug/release | 🔴 BLOCKED / environment follow-up required | Sequoia xattr quarantine + codesign Identity not found; signing / physical device not available | TASK-APP-IOS-CODESIGN-ENV-001 |
 | 3 | Windows / Linux | 🔴 PENDING environment verification | Parallels VM not provisioned | infra provisioning |
 | 4 | dev-merge-guard.sh path spaces | ⚠️ follow-up required | `/Users/sammytan/Documents/New project 2` directory name contains spaces, breaks path expansion | TASK-CICD-DEV-MERGE-GUARD-PATH-FIX-001 |
@@ -123,7 +125,8 @@ client ops batch），但这些任务未经过统一的验证和状态核验，�
 
 | TASK | Owner | Scope |
 | --- | --- | --- |
-| TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001 | App Client Lead | Fix sentry_flutter Kotlin JVM target compatibility for Android debug/release builds |
+| TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001 | App Client Lead | ✅ Completed at App dev merge `5ce5c6c`; Android debug/release builds pass |
+| TASK-APP-ANDROID-RELEASE-SIGNING-001 | App Client Lead / CI-CD | Proposed: configure real Android release signing keys instead of debug signing config |
 | TASK-APP-IOS-CODESIGN-ENV-001 | App Client Lead | Resolve Sequoia xattr/codesign and signing Identity for iOS device builds |
 | TASK-CICD-DEV-MERGE-GUARD-PATH-FIX-001 | DevOps | Fix dev-merge-guard.sh path handling for spaces in "New project 2" directory name |
 

@@ -272,7 +272,7 @@ Build matrix:
 | macOS arm64/x64 | PASS | Universal binary verified with `lipo -archs`. |
 | iOS simulator | PASS | `build/ios/iphonesimulator/Runner.app` built. |
 | Web | PASS | `build/web` built. |
-| Android debug/release | BLOCKED | Pre-existing `sentry_flutter` Kotlin language version mismatch. |
+| Android debug/release | PASS | Kotlin language-version blocker resolved by `TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001`; Android release signing key still needs production configuration. |
 | iOS device | BLOCKED | Requires signing and physical device. |
 | Windows/Linux | BLOCKED | Requires Parallels hosts. |
 
