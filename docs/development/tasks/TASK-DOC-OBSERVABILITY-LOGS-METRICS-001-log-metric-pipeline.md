@@ -1,8 +1,8 @@
 # TASK-DOC-OBSERVABILITY-LOGS-METRICS-001 — Log / Audit / Metric Pipeline
 
-> Status: Ready  
-> Owner: Docs / Backend / NodeAgent / Job Service / Admin / CI-CD / Monitoring  
-> Repo: `livemask-docs`  
+> Status: Ready
+> Owner: Docs / Backend / NodeAgent / Job Service / Admin / CI-CD / Monitoring
+> Repo: `livemask-docs`
 > Related repos: `livemask-backend`, `livemask-nodeagent`,
 > `livemask-job-service`, `livemask-admin`, `livemask-ci-cd`
 
@@ -19,6 +19,14 @@ The requested scope includes:
 - NodeAgent logs delivered through queued ingestion
 - NodeAgent self-built Prometheus-compatible metrics
 - Backend logs: login, operation, task, system, node, payment
+- App exceptions through Sentry, with Backend/Admin storing only redacted
+  Sentry issue summaries
+- App Sentry runtime config delivered by Backend System Settings through a
+  safe client config API
+- Payment order logs: order lifecycle, webhook, provider response,
+  reconciliation, refund, chargeback and manual adjustment
+- Notification delivery logs: Telegram, WhatsApp, Lark, email and push invite,
+  dispatch, callback, retry and dead-letter
 - Job Service job/task logs
 - Admin Node List latest node logs and metric summaries
 
@@ -47,6 +55,10 @@ The contract defines:
 - canonical log entry
 - audit log model
 - NodeAgent log upload API
+- App Sentry exception summary model
+- App Sentry runtime config API and safe field boundary
+- payment order log timeline model
+- notification delivery log model
 - Job Service `observability_log_ingest` queue path
 - Backend Admin log/audit APIs
 - Node-specific latest log API
@@ -61,10 +73,11 @@ The contract defines:
 
 | Repo | Impact | Follow-Up |
 | --- | --- | --- |
-| `livemask-backend` | Add log tables, audit APIs, NodeAgent log ingestion, metrics endpoint, Admin log search | `TASK-BACKEND-OBSERVABILITY-LOGS-001` |
+| `livemask-backend` | Add log tables, audit APIs, NodeAgent log ingestion, App Sentry runtime config API, Sentry summary APIs, payment order logs, notification delivery logs, metrics endpoint, Admin log search | `TASK-BACKEND-OBSERVABILITY-LOGS-001`, `TASK-BACKEND-APP-SENTRY-CONFIG-001`, `TASK-BACKEND-SENTRY-SUMMARY-001`, `TASK-BACKEND-PAYMENT-LOGS-001`, `TASK-BACKEND-NOTIFICATION-LOGS-001` |
 | `livemask-nodeagent` | Add local log queue, Backend upload, Prometheus `/metrics`, node metric summaries | `TASK-NODEAGENT-METRICS-LOGS-001` |
 | `livemask-job-service` | Add queued observability ingestion job and retry/dead-letter behavior | `TASK-JOBS-OBSERVABILITY-INGEST-001` |
-| `livemask-admin` | Add global logs, audit logs, Node List latest logs, node metric panel | `TASK-ADMIN-LOGS-METRICS-001` |
+| `livemask-app` | Use Sentry for crash/exception logging, fetch Backend safe Sentry config, safe breadcrumbs, release/environment tags and redaction | `TASK-APP-SENTRY-OBSERVABILITY-001`, `TASK-APP-SENTRY-RUNTIME-CONFIG-001` |
+| `livemask-admin` | Add global logs, audit logs, Node List latest logs, node metric panel, App exceptions, payment logs, notification delivery logs | `TASK-ADMIN-LOGS-METRICS-001`, `TASK-ADMIN-OBSERVABILITY-DETAILS-001` |
 | `livemask-ci-cd` | Add observability smoke | `TASK-CICD-OBSERVABILITY-SMOKE-001` |
 | `livemask-docs` | Contract and index updates | Current task |
 
@@ -117,5 +130,14 @@ If the contract needs to be reverted:
 - `TASK-BACKEND-OBSERVABILITY-LOGS-001`
 - `TASK-JOBS-OBSERVABILITY-INGEST-001`
 - `TASK-NODEAGENT-METRICS-LOGS-001`
+- `TASK-APP-SENTRY-OBSERVABILITY-001`
+- `TASK-BACKEND-APP-SENTRY-CONFIG-001`
+- `TASK-APP-SENTRY-RUNTIME-CONFIG-001`
+- `TASK-ADMIN-SENTRY-SETTINGS-001`
+- `TASK-BACKEND-SENTRY-SUMMARY-001`
+- `TASK-BACKEND-PAYMENT-LOGS-001`
+- `TASK-BACKEND-NOTIFICATION-LOGS-001`
 - `TASK-ADMIN-LOGS-METRICS-001`
+- `TASK-ADMIN-OBSERVABILITY-DETAILS-001`
 - `TASK-CICD-OBSERVABILITY-SMOKE-001`
+- `TASK-CICD-SENTRY-CONFIG-SMOKE-001`

@@ -1,8 +1,8 @@
 # Job Queue Usage Matrix
 
-> Task: `TASK-DOC-JOB-QUEUE-MATRIX-001`  
-> Owner: Backend / Job Service / NodeAgent / Admin / App / CI-CD / Docs  
-> Status: Ready  
+> Task: `TASK-DOC-JOB-QUEUE-MATRIX-001`
+> Owner: Backend / Job Service / NodeAgent / Admin / App / CI-CD / Docs
+> Status: Ready
 > Scope: Defines which LiveMask workflows must use `livemask-job-service`,
 > which workflows may remain synchronous, and the required DB/Redis/Backend/
 > NodeAgent boundaries for future implementation.
@@ -143,6 +143,9 @@ If Redis is unavailable, Job Service should degrade by polling PostgreSQL.
 | NodeAgent | Event retry from NodeAgent local queue | `outbox_required` | NodeAgent background | `event_id` | NodeAgent local retry queue + Backend ingestion idempotency. |
 | App | App GeoIP manifest check | `synchronous_allowed` | App pull | `user_id/device_id` | Rate limited; no third-party source access. |
 | App | App GeoIP package rollout observation | `queue_recommended` | artifact activation / schedule | `database_id + platform` | Backend/Job Service may aggregate adoption metrics. |
+| App | App release artifact verification | `queue_required` | CI upload / Admin action | `release_id + platform + arch` | Verify sha256/signature/notarization metadata before publish. |
+| App | App release publish/revoke | `queue_required` | manual / CI | `release_id + channel` | Publish, pause, revoke, cache invalidation, and audit must be async-safe. |
+| App | App release adoption aggregation | `queue_required` | schedule | `date + platform + channel` | Aggregate update-check/download/install/version-active events. |
 | App | Content feed pull | `synchronous_allowed` | App pull | `user_id/device_id` | Reads only active public content. |
 | App | Content display/click analytics aggregation | `queue_required` | schedule / event batch | `date + content_id` | Event ingestion can be sync/outbox; aggregation queued. |
 | Content | Scheduled publish/archive | `queue_required` | schedule | `content_id` | Default announcement/campaign/banner window is one month. |
@@ -157,8 +160,13 @@ If Redis is unavailable, Job Service should degrade by polling PostgreSQL.
 | Billing | Invoice/email receipt delivery | `queue_required` | billing event | `invoice_id` | External email/provider retry required. |
 | Connect | Stale session cleanup | `queue_required` | schedule | `date/hour` | Avoid large synchronous deletes. |
 | Connect | Device limit cleanup/reconciliation | `queue_required` | schedule / manual | `user_id` | Audit and idempotency required. |
-| Notification | Email/SMS/push broadcast | `queue_required` | manual / schedule/event | `campaign_id + recipient_id` | Per-provider rate limits and opt-out required. |
-| Notification | Single transactional notification | `outbox_required` | domain event | `event_id + recipient_id` | Persist domain state first, then retry side effect. |
+| Notification | Email/SMS/push/IM broadcast | `queue_required` | manual / schedule/event | `campaign_id + recipient_id` | Per-provider rate limits, locale targeting, channel priority, and opt-out required. See `USER_CONTACT_NOTIFICATION_CONTRACT.md`. |
+| Notification | Single transactional notification | `outbox_required` | domain event | `event_id + recipient_id` | Persist domain state first, then retry side effect through `notification_dispatch_single`. |
+| Notification | Bot invite for Telegram/WhatsApp/Lark binding | `queue_required` | Admin action / user request | `user_id + channel + invite_id` | Invite tokens are short-lived, rate-limited, auditable, and must never expose bot secrets. |
+| Notification | Provider config verification | `queue_required` | Admin action / schedule | `provider` | Verifies Telegram/WhatsApp/Lark credentials and webhook readiness without exposing secrets. |
+| Notification | Scheduled report dispatch | `queue_required` | schedule / manual | `template_key + audience + schedule_window` | Sends system/operations/SRE/sponsor/ambassador/billing/security/job reports with provider rate limits. |
+| Notification | Notification preference backfill/reconciliation | `queue_required` | migration / schedule | `user_id + notification_type` | Used when new notification types/channels launch; must preserve explicit user opt-out. |
+| Notification | Failed delivery retry / provider failover | `queue_required` | delivery failure / schedule | `delivery_log_id + provider` | Retry with backoff, record terminal failure, and avoid duplicate user-facing messages. |
 | Security | Abuse/risk scan | `queue_required` | schedule / manual | `date + account_scope` | Do not block login/payment request handlers. |
 | Security | Secret rotation verification | `queue_required` | manual / schedule | `secret_scope` | Redacted events only. |
 | CI/CD | Staging smoke run | `queue_required` | manual / schedule | `repo + workflow + ref` | Job Service can trigger GitHub workflow; CI remains source of logs. |

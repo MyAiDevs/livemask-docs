@@ -34,7 +34,7 @@ The Admin sidebar MUST use grouped navigation. Each group may contain multiple c
 | Group | Purpose | Default state |
 | --- | --- | --- |
 | Dashboard | Control-plane overview and real-time operations summary | Expanded |
-| Operations | Nodes, Jobs, GeoIP, Protocol/Endpoint, Traffic, Releases | Expanded for operators |
+| Operations | Nodes, Jobs, GeoIP, Protocol/Endpoint, Traffic, Release Control | Expanded for operators |
 | Content | Blog, announcements, campaigns, banners, release notes, help articles | Collapsed |
 | Users & Growth | Users, roles, ambassadors, sponsors, referrals | Collapsed |
 | Finance | Billing, payments, subscriptions, reconciliation | Collapsed |
@@ -48,12 +48,14 @@ When a group has no visible child item after RBAC filtering, the group MUST be h
 | Group | Primary route | Child entries / tabs | Required read permission |
 | --- | --- | --- | --- |
 | Dashboard | `/admin` | Overview, Traffic map, Operations health, Incidents | authenticated admin audience |
-| Operations | `/admin/nodes` | Nodes, Node detail, Traffic, Protocol & Endpoint, GeoIP, Releases | route-specific |
+| Operations | `/admin/nodes` | Nodes, Node detail, Traffic, Protocol & Endpoint, GeoIP, Release Control | route-specific |
 | Operations / Jobs | `/admin/jobs` | Definitions, Runs, Schedules, Events | `jobs:read` |
 | Operations / Protocol & Endpoint | `/admin/protocol-endpoints` | Templates, Assignments, Rollouts, Rollback | `protocol_template:read` or `node:read` |
 | Operations / GeoIP | `/admin/geoip` | Databases, Sources, Update jobs, Rollout events | `geoip:read` |
 | Operations / Traffic | `/admin/traffic` | Country flows, Region health, Node flow drilldown | `node:read` |
-| Operations / Releases | `/admin/nodeagent/releases` | Releases, Rollouts, Events, Rollback | `node:read` |
+| Operations / Release Control | `/admin/releases` | Overview of App releases and NodeAgent releases | `node:read` or `app_release:read` |
+| Operations / Release Control / NodeAgent | `/admin/nodeagent/releases` | NodeAgent binary versions, rollouts, events, rollback | `node:read` |
+| Operations / Release Control / App | `/admin/app/releases` | App versions, artifacts, channels, downloads, adoption, rollback | `app_release:read` |
 | Content | `/admin/content` | All content, Blog, Announcements, Campaigns, App banners, Release notes | `content:read` |
 | Users & Growth | `/admin/users` | Users, roles, sessions, devices, account actions | `user:read` |
 | Users & Growth | `/admin/ambassadors` | Sponsor ambassadors, promotion ambassadors, commissions | future `growth:read` or `user:read` |
@@ -64,7 +66,7 @@ When a group has no visible child item after RBAC filtering, the group MUST be h
 | Observability / Metrics | `/admin/metrics` | Backend, Job Service, NodeAgent, App-safe metrics | `metrics:read` |
 | System | `/admin/config` | Config Center, version history, publish, rollback | `config:read` |
 | System | `/admin/feature-flags` | Feature flags and targeting rules | `config:read` |
-| System | `/admin/settings` | Admin settings, integrations, environment metadata | admin / super_admin or future `settings:read` |
+| System | `/admin/settings` | GeoIP credentials, IM providers, App release storage, report templates, subscription settings, scheduler defaults | `settings:read` |
 
 Routes not implemented yet SHOULD still be documented in the IA contract but MUST NOT appear as enabled menu links until the corresponding page exists.
 
@@ -79,7 +81,8 @@ The Admin implementation MUST consolidate related pages instead of adding one si
 | Jobs definitions, job runs, schedules, retry/cancel | One `Jobs` entry with `Definitions`, `Runs`, `Schedules`, `Events` tabs |
 | Protocol templates, endpoint assignments, rollout status | One `Protocol & Endpoint` entry with tabs |
 | Logs, audit logs, incidents, metrics | One `Observability` group with separate child entries |
-| NodeAgent release metadata, rollout, rollback events | Prefer `Releases` under Operations; node-specific status also appears in Node detail |
+| NodeAgent release metadata, rollout, rollback events | Put under `Release Control` in Operations; node-specific status also appears in Node detail |
+| App release metadata, artifacts, public downloads, adoption | Put under the same `Release Control` group/page as NodeAgent release, but keep separate tabs/routes, permissions, APIs, and data models |
 | Dashboard traffic map, country flows, region health | Dashboard summary plus `Traffic` drilldown under Operations |
 
 Feature pages MAY show shortcuts to related tabs, but MUST NOT duplicate generic scheduler, job run, audit-log, or metrics navigation.
@@ -130,6 +133,9 @@ Recommended permission mapping:
 | Audit Logs | `audit:read` |
 | Metrics | `metrics:read` |
 | Config Center | `config:read` |
+| Release Control overview | `node:read` or `app_release:read` |
+| NodeAgent Releases | `node:read` |
+| App Releases | `app_release:read` |
 
 ## 7. Design Requirements
 

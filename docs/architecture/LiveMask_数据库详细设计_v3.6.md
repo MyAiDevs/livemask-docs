@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS recommendation_strategies (
 
 -- 初始化默认策略
 INSERT INTO recommendation_strategies (strategy_name, version, weights, description)
-VALUES ('default_v1', '1.0', 
+VALUES ('default_v1', '1.0',
 '{"geo_distance": 0.25, "node_quality": 0.30, "load_balance": 0.15, "user_success_rate": 0.20, "freshness": 0.10}',
 '默认多因素加权策略 v1.0')
 ON CONFLICT (strategy_name, version) DO NOTHING;
@@ -104,7 +104,7 @@ ON CONFLICT (strategy_name, version) DO NOTHING;
 -- ==================== 多支付方式预留扩展（Google Play + Apple IAP） ====================
 
 -- 扩展 user_subscriptions 表
-ALTER TABLE user_subscriptions 
+ALTER TABLE user_subscriptions
     ADD COLUMN IF NOT EXISTS payment_provider          VARCHAR(30) DEFAULT 'usdt',
     ADD COLUMN IF NOT EXISTS external_subscription_id  VARCHAR(128),
     ADD COLUMN IF NOT EXISTS external_product_id       VARCHAR(128),
@@ -114,14 +114,14 @@ ALTER TABLE user_subscriptions
     ADD COLUMN IF NOT EXISTS platform                  VARCHAR(20);
 
 -- 扩展 payment_orders 表
-ALTER TABLE payment_orders 
+ALTER TABLE payment_orders
     ADD COLUMN IF NOT EXISTS payment_provider      VARCHAR(30) DEFAULT 'usdt',
     ADD COLUMN IF NOT EXISTS external_order_id     VARCHAR(128),
     ADD COLUMN IF NOT EXISTS receipt_data          TEXT,
     ADD COLUMN IF NOT EXISTS verification_status   VARCHAR(30) DEFAULT 'pending';
 
 -- 扩展 subscription_plans 表（平台映射）
-ALTER TABLE subscription_plans 
+ALTER TABLE subscription_plans
     ADD COLUMN IF NOT EXISTS platform            VARCHAR(20) DEFAULT 'web',
     ADD COLUMN IF NOT EXISTS external_product_id VARCHAR(128),
     ADD COLUMN IF NOT EXISTS is_external         BOOLEAN DEFAULT false;
@@ -233,7 +233,7 @@ CREATE TABLE nodes (
     protocol                VARCHAR(20) NOT NULL CHECK (protocol IN ('reality','hysteria2','tuic')),
     is_free_zone            BOOLEAN DEFAULT false,
     bandwidth_limit_mbps    NUMERIC(8,2),
-    status                  VARCHAR(20) DEFAULT 'active' 
+    status                  VARCHAR(20) DEFAULT 'active'
                             CHECK (status IN ('active','quarantine','disabled','maintenance')),
     quality_score           NUMERIC(5,2) DEFAULT 100.0,
     last_quality_updated_at TIMESTAMPTZ,
@@ -287,14 +287,14 @@ CREATE TABLE node_daily_traffic (
 );
 
 -- 核心索引（支撑收益计算和质量评分）
-CREATE INDEX idx_node_daily_traffic_date_sponsor 
-    ON node_daily_traffic (traffic_date, sponsor_id) 
+CREATE INDEX idx_node_daily_traffic_date_sponsor
+    ON node_daily_traffic (traffic_date, sponsor_id)
     INCLUDE (total_traffic_gb, upload_gb, download_gb);
 
-CREATE INDEX idx_node_daily_traffic_node_date 
+CREATE INDEX idx_node_daily_traffic_node_date
     ON node_daily_traffic (node_id, traffic_date);
 
-CREATE INDEX idx_node_daily_traffic_sponsor_date 
+CREATE INDEX idx_node_daily_traffic_sponsor_date
     ON node_daily_traffic (sponsor_id, traffic_date);
 ```
 
@@ -381,20 +381,20 @@ CREATE INDEX idx_daily_country_traffic_country ON daily_country_traffic (country
 ```sql
 -- 幂等插入前一天数据
 INSERT INTO node_daily_traffic (node_id, sponsor_id, traffic_date, total_traffic_gb, upload_gb, download_gb, ...)
-SELECT 
+SELECT
     n.id,
     n.sponsor_id,
     CURRENT_DATE - 1,
     COALESCE(SUM(ntl.total_bandwidth_mbps * 60 / 8 / 1024 / 1024), 0),  -- 简化示例，实际需按实际字段转换
     ...
 FROM nodes n
-LEFT JOIN node_traffic_logs ntl ON ntl.node_id = n.id 
-    AND ntl.timestamp >= CURRENT_DATE - 1 
+LEFT JOIN node_traffic_logs ntl ON ntl.node_id = n.id
+    AND ntl.timestamp >= CURRENT_DATE - 1
     AND ntl.timestamp < CURRENT_DATE
 WHERE n.status = 'active'
 GROUP BY n.id, n.sponsor_id
-ON CONFLICT (node_id, traffic_date) 
-DO UPDATE SET 
+ON CONFLICT (node_id, traffic_date)
+DO UPDATE SET
     total_traffic_gb = EXCLUDED.total_traffic_gb,
     updated_at = NOW();
 ```
@@ -408,12 +408,12 @@ CREATE TABLE appeals (
     user_id             UUID REFERENCES users(id),                    -- 举报人
     target_type         VARCHAR(30) NOT NULL CHECK (target_type IN ('node','ambassador')),
     target_id           UUID NOT NULL,
-    source              VARCHAR(30) DEFAULT 'user_report' 
+    source              VARCHAR(30) DEFAULT 'user_report'
                         CHECK (source IN ('user_report','system_hunting','manual')),
     appeal_type         VARCHAR(50),
     title               VARCHAR(200),
     content             TEXT,
-    status              VARCHAR(20) DEFAULT 'pending' 
+    status              VARCHAR(20) DEFAULT 'pending'
                         CHECK (status IN ('pending','quarantine','approved','rejected','resolved')),
     review_by           UUID REFERENCES users(id),
     review_comment      TEXT,
@@ -458,6 +458,10 @@ CREATE INDEX idx_system_configs_version
 > P0-03 实现要求：`config_version` 按 `config_key` 单调递增；回滚必须创建新版本，不能回写旧版本号。Redis 只缓存当前发布版本，历史和审计以 PostgreSQL 为准。
 
 ### 2.6.1 `vpn_client_governance` 配置详细结构（推荐 JSON Schema）
+
+> Current contract: new implementations should use
+> [App Runtime Governance Config Contract](../contracts/app/APP_RUNTIME_GOVERNANCE_CONFIG_CONTRACT.md).
+> This v3.6 section remains as historical source material only.
 
 ```json
 {
@@ -586,7 +590,7 @@ CREATE TABLE c2c_listings (
     points_amount       BIGINT NOT NULL CHECK (points_amount > 0),
     price_per_point     NUMERIC(10,4) NOT NULL CHECK (price_per_point > 0),
     total_usdt          NUMERIC(12,2) GENERATED ALWAYS AS (points_amount * price_per_point) STORED,
-    status              VARCHAR(20) DEFAULT 'open' 
+    status              VARCHAR(20) DEFAULT 'open'
                         CHECK (status IN ('open', 'matched', 'cancelled', 'completed')),
     created_at          TIMESTAMPTZ DEFAULT NOW(),
     updated_at          TIMESTAMPTZ DEFAULT NOW()
@@ -608,7 +612,7 @@ CREATE TABLE c2c_trades (
     points_amount       BIGINT NOT NULL,
     usdt_amount         NUMERIC(12,2) NOT NULL,
     payment_order_id    UUID,  -- 关联 payments 表（如果有独立支付表）
-    status              VARCHAR(20) DEFAULT 'pending_payment' 
+    status              VARCHAR(20) DEFAULT 'pending_payment'
                         CHECK (status IN ('pending_payment', 'completed', 'disputed', 'cancelled')),
     created_at          TIMESTAMPTZ DEFAULT NOW(),
     updated_at          TIMESTAMPTZ DEFAULT NOW()
@@ -628,7 +632,7 @@ CREATE TABLE c2c_disputes (
     trade_id            UUID NOT NULL REFERENCES c2c_trades(id),
     reporter_id         UUID NOT NULL REFERENCES users(id),
     reason              TEXT NOT NULL,
-    status              VARCHAR(20) DEFAULT 'open' 
+    status              VARCHAR(20) DEFAULT 'open'
                         CHECK (status IN ('open', 'resolved', 'rejected')),
     resolution_notes    TEXT,
     resolved_by         UUID REFERENCES users(id),
@@ -686,9 +690,9 @@ CREATE TABLE node_appeals (
     id                          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     node_id                     UUID NOT NULL REFERENCES nodes(id) ON DELETE CASCADE,
     sponsor_id                  UUID NOT NULL REFERENCES partners(id) ON DELETE CASCADE,
-    appeal_type                 VARCHAR(50) NOT NULL 
+    appeal_type                 VARCHAR(50) NOT NULL
                                 CHECK (appeal_type IN ('quality_score_dispute', 'node_status_downgrade', 'degraded_mode_trigger', 'other')),
-    status                      VARCHAR(20) DEFAULT 'pending' 
+    status                      VARCHAR(20) DEFAULT 'pending'
                                 CHECK (status IN ('pending', 'under_review', 'resolved', 'rejected')),
     description                 TEXT NOT NULL,
     evidence_files              JSONB,                    -- 存储证据文件路径数组
@@ -738,7 +742,7 @@ CREATE TABLE sponsor_revenues (
     tier_bonus          NUMERIC(5,2) NOT NULL DEFAULT 1.0,
     base_gb_per_unit    NUMERIC(10,2) NOT NULL,           -- 结算时使用的配置快照（1U = X GB）
     revenue_u           NUMERIC(18,6) NOT NULL DEFAULT 0, -- 最终收益（U）
-    status              VARCHAR(20) DEFAULT 'calculated' 
+    status              VARCHAR(20) DEFAULT 'calculated'
                         CHECK (status IN ('calculated', 'paid', 'adjusted', 'cancelled')),
     created_at          TIMESTAMPTZ DEFAULT NOW(),
     updated_at          TIMESTAMPTZ DEFAULT NOW()
@@ -764,14 +768,14 @@ CREATE TABLE subscription_plans (
     validity_days           INTEGER,                                  -- 有效天数
     has_bandwidth_limit     BOOLEAN DEFAULT false,                    -- 是否开启带宽限制
     max_bandwidth_mbps      INTEGER,                                  -- 最大带宽限制（Mbps）
-    
+
     -- 价格相关字段（核心）
     price_usdt              NUMERIC(10,2) NOT NULL,                   -- 当前售价（USDT）
     original_price_usdt     NUMERIC(10,2),                            -- 原价（用于前端显示划线价）
     currency                VARCHAR(10) DEFAULT 'USDT',               -- 货币单位
-    billing_cycle           VARCHAR(20) DEFAULT 'monthly' 
+    billing_cycle           VARCHAR(20) DEFAULT 'monthly'
                             CHECK (billing_cycle IN ('monthly','quarterly','yearly','lifetime')),
-    
+
     is_active               BOOLEAN DEFAULT true,
     sort_order              INTEGER DEFAULT 0,
     features                JSONB DEFAULT '{}',                       -- 其他特性（如是否支持IPv6、设备数限制等）

@@ -1,8 +1,8 @@
 # Client Reconnect Hint Contract
 
-> Task: `TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001`  
-> Owner: Backend / App / NodeAgent / Admin / CI-CD / Docs  
-> Status: Draft  
+> Task: `TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001`
+> Owner: Backend / App / NodeAgent / Admin / CI-CD / Docs
+> Status: Ready with protocol stability gate
 > Scope: Defines the cross-repo contract for notifying App clients about
 > protocol/endpoint changes, triggering graceful reconnect, and ensuring the App
 > pulls fresh `connect_config` before initiating a new connection.
@@ -13,6 +13,7 @@ Related mandatory contracts:
 - [Hysteria2 Connect Config Contract](../vpn/HYSTERIA2_CONNECT_CONFIG_CONTRACT.md)
 - [App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture](../../architecture/control-plane/APP_NODEAGENT_JOB_BACKEND_ADMIN_CLOSED_LOOP.md)
 - [NodeAgent Protocol Extension Architecture](../../nodeagent/NODEAGENT_PROTOCOL_EXTENSION_ARCHITECTURE.md)
+- [Protocol Endpoint Stability Gate](../../development/tasks/TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md)
 
 ---
 
@@ -42,6 +43,11 @@ The single most important architectural rule:
 NodeAgent must NOT notify App directly.
 ```
 
+This remains true even if NodeAgent has a long-lived monitoring connection or a
+local control API. The useful realtime mechanism is Backend -> App, triggered by
+Backend's processing of NodeAgent events. NodeAgent has no App session authority
+and must not fan out reconnect instructions.
+
 ### Why
 
 - **Security**: NodeAgent operates with node-level secrets (node HMAC, private
@@ -67,6 +73,10 @@ NodeAgent applies protocol profile/endpoint change
   -> Backend decides whether to notify connected App sessions
 ```
 
+Backend must rate-limit, deduplicate, and audit reconnect hint creation. App
+must treat the hint as a signal to refresh configuration, not as a replacement
+for `connect_config`.
+
 ---
 
 ## 3. Communication Flow
@@ -83,17 +93,20 @@ NodeAgent
 Backend
   4. Receives NodeAgent event
   5. Updates connect_node_endpoints: enabled=true, protocol=hysteria2, ...
-  6. Determines which App sessions are connected to this node
-  7. Pushes a "reconnect hint" to affected App sessions via realtime channel
+  6. Checks template version, node capability, App support, and endpoint
+     eligibility
+  7. Determines which App sessions are connected to this node
+  8. Creates idempotent reconnect hints with rate limits
+  9. Pushes a "reconnect hint" to affected App sessions via realtime channel
 
 App
-  8. Receives reconnect hint event from Backend realtime channel
-  9. Initiates graceful disconnect from current connection
-  10. Pulls fresh GET /api/v1/connect/config
-  11. Parses new config (may have different protocol or endpoint)
-  12. Connects to new endpoint using updated protocol
-  13. Reports connection success/failure event to Backend
-  14. Enters healthy connected state, or retries/falls back
+  10. Receives reconnect hint event from Backend realtime channel
+  11. Deduplicates by hint_id and validates expiry / delay
+  12. Pulls fresh GET /api/v1/connect/config
+  13. Keeps old tunnel until new config is fetched and supported
+  14. Gracefully reconnects to the new endpoint using updated protocol
+  15. Reports connection success/failure event to Backend
+  16. Enters healthy connected state, or retries/falls back
 ```
 
 ### 3.2 Architecture Diagram

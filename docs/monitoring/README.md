@@ -48,6 +48,8 @@ metrics、NodeAgent 最新日志、节点监控摘要时必须遵守该契约。
 
 - NodeAgent 不直接调用 Job Service；NodeAgent 日志通过 Backend HMAC 入口上传。
 - Backend 验证 node 身份、redact 后投递给 Job Service 队列异步入库。
+- App 原始崩溃和异常使用 Sentry；Backend/Admin 只保存和展示 redacted Sentry issue summary。
+- 支付订单日志和通知投递日志必须是可查询 timeline，但不得包含 raw provider payload、支付凭据、IM contact 明文或 provider secrets。
 - Admin 只通过 Backend 查询 logs/audit/metrics，不直接访问 NodeAgent、Job Service 或 Prometheus。
 - NodeAgent、Backend、Job Service 都需要暴露 Prometheus-compatible `/metrics`。
 - Admin Node List / Node Detail 必须能查看某个 node 的最新日志和指标摘要。

@@ -34,6 +34,23 @@ Compatibility:
 - 非法值行为：拒绝应用并回滚到 last-known-good。
 - 降级模式行为：使用本地缓存配置并提示可能过期。
 
+### App runtime governance relationship
+
+`client.remote_config` remains the lightweight feature/config envelope. The
+multi-platform runtime performance and resource controls formerly described as
+`vpn_client_governance` are now governed by the dedicated
+[App Runtime Governance Config Contract](../app/APP_RUNTIME_GOVERNANCE_CONFIG_CONTRACT.md).
+
+Backend may embed a compatibility pointer in `client.remote_config`, but the
+canonical runtime behavior API is:
+
+```text
+GET /api/v1/app/runtime-config
+```
+
+App must keep last-known-good for both config families and must reject invalid
+runtime governance values without blocking startup.
+
 ## `nodeagent.runtime_config`
 
 - Owner：Backend / NodeAgent

@@ -243,6 +243,11 @@ sentry:
 
 ## 9. 动态资源治理配置应用（vpn_client_governance）
 
+> Current contract: the old `vpn_client_governance` design is superseded by
+> [App Runtime Governance Config Contract](../contracts/app/APP_RUNTIME_GOVERNANCE_CONFIG_CONTRACT.md).
+> New implementations should use `app_runtime_governance` and
+> `GET /api/v1/app/runtime-config`.
+
 ### 9.1 配置结构说明
 客户端从 `/client/config` 接口拉取的 `vpn_client_governance` 配置用于动态控制资源使用和连接行为，显著降低 iOS Extension 被系统终止的风险，并优化弱网环境下的表现。
 
@@ -279,7 +284,7 @@ class VpnGovernance extends _$VpnGovernance {
     orchestrator.updateHealthCheckInterval(
       Duration(milliseconds: config.behavior.healthCheckIntervalMs)
     );
-    
+
     orchestrator.updateReconnectPolicy(
       initialBackoff: Duration(milliseconds: config.behavior.reconnectInitialBackoffMs),
       maxBackoff: Duration(milliseconds: config.behavior.reconnectMaxBackoffMs),
@@ -306,7 +311,7 @@ class ConnectionOrchestrator {
 
 Map<String, dynamic> buildSingboxConfig(VpnClientGovernance governance) {
   final limits = governance.resourceLimits;
-  
+
   return {
     "log": {"level": "warn"},
     "dns": {...},

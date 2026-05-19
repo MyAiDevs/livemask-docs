@@ -1,8 +1,8 @@
 # Admin Job Center / Scheduler Contract
 
-> Task: `TASK-DOC-ADMIN-JOBS-001`  
-> Owner: Job Service / Backend / Admin / CI-CD / Docs  
-> Status: Ready  
+> Task: `TASK-DOC-ADMIN-JOBS-001`
+> Owner: Job Service / Backend / Admin / CI-CD / Docs
+> Status: Ready
 > Scope: Defines the shared Admin Job Center contract for manual triggers,
 > scheduled tasks, job history, retry, cancel, audit, RBAC, and cross-module
 > task ownership.
@@ -28,6 +28,8 @@ operational pattern:
 - Dashboard and traffic aggregation
 - Billing reconciliation
 - Device/session cleanup
+- Notification provider verification, IM invite, campaign dispatch, and report delivery
+- Subscription expiration sweep and entitlement reconciliation
 - Task-sync and smoke validation triggers
 
 These operations need the same product surface:
@@ -123,7 +125,24 @@ future Job Center contract and be removed after `TASK-ADMIN-JOBS-001`.
 | `website_seo_rebuild` | Website / Backend | Job Service worker | manual / schedule | Rebuild sitemap/RSS source snapshots |
 | `dashboard_daily_aggregation` | Backend Analytics | Job Service worker | schedule | Daily country/region/protocol metrics |
 | `billing_reconciliation` | Backend Billing | Job Service worker | schedule / manual | Payment/subscription reconciliation |
+| `subscription_expiration_sweep` | Backend Billing | Job Service worker | schedule | Expire subscriptions, apply grace rules, emit notifications |
+| `subscription_entitlement_reconcile` | Backend Billing | Job Service worker | manual / schedule | Rebuild entitlement state after plan/config changes |
 | `session_cleanup` | Backend Connect | Job Service worker | schedule | Expire stale sessions/devices |
+| `notification_provider_verify` | Backend Notification | Job Service worker | manual | Verify Telegram/WhatsApp/Lark/email provider credentials/callbacks |
+| `notification_bot_invite` | Backend Notification | Job Service worker | manual | Send IM binding invite to one user/channel |
+| `notification_dispatch_single` | Backend Notification | Job Service worker | event / manual | Send one transactional notification |
+| `notification_dispatch_campaign` | Backend Notification | Job Service worker | manual / schedule | Send campaign/broadcast with rate limits and opt-out checks |
+| `notification_retry_failed` | Backend Notification | Job Service worker | manual / schedule | Retry failed notification deliveries |
+| `notification_preference_backfill` | Backend Notification | Job Service worker | manual / schedule | Rebuild default notification preferences safely |
+| `notification_report_dispatch` | Backend Notification / Reports | Job Service worker | manual / schedule | Render and send system/ops/SRE/billing/ambassador briefings |
+| `geoip_credential_rotate` | Backend GeoIP | Job Service worker | manual | Verify and activate a new GeoIP credential reference |
+| `system_secret_verify` | Backend Settings | Job Service worker | manual / schedule | Verify configured secret references without exposing raw values |
+| `app_release_artifact_verify` | Backend App Release | Job Service worker | CI upload / manual | Verify App artifact sha256/signature/notarization metadata |
+| `app_release_publish` | Backend App Release | Job Service worker | manual / CI | Publish App release and refresh eligibility/cache |
+| `app_release_revoke` | Backend App Release | Job Service worker | manual | Revoke App release and remove from update-check results |
+| `app_release_storage_verify` | Backend Settings | Job Service worker | manual / schedule | Verify S3/OSS/COS/local App release storage settings |
+| `app_release_adoption_aggregate` | Backend Analytics | Job Service worker | schedule | Aggregate App update/download/install/version-active telemetry |
+| `website_downloads_refresh` | Website / Backend | Job Service worker | release event / manual | Refresh Website download metadata after App release changes |
 | `ci_smoke_run` | CI/CD | Job Service worker | manual | Trigger selected smoke workflow |
 | `task_sync` | Docs / CI-CD | Job Service worker | manual / schedule | Cross-repo task-sync workflow |
 
@@ -165,16 +184,31 @@ Rules:
   "schedule_id": "uuid",
   "job_type": "geoip_source_update",
   "name": "Daily GeoIP Update",
+  "description": "Update MaxMind city database every day.",
   "enabled": true,
+  "schedule_type": "cron",
   "timezone": "UTC",
   "cron": "0 3 * * *",
+  "interval_seconds": null,
+  "starts_at": "2026-05-18T00:00:00Z",
+  "ends_at": null,
+  "misfire_policy": "run_once",
+  "priority": 50,
+  "max_attempts": 3,
+  "concurrency_limit": 1,
+  "target_filter": {
+    "scope": "all"
+  },
   "parameters": {
     "source": "maxmind_geolite2",
     "edition": "city",
     "force": false
   },
+  "quiet_hours": null,
   "next_run_at": "2026-05-19T03:00:00Z",
   "last_run_id": "uuid",
+  "last_run_status": "succeeded",
+  "version": 2,
   "created_by": "uuid",
   "updated_by": "uuid",
   "created_at": "2026-05-18T00:00:00Z",
@@ -182,8 +216,20 @@ Rules:
 }
 ```
 
-MVP may support only daily/hourly schedules. Cron expressions must be validated
-server-side before saving.
+Required schedule behavior:
+
+- `schedule_type` supports `cron`, `interval`, and `once`.
+- MVP may expose only daily/hourly presets in Admin, but Backend and Job Service
+  must persist enough fields to support full schedule edit/delete later.
+- Cron expressions, timezone, quiet hours, target filters, and parameters must
+  be validated server-side before saving.
+- Schedule edit increments `version`; previous versions remain traceable in
+  audit logs.
+- Deleting a schedule prevents future runs but does not delete historical runs
+  or events.
+- `misfire_policy` must be one of `skip`, `run_once`, or `catch_up_limited`.
+- Schedules must never contain raw credentials. They may reference a provider,
+  source, report template, or secret reference by ID.
 
 ### 4.3 Job Run
 
@@ -349,6 +395,7 @@ Backend must not keep the HTTP request open while a job runs.
 | GET | `/admin/api/v1/jobs/runs/{run_id}/events` | `jobs:read` | Run events/logs |
 | GET | `/admin/api/v1/jobs/schedules` | `jobs:read` | List schedules |
 | GET | `/admin/api/v1/jobs/schedules/{schedule_id}` | `jobs:read` | Schedule detail |
+| GET | `/admin/api/v1/jobs/schedules/{schedule_id}/versions` | `jobs:read` | Schedule version/audit history |
 
 ### 7.2 Write / Action APIs
 
@@ -359,6 +406,9 @@ Backend must not keep the HTTP request open while a job runs.
 | POST | `/admin/api/v1/jobs/runs/{run_id}/cancel` | `jobs:execute` | Request cancellation |
 | POST | `/admin/api/v1/jobs/schedules` | `jobs:write` | Create schedule |
 | PUT | `/admin/api/v1/jobs/schedules/{schedule_id}` | `jobs:write` | Update schedule |
+| POST | `/admin/api/v1/jobs/schedules/{schedule_id}/preview` | `jobs:read` | Validate parameters and show next fire times/target preview |
+| POST | `/admin/api/v1/jobs/schedules/{schedule_id}/run` | `jobs:execute` | Run a schedule immediately using its current parameters |
+| POST | `/admin/api/v1/jobs/schedules/{schedule_id}/clone` | `jobs:write` | Clone schedule as disabled draft |
 | POST | `/admin/api/v1/jobs/schedules/{schedule_id}/enable` | `jobs:write` | Enable schedule |
 | POST | `/admin/api/v1/jobs/schedules/{schedule_id}/disable` | `jobs:write` | Disable schedule |
 | DELETE | `/admin/api/v1/jobs/schedules/{schedule_id}` | `jobs:write` | Delete schedule |
@@ -389,6 +439,11 @@ Backend and Job Service communicate through internal service auth.
 | POST | `/internal/jobs/runs/{run_id}/cancel` | Backend | Request cancel |
 | POST | `/internal/jobs/schedules` | Backend | Create schedule |
 | PUT | `/internal/jobs/schedules/{schedule_id}` | Backend | Update schedule |
+| POST | `/internal/jobs/schedules/{schedule_id}/preview` | Backend | Validate schedule and calculate next fire times |
+| POST | `/internal/jobs/schedules/{schedule_id}/run` | Backend | Create immediate run from schedule |
+| POST | `/internal/jobs/schedules/{schedule_id}/enable` | Backend | Enable schedule |
+| POST | `/internal/jobs/schedules/{schedule_id}/disable` | Backend | Disable schedule |
+| DELETE | `/internal/jobs/schedules/{schedule_id}` | Backend | Delete future schedule execution |
 
 Internal requests must be authenticated with service token, mTLS, or signed
 HMAC headers. User JWTs must not be forwarded as worker credentials.
@@ -423,6 +478,9 @@ Every write/action must write an audit entry:
 | Create schedule | actor, schedule_id, job_type, cron, scrubbed parameters |
 | Update schedule | actor, schedule_id, changed fields |
 | Disable schedule | actor, schedule_id |
+| Enable schedule | actor, schedule_id |
+| Delete schedule | actor, schedule_id, last version |
+| Run schedule now | actor, schedule_id, run_id, scrubbed parameters |
 
 Audit logs must not include secrets or raw download URLs with query params.
 
@@ -438,6 +496,12 @@ Job Service must prevent unsafe duplicate runs:
 | `nodeagent_config_publish` | `config_key + target_scope` |
 | `content_publish` | `content_id` |
 | `dashboard_daily_aggregation` | `date + metric_family` |
+| `notification_provider_verify` | `provider` |
+| `notification_bot_invite` | `user_id + provider` |
+| `notification_dispatch_campaign` | `campaign_id + recipient_cohort` |
+| `notification_report_dispatch` | `template_key + recipient_scope + schedule_id` |
+| `subscription_expiration_sweep` | `date + plan_scope` |
+| `subscription_entitlement_reconcile` | `config_version + user_scope` |
 
 If a lock exists, API should return `409 JOB_ALREADY_RUNNING` with the active
 `run_id`.
@@ -468,6 +532,15 @@ must not collect or display credential values.
 - Latest run status badge
 - `Run Now` button gated by `jobs:execute`
 - `Schedule` button gated by `jobs:write`
+- `/admin/jobs/schedules` table with create, edit, clone, enable, disable,
+  delete, preview, and run-now actions
+- Schedule editor driven by `parameter_schema`, with presets for hourly, daily,
+  weekly, monthly, and custom cron/interval when enabled
+- Schedule editor must support notification/report jobs, including
+  `notification_report_dispatch`, `notification_dispatch_campaign`, and
+  `notification_retry_failed`
+- Schedule detail must show next fire times, last run, last status, version,
+  actor, target preview, and redacted parameters
 - Run detail drawer or page
 - Event timeline with safe metadata rendering
 - Empty/loading/error states
@@ -480,6 +553,10 @@ Design requirements:
 - No nested cards inside cards
 - Use icon buttons for retry/cancel/view where appropriate
 - All destructive or risky actions require confirmation
+- Delete schedule and disable schedule must be separate actions with different
+  confirmation copy
+- Secret fields must not appear in schedule forms; use settings pages for
+  provider credentials and source credentials
 - Text must fit in table cells and dialogs on mobile/desktop
 
 ## 13. CI/CD Smoke Requirements
@@ -499,7 +576,13 @@ implementation:
 | Get run detail | 200 |
 | Get run events | 200 and no secret leakage |
 | Create schedule | 200/201 |
+| Edit schedule | 200 and version increments |
+| Preview schedule | 200 and returns next fire times |
+| Run schedule now | 202 + run_id |
 | Disable schedule | 200 |
+| Delete schedule | 200/204 and no future run |
+| Create notification report schedule | 200/201 with `notification_report_dispatch` |
+| Create invalid notification schedule | 400 `JOB_INVALID_PARAMETERS` |
 | Worker retry/backoff | Failed test job creates retry event |
 | Lease recovery | Expired lease can be picked up by a worker |
 | Invalid job_type | 404/400 |
@@ -542,6 +625,10 @@ Smoke must check no response contains:
 | `TASK-ADMIN-JOBS-001` | `livemask-admin` | Job Center UI, GeoIP trigger migration, schedule/run pages |
 | `TASK-CICD-JOBS-001` | `livemask-ci-cd` | Job Center smoke tests |
 | `TASK-DOC-ADMIN-JOBS-001` | `livemask-docs` | This contract and task wiring |
+| `TASK-JOBS-SCHEDULER-CRUD-001` | `livemask-job-service` | Durable schedule create/edit/delete/preview/run-now, evaluator, versioning, misfire policy |
+| `TASK-BACKEND-JOBS-SCHEDULE-CRUD-001` | `livemask-backend` | Backend schedule CRUD gateway, RBAC, owner-domain validation, audit |
+| `TASK-ADMIN-JOBS-SCHEDULE-CRUD-001` | `livemask-admin` | Admin schedule editor, notification/report schedule support |
+| `TASK-CICD-SCHEDULER-CRUD-001` | `livemask-ci-cd` | Schedule CRUD smoke with secret leakage checks |
 
 Follow-up domain integrations:
 
@@ -549,6 +636,13 @@ Follow-up domain integrations:
 - `TASK-JOBS-NODEAGENT-001` — wire release/config rollout executor into Job Service
 - `TASK-JOBS-CONTENT-001` — wire publish/archive schedules into Job Service
 - `TASK-JOBS-DASHBOARD-001` — wire daily analytics aggregation into Job Service
+- `TASK-JOBS-NOTIFICATION-SCHEDULES-001` — wire provider verify, IM invite,
+  campaign dispatch, retry failed, and report dispatch jobs into Job Service
+- `TASK-JOBS-SUBSCRIPTION-001` — wire subscription expiration sweep,
+  entitlement reconcile, and billing reconciliation jobs into Job Service
+- `TASK-JOBS-APP-RELEASE-001` — wire App release artifact verify,
+  publish/revoke, storage verify, adoption aggregate, and Website downloads
+  refresh jobs into Job Service
 
 ## 16. Done Criteria
 
@@ -557,8 +651,12 @@ Follow-up domain integrations:
 - Backend exposes Admin gateway routes for job definitions, runs, schedules, and actions.
 - Admin run requests return `202 + run_id` without running long work in request handlers.
 - Admin has a first-class `/admin/jobs` menu.
+- Admin can create, edit, clone, preview, run now, enable, disable, and delete
+  schedules.
 - GeoIP update can be triggered from Job Center.
 - GeoIP page links to Job Center instead of owning generic scheduler UI.
+- Notification/report schedules can be managed from Job Center and linked from
+  System Settings.
 - RBAC covers `jobs:read`, `jobs:execute`, `jobs:write` plus owner permissions.
 - Audit logs exist for every run/schedule mutation.
 - Worker retry/backoff, lease recovery, per-target locks, and concurrency limits are tested.

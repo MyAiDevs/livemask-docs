@@ -8,7 +8,12 @@
 - FeatureFlag
 - NodeAgent runtime config
 - App remote config
+- App runtime governance config for performance/resource/reconnect tuning
 - Payment / Risk Control rules
+
+Primary App runtime governance contract:
+
+- [App Runtime Governance Config Contract](../app/APP_RUNTIME_GOVERNANCE_CONFIG_CONTRACT.md)
 
 ## 2. 配置项模板
 

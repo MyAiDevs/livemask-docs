@@ -62,12 +62,43 @@ experience only.
 | `user:write` | `support_agent`, `admin`, `super_admin` |
 | `payment:read` | `finance_operator`, `admin`, `super_admin`, `auditor` |
 | `payment:write` | `finance_operator`, `admin`, `super_admin` |
+| `settings:read` | `ops_operator`, `admin`, `super_admin`, `auditor` |
+| `settings:write` | `admin`, `super_admin` |
+| `settings:verify` | `ops_operator`, `admin`, `super_admin` |
+| `jobs:read` | `ops_operator`, `admin`, `super_admin`, `auditor` |
+| `jobs:execute` | `ops_operator`, `admin`, `super_admin` |
+| `jobs:write` | `admin`, `super_admin` |
+| `logs:read` | `support_agent`, `ops_operator`, `admin`, `super_admin`, `auditor` |
 | `audit:read` | `auditor`, `admin`, `super_admin` |
+| `metrics:read` | `ops_operator`, `admin`, `super_admin`, `auditor` |
+| `metrics:write` | `admin`, `super_admin` |
+| `notifications:read` | `support_agent`, `ops_operator`, `admin`, `super_admin`, `auditor` |
+| `notifications:write` | `ops_operator`, `admin`, `super_admin` |
+| `notifications:execute` | `ops_operator`, `admin`, `super_admin` |
+| `app_release:read` | `support_agent`, `ops_operator`, `admin`, `super_admin`, `auditor` |
+| `app_release:write` | `admin`, `super_admin` |
+| `app_release:upload` | `ops_operator`, `admin`, `super_admin`, CI service actor |
 | `role:manage` | `super_admin` |
 | `sponsor:self_read` | `sponsor_ambassador`, `admin`, `super_admin` |
 | `sponsor:self_write` | `sponsor_ambassador`, `admin`, `super_admin` |
 | `ambassador:self_read` | `promotion_ambassador`, `admin`, `super_admin` |
 | `ambassador:self_write` | `promotion_ambassador`, `admin`, `super_admin` |
+| `growth:read` | `support_agent`, `ops_operator`, `finance_operator`, `auditor`, `admin`, `super_admin` |
+| `growth:write` | `ops_operator`, `finance_operator`, `admin`, `super_admin` |
+| `settlement:read` | `finance_operator`, `auditor`, `admin`, `super_admin` |
+| `settlement:write` | `finance_operator`, `admin`, `super_admin` |
+
+Permission semantics:
+
+| Permission Family | Meaning | Notes |
+| --- | --- | --- |
+| `jobs:*` | Admin Job Center definitions, runs, schedules, retry/cancel/run-now | Write/execute still requires owner-domain permission such as `geoip:write` when applicable |
+| `logs:read` | Redacted technical logs, node latest logs, payment/notification log views | Does not grant raw secret, raw payload, or sensitive contact reveal |
+| `audit:read` | Immutable audit log search | Auditors and admins only |
+| `metrics:read` | Prometheus-derived summaries and Admin metric views | Does not grant direct browser access to Prometheus/NodeAgent |
+| `metrics:write` | Observability sampling/client config changes | Used for App/Sentry safe client config settings |
+| `notifications:*` | Provider settings, templates, delivery logs and dispatch actions | Contact reveal still requires separate sensitive-contact permission if introduced |
+| `settings:*` | Safe system setting summaries, write-only secret updates, provider verification | Raw secrets are never returned even with `settings:read` |
 
 ## 5. Token Model
 

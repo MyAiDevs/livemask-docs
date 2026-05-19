@@ -1,8 +1,8 @@
 # Protocol & Endpoint Template Contract
 
-> Task: `TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001`  
-> Owner: Backend / Job Service / NodeAgent / Admin / CI-CD / Docs  
-> Status: Draft  
+> Task: `TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001`
+> Owner: Backend / Job Service / NodeAgent / Admin / CI-CD / Docs
+> Status: Ready with implementation stability gate
 > Scope: Defines the cross-repo contract for protocol endpoint template management,
 > batch assignment, staged rollout, NodeAgent apply, Backend connect_config
 > reconciliation, and App graceful reconnect.
@@ -15,6 +15,7 @@ Related mandatory contracts:
 - [NodeAgent Protocol Extension Architecture](../../nodeagent/NODEAGENT_PROTOCOL_EXTENSION_ARCHITECTURE.md)
 - [Hysteria2 Connect Config Contract](../vpn/HYSTERIA2_CONNECT_CONFIG_CONTRACT.md)
 - [NodeAgent Release Config Rollback Contract](../nodeagent/NODEAGENT_RELEASE_CONFIG_ROLLBACK_CONTRACT.md)
+- [Protocol Endpoint Stability Gate](../../development/tasks/TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md)
 
 ---
 
@@ -35,6 +36,28 @@ WireGuard), Backend must be able to:
 
 Without this contract, each new protocol would require ad-hoc configuration
 screens, hardcoded rollout logic, and silent client failures.
+
+---
+
+## 1.1 Implementation Stability Gate
+
+Protocol endpoint rollout changes MUST pass the stability gate before any repo
+reports the runtime implementation as complete.
+
+| Gate | Required behavior |
+| --- | --- |
+| Backend authority | Backend owns template/version state, capability aggregation, endpoint eligibility, connect_config selection, reconnect hints, RBAC, and audit. |
+| NodeAgent pull safety | NodeAgent only pulls assignments and reports events. It never receives browser/Admin direct commands and never notifies App directly. |
+| Job Service waves | Rollout and rollback use Job Service waves, per-node locks, retry/backoff, cancel checks, failure thresholds, and redacted events. |
+| App graceful reconnect | App receives Backend hints, deduplicates them, fetches fresh connect_config, and preserves old tunnel until a supported replacement is ready. |
+| LKG and rollback | NodeAgent and Backend both preserve current/previous/LKG assignment state. Rollback creates a new versioned assignment. |
+| Admin real data | Node list/detail, template, assignment, events, logs, and metrics read Backend APIs only. Demo data must be removed or visibly marked with a tracked endpoint gap. |
+| QA coverage | CI/CD smoke covers seed, CRUD, versioning, capability gating, rollout, NodeAgent event, reconnect hint, rollback, and secret leak scan. |
+
+The detailed gate and Cursor handoff are defined in
+[TASK-DOC-PROTOCOL-STABILITY-GATE-001](../../development/tasks/TASK-DOC-PROTOCOL-STABILITY-GATE-001-protocol-endpoint-stability-gate.md)
+and
+[PROTOCOL-ENDPOINT-STABILITY-CURSOR_HANDOFF.md](../../development/cursor-handoffs/PROTOCOL-ENDPOINT-STABILITY-CURSOR_HANDOFF.md).
 
 ---
 
@@ -411,7 +434,7 @@ Recommended Admin APIs:
 
 ```http
 GET /admin/api/v1/protocol/capabilities
-GET /admin/api/v1/nodes/{node_id}/protocol-capabilities
+GET /admin/api/v1/protocol/nodes/{node_id}/capabilities
 GET /admin/api/v1/protocol-templates/{template_id}/eligibility
 ```
 
@@ -684,6 +707,10 @@ Admin creates/edits template assignment
 
 ## 7. NodeAgent Assignment API
 
+NodeAgent assignment is a pull API. Backend creates assignment targets;
+NodeAgent periodically pulls and applies them with local LKG protection. Job
+Service and Admin must never call a NodeAgent runtime endpoint directly.
+
 ### 7.1 Pull Endpoint
 
 ```http
@@ -737,6 +764,21 @@ Rules:
    e. Apply rendered config to sing-box (hot reload or restart).
    f. Run `ProtocolProfile.HealthChecks()`.
    g. Report event via `/internal/agent/protocol-events`.
+
+### 7.3 Apply Safety Requirements
+
+NodeAgent MUST:
+
+- Keep the current healthy runtime active while validating a candidate
+  assignment.
+- Persist `current`, `target`, `previous`, and `lkg` assignment state.
+- Mark an assignment as LKG only after protocol-specific health checks pass.
+- Report a failed candidate as `failed` or `endpoint_not_ready` without
+  overwriting the last-known-good runtime.
+- Attempt rollback to LKG when an applied assignment fails health checks after
+  activation.
+- Redact raw sing-box config, resolved secrets, private keys, tokens, signed
+  URLs, local paths, and session identifiers from all status, logs, and events.
 
 ---
 
@@ -815,6 +857,74 @@ When a NodeAgent reports `endpoint_ready` or `endpoint_not_ready`, Backend must:
 The App reconnect flow is documented in
 [CLIENT_RECONNECT_HINT_CONTRACT.md](../realtime/CLIENT_RECONNECT_HINT_CONTRACT.md).
 
+### 9.1 Backend-Owned Reconnect Hint Rule
+
+NodeAgent must not notify App clients. Backend is the only component allowed to
+create App reconnect hints, because Backend owns user sessions, device identity,
+connect_config selection, rate limiting, and deduplication.
+
+Backend emits reconnect hints only when all conditions are true:
+
+1. NodeAgent reported `endpoint_ready`.
+2. Backend accepted and stored the new endpoint metadata.
+3. Template and node capability are eligible for App consumption.
+4. Existing sessions are affected by the node/protocol/config version change.
+5. Hint creation is idempotent for `rollout_id + node_id + session_id +
+   config_hash`.
+6. Per-node, per-rollout, per-user, and per-device reconnect rate limits allow
+   delivery.
+
+Hints are notifications, not config payloads. App must fetch fresh
+`connect_config` before changing its tunnel.
+
+---
+
+## 9.2 Required Admin And Internal API Surface
+
+### Node Detail APIs
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/admin/api/v1/nodes` | List nodes with health, region, traffic, protocol summary, capability freshness. |
+| GET | `/admin/api/v1/nodes/{node_id}` | Canonical node detail state. |
+| GET | `/admin/api/v1/nodes/{node_id}/heartbeats` | Recent heartbeat timeline. |
+| GET | `/admin/api/v1/nodes/{node_id}/logs` | Latest redacted node logs. |
+| GET | `/admin/api/v1/nodes/{node_id}/metrics-summary` | CPU, memory, endpoint readiness, queue depth, traffic summary. |
+| GET | `/admin/api/v1/protocol/nodes/{node_id}/capabilities` | Latest capability report with fresh/stale marker. |
+| GET | `/admin/api/v1/nodes/{node_id}/protocol-endpoints` | Current endpoint metadata and health by protocol/transport. |
+| GET | `/admin/api/v1/nodes/{node_id}/protocol-assignments` | Current, target, previous, and LKG assignment state. |
+| GET | `/admin/api/v1/nodes/{node_id}/protocol-events` | Protocol apply, health, degraded, failed, and rollback timeline. |
+| POST | `/admin/api/v1/nodes/{node_id}/protocol-endpoints/{endpoint_id}/probe` | Queue endpoint probe job. |
+
+### Template And Rollout APIs
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| GET | `/admin/api/v1/protocol-templates` | List templates with version, eligibility, reserved/blocked state. |
+| POST | `/admin/api/v1/protocol-templates` | Create custom template. |
+| GET | `/admin/api/v1/protocol-templates/{template_id}` | Template detail. |
+| PUT | `/admin/api/v1/protocol-templates/{template_id}` | Update editable fields and create new version when config changes. |
+| GET | `/admin/api/v1/protocol-templates/{template_id}/versions` | Immutable version history. |
+| POST | `/admin/api/v1/protocol-templates/{template_id}/versions` | Create version snapshot. |
+| GET | `/admin/api/v1/protocol-templates/{template_id}/eligibility` | Fleet and per-node eligibility preview. |
+| POST | `/admin/api/v1/protocol-templates/{template_id}/publish` | Publish selected version through Job Service rollout. |
+| POST | `/admin/api/v1/protocol-templates/{template_id}/rollback` | Roll back to previous/LKG version through Job Service. |
+| POST | `/admin/api/v1/protocol-rollouts` | Create rollout run. |
+| GET | `/admin/api/v1/protocol-rollouts/{run_id}` | Rollout progress and wave state. |
+| POST | `/admin/api/v1/protocol-rollouts/{run_id}/pause` | Pause rollout. |
+| POST | `/admin/api/v1/protocol-rollouts/{run_id}/resume` | Resume rollout. |
+| POST | `/admin/api/v1/protocol-rollouts/{run_id}/rollback` | Create rollback run. |
+
+### Internal APIs
+
+| Method | Path | Caller | Purpose |
+| --- | --- | --- | --- |
+| GET | `/internal/agent/protocol-assignment` | NodeAgent | Pull target assignment. |
+| POST | `/internal/agent/protocol-events` | NodeAgent | Report apply, ready, degraded, failed, rollback events. |
+| POST | `/internal/agent/protocol-capabilities` | NodeAgent optional | Capability report if heartbeat does not carry it. |
+| POST | `/internal/job-executors/protocol-endpoint/rollout-wave` | Job Service | Create per-node target assignments for a wave. |
+| POST | `/internal/job-executors/protocol-endpoint/rollback-wave` | Job Service | Create rollback assignments for a wave. |
+
 ---
 
 ## 10. Admin UI Requirements
@@ -872,6 +982,11 @@ After implementation, `livemask-ci-cd` must cover:
 | connect_config reconciliation | Node appears in connect_config after endpoint_ready. |
 | Reserved template cannot be enabled | 400 or blocked. |
 | System-managed template profile_config read-only | Admin UI shows lock. |
+| Admin node detail no mock | Node detail uses Backend data and no hidden demo fallback. |
+| Reconnect hint generated by Backend | Active session receives hint after Backend accepts endpoint_ready. |
+| Direct NodeAgent-to-App path absent | No App-facing NodeAgent URL, token, or direct channel exists. |
+| Rollout failure threshold | Wave pauses when failure threshold is exceeded. |
+| LKG rollback | Rollback creates a new assignment and restores previous healthy version. |
 
 ---
 
@@ -935,6 +1050,13 @@ first-ever assignment), rollback is blocked and Admin must manually intervene.
 | `TASK-NODEAGENT-PROTOCOL-ASSIGNMENT-001` | `livemask-nodeagent` | Assignment pull client, apply sequence, event reporter. |
 | `TASK-ADMIN-PROTOCOL-TEMPLATE-001` | `livemask-admin` | Template management UI, assignment creation, rollout progress view, rollback action. |
 | `TASK-CICD-PROTOCOL-TEMPLATE-001` | `livemask-ci-cd` | Protocol template and rollout smoke tests per Section 11. |
+| `TASK-DOC-PROTOCOL-STABILITY-GATE-001` | `livemask-docs` | Implementation readiness gate, Admin real API list, QA matrix, Cursor handoff. |
+| `TASK-BACKEND-PROTOCOL-STABILITY-001` | `livemask-backend` | Real Admin/Internal APIs, eligibility, reconnect hint authority, node detail data. |
+| `TASK-NODEAGENT-PROTOCOL-STABILITY-001` | `livemask-nodeagent` | Assignment LKG, rollback, readiness, event retry, metrics/logs hardening. |
+| `TASK-ADMIN-PROTOCOL-STABILITY-001` | `livemask-admin` | Replace node detail demo data and implement protocol template/assignment UI. |
+| `TASK-APP-RECONNECT-STABILITY-001` | `livemask-app` | Verify real reconnect hints, unsupported protocol safety, graceful reconnect evidence. |
+| `TASK-JOBS-PROTOCOL-STABILITY-001` | `livemask-job-service` | Harden rollout/rollback executor and per-node/wave safety. |
+| `TASK-CICD-PROTOCOL-STABILITY-001` | `livemask-ci-cd` | Turn capability/rollout smoke SKIP to PASS and add stability checks. |
 
 ---
 
@@ -959,3 +1081,4 @@ first-ever assignment), rollback is blocked and Admin must manually intervene.
 | Date | Change | Author |
 | --- | --- | --- |
 | 2026-05-18 | Initial version | TASK-DOC-PROTOCOL-ENDPOINT-ROLLOUT-001 |
+| 2026-05-19 | Added implementation stability gate, Backend-owned reconnect hint rule, Admin real API list, and QA smoke expansion | TASK-DOC-PROTOCOL-STABILITY-GATE-001 |

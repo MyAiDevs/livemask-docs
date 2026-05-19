@@ -13,6 +13,7 @@ Primary contracts:
 
 - `docs/contracts/api/auth-rbac.md`
 - `docs/contracts/i18n/I18N_LOCALIZATION_CONTRACT.md`
+- `docs/contracts/app/APP_RELEASE_DISTRIBUTION_CONTRACT.md`
 - `docs/admin/LIVEMASK_FRONTEND_DESIGN_BRIEF_FOR_ATOMS.md`
 - `design/frontend-suite/atoms/v1/export/`
 - `docs/contracts/jobs/JOB_QUEUE_USAGE_MATRIX.md`
@@ -35,3 +36,21 @@ canonical, JSON-LD, and hreflang behavior must follow
 Required follow-up:
 
 - `TASK-WEBSITE-I18N-001`
+
+## App Downloads
+
+Website download pages must consume Backend App release metadata instead of
+hardcoding artifact URLs.
+
+Required behavior:
+
+- Show latest `stable` release per platform.
+- Link release notes from Content System `release_note`.
+- Use Backend public download endpoint or Backend-provided safe CDN URL.
+- Do not expose S3/OSS/COS object keys, signed URL query strings, storage
+  credentials, or local filesystem paths.
+- Keep crawler-visible download and release-note text in localized HTML.
+
+Required follow-up:
+
+- `TASK-WEBSITE-DOWNLOADS-001`

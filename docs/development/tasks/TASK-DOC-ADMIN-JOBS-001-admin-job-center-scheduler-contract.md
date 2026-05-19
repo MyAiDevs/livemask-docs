@@ -21,6 +21,8 @@ LiveMask 后续会持续增加运营任务：
 - Website sitemap / RSS rebuild
 - Dashboard daily aggregation
 - Billing reconciliation
+- Notification provider verify, IM invite, campaign dispatch, failed retry, and report dispatch
+- Subscription expiration sweep and entitlement reconciliation
 - Session / device cleanup
 - CI smoke and task-sync triggers
 
@@ -33,6 +35,7 @@ LiveMask 后续会持续增加运营任务：
 - 定义 Admin Job Center / Scheduler contract。
 - 定义 job definitions、job runs、job events、job schedules。
 - 定义 `/admin/jobs` 产品路由。
+- 定义 `/admin/jobs/schedules` 新增、修改、克隆、预览、立即运行、启用、禁用、删除行为。
 - 定义独立 `livemask-job-service` 部署边界。
 - 定义 Backend Admin Gateway API。
 - 定义 DB-backed queue、worker pool、retry/backoff、lease、locking。
@@ -60,9 +63,9 @@ LiveMask 后续会持续增加运营任务：
 
 | 仓库 | 影响 | 必须修改 | 验证方式 |
 | --- | --- | --- | --- |
-| `livemask-job-service` | 新独立服务；queue、worker、scheduler、retry/backoff、locks、internal API | 后续 `TASK-JOBS-SERVICE-001` | service unit/integration tests, worker smoke |
-| `livemask-backend` | 新增 Admin Job Gateway、RBAC、audit attribution、service auth integration | 后续 `TASK-BACKEND-JOBS-GATEWAY-001` | `go test ./...`, Admin API smoke |
-| `livemask-admin` | 新增 `/admin/jobs`、run history、schedule UI；GeoIP trigger 迁移 | 后续 `TASK-ADMIN-JOBS-001` | `npm run build`, UI smoke |
+| `livemask-job-service` | 新独立服务；queue、worker、scheduler、schedule CRUD、retry/backoff、locks、internal API | 后续 `TASK-JOBS-SERVICE-001`, `TASK-JOBS-SCHEDULER-CRUD-001` | service unit/integration tests, worker smoke |
+| `livemask-backend` | 新增 Admin Job Gateway、schedule CRUD gateway、RBAC、audit attribution、service auth integration | 后续 `TASK-BACKEND-JOBS-GATEWAY-001`, `TASK-BACKEND-JOBS-SCHEDULE-CRUD-001` | `go test ./...`, Admin API smoke |
+| `livemask-admin` | 新增 `/admin/jobs`、run history、schedule create/edit/delete UI；GeoIP trigger 迁移 | 后续 `TASK-ADMIN-JOBS-001`, `TASK-ADMIN-JOBS-SCHEDULE-CRUD-001` | `npm run build`, UI smoke |
 | `livemask-ci-cd` | 新增 Job Center smoke | 后续 `TASK-CICD-JOBS-001` | `bash scripts/jobs-smoke.sh` |
 | `livemask-docs` | 新增 contract 和任务索引 | 当前任务 | `bash scripts/check-docs.sh` |
 | `livemask-nodeagent` | 无直接改动；NodeAgent rollout/probe/config job 后续由 Job Service fan-out | 后续 `TASK-JOBS-NODEAGENT-001` | N/A |
@@ -90,6 +93,9 @@ LiveMask 后续会持续增加运营任务：
 - [ ] Backend implements `TASK-BACKEND-JOBS-GATEWAY-001`.
 - [ ] Admin implements `TASK-ADMIN-JOBS-001`.
 - [ ] CI/CD implements `TASK-CICD-JOBS-001`.
+- [ ] Job Service implements `TASK-JOBS-SCHEDULER-CRUD-001`.
+- [ ] Backend implements `TASK-BACKEND-JOBS-SCHEDULE-CRUD-001`.
+- [ ] Admin implements `TASK-ADMIN-JOBS-SCHEDULE-CRUD-001`.
 
 ## 7. Validation Plan
 
@@ -132,7 +138,12 @@ LiveMask 后续会持续增加运营任务：
 - `TASK-BACKEND-JOBS-GATEWAY-001`
 - `TASK-ADMIN-JOBS-001`
 - `TASK-CICD-JOBS-001`
+- `TASK-JOBS-SCHEDULER-CRUD-001`
+- `TASK-BACKEND-JOBS-SCHEDULE-CRUD-001`
+- `TASK-ADMIN-JOBS-SCHEDULE-CRUD-001`
 - `TASK-JOBS-GEOIP-001`
 - `TASK-JOBS-NODEAGENT-001`
 - `TASK-JOBS-CONTENT-001`
 - `TASK-JOBS-DASHBOARD-001`
+- `TASK-JOBS-NOTIFICATION-SCHEDULES-001`
+- `TASK-JOBS-SUBSCRIPTION-001`

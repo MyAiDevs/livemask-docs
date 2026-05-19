@@ -1,8 +1,8 @@
 # App / NodeAgent / Job Service / Backend / Admin Closed Loop Architecture
 
-> Task: `TASK-DOC-CONTROL-PLANE-001`  
-> Owner: Product / Docs / Backend / Job Service / NodeAgent / App / Admin / CI-CD  
-> Status: Ready  
+> Task: `TASK-DOC-CONTROL-PLANE-001`
+> Owner: Product / Docs / Backend / Job Service / NodeAgent / App / Admin / CI-CD
+> Status: Ready
 > Scope: Defines the long-term LiveMask control-plane loop across Admin,
 > Backend, Job Service, NodeAgent, and App.
 
@@ -74,27 +74,27 @@ flowchart LR
 
 ## 4. Control Plane Principles
 
-1. **Admin creates intent, not work.**  
+1. **Admin creates intent, not work.**
    Admin submits “roll out release”, “update GeoIP”, “publish config”, or “run
    probe” intent. It never loops over nodes or downloads artifacts itself.
 
-2. **Backend validates and records authority.**  
+2. **Backend validates and records authority.**
    Backend owns Admin JWT, RBAC, owner-domain permission checks, audit identity,
    and domain state validation.
 
-3. **Job Service executes asynchronously.**  
+3. **Job Service executes asynchronously.**
    All long-running work goes through queue, lease, worker pool, retry, backoff,
    idempotency, and per-target locks.
 
-4. **NodeAgent and App are pull-safe clients.**  
+4. **NodeAgent and App are pull-safe clients.**
    They fetch signed/verified config or artifacts, keep last-known-good state,
    and report events. They never receive vendor credentials or Admin secrets.
 
-5. **Backend aggregates truth.**  
+5. **Backend aggregates truth.**
    Backend stores canonical node/app/job/domain status. Admin views Backend
    state, not raw worker assumptions.
 
-6. **Every loop has rollback.**  
+6. **Every loop has rollback.**
    If a rollout, config, GeoIP, content, or protocol job can change runtime
    behavior, it must define rollback and validation before it is implemented.
 
@@ -229,6 +229,29 @@ Required safeguards:
 - Admin dashboard clearly marks stale data
 - Country/region mapping uses versioned GeoIP database
 
+### 5.7 User Contact And Notification Delivery
+
+```text
+Admin adds or verifies a user IM contact channel
+  -> Backend validates user:write / user:contact:verify and stores safe contact metadata
+  -> Backend creates bot invite or notification run through Job Service
+  -> Job Service dispatches provider-specific invite/message with rate limits
+  -> Provider callback or user confirmation updates binding/verification state
+  -> Backend records notification delivery logs and preference effects
+  -> Admin user detail shows contact channels, preferences, invites, and latest delivery logs
+  -> App/Website account settings can later expose self-service contact binding and preferences
+```
+
+Required safeguards:
+
+- Contact handles, chat IDs, invite tokens, and provider response payloads are PII.
+- Admin list/detail responses mask contact identifiers by default.
+- Only `user:contact:read_sensitive` may reveal full contact identifiers, and every reveal is audited.
+- Bot tokens and provider secrets stay in Backend/Job Service configuration, never in Admin/App/Website responses.
+- Marketing and campaign notifications must honor channel-level and notification-type opt-out.
+- Transactional/security notifications may bypass marketing opt-out only when the contract explicitly allows it.
+- Delivery retries must use idempotency keys and must not duplicate user-facing messages.
+
 ## 6. Data Ownership
 
 | Data | Owner | Readers | Notes |
@@ -238,6 +261,8 @@ Required safeguards:
 | Node identity/secret/status | Backend | NodeAgent, Admin | Node secret never reaches Admin/App |
 | NodeAgent release artifacts metadata | Backend / Job Service | NodeAgent, Admin | Binary storage may be external |
 | NodeAgent local LKG binary/config | NodeAgent | NodeAgent only | Report summary only |
+| User contact channels and notification preferences | Backend | Admin, App/Website self-service APIs | PII; masked by default; explicit opt-out preserved |
+| Notification runs and delivery logs | Backend / Job Service | Admin, Support | Provider secrets never stored in delivery logs |
 | GeoIP source credentials | Backend | Backend/Job Service via controlled executor | No raw secret in Admin/App/NodeAgent |
 | GeoIP artifacts/manifests | Backend / Job Service | App, NodeAgent, Admin | Signed and sha256 verified |
 | App content feed | Backend | App, Website, Admin | Scheduling may be Job Service driven |

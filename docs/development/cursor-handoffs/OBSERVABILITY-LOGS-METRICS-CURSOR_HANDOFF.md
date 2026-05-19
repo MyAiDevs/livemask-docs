@@ -1,8 +1,8 @@
 # OBSERVABILITY-LOGS-METRICS Cursor Multi-Window Handoff
 
-> Task family: `TASK-DOC-OBSERVABILITY-LOGS-METRICS-001`  
-> Contract: `docs/contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md`  
-> Status: Ready for multi-window implementation  
+> Task family: `TASK-DOC-OBSERVABILITY-LOGS-METRICS-001`
+> Contract: `docs/contracts/observability/LOG_METRIC_PIPELINE_CONTRACT.md`
+> Status: Ready for multi-window implementation
 > Scope: system logs, NodeAgent logs, App Sentry exception summaries, payment
 > order logs, notification delivery logs, audit logs, metrics, Admin pages and
 > CI smoke.
@@ -63,11 +63,11 @@ livemask-ci-cd: ../livemask-docs/docs/operations/README.md
 | --- | --- | --- | --- |
 | Backend A | `livemask-backend` | `TASK-BACKEND-OBSERVABILITY-LOGS-001` | ✅ Routes fixed / implemented |
 | Backend B | `livemask-backend` | `TASK-BACKEND-SENTRY-SUMMARY-001`, `TASK-BACKEND-PAYMENT-LOGS-001`, `TASK-BACKEND-NOTIFICATION-LOGS-001` | ✅ Routes fixed / implemented |
-| Job Service | `livemask-job-service` | `TASK-JOBS-OBSERVABILITY-INGEST-001` | Pending |
-| NodeAgent | `livemask-nodeagent` | `TASK-NODEAGENT-METRICS-LOGS-001` | Pending |
-| App | `livemask-app` | `TASK-APP-SENTRY-OBSERVABILITY-001` | Pending |
-| Admin | `livemask-admin` | `TASK-ADMIN-LOGS-METRICS-001`, then `TASK-ADMIN-OBSERVABILITY-DETAILS-001` | Pending |
-| CI/CD | `livemask-ci-cd` | `TASK-CICD-OBSERVABILITY-SMOKE-001` | Pending |
+| Job Service | `livemask-job-service` | `TASK-JOBS-OBSERVABILITY-INGEST-001` | ✅ Implemented / CI async path verification pending |
+| NodeAgent | `livemask-nodeagent` | `TASK-NODEAGENT-METRICS-LOGS-001` + `TASK-NODEAGENT-OBSERVABILITY-UPLOAD-INTEGRATION-001` | ✅ Verified |
+| App | `livemask-app` | `TASK-APP-SENTRY-OBSERVABILITY-001` + `TASK-APP-SENTRY-RUNTIME-CONFIG-001` | ✅ Done / platform build blockers remain |
+| Admin | `livemask-admin` | `TASK-ADMIN-LOGS-METRICS-001`, then `TASK-ADMIN-OBSERVABILITY-DETAILS-001` | Unlocked |
+| CI/CD | `livemask-ci-cd` | `TASK-CICD-SENTRY-CONFIG-SMOKE-001` + `TASK-CICD-OBSERVABILITY-SMOKE-001` | ✅ Passed |
 
 Backend routes (core observability, Sentry config, payment order logs,
 notification delivery logs, system logs, NodeAgent log ingestion, metrics,
@@ -264,10 +264,46 @@ Tests:
 - status includes observability.
 ```
 
+### NodeAgent Verification Status
+
+`TASK-NODEAGENT-OBSERVABILITY-UPLOAD-INTEGRATION-001` is verified.
+`TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001` is verified in dev-local.
+
+Evidence:
+
+- HMAC signature and header derivation: 6 tests PASS.
+- `batch_id` generation and payload embedding: 4 tests PASS.
+- Retry / backoff / exhaustion / overflow: 9 tests PASS.
+- Redaction and message truncation: 12 tests PASS.
+- Total verification set: 31 tests PASS.
+- End-to-end upload path to Backend `/internal/agent/logs` verified.
+- Upload client accepts Backend `202 Accepted` responses and the current
+  response body shape:
+  `{ "accepted": true, "accepted_count": n, "queued": false }`.
+- Dev-local runtime after targeted NodeAgent restart shows
+  `[observability] log upload success` instead of retrying on status 202.
+
+Security fix:
+
+- `RedactLogEntry` previously failed to redact camelCase `nodeSecret`
+  because metadata keys are lowercased before matching. The sensitive key map
+  entry is now normalized to lowercase `nodesecret`.
+- `node_secret`, `nodeSecret`, and `NODE_SECRET` are all redacted.
+- Signed URLs in messages and metadata are redacted.
+- Upload failures retry with backoff and do not crash NodeAgent.
+- Exhausted retries discard entries after max retry limit.
+- Backend rejected responses such as `accepted:false` still fail and requeue
+  according to the normal backoff path.
+
+Next:
+
+- Admin may proceed with Node Detail latest logs and metric summary UI.
+- No further NodeAgent contract changes are required for this upload path.
+
 ## 8. App Cursor Prompt
 
 ```text
-TASK ID: TASK-APP-SENTRY-OBSERVABILITY-001
+TASK ID: TASK-APP-SENTRY-OBSERVABILITY-001 + TASK-APP-SENTRY-RUNTIME-CONFIG-001
 Repo: livemask-app
 Branch: dev
 
@@ -307,6 +343,42 @@ Tests:
 Completion report must explicitly state that raw App exception data stays in
 Sentry and Backend receives only summary via separate Backend task.
 ```
+
+### App Sentry Runtime Config Status
+
+`TASK-APP-SENTRY-RUNTIME-CONFIG-001` is complete at the integration layer.
+
+Implemented behavior:
+
+- Backend `GET /api/v1/app/observability/config` is the primary Sentry config
+  source.
+- Backend `enabled:false` is authoritative. It must not fall through to cached
+  config or `--dart-define=SENTRY_DSN`.
+- `--dart-define=SENTRY_DSN` remains only a local/dev fallback when Backend is
+  unreachable.
+- `APP_VERSION`, `APP_ENVIRONMENT`, and `SENTRY_DSN` can pass through
+  `scripts/local-app.sh`.
+- Forbidden Sentry secrets are dropped at parse time and never cached.
+- Backend disabled response is not cached; only valid enabled configs are
+  cached for offline startup.
+
+Validation:
+
+- `flutter pub get`: PASS.
+- `flutter analyze`: PASS with no new warnings/errors.
+- `flutter test`: 429 tests PASS.
+- `flutter test test/observability_config_test.dart`: 28 tests PASS.
+- `flutter build macos`: PASS for universal binary.
+- `flutter build web`: PASS.
+- iOS simulator build: BLOCKED by pre-existing macOS Sequoia xattr/codesign
+  issue.
+- Android debug APK: BLOCKED by pre-existing Kotlin version mismatch in
+  `sentry_flutter`.
+
+Next:
+
+- App window should fix the Android Kotlin mismatch and iOS codesign/xattr
+  environment blocker before claiming full-platform completion.
 
 ## 9. Admin Cursor Prompt
 
@@ -387,6 +459,35 @@ Local runtime rule:
 - Use targeted service sync/recreate only when explicitly needed.
 - Staging smoke must use isolated compose project/network/volume/ports.
 ```
+
+### CI/CD Verification Status
+
+`TASK-CICD-SENTRY-CONFIG-SMOKE-001` is passed.
+
+- Backend health: PASS.
+- Admin login: PASS.
+- App-facing Sentry config: PASS with disabled response.
+- Forbidden field check: PASS.
+- Admin Sentry settings: PASS.
+- RBAC: no token -> 401 and user token -> 403 PASS.
+- App fallback evidence: expected SKIP because CI/CD does not run App runtime
+  tests.
+- Secret leak scan: PASS with 0 leaks.
+
+`TASK-CICD-OBSERVABILITY-SMOKE-001` is passed.
+
+- All 23 sections executed with 0 failures.
+- Backend, Job Service, and NodeAgent health are reachable.
+- Backend / Job Service / NodeAgent `/metrics` expose required names.
+- NodeAgent log upload returns HTTP 202.
+- Global logs, agent logs, payment logs, notification logs, audit logs, Sentry
+  summary/events/performance all return HTTP 200.
+- RBAC checks across 14 routes return 401 without token and 403 for user token.
+- Secret leak scan reports 0 leaks.
+- Expected SKIPs remain non-blocking: cosmetic Job Service health JSON response
+  and payment order logs when no order data exists.
+
+The local dev runtime remained running during verification.
 
 ## 11. Completion Report Requirements
 

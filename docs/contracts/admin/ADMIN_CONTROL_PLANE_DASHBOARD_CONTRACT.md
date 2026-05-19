@@ -237,6 +237,64 @@ Country-level traffic statistics.
 }
 ```
 
+#### GET /admin/api/v1/dashboard/traffic/bandwidth-trend
+
+Traffic bandwidth trend for the selected aggregation window.
+
+```json
+{
+  "points": [
+    {
+      "timestamp": "2026-05-18T09:00:00Z",
+      "bytes_up": 123456789,
+      "bytes_down": 987654321,
+      "bandwidth_mbps": 128.5,
+      "active_sessions": 4520
+    }
+  ],
+  "window_start": "2026-05-17T10:00:00Z",
+  "window_end": "2026-05-18T10:00:00Z",
+  "interval": "1h",
+  "peak_bandwidth_mbps": 164.2,
+  "avg_bandwidth_mbps": 91.7,
+  "generated_at": "2026-05-18T10:00:00Z"
+}
+```
+
+#### GET /admin/api/v1/dashboard/traffic/top-users
+
+Users with the highest aggregated traffic in the selected window.
+
+```json
+{
+  "users": [
+    {
+      "user_id": "uuid",
+      "display_name": "Northwind Ops",
+      "email_masked": "no***@example.com",
+      "plan_name": "Team Pro",
+      "bytes_up": 123456789,
+      "bytes_down": 987654321,
+      "session_count": 456,
+      "active_device_count": 4,
+      "primary_country": "US",
+      "percentage": 18.4,
+      "last_active_at": "2026-05-18T09:58:00Z"
+    }
+  ],
+  "total_users": 1,
+  "generated_at": "2026-05-18T10:00:00Z"
+}
+```
+
+Privacy rules:
+
+- `email_masked` is required. Do not return raw email in this dashboard API.
+- The API must not expose IP addresses, destination domains, URLs, node secrets,
+  device identifiers, or browsing history.
+- Full user identifiers beyond `user_id` require normal user detail APIs and
+  their own RBAC/audit.
+
 #### GET /admin/api/v1/dashboard/jobs/summary
 
 Job Service execution summary.
@@ -466,6 +524,8 @@ returned by:
 
 - `GET /admin/api/v1/dashboard/traffic/flows` — per-flow link data for map arcs
 - `GET /admin/api/v1/dashboard/traffic/countries` — per-country aggregate data for map pins
+- `GET /admin/api/v1/dashboard/traffic/bandwidth-trend` — bandwidth and active session trend
+- `GET /admin/api/v1/dashboard/traffic/top-users` — high-traffic users with masked identifiers
 
 ### 5.2 Traffic Flow Fields
 
@@ -484,12 +544,46 @@ returned by:
 | `window_start` | timestamptz | Aggregation window start |
 | `window_end` | timestamptz | Aggregation window end |
 
+### 5.2.1 Bandwidth Trend Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `timestamp` | timestamptz | Bucket timestamp |
+| `bytes_up` | bigint | Upload bytes in bucket |
+| `bytes_down` | bigint | Download bytes in bucket |
+| `bandwidth_mbps` | float | Average bandwidth in Mbps for the bucket |
+| `active_sessions` | integer | Active sessions in bucket |
+
+### 5.2.2 Top User Fields
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `user_id` | string | User ID for Admin drilldown |
+| `display_name` | string | Safe display name |
+| `email_masked` | string | Masked email only |
+| `plan_name` | string | Subscription/plan label |
+| `bytes_up` | bigint | Upload bytes in window |
+| `bytes_down` | bigint | Download bytes in window |
+| `session_count` | integer | Session count in window |
+| `active_device_count` | integer | Active devices in window |
+| `primary_country` | string | Primary country code |
+| `percentage` | float | Share of total traffic in the current window |
+| `last_active_at` | timestamptz | Last active time |
+
 ### 5.3 Rendering Contract
 
 | Stage | Visualization | Notes |
 | --- | --- | --- |
 | MVP | SVG or 2D canvas map with country pins and flow arcs | Must use real API data. No fake arcs. |
 | Post-MVP | 3D globe (Three.js or similar) | Data layer contract unchanged. Only rendering changes. |
+
+`/admin/traffic` must also render:
+
+- global traffic map / flow layer
+- bandwidth trend chart
+- country/region traffic ranking with percentage share
+- high-traffic user list with masked identifiers
+- upload/download split and active session summary
 
 ### 5.4 Required Widget States
 
