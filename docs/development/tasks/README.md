@@ -127,6 +127,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-ADMIN-TEST-EXPANSION-001.md](TASK-ADMIN-TEST-EXPANSION-001.md) | ✅ Completed | ✅ `0698238` (via guard) | ✅ `0698238` |
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md) | ✅ Completed (runtime fixed by follow-up) | ✅ `63dcdaa` + runtime fix `1f630f0` | ✅ `1f630f0` |
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md) | ✅ Completed | ✅ `1f630f0` (via guard) | ✅ `1f630f0` |
+| [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md](TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md) | ✅ Completed | ✅ `5ce5c6c` (via guard) | ✅ `5ce5c6c` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
@@ -286,8 +287,9 @@ PR order:
 
 | TASK | Repo | Scope | Status |
 | --- | --- | --- | --- |
-| [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001] | `livemask-app` | Fix sentry_flutter Kotlin JVM target compatibility for Android debug/release builds | Open |
+| [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md](TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md) | `livemask-app` | Fix sentry_flutter Kotlin JVM target compatibility for Android debug/release builds | ✅ Completed (`5ce5c6c`) |
 | [TASK-APP-IOS-CODESIGN-ENV-001] | `livemask-app` | Resolve Sequoia xattr/codesign and signing Identity for iOS device builds | Open |
+| TASK-APP-ANDROID-RELEASE-SIGNING-001 | `livemask-app` / CI-CD | Configure real Android release signing keys; current release build passes with debug signing config | Proposed |
 | [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md](TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md) | `livemask-ci-cd` | Fix dev-merge-guard.sh path handling for spaces in "New project 2" directory name | ✅ Completed |
 
 ## Content System（统一内容系统）任务
