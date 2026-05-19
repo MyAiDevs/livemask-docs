@@ -4,7 +4,9 @@
 > Repo: `livemask-website`
 > Branch: `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001`
 > Commit: `9d8c144`
-> Status: partial / evidence_missing (task branch not merged to dev)
+> Status: **completed**
+>   (all subtasks including help_article rendering now PASS via
+>   TASK-WEBSITE-HELP-ARTICLE-001, merged at 9ce1a88 on dev)
 > Created: 2026-05-19
 >
 > Regression branch: `task/TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001`
@@ -27,7 +29,8 @@ Completed subtasks:
 | `TASK-WEBSITE-DOWNLOADS-001` | Downloads page consumes public App release metadata | Done |
 | `TASK-WEBSITE-I18N-001` | zh-CN default route, en-US fallback, hreflang, localized sitemap | Done |
 | `TASK-WEBSITE-BLOG-002` | Blog list/detail/category/tag use real Content APIs | Done |
-| `TASK-WEBSITE-CONTENT-001` | `help_article` content support and marketing SEO metadata | Done |
+| `TASK-WEBSITE-CONTENT-001` | `help_article` content types, API client, and useContent hook (data layer only) | Done |
+| `TASK-WEBSITE-HELP-ARTICLE-001` | `/support` list/detail pages rendering help_article content | Done (merged at `9ce1a88` on dev) |
 | `TASK-WEBSITE-SEO-REBUILD-001` | Build-time `sitemap.xml` and `rss.xml` generation from Backend with fallback | Done |
 
 Changed implementation areas:
@@ -97,24 +100,29 @@ Release-control regression evidence:
 
 ## 6. Dev Merge Evidence
 
+The original `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001` branch (`9d8c144`) was
+never merged to `dev` directly (pre-dates dev-merge-guard adoption). The gap
+identified in this task — `help_article` rendering pages — has been closed and
+merged via the follow-up task:
+
 | Field | Value |
 |-------|-------|
 | **Repository** | `livemask-website` |
-| **Task branch** | `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001` |
-| **Task branch commit** | `9d8c144` |
-| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-website` dev |
-| **Remote dev ref** | **Evidence missing** |
+| **Original task branch** | `task/TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001` (`9d8c144`) — not merged to dev |
+| **Remediation task** | `TASK-WEBSITE-HELP-ARTICLE-001` (`93f3cab`) — merged at `9ce1a88` on `dev` |
+| **Remediation dev merge** | `9ce1a88` (via integration branch through `dev-merge-guard.sh`) |
+| **Remote dev ref** | `9ce1a88` on `origin/dev` |
+| **All subtasks** | Downloads ✅, I18N ✅, Blog ✅, SEO rebuild ✅, Help article rendering ✅ |
 | **Validation** | `tsc -b` PASS, `npm run build` PASS, `git diff --check` PASS, sitemap/RSS generation PASS |
-| **Evidence status** | **missing** — pending Website window dev merge |
-| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
-| **Runtime repo evidence** | pending external repo audit — requires `livemask-website` window to verify dev merge |
+| **Evidence status** | ✅ completed — remediation merged to `dev` and pushed to `origin/dev` |
 
 ## 7. Done Criteria
 
 - Website downloads page no longer hardcodes artifact URLs.
 - Blog pages consume public Content APIs.
 - Marketing pages include SEO metadata.
-- `help_article` and `release_note` content types are supported.
+- `help_article` data layer and `/support` rendering pages are supported.
+- `release_note` content type is supported.
 - `sitemap.xml` and `rss.xml` are generated at build time.
 - Validation evidence is recorded.
 - Backend/App/Admin/CI-CD follow-ups are clearly separated.
