@@ -12,6 +12,10 @@
 6. 完成前必须执行闭环验证，不能只完成单仓库改动。
 7. 完成报告只是状态事件，不是 GitHub Issue 关闭信号。
 8. 多窗口必须遵守 task lease：一个窗口同一时间只能拥有一个 active task，开始第二个任务前必须结束第一个任务的报告、提交和 task-sync。
+9. 每个 task 通过测试后必须合并到 `dev` 并推送 `origin/dev`；只停留在
+   `task/*` 或其它功能分支不能报告为完成。
+10. CI/CD smoke / staging validation 必须从 `dev` 运行。task 分支 smoke 只能作为预检，
+    不能作为最终验收证据。
 
 详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
 
@@ -34,6 +38,9 @@
 6. 如涉及架构、接口或配置变更，同步更新 `livemask-docs`。
 7. 在受影响仓库中完成兼容性检查。
 8. 提交时 commit message 必须包含 `TASK-XXXX`。
+9. 如果使用任务分支，验证通过后合并到 `dev`。
+10. 在合并后的 `dev` 上重新验证，并推送 `origin/dev`。
+11. 需要 CI/CD / smoke 的任务，只能以 `dev` ref 作为最终 smoke 来源。
 
 ## 3. 变更影响分析 Checklist
 
@@ -78,5 +85,8 @@
 - [ ] 失败、重试、降级、回滚路径已说明
 - [ ] 文档中的验收标准已更新
 - [ ] 已执行 `bash scripts/check-docs.sh`
+- [ ] 任务分支已合并到 `dev`，并已推送 `origin/dev`
+- [ ] 合并后的 `dev` 已重新执行本仓库必需验证
+- [ ] CI/CD smoke / staging validation 使用的是 `dev`，不是 `task/*` 分支
 - [ ] 若任务是跨仓库 Epic，所有 child task 与最终 smoke 已完成；单个 repo 的 `implemented` 不能关闭 Epic
 - [ ] 若 CI/CD 仍有 SKIP，状态必须写为 `completed_with_skip` 或 `verified_with_skip`，不得写成完整 `completed`

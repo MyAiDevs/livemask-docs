@@ -55,6 +55,10 @@ Do not report `completed` if the task branch has not been merged into `dev`, if
 `dev` has not been pushed to `origin/dev`, if validation only passed before the
 dev merge, or if merge conflicts remain unresolved.
 
+CI/CD smoke and staging validation must run from `dev`. A `task/*`, `codex/*`,
+or feature branch smoke run is only a precheck and cannot be used as final
+completion evidence. Merge to `dev`, push `origin/dev`, then run CI/CD smoke.
+
 ## Task Completion Report
 When a task or subtask is complete, use the standard completion report from:
 @ai-rules/v3.7/16-Task-Completion-Report.md

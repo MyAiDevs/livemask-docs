@@ -146,6 +146,8 @@ git pull --ff-only origin dev
 4. 如果发生冲突，只能解决当前仓库职责范围内的冲突；不得顺手改其它端代码。
 5. 合并后必须在 `dev` 上重新运行本仓库必需的验证，例如：
    `go test` / `go build` / `npm build` / `vitest` / `flutter test` / smoke。
+   CI/CD smoke / staging validation 只能使用 `dev`；`task/*`、`codex/*` 或其它
+   功能分支上的 smoke 只能作为预检，不能作为完成验收。
 6. 验证通过后必须推送：
 
 ```bash
@@ -161,6 +163,7 @@ git push origin dev
 - 任务分支尚未合并到 `dev`。
 - `dev` 尚未推送到 `origin/dev`。
 - 只在任务分支测试通过，未在合并后的 `dev` 上复测。
+- CI/CD smoke 使用了 `task/*`、`codex/*` 或其它功能分支 ref，而不是 `dev`。
 - 仍存在 merge conflict、未提交改动或未说明的 dirty worktree。
 - 为了合并而使用 `git reset --hard`、删除 volume、清理他人改动等破坏性操作。
 
