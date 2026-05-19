@@ -3,7 +3,9 @@
 > Owner: Backend / Docs
 > Repo: `livemask-backend` (primary), `livemask-docs` (tracking)
 > Created: 2026-05-20
-> Status: OPEN
+> Status: Completed
+> Backend remote dev ref: `1c1ebf4`
+> Completed: 2026-05-20
 
 ## 1. Background
 
@@ -11,22 +13,46 @@
 但实际在 `origin/dev` 上不存在对应的 endpoint、route wiring 或实现。
 必须由 Backend 窗口统一补救并验证后，才能重新升级状态。
 
+2026-05-20 Backend 补救窗口已完成本 TASK 范围内的 dev 修复并推送
+`livemask-backend` remote dev ref `1c1ebf4`。本次完成项包括：
+
+- `TASK-BACKEND-GEOIP-TEST-SIGNATURE-FIX-001`：GeoIP 测试签名修复。
+- `TASK-BACKEND-APP-RELEASE-LATEST-001-RECONCILE`：恢复
+  `GET /api/v1/app/releases/latest`。
+- `TASK-BACKEND-NODE-DETAIL-REAL-DATA-001-RECONCILE`：接通
+  `/admin/api/v1/nodes/{id}/logs` 和
+  `/admin/api/v1/nodes/{id}/metrics-summary`。
+
+Backend 验证：
+
+```text
+go test ./... -count=1 PASS
+go vet ./... PASS
+go build ./... PASS
+git diff --check PASS
+```
+
+以下任务仍为 blocker，不随本 TASK 关闭：
+
+- `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE`
+- `TASK-BACKEND-I18N-001`
+
 ## 2. 受影响的 TASK
 
 | TASK | 当前状态 | 问题 | 补救要求 |
 | --- | --- | --- | --- |
-| TASK-BACKEND-APP-RELEASE-LATEST-001 | ❌ MISSING | `GET /api/v1/app/releases/latest` endpoint 存在 task branch 但从未合并到 dev，不在 `origin/dev` 上运行 | (1) 在 dev 上恢复或重新发布 endpoint (2) guard merge 到 dev (3) 提供 dev merge commit + validation + remote ref |
-| TASK-BACKEND-NODE-DETAIL-REAL-DATA-001 | ⚠️ PARTIAL | 三个端点 handler 已实现但 route 未接入 Backend main router: `/nodes/{node_id}/logs`, `/nodes/{node_id}/metrics-summary`, `/protocol/nodes/{node_id}/capabilities` | (1) 将三个 handler route 接入 main router (2) 确认权限中间件正确 (3) 用真实 node_id 验证 200 / NODE_NOT_FOUND 404 / PERMISSION_DENIED 403 |
-| TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001 | ❌ MISSING | Capability wiring 代码存在 task branch 但未确认在 dev 上 live；不允许使用 verified 标签 | (1) 确认 `nodeService.SetCapabilityProcessor` 和 `connectService.SetCapabilityProvider` 在 dev 上生效 (2) 验证 node 4877168a... 有 capability rows (3) guard merge + validation |
-| TASK-BACKEND-I18N-001 | ❌ MISSING / next phase | dev 上无 `message_key` 或 i18n error response 实现 | 作为后续阶段，本次 reconcile 不强制要求实现 |
+| TASK-BACKEND-APP-RELEASE-LATEST-001 | ✅ Completed | `GET /api/v1/app/releases/latest` 已恢复到 Backend dev；remote dev ref `1c1ebf4` | Website/downloads 可进入真实 Backend 集成 smoke |
+| TASK-BACKEND-NODE-DETAIL-REAL-DATA-001 | ✅ Completed / partial capability blocker retained | `/admin/api/v1/nodes/{id}/logs` 和 `/admin/api/v1/nodes/{id}/metrics-summary` 已接通；protocol capabilities 仍由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 跟踪 | Admin Node Detail logs/metrics 可对接真实数据；capabilities 不标 completed |
+| TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001 | ❌ BLOCKED / not completed | Capability wiring 仍未完成 reconcile；不允许使用 verified 标签 | 继续由 `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 跟踪 |
+| TASK-BACKEND-I18N-001 | ❌ MISSING / next phase | dev 上无 `message_key` 或 i18n error response 实现 | 仍为后续 blocker，本次 reconcile 不关闭 |
 
 ## 3. 补救步骤
 
-- [ ] **Step 1 (Backend):** Backend 窗口逐项确认上表中每个 TASK 的缺失项。
-- [ ] **Step 2 (Backend):** 对每个需要修复的任务，将代码合并到 dev 并通过 guard。
-- [ ] **Step 3 (Backend):** 提供每个任务的 dev merge commit + `origin/dev` ref + validation 证据。
-- [ ] **Step 4 (Docs):** Docs 窗口在收到证据后，将对应任务状态升级为 Completed / Verified。
-- [ ] **Step 5 (Docs):** 从本 TASK 中勾除已完成的子项。
+- [x] **Step 1 (Backend):** Backend 窗口逐项确认上表中每个 TASK 的缺失项。
+- [x] **Step 2 (Backend):** 对本次补救范围内的任务，将代码合并到 dev 并通过 guard。
+- [x] **Step 3 (Backend):** 提供 dev ref `1c1ebf4` 和 validation 证据。
+- [x] **Step 4 (Docs):** Docs 窗口在收到证据后，将对应任务状态升级为 Completed / Verified。
+- [x] **Step 5 (Docs):** 从本 TASK 中勾除已完成的子项。
 
 ## 5. 验证标准
 
@@ -42,11 +68,12 @@
 | 仓库 | 影响 |
 | --- | --- |
 | `livemask-website` | `/download` 和 release-control smoke 需要 `TASK-BACKEND-APP-RELEASE-LATEST-001` 修复后才能跑真实集成 |
-| `livemask-admin` | Admin Node Detail 需要三个 backend route 修复后才能显示真实数据 |
+| `livemask-admin` | Admin Node Detail logs/metrics 已解除 Backend route blocker；protocol capabilities 仍等待 Backend capability wiring blocker |
 | `livemask-ci-cd` | 对应 smoke 需要 Backend 端点 live 后才能 pass |
 | `livemask-docs` | 本 TASK 维护核验状态和补救进度 |
 
 ## 6. Follow-up
 
-- 所有子项修复完成后，关闭本 TASK。
-- 如果 Backend dev 无法修复某子项，需在下面注明原因并记录为 BLOCKED。
+- 本 TASK 已关闭，引用 Backend remote dev ref `1c1ebf4`。
+- `TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001-RECONCILE` 继续保持 blocker。
+- `TASK-BACKEND-I18N-001` 继续保持 blocker / next phase。

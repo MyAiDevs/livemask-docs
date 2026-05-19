@@ -105,14 +105,14 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md](TASK-WEBSITE-PUBLIC-GROWTH-BATCH-001.md) | ✅ completed (remediated via TASK-WEBSITE-HELP-ARTICLE-001) | ❌ original not merged | ❌ original not merged |
 | [TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md](TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-APP-RELEASE-CHECK-REGRESSION-001.md](TASK-APP-RELEASE-CHECK-REGRESSION-001.md) | ✅ dev-contained (verified by TASK-APP-INTEGRITY-RECONCILE-001) | ⚠️ platform blockers retained | ⚠️ platform blockers retained |
-| [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md) | ❌ MISSING / reconcile required | ❌ missing (never merged) | ❌ missing |
+| [TASK-BACKEND-APP-RELEASE-LATEST-001.md](TASK-BACKEND-APP-RELEASE-LATEST-001.md) | ✅ Completed / reconciled | ✅ via `TASK-BACKEND-DEV-RECONCILE-001` | ✅ `1c1ebf4` |
 | [TASK-ADMIN-APP-RELEASE-001.md](TASK-ADMIN-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-ADMIN-RELEASE-CONTROL-IA-001.md](TASK-ADMIN-RELEASE-CONTROL-IA-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-JOBS-APP-RELEASE-001.md](TASK-JOBS-APP-RELEASE-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 | [TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md](TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
 || [TASK-WEBSITE-HELP-ARTICLE-001.md](TASK-WEBSITE-HELP-ARTICLE-001.md) | ✅ completed | ✅ `9ce1a88` (via guard) | ✅ `origin/dev` |
-|| [TASK-BACKEND-DEV-RECONCILE-001.md](TASK-BACKEND-DEV-RECONCILE-001.md) | 🔴 OPEN | ❌ missing | ❌ missing |
+|| [TASK-BACKEND-DEV-RECONCILE-001.md](TASK-BACKEND-DEV-RECONCILE-001.md) | ✅ Completed | ✅ Backend reconcile evidence received | ✅ `1c1ebf4` |
 
 ### Docs 契约任务
 
@@ -144,9 +144,9 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-P5-03-monitoring-alerting.md](TASK-P5-03-monitoring-alerting.md)
 - [TASK-P5-04-deploy-runbook.md](TASK-P5-04-deploy-runbook.md)
 - [TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md](TASK-NODEAGENT-OBSERVABILITY-UPLOAD-202-FIX-001.md)
-- [TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md](TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md) — ⚠️ PARTIAL (handlers exist but routes not wired)
+- [TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md](TASK-BACKEND-NODE-DETAIL-REAL-DATA-001.md) — ✅ completed for logs/metrics at Backend dev ref `1c1ebf4`; protocol capabilities remain blocked separately
 - [TASK-BACKEND-I18N-001] — ❌ MISSING / next phase (no message_key/i18n error on dev)
-- [TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001] — ❌ MISSING (wiring not confirmed live on dev)
+- [TASK-BACKEND-PROTOCOL-CAPABILITY-WIRING-001] — ❌ BLOCKED / not completed (wiring not confirmed live on dev)
 
 > 🔒 TASK-JOBS-SENTRY-CONFIG-SUPPORT-001: closed/no-op. Task branch was zero commits (HEAD == dev divergence point). Sentry exception handling is owned by Backend (`TASK-BACKEND-SENTRY-SUMMARY-001`) via Sentry webhook summary, not Job Service. No implementation needed.
 
