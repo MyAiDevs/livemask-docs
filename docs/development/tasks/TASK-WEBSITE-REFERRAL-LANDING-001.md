@@ -4,7 +4,7 @@
 > Repo: `livemask-website`
 > Branch: `task/TASK-WEBSITE-REFERRAL-LANDING-001`
 > Commit: `c778c5d`
-> Status: Completed dev-local
+> Status: partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -58,7 +58,21 @@ Security validation:
 - Backend-side referral conversion accounting remains owned by the growth
   revenue Backend tasks and must not be inferred by Website UI.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-website` |
+| **Task branch** | `task/TASK-WEBSITE-REFERRAL-LANDING-001` |
+| **Task branch commit** | `c778c5d` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-website` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `tsc -b` PASS, `npm run build` PASS, `git diff --check` PASS |
+| **Evidence status** | **missing** — pending Website window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-website` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Referral code query support is implemented.
 - Sanitization and no-open-redirect behavior are documented.

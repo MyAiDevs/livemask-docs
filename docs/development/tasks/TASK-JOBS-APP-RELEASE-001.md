@@ -4,7 +4,7 @@
 > Repo: `livemask-job-service`
 > Branch: `task/TASK-JOBS-APP-RELEASE-001`
 > Commit: `5f87d6d`
-> Status: Completed dev-local
+> Status: partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -69,7 +69,21 @@ POST /internal/job-executors/app-release/adoption-aggregate
 POST /internal/job-executors/app-release/website-downloads-refresh
 ```
 
-## 7. Done Criteria
+## 7. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-job-service` |
+| **Task branch** | `task/TASK-JOBS-APP-RELEASE-001` |
+| **Task branch commit** | `5f87d6d` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-job-service` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `go test ./... -count=1` PASS, `go vet ./...` PASS, `go build ./cmd/job-service` PASS |
+| **Evidence status** | **missing** — pending Job Service window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-job-service` window to verify dev merge |
+
+## 8. Done Criteria
 
 - All six App Release job executors are implemented and registered.
 - Storage credentials and signing/private-key parameters are rejected.

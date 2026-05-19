@@ -3,7 +3,7 @@
 > Owner: Backend / Job Service / Growth / CI-CD / Docs
 > Repo: `livemask-backend`
 > Branch: `task/TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001`
-> Status: Completed dev-local with unrelated full-suite failure recorded
+> Status: Completed dev-local with unrelated full-suite failure recorded — partial / evidence_missing
 > Created: 2026-05-19
 
 ## 1. Background
@@ -63,7 +63,21 @@ Known unrelated validation issue:
 - The unrelated full-suite `auth.HasPermission` failures should be tracked by a
   separate Backend cleanup task.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-backend` |
+| **Task branch** | `task/TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001` |
+| **Task branch commit** | Not specified |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-backend` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `go test ./internal/growth/...` PASS, `go test ./internal/auth/...` PASS, `go vet` clean, `go build` clean |
+| **Evidence status** | **missing** — pending Backend window dev merge; pre-existing unrelated full-suite failure is a known non-blocker |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-backend` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Internal executor APIs are implemented.
 - Changed-package tests/build/vet pass.

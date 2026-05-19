@@ -4,7 +4,7 @@
 > Repo: `livemask-backend`
 > Branch: `task/TASK-BACKEND-APP-RELEASE-LATEST-001`
 > Commit: `449786b`
-> Status: Completed dev-local
+> Status: partial / evidence_missing (task branch not merged to dev)
 > Created: 2026-05-19
 
 ## 1. Background
@@ -82,7 +82,21 @@ git diff --check clean
 - Website real integration smoke still needs to run against the deployed local
   Backend stack.
 
-## 6. Done Criteria
+## 6. Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-backend` |
+| **Task branch** | `task/TASK-BACKEND-APP-RELEASE-LATEST-001` |
+| **Task branch commit** | `449786b` |
+| **Dev merge commit** | **Evidence missing** — task branch not merged to `livemask-backend` dev |
+| **Remote dev ref** | **Evidence missing** |
+| **Validation** | `go test ./internal/apprelease/...` PASS (14 tests), `go vet` clean, `go build` clean |
+| **Evidence status** | **missing** — pending Backend window dev merge |
+| **Last verified at** | 2026-05-19 (dev-local on task branch only) |
+| **Runtime repo evidence** | pending external repo audit — requires `livemask-backend` window to verify dev merge |
+
+## 7. Done Criteria
 
 - Public latest release endpoint is implemented.
 - Sensitive fields are excluded from public responses.

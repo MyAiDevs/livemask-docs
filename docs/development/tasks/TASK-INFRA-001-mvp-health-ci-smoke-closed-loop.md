@@ -149,6 +149,22 @@
 
 ## 10. Completion Evidence
 
+> Note: This task was completed before the dev merge guard model was established.
+> The docs commit is present on `origin/dev`; Backend and CI/CD repo evidence
+> must be verified in their respective windows.
+
+### Dev Merge Evidence
+
+| Field | Value |
+|-------|-------|
+| **Repository** | `livemask-docs` (docs tracking) |
+| **Task branch** | None — commits were made directly |
+| **Dev merge commit** | `2c3e66d` (docs commit) — present on `origin/dev` |
+| **Remote dev ref** | `origin/dev` at `0a5d984` |
+| **Validation** | `bash scripts/check-docs.sh` PASS |
+| **Evidence status** | **Complete for docs** — commits present on dev |
+| **Runtime repo evidence** | pending external repo audit — Backend (`2c53398`, `212a38d`) and CI-CD (`8c446cc`) must be verified by their respective windows |
+
 - PR：N/A（当前阶段直接提交到 `main`）
 - Commit：
   - `livemask-docs`: `2c3e66d docs: add infra health smoke task`
