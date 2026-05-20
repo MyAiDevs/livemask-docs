@@ -126,7 +126,8 @@ project health:
   TASK.
 - `TASK-CICD-ISSUE-CLOSE-GUARD-001`: guarded Issue close/reopen automation is
   ready but not implemented.
-- `TASK-DOCS-LEASE-REGISTRY-001`: active lease collision detection is ready but
-  not implemented.
+- `TASK-DOCS-LEASE-REGISTRY-001` is completed. Active lease state is
+  file-backed in `docs/development/task-leases.json`, and
+  `scripts/check-task-leases.py` detects overlapping active leases.
 - Historical tasks are not fully backfilled into `task-state-ledger.json`; the
   ledger is an active snapshot that grows as reports are processed.

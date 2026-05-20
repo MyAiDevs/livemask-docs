@@ -83,6 +83,16 @@ Cursor windows MUST NOT jump directly from `in_progress` to Epic `completed`.
 
 Each Cursor/Codex window must treat work as a lease.
 
+The repo-native source of truth for active leases is
+`docs/development/task-leases.json`. The deterministic local check is:
+
+```bash
+python3 scripts/check-task-leases.py
+```
+
+Base docs validation runs this check without network access. Issue comments may
+mirror lease start/end events later, but they are not the primary local guard.
+
 ### 4.1 Lease Start
 
 Before editing, the window must know:
@@ -95,6 +105,10 @@ branch
 expected_files
 depends_on
 blocked_by
+lease_owner
+started_at
+expires_at
+status
 ```
 
 If this is posted as an Issue comment, use:
@@ -111,6 +125,7 @@ depends_on:
 blocked_by:
 lease_owner:
 started_at:
+expires_at:
 ```
 
 ### 4.2 Lease End
@@ -141,11 +156,27 @@ still_blocked:
 next_task:
 ```
 
+For the file-backed registry, mark the lease `status` as `ended` and set
+`ended_at`. Expired, ended, or abandoned leases do not block new work.
+
 ### 4.3 Single Active Lease Rule
 
 One window may work through multiple tasks sequentially, but it must not mix
 multiple unrelated TASK completion reports. If a window starts a second task,
 the first task must be formally ended.
+
+### 4.4 Collision Rule
+
+Two active leases collide when they have:
+
+- the same `repo`
+- overlapping `expected_files`
+- different `task_id`
+- `expires_at` in the future
+- `status=active`
+
+Overlapping paths include exact file matches and parent/child directories.
+Disjoint repos or disjoint file areas may run in parallel.
 
 ## 5. Completion Report Template
 
