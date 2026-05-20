@@ -336,6 +336,31 @@
         "CI/CD reconnect hint runtime smoke remains ready.",
         "Final cross-repo runtime smoke must distinguish PASS from accepted SKIP."
       ]
+    },
+    {
+      "module_id": "backend-api-documentation",
+      "summary": "Backend Swagger/OpenAPI documentation, API contract discoverability, and future client integration support.",
+      "overall_status": "partial",
+      "owner_repo": "livemask-docs",
+      "tasks": [
+        {
+          "task_id": "TASK-BACKEND-SWAGGER-API-DOCS-001",
+          "repo": "livemask-backend",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-BACKEND-SWAGGER-API-DOCS-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#10, livemask-backend#1",
+          "validation": "",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "New requirement: add complete backend Swagger/OpenAPI docs for future iteration. Cursor handoff: docs/development/cursor-handoffs/BACKEND-SWAGGER-API-DOCS-CURSOR_HANDOFF.md."
+        }
+      ],
+      "open_gaps": [
+        "Backend OpenAPI 3 document and Swagger UI are not yet implemented.",
+        "CI/CD OpenAPI drift validation can be added after backend docs exist."
+      ]
     }
   ]
 }
