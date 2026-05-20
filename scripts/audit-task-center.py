@@ -10,9 +10,11 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import os
 import json
 import pathlib
 import re
+import subprocess
 import sys
 from dataclasses import asdict, dataclass
 from typing import Any
@@ -33,6 +35,16 @@ OPEN_STATUSES = {
     "partial",
     "blocked",
     "evidence_missing",
+}
+REMOTE_REPOS = {
+    "livemask-docs",
+    "livemask-backend",
+    "livemask-nodeagent",
+    "livemask-app",
+    "livemask-admin",
+    "livemask-website",
+    "livemask-job-service",
+    "livemask-ci-cd",
 }
 
 
@@ -434,6 +446,325 @@ def write_audit_log(report: dict[str, Any], *, log_file: pathlib.Path, argv: lis
         handle.write("\n")
 
 
+def run_cmd(args: list[str], *, cwd: pathlib.Path | None = None) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        args,
+        cwd=str(cwd or ROOT),
+        text=True,
+        capture_output=True,
+        timeout=30,
+        check=False,
+    )
+
+
+def append_remote_finding(report: dict[str, Any], section: str, finding: Finding) -> None:
+    report[section].append(asdict(finding))
+    key = f"{section[:-1]}_count"
+    report["summary"][key] = len(report[section])
+
+
+def add_remote(
+    report: dict[str, Any],
+    section: str,
+    severity: str,
+    rule_id: str,
+    message: str,
+    *,
+    task_id: str = "",
+    module_id: str = "",
+    repo: str = "",
+    evidence: str = "",
+) -> None:
+    append_remote_finding(
+        report,
+        section,
+        Finding(
+            severity=severity,
+            rule_id=rule_id,
+            message=message,
+            task_id=task_id,
+            module_id=module_id,
+            repo=repo,
+            evidence=evidence,
+        ),
+    )
+
+
+def all_tasks(data: dict[str, Any]) -> list[tuple[str, dict[str, Any]]]:
+    rows: list[tuple[str, dict[str, Any]]] = []
+    for module in data.get("modules", []):
+        if not isinstance(module, dict):
+            continue
+        module_id = str(module.get("module_id", ""))
+        for task in module.get("tasks", []):
+            if isinstance(task, dict):
+                rows.append((module_id, task))
+    return rows
+
+
+def token_available() -> bool:
+    if os.environ.get("LIVEMASK_BOT_TOKEN") or os.environ.get("GITHUB_TOKEN"):
+        return True
+    proc = run_cmd(["gh", "auth", "token"])
+    return proc.returncode == 0 and bool(proc.stdout.strip())
+
+
+def remote_issue_audit(report: dict[str, Any], data: dict[str, Any], *, strict: bool) -> None:
+    section = "gates" if strict else "warnings"
+    severity = "gate" if strict else "warning"
+    if not token_available():
+        add_remote(
+            report,
+            section,
+            severity,
+            "AUDIT-REMOTE-ISSUE-001",
+            "Remote Issue audit requested but LIVEMASK_BOT_TOKEN/GITHUB_TOKEN is not set.",
+            evidence="set token or run without --remote-issues",
+        )
+        return
+
+    for module_id, task in all_tasks(data):
+        task_id = str(task.get("task_id", ""))
+        repo = str(task.get("repo", ""))
+        if not TASK_RE.fullmatch(task_id):
+            continue
+        repos_to_check = ["livemask-docs"]
+        if repo and repo != "livemask-docs":
+            repos_to_check.append(repo)
+        for target_repo in repos_to_check:
+            if target_repo not in REMOTE_REPOS:
+                continue
+            proc = run_cmd(
+                [
+                    "gh",
+                    "issue",
+                    "list",
+                    "--repo",
+                    f"MyAiDevs/{target_repo}",
+                    "--search",
+                    f"{task_id} in:title,body",
+                    "--state",
+                    "all",
+                    "--limit",
+                    "20",
+                    "--json",
+                    "number,state,title",
+                ]
+            )
+            if proc.returncode != 0:
+                add_remote(
+                    report,
+                    section,
+                    severity,
+                    "AUDIT-REMOTE-ISSUE-002",
+                    "Remote Issue query failed.",
+                    task_id=task_id,
+                    module_id=module_id,
+                    repo=target_repo,
+                    evidence=(proc.stderr or proc.stdout).strip(),
+                )
+                continue
+            try:
+                issues = json.loads(proc.stdout or "[]")
+            except json.JSONDecodeError:
+                add_remote(
+                    report,
+                    section,
+                    severity,
+                    "AUDIT-REMOTE-ISSUE-003",
+                    "Remote Issue query returned invalid JSON.",
+                    task_id=task_id,
+                    module_id=module_id,
+                    repo=target_repo,
+                )
+                continue
+            if not issues:
+                add_remote(
+                    report,
+                    "warnings",
+                    "warning",
+                    "AUDIT-REMOTE-ISSUE-004",
+                    "No matching remote Issue found.",
+                    task_id=task_id,
+                    module_id=module_id,
+                    repo=target_repo,
+                )
+            elif len([item for item in issues if item.get("state") == "OPEN"]) > 1:
+                add_remote(
+                    report,
+                    section,
+                    severity,
+                    "AUDIT-REMOTE-ISSUE-005",
+                    "Multiple open matching remote Issues found.",
+                    task_id=task_id,
+                    module_id=module_id,
+                    repo=target_repo,
+                    evidence=", ".join(f"#{item.get('number')}:{item.get('state')}" for item in issues),
+                )
+
+
+def remote_actions_audit(report: dict[str, Any], *, strict: bool) -> None:
+    section = "gates" if strict else "warnings"
+    severity = "gate" if strict else "warning"
+    if not token_available():
+        add_remote(
+            report,
+            section,
+            severity,
+            "AUDIT-REMOTE-ACTIONS-001",
+            "Remote Actions audit requested but LIVEMASK_BOT_TOKEN/GITHUB_TOKEN is not set.",
+            repo="livemask-ci-cd",
+        )
+        return
+    proc = run_cmd(
+        [
+            "gh",
+            "run",
+            "list",
+            "--repo",
+            "MyAiDevs/livemask-ci-cd",
+            "--branch",
+            "dev",
+            "--limit",
+            "1",
+            "--json",
+            "databaseId,status,conclusion,workflowName,headSha",
+        ]
+    )
+    if proc.returncode != 0:
+        add_remote(
+            report,
+            section,
+            severity,
+            "AUDIT-REMOTE-ACTIONS-002",
+            "GitHub Actions query failed.",
+            repo="livemask-ci-cd",
+            evidence=(proc.stderr or proc.stdout).strip(),
+        )
+        return
+    try:
+        runs = json.loads(proc.stdout or "[]")
+    except json.JSONDecodeError:
+        add_remote(
+            report,
+            section,
+            severity,
+            "AUDIT-REMOTE-ACTIONS-003",
+            "GitHub Actions query returned invalid JSON.",
+            repo="livemask-ci-cd",
+        )
+        return
+    if not runs:
+        add_remote(
+            report,
+            "warnings",
+            "warning",
+            "AUDIT-REMOTE-ACTIONS-004",
+            "No GitHub Actions runs found for livemask-ci-cd dev.",
+            repo="livemask-ci-cd",
+        )
+        return
+    run = runs[0]
+    conclusion = run.get("conclusion") or ""
+    status = run.get("status") or ""
+    if status != "completed" or conclusion not in {"success", "skipped"}:
+        add_remote(
+            report,
+            section,
+            severity,
+            "AUDIT-REMOTE-ACTIONS-005",
+            "Latest livemask-ci-cd dev workflow is not successful.",
+            repo="livemask-ci-cd",
+            evidence=json.dumps(run, ensure_ascii=False, sort_keys=True),
+        )
+
+
+def remote_ref_audit(report: dict[str, Any], data: dict[str, Any], *, strict: bool, workspace_root: pathlib.Path) -> None:
+    section = "gates" if strict else "warnings"
+    severity = "gate" if strict else "warning"
+    for module_id, task in all_tasks(data):
+        task_id = str(task.get("task_id", ""))
+        repo = str(task.get("repo", ""))
+        status = str(task.get("status", ""))
+        expected = str(task.get("remote_dev_ref", ""))
+        if status != "completed" or repo == "livemask-docs" or not expected:
+            continue
+        repo_path = workspace_root / repo
+        if not (repo_path / ".git").exists():
+            add_remote(
+                report,
+                "warnings",
+                "warning",
+                "AUDIT-REMOTE-REF-001",
+                "Sibling repository is not present; remote ref comparison skipped.",
+                task_id=task_id,
+                module_id=module_id,
+                repo=repo,
+                evidence=str(repo_path),
+            )
+            continue
+        proc = run_cmd(["git", "rev-parse", "--short", "origin/dev"], cwd=repo_path)
+        if proc.returncode != 0:
+            add_remote(
+                report,
+                section,
+                severity,
+                "AUDIT-REMOTE-REF-002",
+                "Could not read local origin/dev ref for sibling repository.",
+                task_id=task_id,
+                module_id=module_id,
+                repo=repo,
+                evidence=(proc.stderr or proc.stdout).strip(),
+            )
+            continue
+        actual = proc.stdout.strip()
+        if not (actual.startswith(expected) or expected.startswith(actual)):
+            add_remote(
+                report,
+                section,
+                severity,
+                "AUDIT-REMOTE-REF-003",
+                "Ledger remote_dev_ref does not match sibling origin/dev.",
+                task_id=task_id,
+                module_id=module_id,
+                repo=repo,
+                evidence=f"ledger={expected} sibling_origin_dev={actual}",
+            )
+
+
+def remote_ref_self_test() -> int:
+    report = {
+        "schema_version": 1,
+        "audit_scope": "remote-self-test",
+        "summary": {"gate_count": 0, "warning_count": 0, "suggestion_count": 0, "task_count": 1, "module_count": 1},
+        "gates": [],
+        "warnings": [],
+        "suggestions": [],
+        "next_task_queue": [],
+    }
+    data = {
+        "modules": [
+            {
+                "module_id": "fixture",
+                "tasks": [
+                    {
+                        "task_id": "TASK-CICD-ISSUE-CLOSE-GUARD-001",
+                        "repo": "livemask-ci-cd",
+                        "status": "completed",
+                        "remote_dev_ref": "0000000",
+                    }
+                ],
+            }
+        ]
+    }
+    remote_ref_audit(report, data, strict=True, workspace_root=ROOT.parent)
+    if any(item["rule_id"] == "AUDIT-REMOTE-REF-003" for item in report["gates"]):
+        print("Remote ref self-test OK")
+        return 0
+    print("Remote ref self-test failed: mismatch fixture was not detected")
+    return 1
+
+
 def render_text(report: dict[str, Any], *, verbose: bool = False) -> str:
     summary = report["summary"]
     lines = [
@@ -493,6 +824,17 @@ def render_text(report: dict[str, Any], *, verbose: bool = False) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit LiveMask task center state.")
     parser.add_argument("--format", choices=("text", "json"), default="text")
+    parser.add_argument("--remote-issues", action="store_true", help="Opt-in GitHub Issue audit.")
+    parser.add_argument("--remote-actions", action="store_true", help="Opt-in GitHub Actions audit.")
+    parser.add_argument("--remote-refs", action="store_true", help="Opt-in sibling origin/dev ref audit.")
+    parser.add_argument("--remote-all", action="store_true", help="Run every remote audit mode.")
+    parser.add_argument("--remote-strict", action="store_true", help="Promote remote audit failures to gates.")
+    parser.add_argument("--remote-ref-self-test", action="store_true", help="Run a local mismatch fixture for remote ref audit.")
+    parser.add_argument(
+        "--workspace-root",
+        default=str(ROOT.parent),
+        help="Sibling LiveMask workspace root for --remote-refs.",
+    )
     parser.add_argument(
         "--log-file",
         default=str(DEFAULT_LOG.relative_to(ROOT)),
@@ -501,6 +843,9 @@ def main() -> int:
     parser.add_argument("--no-log", action="store_true", help="Do not append an audit record.")
     parser.add_argument("--verbose", action="store_true", help="Show full warning and suggestion details in text output.")
     args = parser.parse_args()
+
+    if args.remote_ref_self_test:
+        return remote_ref_self_test()
 
     initial_gates: list[Finding] = []
     data = load_ledger(initial_gates)
@@ -522,6 +867,21 @@ def main() -> int:
         }
     else:
         report = audit_ledger(data)
+
+    if data is not None:
+        remote_modes: list[str] = []
+        if args.remote_all or args.remote_issues:
+            remote_modes.append("issues")
+            remote_issue_audit(report, data, strict=args.remote_strict)
+        if args.remote_all or args.remote_actions:
+            remote_modes.append("actions")
+            remote_actions_audit(report, strict=args.remote_strict)
+        if args.remote_all or args.remote_refs:
+            remote_modes.append("refs")
+            remote_ref_audit(report, data, strict=args.remote_strict, workspace_root=pathlib.Path(args.workspace_root))
+        if remote_modes:
+            report["remote_modes"] = remote_modes
+            report["audit_scope"] = f"{report['audit_scope']}+remote"
 
     log_file = pathlib.Path(args.log_file)
     if not log_file.is_absolute():
