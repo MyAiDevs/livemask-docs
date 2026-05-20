@@ -257,7 +257,7 @@
     {
       "module_id": "protocol-stability",
       "summary": "Protocol template, LKG, rollback, reconnect, and smoke closure across Backend, NodeAgent, Job Service, Admin, App, and CI/CD.",
-      "overall_status": "partial",
+      "overall_status": "completed",
       "owner_repo": "livemask-docs",
       "tasks": [
         {
@@ -320,26 +320,23 @@
         {
           "task_id": "TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001",
           "repo": "livemask-ci-cd",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md",
-          "dev_merge_commit": "",
-          "remote_dev_ref": "",
+          "dev_merge_commit": "c5f628a",
+          "remote_dev_ref": "c5f628a",
           "issue": "livemask-docs#12, livemask-ci-cd#1",
-          "validation": "",
+          "validation": "bash -n scripts/openapi-drift-smoke.sh PASS; bash -n scripts/protocol-endpoint-smoke.sh PASS; bash -n scripts/smoke.sh PASS; git diff --check PASS; dev-merge-guard integration and dev validation PASS",
           "blocked_by": [],
           "unlocks": [],
-          "notes": "Unlocked by App real-backend reconnect cutover at livemask-app dev e797875. Add runtime smoke for App-facing Backend reconnect hints and connect config session_id behavior."
+          "notes": "Completed in combined CI/CD branch task/TASK-CICD-OPENAPI-DRIFT-RECONNECT-SMOKE-001 at dev c5f628a. Enhanced protocol-endpoint-smoke [11c] with connect session, connect config session_id, reconnect-hints session_id, safe-field, and forbidden internal-field checks."
         }
       ],
-      "open_gaps": [
-        "CI/CD reconnect hint runtime smoke remains ready.",
-        "Final cross-repo runtime smoke must distinguish PASS from accepted SKIP."
-      ]
+      "open_gaps": []
     },
     {
       "module_id": "backend-api-documentation",
       "summary": "Backend Swagger/OpenAPI documentation, API contract discoverability, and future client integration support.",
-      "overall_status": "partial",
+      "overall_status": "completed",
       "owner_repo": "livemask-docs",
       "tasks": [
         {
@@ -374,20 +371,18 @@
         {
           "task_id": "TASK-CICD-OPENAPI-DRIFT-CHECK-001",
           "repo": "livemask-ci-cd",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-CICD-OPENAPI-DRIFT-CHECK-001.md",
-          "dev_merge_commit": "",
-          "remote_dev_ref": "",
+          "dev_merge_commit": "c5f628a",
+          "remote_dev_ref": "c5f628a",
           "issue": "livemask-docs#14, livemask-ci-cd#2",
-          "validation": "",
+          "validation": "bash -n scripts/openapi-drift-smoke.sh PASS; bash -n scripts/protocol-endpoint-smoke.sh PASS; bash -n scripts/smoke.sh PASS; git diff --check PASS; dev-merge-guard integration and dev validation PASS",
           "blocked_by": [],
           "unlocks": [],
-          "notes": "Integrate Backend scripts/validate-openapi.sh into CI/CD smoke or workflow so Backend API/OpenAPI drift is enforced beyond backend-local validation."
+          "notes": "Completed in combined CI/CD branch task/TASK-CICD-OPENAPI-DRIFT-RECONNECT-SMOKE-001 at dev c5f628a. Added scripts/openapi-drift-smoke.sh and staging-smoke step to run Backend scripts/validate-openapi.sh with PASS/SKIP/FAIL classification."
         }
       ],
-      "open_gaps": [
-        "CI/CD OpenAPI drift validation is ready but not implemented."
-      ]
+      "open_gaps": []
     }
   ]
 }

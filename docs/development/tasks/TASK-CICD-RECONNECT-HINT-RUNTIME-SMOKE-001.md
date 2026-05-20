@@ -1,6 +1,6 @@
 # TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001 — CI/CD Reconnect Hint Runtime Smoke
 
-> Status: Ready
+> Status: Completed
 > Repository: livemask-ci-cd
 > Environment: dev-local
 > Issues: livemask-docs#12, livemask-ci-cd#1
@@ -104,3 +104,36 @@ Cursor must report:
 - PASS/SKIP/FAIL table for reconnect runtime checks;
 - whether Docker dev-local runtime was used;
 - exact remaining blockers if any checks remain SKIP.
+
+## 7. Completion Evidence
+
+| Field | Value |
+| --- | --- |
+| Task branch | `task/TASK-CICD-OPENAPI-DRIFT-RECONNECT-SMOKE-001` |
+| Task branch commit | `10f271b` |
+| Dev merge commit | `c5f628a` |
+| Remote dev ref | `origin/dev` (`c5f628a`) |
+| Validation | `bash -n scripts/openapi-drift-smoke.sh` PASS; `bash -n scripts/protocol-endpoint-smoke.sh` PASS; `bash -n scripts/smoke.sh` PASS; `git diff --check` PASS; dev-merge-guard integration and dev validation PASS |
+| Issues | `livemask-docs#12`, `livemask-ci-cd#1` |
+
+Implemented CI/CD behavior:
+
+- Enhanced existing `scripts/protocol-endpoint-smoke.sh` section `[11c]`.
+- Added `[11c-a]` connect session creation and `session_id` capture.
+- Added `[11c-b]` `GET /api/v1/connect/config?session_id=<sessionID>` check.
+- Added `[11c-c]` `GET /api/v1/reconnect-hints?session_id=<sessionID>` deep
+  response-shape checks:
+  - response must be `{"hints":[...]}`;
+  - each hint must include at least one safe field:
+    `hint_id`, `reason`, `reconnect_after_ms`, `expires_at`;
+  - internal fields are forbidden:
+    `node_id`, `session_id`, `config_hash`, `rollout_id`, `created_at`;
+  - safe fields must not be null.
+- Added `[11c-d]` loose-scope `GET /api/v1/reconnect-hints` check without
+  `session_id`.
+- Kept existing `[11c-e]` Admin protocol-rollouts API check.
+
+Known behavior:
+
+- Runtime checks may SKIP when no usable connect session or seed/runtime data is
+  available. This is expected and must be reported with a reason.
