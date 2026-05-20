@@ -47,6 +47,25 @@ Runtime repositories hand off completion evidence to this docs window. This docs
 window updates the MVP plan, task index, task files, cursor handoffs, contract
 indexes, and then runs task-sync when appropriate.
 
+## Backend API / Swagger Alignment
+
+All Backend API additions, changes, and deletions must be aligned with the
+Backend OpenAPI/Swagger contract in the same TASK. A Backend API task is not
+complete if route behavior, request/response schema, auth/RBAC, error codes,
+query params, or sensitive-field redaction differ from OpenAPI.
+
+Swagger UI is not a public Backend surface. Backend may expose machine-readable
+OpenAPI JSON for Admin/CI consumption, but the human Swagger UI must only be
+visible inside logged-in `livemask-admin`.
+
+When dispatching or accepting any Backend API task, require evidence for:
+
+- OpenAPI validation;
+- route/API drift check;
+- proof that Backend does not expose public unauthenticated Swagger UI;
+- proof that logged-in Admin can view the Swagger UI when the task touches
+  Swagger UI access.
+
 ## Natural Language Task Intake
 
 When the user describes a requirement or bug in plain text and no TASK file

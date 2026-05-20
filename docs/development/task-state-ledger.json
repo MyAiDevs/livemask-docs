@@ -352,12 +352,30 @@
           "issue": "livemask-docs#10, livemask-backend#1",
           "validation": "",
           "blocked_by": [],
+          "unlocks": [
+            "TASK-ADMIN-SWAGGER-API-DOCS-UI-001"
+          ],
+          "notes": "New requirement: all Backend APIs must align with Swagger/OpenAPI. Backend may expose machine-readable OpenAPI JSON for Admin/CI, but human Swagger UI must only be visible inside logged-in livemask-admin. Every later Backend API add/change/delete must update OpenAPI and pass route/API drift checks. Cursor handoff: docs/development/cursor-handoffs/BACKEND-SWAGGER-API-DOCS-CURSOR_HANDOFF.md."
+        },
+        {
+          "task_id": "TASK-ADMIN-SWAGGER-API-DOCS-UI-001",
+          "repo": "livemask-admin",
+          "status": "blocked",
+          "task_doc": "docs/development/tasks/TASK-ADMIN-SWAGGER-API-DOCS-UI-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#13, livemask-admin#2",
+          "validation": "",
+          "blocked_by": [
+            "TASK-BACKEND-SWAGGER-API-DOCS-001"
+          ],
           "unlocks": [],
-          "notes": "New requirement: add complete backend Swagger/OpenAPI docs for future iteration. Cursor handoff: docs/development/cursor-handoffs/BACKEND-SWAGGER-API-DOCS-CURSOR_HANDOFF.md."
+          "notes": "Admin must provide the logged-in Swagger UI surface after Backend exposes validated OpenAPI JSON. Swagger UI must not be public from Backend."
         }
       ],
       "open_gaps": [
-        "Backend OpenAPI 3 document and Swagger UI are not yet implemented.",
+        "Backend OpenAPI 3 document and Admin-authenticated Swagger UI are not yet implemented.",
+        "Backend API route/OpenAPI drift gate is not yet implemented.",
         "CI/CD OpenAPI drift validation can be added after backend docs exist."
       ]
     }

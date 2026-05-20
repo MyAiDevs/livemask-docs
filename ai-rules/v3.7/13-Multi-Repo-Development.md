@@ -199,6 +199,26 @@ commit、dev merge commit、remote dev ref、validation on dev 和 blockers 给 
 API client、mock、页面状态和错误处理；不得创建 `.go`、`go.mod`、`go.sum`、migration
 或 Backend 目录结构。
 
+### 5.4 Backend API / Swagger 对齐门禁
+
+Backend 的所有 API 必须和 Swagger/OpenAPI 文档对齐。任何新增、修改、删除 Backend
+API 的任务，必须在同一个 TASK 中同步 OpenAPI，并通过 route/API drift 校验。
+
+门禁要求：
+
+1. Backend route、request schema、response schema、auth/RBAC、错误码、query/path
+   params、状态机字段和 sensitive-field redaction 规则必须和 OpenAPI 一致。
+2. 未同步 OpenAPI 的 Backend API 变更不得标记为 `completed`，只能标记为
+   `partial` / `evidence_missing` 并登记补救 TASK。
+3. Backend 可以提供机器可读 OpenAPI JSON 给 Admin/CI 使用，但不得公开未登录
+   Swagger UI。
+4. Human-facing Swagger UI 只能在登录后的 `livemask-admin` 中查看。
+5. 如果任务触及 Swagger UI 或 OpenAPI 暴露方式，完成报告必须证明：
+   - OpenAPI validation PASS；
+   - route/API drift check PASS；
+   - Backend 未暴露 public unauthenticated Swagger UI；
+   - `livemask-admin` 登录后可查看 Swagger UI。
+
 ## 6. 分支与环境映射
 
 | 分支 / ref | 环境含义 | 允许动作 |

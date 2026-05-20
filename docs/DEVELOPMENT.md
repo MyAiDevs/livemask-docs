@@ -29,6 +29,10 @@
     主动创建或分配下一批 Cursor 任务，并更新任务文档。
 15. 如果任务清单暂时没有下一步，但项目尚未完成落地，`livemask-docs` 窗口必须扫描项目
     文档、contracts、handoff、QA/runbook 和相关任务状态，识别缺口并创建新的 `TASK-*.md`。
+16. Backend 所有 API 必须和 Swagger/OpenAPI 文档对齐。任何新增、修改、删除 Backend
+    API 的任务，必须在同一任务中同步 OpenAPI，并通过 route/API drift 校验。
+17. Swagger UI 只能在登录后的 `livemask-admin` 中查看；Backend 不得暴露公开未登录的
+    Swagger UI。Backend 可提供机器可读 OpenAPI JSON 给 Admin/CI 使用。
 
 详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
 Codex 调度窗口的职责见 [Codex Task Dispatcher Role](development/CODEX_TASK_DISPATCHER_ROLE.md)。
@@ -74,6 +78,8 @@ Codex 调度窗口的职责见 [Codex Task Dispatcher Role](development/CODEX_TA
 - [ ] 如果需求来自普通文本，已完成 TASK intake 和 mini task brief
 - [ ] 已分析本次变更会影响哪些仓库（Backend / NodeAgent / App / Payment / Admin）
 - [ ] 已确认是否需要同步更新架构、接口、配置或运维文档
+- [ ] 如果涉及 Backend API 增删改，已同步 Swagger/OpenAPI 并通过 drift 校验
+- [ ] 如果涉及 Swagger UI，已确认只能在登录后的 `livemask-admin` 内查看
 - [ ] 已确认是否影响配置热更新、FeatureFlag、支付风控或降级模式
 - [ ] 已确认代码注释中是否需要包含 `TASK-XXXX`
 - [ ] 已确认 PR 描述是否说明跨仓库影响和验证结果
@@ -84,6 +90,11 @@ Codex 调度窗口的职责见 [Codex Task Dispatcher Role](development/CODEX_TA
 
 ### Backend 接口变更
 
+- 更新 Swagger/OpenAPI 文档；Backend API 实现和 Swagger/OpenAPI 必须保持一致。
+- 任何新增、修改、删除 Backend API 都必须在同一任务中同步 OpenAPI，并通过 route/API
+  drift 校验；未同步 OpenAPI 的 Backend API 任务不得标记为 completed。
+- Swagger UI 只能在登录后的 `livemask-admin` 中查看；Backend 不得暴露公开未登录的
+  Swagger UI。Backend 可提供机器可读 OpenAPI JSON 供 Admin/CI 拉取。
 - 更新 `docs/backend/README.md` 或对应接口文档。
 - 检查 NodeAgent 是否需要同步调整配置下发、轮询、上报或降级逻辑。
 - 检查 App 是否需要更新请求封装、错误处理、本地缓存或 UI 反馈。
@@ -109,6 +120,8 @@ Codex 调度窗口的职责见 [Codex Task Dispatcher Role](development/CODEX_TA
 - [ ] 代码、文档、提交、PR 使用同一个 `TASK-XXXX`
 - [ ] 独立任务单已更新
 - [ ] 契约文档已更新或确认无需更新
+- [ ] 若涉及 Backend API，Swagger/OpenAPI 已同步且 route/API drift 校验通过
+- [ ] 若涉及 Swagger UI，已证明它只能在登录后的 `livemask-admin` 内查看
 - [ ] 所有受影响仓库均已检查
 - [ ] App Client、Backend API、NodeAgent、Database 的数据流闭环
 - [ ] 失败、重试、降级、回滚路径已说明

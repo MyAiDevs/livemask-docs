@@ -17,12 +17,16 @@ Lease:
   - `main.go`
   - backend README/runbook docs
   - OpenAPI validation scripts/tests
+  - Admin Swagger UI integration files if implemented in this task
 - expires_at: 2026-05-22T23:59:00+08:00
 
 ### Why
 
 - Backend needs a complete Swagger/OpenAPI source of truth for future Admin,
   App, Website, NodeAgent, Job Service, CI/CD, QA, and AI-assisted development.
+- All Backend APIs must stay aligned with OpenAPI. Every later API
+  add/change/delete must update OpenAPI in the same task.
+- Swagger UI must only be visible inside logged-in `livemask-admin`.
 
 ### Must Read First
 
@@ -38,11 +42,14 @@ Lease:
 - Cover all major route families listed in the task doc.
 - Document auth, RBAC, errors, pagination/query params, and redaction rules.
 - Add validation and tests.
+- Add a drift check that fails when Backend routes and OpenAPI diverge.
+- Ensure human Swagger UI is Admin-authenticated, not publicly exposed by Backend.
 
 ### Out of Scope / Do Not Touch
 
 - Do not change API behavior except to fix a documentation blocker bug.
 - Do not edit `../livemask-docs` directly.
+- Do not expose public unauthenticated Swagger UI from Backend.
 - Do not expose secrets, raw provider payloads, private keys, protocol config,
   passwords, tokens, or unredacted sensitive examples.
 
@@ -53,6 +60,7 @@ Lease:
 - `main.go` route registration
 - README/runbook docs
 - Tests and validation script if needed
+- Admin Swagger UI integration if included
 
 ### Validation Required On Task Branch
 
@@ -61,6 +69,8 @@ Lease:
 - `go build ./...`
 - OpenAPI validation command
 - Coverage check against route families or documented endpoint audit
+- Drift check for route/OpenAPI alignment
+- Auth check proving Swagger UI is visible only inside logged-in Admin
 - `git diff --check`
 
 ### Dev Merge Requirement
@@ -78,6 +88,8 @@ Lease:
 - Remote dev Ref
 - Tests and validation on `dev`
 - Swagger/OpenAPI routes and how to view them
+- Proof that Swagger UI is only visible inside logged-in `livemask-admin`
+- Proof that Backend does not expose public unauthenticated Swagger UI
 - Endpoint families covered and any explicit deferrals
 - Docs handoff evidence
 - Risks / skips / follow-up TASK
