@@ -9,6 +9,7 @@ memory, GitHub credentials, or network access.
 from __future__ import annotations
 
 import argparse
+import datetime as dt
 import json
 import pathlib
 import re
@@ -19,6 +20,7 @@ from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEDGER = ROOT / "docs/development/task-state-ledger.json"
+DEFAULT_LOG = ROOT / ".local-dev/logs/auto-task-center.log"
 TASK_RE = re.compile(r"^TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*$")
 SHA_RE = re.compile(r"^[0-9a-f]{7,40}$")
 DONE_STATUSES = {"completed", "completed_with_skip", "deferred", "cancelled"}
@@ -46,7 +48,10 @@ class Finding:
 
 
 def rel(path: pathlib.Path) -> str:
-    return str(path.relative_to(ROOT))
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
 
 def add(
@@ -409,11 +414,33 @@ def audit_ledger(data: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def utc_now() -> str:
+    return dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def write_audit_log(report: dict[str, Any], *, log_file: pathlib.Path, argv: list[str], exit_code: int) -> None:
+    log_file.parent.mkdir(parents=True, exist_ok=True)
+    entry = {
+        "logged_at": utc_now(),
+        "tool": "audit-task-center",
+        "argv": argv,
+        "cwd": str(pathlib.Path.cwd()),
+        "exit_code": exit_code,
+        "summary": report.get("summary", {}),
+        "report": report,
+    }
+    with log_file.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps(entry, ensure_ascii=False, sort_keys=True))
+        handle.write("\n")
+
+
 def render_text(report: dict[str, Any], *, verbose: bool = False) -> str:
     summary = report["summary"]
     lines = [
         "Auto audit center report",
         f"- scope: {report['audit_scope']}",
+        f"- generated_at: {report['generated_at']}",
+        f"- log_file: {report['log_file']}",
         f"- modules: {summary['module_count']}",
         f"- tasks: {summary['task_count']}",
         f"- gates: {summary['gate_count']}",
@@ -466,6 +493,12 @@ def render_text(report: dict[str, Any], *, verbose: bool = False) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit LiveMask task center state.")
     parser.add_argument("--format", choices=("text", "json"), default="text")
+    parser.add_argument(
+        "--log-file",
+        default=str(DEFAULT_LOG.relative_to(ROOT)),
+        help="Append audit records to this JSONL log file. Defaults to .local-dev/logs/auto-task-center.log.",
+    )
+    parser.add_argument("--no-log", action="store_true", help="Do not append an audit record.")
     parser.add_argument("--verbose", action="store_true", help="Show full warning and suggestion details in text output.")
     args = parser.parse_args()
 
@@ -490,12 +523,26 @@ def main() -> int:
     else:
         report = audit_ledger(data)
 
+    log_file = pathlib.Path(args.log_file)
+    if not log_file.is_absolute():
+        log_file = ROOT / log_file
+    exit_code = 1 if report["summary"]["gate_count"] else 0
+    report["generated_at"] = utc_now()
+    report["log_file"] = rel(log_file)
+
+    if not args.no_log:
+        try:
+            write_audit_log(report, log_file=log_file, argv=sys.argv[1:], exit_code=exit_code)
+        except OSError as exc:
+            print(f"failed to write audit log {rel(log_file)}: {exc}", file=sys.stderr)
+            return 1
+
     if args.format == "json":
         print(json.dumps(report, ensure_ascii=False, indent=2))
     else:
         print(render_text(report, verbose=args.verbose))
 
-    return 1 if report["summary"]["gate_count"] else 0
+    return exit_code
 
 
 if __name__ == "__main__":

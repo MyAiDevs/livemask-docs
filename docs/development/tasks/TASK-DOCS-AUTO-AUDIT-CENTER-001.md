@@ -75,6 +75,8 @@ warnings, and suggestions.
 - [x] Add text output.
 - [x] Keep default text output concise; expose full findings through
   `--verbose` and JSON.
+- [x] Append every audit run to `.local-dev/logs/auto-task-center.log` by
+  default for local traceability.
 - [x] Wire audit script into `check-docs.sh`.
 - [x] Update ledger and task README.
 
@@ -82,6 +84,7 @@ warnings, and suggestions.
 
 - [x] `python3 scripts/audit-task-center.py`
 - [x] `python3 scripts/audit-task-center.py --format json`
+- [x] `python3 scripts/audit-task-center.py --log-file /tmp/auto-task-center.log`
 - [x] `bash scripts/check-docs.sh`
 - [x] `git diff --check`
 
@@ -93,6 +96,7 @@ warnings, and suggestions.
 | Audit blocks on network or credentials | CI becomes flaky | Default audit is offline only | Docs |
 | Audit mutates state incorrectly | Task center becomes untrustworthy | Script is read-only and emits reports only | Docs |
 | Suggestions are treated as commands | Wrong task dispatch | Suggestions require human/AI dispatcher review | Docs |
+| Audit has no trace | Later AI cannot reconstruct why a decision was made | Append JSONL records to `auto-task-center.log` | Docs |
 
 ## 9. Rollback
 

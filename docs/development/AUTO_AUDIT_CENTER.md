@@ -46,11 +46,28 @@ docs audit remains reproducible without network credentials.
 python3 scripts/audit-task-center.py
 python3 scripts/audit-task-center.py --verbose
 python3 scripts/audit-task-center.py --format json
+python3 scripts/audit-task-center.py --log-file .local-dev/logs/auto-task-center.log
 ```
 
 `bash scripts/check-docs.sh` runs the text audit and fails only on gate
 findings. The default text report summarizes warnings and suggestions by rule
 to keep CI output readable; use `--verbose` or `--format json` for full details.
+
+Every audit run appends a JSON Lines record to
+`.local-dev/logs/auto-task-center.log` by default. The log entry includes:
+
+- `logged_at`
+- `tool`
+- `argv`
+- `cwd`
+- `exit_code`
+- `summary`
+- full `report`
+
+The `.local-dev/` directory is ignored by git, so audit history remains local
+and traceable without polluting commits. Use `--log-file` to write a different
+path when a CI job wants to upload the log as an artifact. Use `--no-log` only
+for exceptional parser tests where no audit trail should be written.
 
 ## 5. JSON Contract
 
@@ -59,6 +76,8 @@ The JSON report contains:
 - `schema_version`
 - `audit_scope`
 - `summary`
+- `generated_at`
+- `log_file`
 - `gates`
 - `warnings`
 - `suggestions`
