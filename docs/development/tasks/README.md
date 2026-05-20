@@ -129,6 +129,8 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-ADMIN-TEST-EXPANSION-001.md](TASK-ADMIN-TEST-EXPANSION-001.md) | ✅ Completed | ✅ `0698238` (via guard) | ✅ `0698238` |
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-001.md) | ✅ Completed (runtime fixed by follow-up) | ✅ `63dcdaa` + runtime fix `1f630f0` | ✅ `1f630f0` |
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md) | ✅ Completed | ✅ `1f630f0` (via guard) | ✅ `1f630f0` |
+| [TASK-CICD-LOCAL-RUNTIME-WORKSPACE-MOUNT-FIX-001.md](TASK-CICD-LOCAL-RUNTIME-WORKSPACE-MOUNT-FIX-001.md) | ✅ Completed | ✅ `ea69ee9` (via guard) | ✅ `ea69ee9` |
+| [TASK-BACKEND-PROTOCOL-SCHEMA-MIGRATION-FIX-001.md](TASK-BACKEND-PROTOCOL-SCHEMA-MIGRATION-FIX-001.md) | ✅ Completed | ✅ `2e5fda9` (via guard) | ✅ `2e5fda9` |
 | [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md](TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md) | ✅ Completed | ✅ `5ce5c6c` (via guard) | ✅ `5ce5c6c` |
 | [TASK-APP-IOS-CODESIGN-ENV-001.md](TASK-APP-IOS-CODESIGN-ENV-001.md) | ⚠️ Partial — simulator PASS via safe workdir, device signing BLOCKED | ✅ `a5243cd` (via guard) | ✅ `a5243cd` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
