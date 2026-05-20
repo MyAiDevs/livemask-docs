@@ -218,7 +218,7 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 | --- | --- | --- |
 | [TASK-BACKEND-PROTOCOL-STABILITY-001.md](TASK-BACKEND-PROTOCOL-STABILITY-001.md) | livemask-backend | Real Admin/Internal APIs, eligibility, reconnect hint authority, node detail data — ✅ Completed |
 | TASK-NODEAGENT-PROTOCOL-STABILITY-001 | livemask-nodeagent | Assignment LKG, rollback, readiness, event retry, metrics/logs |
-| [TASK-ADMIN-PROTOCOL-STABILITY-001.md](TASK-ADMIN-PROTOCOL-STABILITY-001.md) | livemask-admin | Replace node detail demo data and implement template/assignment UI — ✅ Completed (`823f4fe`) |
+| [TASK-ADMIN-PROTOCOL-STABILITY-001.md](TASK-ADMIN-PROTOCOL-STABILITY-001.md) | livemask-admin | Replace node detail demo data and implement template/assignment UI plus LKG/rollback observability — ✅ Completed (latest `986dc9c`, original `823f4fe`) |
 | [TASK-APP-RECONNECT-STABILITY-001.md](TASK-APP-RECONNECT-STABILITY-001.md) | livemask-app | Verify real reconnect hints and unsupported protocol safety — ✅ Completed (`17e83c9`) |
 | [TASK-JOBS-PROTOCOL-STABILITY-001.md](TASK-JOBS-PROTOCOL-STABILITY-001.md) | livemask-job-service | Harden rollout/rollback executor — ✅ Completed (`16d9ba0`) |
 | [TASK-CICD-PROTOCOL-STABILITY-001.md](TASK-CICD-PROTOCOL-STABILITY-001.md) | livemask-ci-cd | Turn protocol smoke SKIP to PASS and add stability checks — ✅ Completed (`d721677`) |
