@@ -305,15 +305,17 @@
         {
           "task_id": "TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001",
           "repo": "livemask-app",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md",
-          "dev_merge_commit": "",
-          "remote_dev_ref": "",
-          "issue": "",
-          "validation": "",
+          "dev_merge_commit": "e797875",
+          "remote_dev_ref": "e797875",
+          "issue": "livemask-docs#11, livemask-app#1",
+          "validation": "flutter analyze --no-fatal-warnings --no-fatal-infos PASS with 0 errors and no new issues; flutter test PASS 597/597; git diff --check PASS; dev-merge-guard PASS on integration and dev",
           "blocked_by": [],
-          "unlocks": [],
-          "notes": "Next protocol-stability client closure task."
+          "unlocks": [
+            "TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001"
+          ],
+          "notes": "App real-backend reconnect cutover completed. fetchConnectConfig now accepts sessionId and sends session_id query param only when non-empty; reconnect paths pass state.sessionId; mock reconnect data remains isolated to AUTH_CLIENT_MODE=mock."
         },
         {
           "task_id": "TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001",
@@ -322,17 +324,14 @@
           "task_doc": "docs/development/tasks/TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md",
           "dev_merge_commit": "",
           "remote_dev_ref": "",
-          "issue": "",
+          "issue": "livemask-docs#12, livemask-ci-cd#1",
           "validation": "",
-          "blocked_by": [
-            "TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001"
-          ],
+          "blocked_by": [],
           "unlocks": [],
-          "notes": "Runtime smoke should run after App real-backend reconnect cutover evidence."
+          "notes": "Unlocked by App real-backend reconnect cutover at livemask-app dev e797875. Add runtime smoke for App-facing Backend reconnect hints and connect config session_id behavior."
         }
       ],
       "open_gaps": [
-        "App reconnect runtime real-backend closure remains ready, not completed.",
         "CI/CD reconnect hint runtime smoke remains ready.",
         "Final cross-repo runtime smoke must distinguish PASS from accepted SKIP."
       ]
