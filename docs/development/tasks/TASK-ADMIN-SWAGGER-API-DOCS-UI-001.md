@@ -1,6 +1,6 @@
 # TASK-ADMIN-SWAGGER-API-DOCS-UI-001 - Admin-Authenticated Swagger UI
 
-> Status: Ready
+> Status: Completed
 > Repository: livemask-admin
 > Environment: dev-local
 > Unblocked by: TASK-BACKEND-SWAGGER-API-DOCS-001 (`livemask-backend` dev `9de2f14`)
@@ -71,9 +71,41 @@ Backend is now ready at `origin/dev` `9de2f14`:
 
 ## 6. Acceptance Criteria
 
-- [ ] Swagger UI is reachable only from `livemask-admin` after Admin login.
-- [ ] Backend does not expose public unauthenticated Swagger UI.
-- [ ] Admin route handles unavailable OpenAPI JSON safely.
-- [ ] Tests cover logged-out denial and logged-in success.
-- [ ] Completion report includes task branch commit, dev merge commit, remote
+- [x] Swagger UI is reachable only from `livemask-admin` after Admin login.
+- [x] Backend does not expose public unauthenticated Swagger UI.
+- [x] Admin route handles unavailable OpenAPI JSON safely.
+- [x] Tests cover logged-out denial and logged-in success.
+- [x] Completion report includes task branch commit, dev merge commit, remote
   `origin/dev`, and validation evidence from merged `dev`.
+
+## 7. Completion Evidence
+
+| Field | Value |
+| --- | --- |
+| Task branch | `task/TASK-ADMIN-SWAGGER-API-DOCS-UI-001` |
+| Task branch commit | `df1af3a` |
+| Dev merge commit | `656d4d9` |
+| Remote dev ref | `origin/dev` (`656d4d9`) |
+| Validation | `npx vitest run` PASS 217/217; `npx next build` PASS with 56/56 pages generated; `git diff --check` PASS; dev merge validation reran vitest and build on `dev` |
+| Issues | `livemask-docs#13`, `livemask-admin#2` |
+
+Implemented Admin behavior:
+
+- Added `/admin/api-docs` route using `swagger-ui-react` with dynamic client-side
+  loading.
+- Route is protected by the existing Admin `AuthGuard`; unauthenticated users
+  are redirected to `/login`.
+- Added `lib/swagger-api.ts` with `fetchOpenApiSpec()` through same-origin
+  `/admin/openapi.json` proxy and bearer token injection.
+- Added Swagger UI `requestInterceptor` to inject bearer token and rewrite
+  "Try it out" calls through the same-origin Next.js proxy.
+- Added `next.config.ts` rewrites for `/admin/openapi.json` and
+  `/admin/openapi.yaml` to Backend.
+- Added API Docs sidebar navigation with `BookOpen` icon.
+- Added loading, success, error, and unavailable states.
+- `tryItOutEnabled={false}` by default; token handling stays inside the
+  interceptor and is not displayed in UI.
+
+Remaining linked work:
+
+- `TASK-CICD-OPENAPI-DRIFT-CHECK-001`

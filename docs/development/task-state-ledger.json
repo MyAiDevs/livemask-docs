@@ -361,15 +361,15 @@
         {
           "task_id": "TASK-ADMIN-SWAGGER-API-DOCS-UI-001",
           "repo": "livemask-admin",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-ADMIN-SWAGGER-API-DOCS-UI-001.md",
-          "dev_merge_commit": "",
-          "remote_dev_ref": "",
+          "dev_merge_commit": "656d4d9",
+          "remote_dev_ref": "656d4d9",
           "issue": "livemask-docs#13, livemask-admin#2",
-          "validation": "",
+          "validation": "npx vitest run PASS 217/217; npx next build PASS 56/56 pages; git diff --check PASS; dev merge validation reran vitest and build on dev",
           "blocked_by": [],
           "unlocks": [],
-          "notes": "Unblocked by Backend dev 9de2f14. Admin must provide the logged-in Swagger UI surface using Backend /openapi.json or /openapi.yaml. Swagger UI must not be public from Backend."
+          "notes": "Admin-authenticated Swagger UI completed at livemask-admin dev 656d4d9. /admin/api-docs is protected by AuthGuard, fetches /admin/openapi.json via same-origin proxy, injects bearer token in requestInterceptor, and defaults Try it out to disabled."
         },
         {
           "task_id": "TASK-CICD-OPENAPI-DRIFT-CHECK-001",
@@ -386,7 +386,6 @@
         }
       ],
       "open_gaps": [
-        "Admin-authenticated Swagger UI is ready but not implemented.",
         "CI/CD OpenAPI drift validation is ready but not implemented."
       ]
     }
