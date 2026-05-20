@@ -52,10 +52,10 @@ client additions.
 | Field | Value |
 | --- | --- |
 | Task branch | `task/TASK-ADMIN-PROTOCOL-STABILITY-001` |
-| Task branch commit | `08f1b3f` |
-| Dev merge commit | `823f4fe` |
-| Remote dev ref | `origin/dev` (`823f4fe`) |
-| Validation | `npx vitest run` PASS (168 tests), `npx next build` PASS |
+| Task branch commit | `08f1b3f`; latest incremental task commit `c988b63` |
+| Dev merge commit | `823f4fe`; latest incremental dev merge `986dc9c` |
+| Remote dev ref | `origin/dev` (`986dc9c`) |
+| Validation | `npx vitest run` PASS (168 tests), `npx next build` PASS; latest validation also built 55 routes |
 | Diff size | 11 files changed, +1106 / -107 lines |
 
 ## 6. Remaining Backend Dependencies
@@ -74,3 +74,28 @@ client additions.
 - [x] Node detail uses the unified protocol template capability hook.
 - [x] Tests and build pass on merged `dev`.
 - [x] Remaining Backend dependencies are explicitly recorded.
+
+## 8. Incremental Update: LKG / Rollback UI
+
+Latest Admin dev merge `986dc9c` extends this completed task with explicit
+LKG and rollback observability in the protocol stability UI.
+
+| Area | Change |
+| --- | --- |
+| Types | Added `lkg_version`, `lkg_at`, assignment `lkg_info`, rollback fields, `LKGInfo`, `RollbackInfo`, and `ASSIGNMENT_EVENT_TYPES` metadata. |
+| Mock data | Added LKG values to mock templates, enriched capability eligibility, and generated realistic assignment event timelines. |
+| Assignment detail | Added LKG/rollback status card, event icons/badges, metadata display, rolled-back header badge, and rollback warning banner. |
+| Template detail | Added LKG badges, eligibility/LKG cards, LKG-highlighted version history, and rollback dialog LKG recommendation. |
+
+Evidence:
+
+| Field | Value |
+| --- | --- |
+| Task branch commit | `c988b63` |
+| Dev merge commit | `986dc9c` |
+| Remote dev ref | `origin/dev` (`986dc9c`) |
+| Validation | `npx vitest run` PASS (168/168), `npx next build` PASS (55 routes) |
+
+Remaining real-data dependency: Backend should return LKG and rollback fields
+from protocol template/detail and assignment/detail APIs so Admin can drop the
+mock fallback for those sections.
