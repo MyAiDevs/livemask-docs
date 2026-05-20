@@ -102,7 +102,8 @@ snapshot. The currently visible high-priority gaps include:
 | Module | Gap | Next TASK |
 | --- | --- | --- |
 | Protocol stability | CI/CD reconnect hint runtime smoke still needs closure | `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001` |
-| Backend API documentation | Backend APIs must align with OpenAPI; Swagger UI must be Admin-login only | `TASK-BACKEND-SWAGGER-API-DOCS-001` |
+| Backend API documentation | Admin-login-only Swagger UI still needs implementation | `TASK-ADMIN-SWAGGER-API-DOCS-UI-001` |
+| Backend API documentation | CI/CD should enforce Backend OpenAPI drift checks | `TASK-CICD-OPENAPI-DRIFT-CHECK-001` |
 
 Before dispatching any new task, check whether the next task is already present
 in the ledger or task README. Prefer existing tasks over inventing new ones.

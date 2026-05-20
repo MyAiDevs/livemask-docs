@@ -345,38 +345,49 @@
         {
           "task_id": "TASK-BACKEND-SWAGGER-API-DOCS-001",
           "repo": "livemask-backend",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-BACKEND-SWAGGER-API-DOCS-001.md",
-          "dev_merge_commit": "",
-          "remote_dev_ref": "",
+          "dev_merge_commit": "9de2f14",
+          "remote_dev_ref": "9de2f14",
           "issue": "livemask-docs#10, livemask-backend#1",
-          "validation": "",
+          "validation": "scripts/validate-openapi.sh PASS 22/22 checks; OpenAPI JSON/YAML validation; route coverage drift gate; no public Swagger UI gate; go build; go vet; go test ./...; git diff --check",
           "blocked_by": [],
           "unlocks": [
-            "TASK-ADMIN-SWAGGER-API-DOCS-UI-001"
+            "TASK-ADMIN-SWAGGER-API-DOCS-UI-001",
+            "TASK-CICD-OPENAPI-DRIFT-CHECK-001"
           ],
-          "notes": "New requirement: all Backend APIs must align with Swagger/OpenAPI. Backend may expose machine-readable OpenAPI JSON for Admin/CI, but human Swagger UI must only be visible inside logged-in livemask-admin. Every later Backend API add/change/delete must update OpenAPI and pass route/API drift checks. Cursor handoff: docs/development/cursor-handoffs/BACKEND-SWAGGER-API-DOCS-CURSOR_HANDOFF.md."
+          "notes": "Backend OpenAPI completed at dev 9de2f14: docs/openapi.yaml, docs/openapi.json, /openapi.yaml, /openapi.json, route drift gate, no public /swagger/ route, 124 documented paths. Admin UI remains separate and is now unblocked."
         },
         {
           "task_id": "TASK-ADMIN-SWAGGER-API-DOCS-UI-001",
           "repo": "livemask-admin",
-          "status": "blocked",
+          "status": "ready",
           "task_doc": "docs/development/tasks/TASK-ADMIN-SWAGGER-API-DOCS-UI-001.md",
           "dev_merge_commit": "",
           "remote_dev_ref": "",
           "issue": "livemask-docs#13, livemask-admin#2",
           "validation": "",
-          "blocked_by": [
-            "TASK-BACKEND-SWAGGER-API-DOCS-001"
-          ],
+          "blocked_by": [],
           "unlocks": [],
-          "notes": "Admin must provide the logged-in Swagger UI surface after Backend exposes validated OpenAPI JSON. Swagger UI must not be public from Backend."
+          "notes": "Unblocked by Backend dev 9de2f14. Admin must provide the logged-in Swagger UI surface using Backend /openapi.json or /openapi.yaml. Swagger UI must not be public from Backend."
+        },
+        {
+          "task_id": "TASK-CICD-OPENAPI-DRIFT-CHECK-001",
+          "repo": "livemask-ci-cd",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-CICD-OPENAPI-DRIFT-CHECK-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#14, livemask-ci-cd#2",
+          "validation": "",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "Integrate Backend scripts/validate-openapi.sh into CI/CD smoke or workflow so Backend API/OpenAPI drift is enforced beyond backend-local validation."
         }
       ],
       "open_gaps": [
-        "Backend OpenAPI 3 document and Admin-authenticated Swagger UI are not yet implemented.",
-        "Backend API route/OpenAPI drift gate is not yet implemented.",
-        "CI/CD OpenAPI drift validation can be added after backend docs exist."
+        "Admin-authenticated Swagger UI is ready but not implemented.",
+        "CI/CD OpenAPI drift validation is ready but not implemented."
       ]
     }
   ]

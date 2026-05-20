@@ -1,9 +1,9 @@
 # TASK-ADMIN-SWAGGER-API-DOCS-UI-001 - Admin-Authenticated Swagger UI
 
-> Status: blocked
+> Status: Ready
 > Repository: livemask-admin
 > Environment: dev-local
-> Blocked by: TASK-BACKEND-SWAGGER-API-DOCS-001
+> Unblocked by: TASK-BACKEND-SWAGGER-API-DOCS-001 (`livemask-backend` dev `9de2f14`)
 > Module: swagger-api
 > Issues: livemask-docs#13, livemask-admin#2
 
@@ -13,6 +13,14 @@ Backend OpenAPI/Swagger is the mandatory API contract source of truth after
 `TASK-BACKEND-SWAGGER-API-DOCS-001`. The human Swagger UI must not be exposed as
 a public Backend route. It must be visible only inside `livemask-admin` after a
 successful Admin login.
+
+Backend is now ready at `origin/dev` `9de2f14`:
+
+- `GET /openapi.yaml`
+- `GET /openapi.json`
+- `internal/swagger/swagger-ui.html` embeddable template
+- no public `/swagger/` route
+- `scripts/validate-openapi.sh` PASS 22/22 checks
 
 ## 2. Scope
 
