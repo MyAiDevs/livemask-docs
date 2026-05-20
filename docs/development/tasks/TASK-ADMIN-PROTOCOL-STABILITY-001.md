@@ -96,6 +96,7 @@ Evidence:
 | Remote dev ref | `origin/dev` (`986dc9c`) |
 | Validation | `npx vitest run` PASS (168/168), `npx next build` PASS (55 routes) |
 
-Remaining real-data dependency: Backend should return LKG and rollback fields
-from protocol template/detail and assignment/detail APIs so Admin can drop the
-mock fallback for those sections.
+Backend real-data dependency resolved by
+`TASK-BACKEND-PROTOCOL-LKG-ROLLBACK-API-001` at Backend dev merge `9a06111`.
+Admin can now remove mock LKG/rollback fallback and validate those sections
+against real protocol template, eligibility, and assignment APIs.

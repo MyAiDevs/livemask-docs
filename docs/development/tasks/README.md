@@ -217,6 +217,7 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 | TASK | Repo | Scope |
 | --- | --- | --- |
 | [TASK-BACKEND-PROTOCOL-STABILITY-001.md](TASK-BACKEND-PROTOCOL-STABILITY-001.md) | livemask-backend | Real Admin/Internal APIs, eligibility, reconnect hint authority, node detail data — ✅ Completed |
+| [TASK-BACKEND-PROTOCOL-LKG-ROLLBACK-API-001.md](TASK-BACKEND-PROTOCOL-LKG-ROLLBACK-API-001.md) | livemask-backend | Real LKG/rollback fields for protocol template, eligibility, assignment list/detail APIs — ✅ Completed (`9a06111`) |
 | [TASK-NODEAGENT-PROTOCOL-STABILITY-001.md](TASK-NODEAGENT-PROTOCOL-STABILITY-001.md) | livemask-nodeagent | Assignment LKG, rollback, readiness, event retry, metrics/logs — ✅ Completed (`0fa3e9c`) |
 | [TASK-ADMIN-PROTOCOL-STABILITY-001.md](TASK-ADMIN-PROTOCOL-STABILITY-001.md) | livemask-admin | Replace node detail demo data and implement template/assignment UI plus LKG/rollback observability — ✅ Completed (latest `986dc9c`, original `823f4fe`) |
 | [TASK-APP-RECONNECT-STABILITY-001.md](TASK-APP-RECONNECT-STABILITY-001.md) | livemask-app | Verify real reconnect hints, polling, and unsupported protocol safety — ✅ Completed (latest `5a433f9`, original `17e83c9`) |
