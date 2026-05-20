@@ -384,6 +384,7 @@ Start every new AI session with docs/development/AI_PROJECT_STATUS_ONBOARDING.md
 | `TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001` | `livemask-docs` | Standardize next Cursor task dispatch briefs. |
 | `TASK-CICD-TASK-RECONCILER-001` | `livemask-docs` / `livemask-ci-cd` | Add lightweight reconciliation checks before stricter Issue automation. |
 | `TASK-CICD-ISSUE-SYNC-STRICT-001` | `livemask-docs` / `livemask-ci-cd` | Search and update docs plus runtime repo Issues by TASK ID. |
+| `TASK-CICD-ISSUE-CLOSE-GUARD-001` | `livemask-ci-cd` | Guarded Issue close/reopen automation after final verification evidence. |
 | `TASK-DOCS-LEASE-REGISTRY-001` | `livemask-docs` + all repos | Track active Cursor leases and detect overlapping task/file ownership. |
 
 ## 11. Done Criteria

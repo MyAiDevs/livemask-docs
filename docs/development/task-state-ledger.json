@@ -122,18 +122,36 @@
         },
         {
           "task_id": "TASK-CICD-ISSUE-SYNC-STRICT-001",
-          "repo": "livemask-docs",
-          "status": "ready",
+          "repo": "livemask-ci-cd",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-001.md",
+          "dev_merge_commit": "bb262a3",
+          "remote_dev_ref": "bb262a3",
+          "issue": "",
+          "validation": "bash -n scripts/issue-sync-strict.sh, bash -n scripts/*.sh, git diff --check, dev-merge-guard",
+          "blocked_by": [
+            "TASK-CICD-TASK-RECONCILER-001"
+          ],
+          "unlocks": [
+            "TASK-CICD-ISSUE-CLOSE-GUARD-001",
+            "TASK-DOCS-LEASE-REGISTRY-001"
+          ],
+          "notes": "Cross-repo Issue presence and ambiguity check implemented in livemask-ci-cd; no existing docs/ci-cd Issue was found during docs sync."
+        },
+        {
+          "task_id": "TASK-CICD-ISSUE-CLOSE-GUARD-001",
+          "repo": "livemask-ci-cd",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-CICD-ISSUE-CLOSE-GUARD-001.md",
           "dev_merge_commit": "",
           "remote_dev_ref": "",
           "issue": "",
           "validation": "",
           "blocked_by": [
-            "TASK-CICD-TASK-RECONCILER-001"
+            "TASK-CICD-ISSUE-SYNC-STRICT-001"
           ],
           "unlocks": [],
-          "notes": "Next automation step: search and update docs plus runtime repo issues by TASK ID."
+          "notes": "Next automation step: guarded Issue close/reopen only after final verification state is reliable."
         },
         {
           "task_id": "TASK-DOCS-LEASE-REGISTRY-001",
@@ -145,14 +163,14 @@
           "issue": "",
           "validation": "",
           "blocked_by": [
-            "TASK-CICD-TASK-RECONCILER-001"
+            "TASK-CICD-ISSUE-SYNC-STRICT-001"
           ],
           "unlocks": [],
-          "notes": "Next governance step: active lease registry to reduce parallel Cursor collisions."
+          "notes": "Next governance step: active lease registry to reduce parallel Cursor collisions; strict Issue sync is now available as the scan foundation."
         }
       ],
       "open_gaps": [
-        "Issue sync still needs strict cross-repo lookup and update automation.",
+        "Issue close/reopen guard remains intentionally separate from strict Issue presence checking.",
         "Lease registry is documented as next task but not yet enforced by tooling.",
         "Ledger should grow as completion reports are processed; it is not yet exhaustive for every historical TASK."
       ]

@@ -113,8 +113,8 @@ project health:
 
 ## Current Known Open Automation Gaps
 
-- `TASK-CICD-ISSUE-SYNC-STRICT-001`: cross-repo Issue lookup/update is ready but
-  not implemented.
+- `TASK-CICD-ISSUE-CLOSE-GUARD-001`: guarded Issue close/reopen automation is
+  ready but not implemented.
 - `TASK-DOCS-LEASE-REGISTRY-001`: active lease collision detection is ready but
   not implemented.
 - Historical tasks are not fully backfilled into `task-state-ledger.json`; the

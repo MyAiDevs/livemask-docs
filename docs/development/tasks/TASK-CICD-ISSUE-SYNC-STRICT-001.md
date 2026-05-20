@@ -1,10 +1,10 @@
 # TASK-CICD-ISSUE-SYNC-STRICT-001 - Strict Cross-Repo Issue Sync
 
-- 状态：Ready
+- 状态：Completed
 - Owner：Docs / CI-CD
 - 创建日期：2026-05-21
 - 目标完成日期：
-- 主影响仓库：`livemask-docs`
+- 主影响仓库：`livemask-ci-cd`
 - 受影响仓库：All LiveMask repositories
 - 关联里程碑：Multi-repo intelligent development workflow
 
@@ -56,16 +56,23 @@ not found and updated, status can drift between docs and implementation repos.
 
 ## 6. Implementation Plan
 
-- [ ] Add cross-repo issue search by TASK ID.
-- [ ] Add dry-run mode for local verification.
-- [ ] Update ledger with matched issue reference.
-- [ ] Document ambiguous match handling.
+- [x] Add cross-repo issue search by TASK ID.
+- [x] Add a standalone `scripts/issue-sync-strict.sh` check independent of
+  Docker.
+- [x] Support docs repo plus selected runtime repos via repeated `--repo`.
+- [x] Add text and JSON output modes.
+- [x] Write `GITHUB_OUTPUT` fields for downstream workflow steps.
+- [x] Add `workflow_dispatch` via `.github/workflows/issue-sync-strict.yml`.
+- [x] Add staging-smoke integration before Docker startup.
+- [x] Document missing / ambiguous issue handling through exit codes.
 
 ## 7. Validation Plan
 
-- [ ] Unit test parser/search helper with sample responses.
-- [ ] Dry run against known TASK ID.
-- [ ] `bash scripts/check-docs.sh`.
+- [x] `bash -n scripts/issue-sync-strict.sh`
+- [x] `bash -n scripts/*.sh`
+- [x] `git diff --check`
+- [x] dev-merge-guard task branch -> integration branch -> dev merge ->
+  `origin/dev` push
 
 ## 8. Risks
 
@@ -82,12 +89,22 @@ not found and updated, status can drift between docs and implementation repos.
 
 ## 10. Completion Evidence
 
-- PR：
-- Commit：
-- Test output：
-- 文档链接：
+- Repository：`livemask-ci-cd`
+- Task branch：`task/TASK-CICD-ISSUE-SYNC-STRICT-001`
+- Task branch commit：`a96a742`
+- Dev merge commit：`bb262a3`
+- Remote dev ref：`bb262a3`
+- Validation：`bash -n scripts/issue-sync-strict.sh` PASS,
+  `bash -n scripts/*.sh` PASS, `git diff --check` clean
+- Issue lookup：No existing `TASK-CICD-ISSUE-SYNC-STRICT-001` Issue found in
+  `MyAiDevs/livemask-docs` or `MyAiDevs/livemask-ci-cd` during docs sync.
+- Runtime status：local dev runtime left running; no temporary smoke
+  environment started.
+- 文档链接：this task file and `docs/development/task-state-ledger.json`
 
 ## 11. Follow-up
 
-- 后续 TASK：Issue close/reopen guard only after sync is reliable.
-- 未完成项：
+- 后续 TASK：`TASK-CICD-ISSUE-CLOSE-GUARD-001`,
+  `TASK-DOCS-LEASE-REGISTRY-001`
+- 未完成项：Issue close/reopen guard remains intentionally separate from Issue
+  presence/ambiguity checking.

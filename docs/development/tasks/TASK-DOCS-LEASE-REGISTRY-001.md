@@ -15,6 +15,9 @@ area. Existing lease rules are documented but not registered in a shared place.
 A lightweight active lease registry would make collisions visible before edits
 begin.
 
+`TASK-CICD-ISSUE-SYNC-STRICT-001` is now completed, so lease registry work can
+reuse the same idea of scanable task/Issue state and structured output.
+
 ## 2. Scope
 
 ### In Scope
@@ -60,6 +63,8 @@ begin.
 - [ ] Define lease JSON/schema or comment format.
 - [ ] Add collision detection for repo + expected file overlap.
 - [ ] Update Cursor brief template to include lease start/end.
+- [ ] Ensure lease state can be reconciled asynchronously alongside
+  `task-state-ledger.json`.
 
 ## 7. Validation Plan
 
