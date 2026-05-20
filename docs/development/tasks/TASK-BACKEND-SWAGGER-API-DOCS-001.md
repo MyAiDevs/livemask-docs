@@ -1,6 +1,6 @@
 # TASK-BACKEND-SWAGGER-API-DOCS-001 - Backend Swagger / OpenAPI Documentation
 
-> Status: Ready
+> Status: Completed
 > Repository: livemask-backend
 > Environment: dev-local
 > Module: swagger-api
@@ -141,20 +141,23 @@ reason and create a follow-up TASK.
 
 ## 7. Acceptance Criteria
 
-- [ ] OpenAPI 3 document exists and validates.
-- [ ] Machine-readable OpenAPI JSON is reachable for Admin/CI consumption.
-- [ ] Swagger UI is visible only inside logged-in `livemask-admin`.
-- [ ] Backend does not expose public unauthenticated Swagger UI.
-- [ ] Major backend route families are documented or explicitly deferred with
+- [x] OpenAPI 3 document exists and validates.
+- [x] Machine-readable OpenAPI JSON is reachable for Admin/CI consumption.
+- [x] Backend does not expose public unauthenticated Swagger UI.
+- [x] Major backend route families are documented or explicitly deferred with
   follow-up TASKs.
-- [ ] Backend route add/change/delete drift check fails if OpenAPI is not
+- [x] Backend route add/change/delete drift check fails if OpenAPI is not
   updated.
-- [ ] Auth/RBAC/security requirements are visible per endpoint family.
-- [ ] Request/response schemas use real backend types where practical.
-- [ ] Sensitive examples are redacted and validated.
-- [ ] Backend README/runbook explains how to view and validate API docs.
-- [ ] Completion report includes task branch commit, dev merge commit, remote
+- [x] Auth/RBAC/security requirements are visible per endpoint family.
+- [x] Request/response schemas use real backend types where practical.
+- [x] Sensitive examples are redacted and validated.
+- [x] Backend README/runbook explains how to view and validate API docs.
+- [x] Completion report includes task branch commit, dev merge commit, remote
   `origin/dev`, and validation evidence from merged `dev`.
+- [ ] Swagger UI is visible only inside logged-in `livemask-admin`.
+  - Deferred to `TASK-ADMIN-SWAGGER-API-DOCS-UI-001`; Backend supplies
+    `/openapi.yaml`, `/openapi.json`, CORS, and an embeddable UI template but
+    intentionally exposes no public `/swagger/` route.
 
 ## 8. Rollback
 
@@ -164,7 +167,37 @@ reason and create a follow-up TASK.
   affecting core API behavior; Admin Swagger UI should fail closed when the JSON
   source is unavailable.
 
-## 9. Cursor Task Brief
+## 9. Completion Evidence
+
+| Field | Value |
+| --- | --- |
+| Task branch | `task/TASK-BACKEND-SWAGGER-API-DOCS-001` |
+| Task branch commits | `f42cfc1`, `3d0c307`, `8e5e968` |
+| Dev merge commit | `9de2f14` |
+| Remote dev ref | `origin/dev` (`9de2f14`) |
+| Validation | `scripts/validate-openapi.sh` PASS 22/22 checks; OpenAPI JSON/YAML validation; route coverage gate; no public Swagger UI gate; `go build`; `go vet`; `go test ./...`; `git diff --check` |
+| Issues | `livemask-docs#10`, `livemask-backend#1` |
+
+Implemented Backend artifacts:
+
+- `docs/openapi.yaml` with OpenAPI 3.0.3 and 124 documented paths across all
+  major Backend route families.
+- `docs/openapi.json` generated from YAML for machine consumers.
+- `internal/swagger/swagger.go` serving `GET /openapi.yaml` and
+  `GET /openapi.json` with CORS for Admin.
+- `internal/swagger/swagger-ui.html` retained as an Admin-embeddable template.
+- `scripts/validate-openapi.sh` with 22 checks covering spec structure,
+  security schemes, sensitive-field scanning, JSON consistency, route coverage,
+  no public `/swagger/`, Go build/vet/test, and whitespace.
+- Backend tests for YAML/JSON endpoints, path count, no public Swagger UI,
+  spec non-empty, sensitive placeholder behavior, CORS, and embeddable UI HTML.
+
+Unblocked follow-up tasks:
+
+- `TASK-ADMIN-SWAGGER-API-DOCS-UI-001`
+- `TASK-CICD-OPENAPI-DRIFT-CHECK-001`
+
+## 10. Cursor Task Brief
 
 ```markdown
 ## Cursor Task Brief
