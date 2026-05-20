@@ -125,7 +125,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-AUTO-AUDIT-CENTER-001.md](TASK-DOCS-AUTO-AUDIT-CENTER-001.md) — ✅ Completed (offline gate/warning/suggestion audit center with JSON report)
 - [TASK-CICD-ISSUE-CLOSE-GUARD-001.md](TASK-CICD-ISSUE-CLOSE-GUARD-001.md) — ✅ Completed (guarded Issue close/reopen automation)
 - [TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001.md](TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001.md) — ✅ Completed (optional GitHub Issue / Actions / remote ref audit)
-- [TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001.md](TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001.md) — Ready (sync governance rules into child repo AI/Cursor rules)
+- [TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001.md](TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001.md) — ✅ Completed (sync governance rules into child repo AI/Cursor rules)
 - [TASK-DOCS-LEASE-REGISTRY-001.md](TASK-DOCS-LEASE-REGISTRY-001.md) — ✅ Completed (file-backed active lease registry and collision checks)
 - [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)
 - [TASK-DOC-NAT-SHARING-GUARD-001.md](TASK-DOC-NAT-SHARING-GUARD-001.md) — Ready (NAT/device-as-router abuse guard contract and follow-up tasks)

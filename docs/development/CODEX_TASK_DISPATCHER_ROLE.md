@@ -133,7 +133,12 @@ project health:
 - `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001` is completed. Optional read-only
   GitHub Issue, Actions, and remote-ref audit is available through
   `scripts/audit-task-center.py` remote flags; base docs checks remain offline.
-- `TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001`: child repo AI/Cursor rule sync is
-  ready but not implemented.
+- `TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001` is completed. Child repo
+  `.cursorrules` now mirror lease registry, completion report, docs boundary,
+  remote audit, and Issue close guard ownership rules.
 - Historical tasks are not fully backfilled into `task-state-ledger.json`; the
   ledger is an active snapshot that grows as reports are processed.
+
+Do not keep dispatching governance-only follow-ups after the audit center is
+clean. Product/runtime tasks should take priority unless an audit gate finds a
+specific drift or safety defect.
