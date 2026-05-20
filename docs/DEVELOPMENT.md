@@ -21,6 +21,11 @@
 12. 运行时代码仓库不得直接修改 `../livemask-docs` 或自行运行 task-sync；它们只输出
     完成证据，由 `livemask-docs` 窗口统一更新任务台账。
 13. 用户只用普通文本描述需求或 bug 时，必须先执行 TASK intake，不能直接改代码。
+14. `livemask-docs` 窗口收到 Cursor / Codex / 人工完成报告后，必须作为任务调度中枢处理：
+    读取任务事实源、审核完成证据、同步 GitHub Issue、总结已完成/未完成模块、
+    主动创建或分配下一批 Cursor 任务，并更新任务文档。
+15. 如果任务清单暂时没有下一步，但项目尚未完成落地，`livemask-docs` 窗口必须扫描项目
+    文档、contracts、handoff、QA/runbook 和相关任务状态，识别缺口并创建新的 `TASK-*.md`。
 
 详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
 
@@ -105,3 +110,5 @@
 - [ ] 如果任务来自自然语言需求 / bug，完成报告包含 Task intake summary
 - [ ] 若任务是跨仓库 Epic，所有 child task 与最终 smoke 已完成；单个 repo 的 `implemented` 不能关闭 Epic
 - [ ] 若 CI/CD 仍有 SKIP，状态必须写为 `completed_with_skip` 或 `verified_with_skip`，不得写成完整 `completed`
+- [ ] `livemask-docs` 窗口已同步已有 GitHub Issue，或创建/登记新的后续 Issue/TASK
+- [ ] 已按模块总结 completed / partial / blocked / evidence_missing 状态，并给出下一批 Cursor 任务

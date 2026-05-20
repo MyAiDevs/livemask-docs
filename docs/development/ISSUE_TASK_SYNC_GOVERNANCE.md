@@ -276,11 +276,33 @@ run task-sync as a substitute for updating the docs ledger. They must hand off
 completion evidence to `livemask-docs`; the docs window updates MVP/task/handoff
 state and then triggers task-sync when appropriate.
 
+The `livemask-docs` window must also synchronize GitHub Issues. For every
+completion report, it must search for an existing Issue by TASK ID and repo
+before creating anything new. Existing Issues are updated with completion
+evidence, current status, blockers, unlocked repos, next tasks, and links to the
+updated docs ledger. A new Issue is created or explicitly registered only when
+no suitable Issue exists and the task is ready to execute.
+
 When a TASK starts from a plain-language request or bug report, task-sync must
 not be used as the first record. The runtime repo must first perform TASK intake,
 generate a TASK ID, implement and merge through dev, then hand off completion
 evidence to `livemask-docs`. The docs window creates or updates the TASK file
 and only then runs task-sync.
+
+After processing a report, the `livemask-docs` window must summarize module
+state and assign the next Cursor tasks. The summary must distinguish:
+
+- modules with `completed` evidence on `dev` and `origin/dev`;
+- modules that are `partial`, `blocked`, or `evidence_missing`;
+- repos that are unlocked for parallel work;
+- repos still blocked and the concrete unblock condition;
+- missing runtime smoke, contract, UI, Backend, App, NodeAgent, CI/CD, QA, or
+  runbook evidence.
+
+If no next task exists in the current task ledger but the project is not landed,
+the `livemask-docs` window must scan project documents, contracts, handoffs,
+runbooks, QA matrices, and existing task state, then create new `TASK-*.md`
+entries and update the task ledger before issuing Cursor briefs.
 
 ## 8. CI/CD SKIP Rules
 
@@ -317,6 +339,10 @@ Runtime repos must not edit ../livemask-docs directly.
 Only the livemask-docs window updates MVP/task/handoff/contract ledger state and
 runs task-sync.
 Plain-language user requests must go through TASK intake before code changes.
+When processing completion reports, livemask-docs must update existing GitHub
+Issues, summarize completed/unfinished modules, and assign or create the next
+Cursor tasks. If the ledger has no next task but the project is not landed,
+scan the project and create new TASK docs before dispatching work.
 ```
 
 ## 10. Follow-Up Tasks

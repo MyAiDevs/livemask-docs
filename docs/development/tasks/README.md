@@ -22,6 +22,13 @@
 > （如 `system-settings-smoke.sh`、`jobs-smoke.sh`、`protocol-capability-smoke.sh`、
 > `release-control-smoke.sh`）。`scripts/smoke.sh` / workflow 不得引用不存在的路径。
 
+> **Completion Report Intake Rule**
+> 每次 `livemask-docs` 窗口收到 Cursor / Codex / 人工完成报告后，必须读取任务台账、
+> MVP 计划、相关 TASK、contracts、handoff 和已有 GitHub Issue；审核 dev merge、
+> `origin/dev`、验证证据和跨仓库影响；更新 docs 台账和 Issue；总结已完成/未完成模块；
+> 主动分配下一批 Cursor 任务。如果现有任务清单没有下一步但项目仍未落地，必须扫描
+> 项目文档和任务状态，创建新的 `TASK-*.md`，更新台账后再派发任务。
+
 ## 0. 多窗口同步要求
 
 所有 Cursor / Codex / 人工开发窗口完成任务后，必须同步提交 TASK 记录。
@@ -101,6 +108,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md](TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md) — ✅ Completed (CI/CD scripts enforce `~/Developer/LiveMask` workspace)
 - [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
 - [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
+- [TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md](TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md) — ✅ Completed (completion report intake -> Issue sync -> module summary -> next Cursor task dispatch)
 - [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)
 - [TASK-DOC-NAT-SHARING-GUARD-001.md](TASK-DOC-NAT-SHARING-GUARD-001.md) — Ready (NAT/device-as-router abuse guard contract and follow-up tasks)
 - [TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md](TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md) — ✅ Completed (AppClient feature validation is Android-first; iOS deferred hardening)
