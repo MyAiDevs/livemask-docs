@@ -85,7 +85,7 @@ These are intentional, tracked gaps, not memory-only notes:
 
 | Gap | TASK | Status |
 | --- | --- | --- |
-| Guarded Issue close/reopen automation | `TASK-CICD-ISSUE-CLOSE-GUARD-001` | Ready |
+| Optional GitHub Issue / Actions / remote-ref audit | `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001` | Ready |
 | Full historical backfill into `task-state-ledger.json` | Follow-up as reports are processed | Incremental |
 
 Do not claim the governance-control-plane module is fully completed while these
@@ -100,7 +100,7 @@ snapshot. The currently visible high-priority gaps include:
 | --- | --- | --- |
 | Protocol stability | App reconnect runtime must cut over to real Backend APIs | `TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001` |
 | Protocol stability | CI/CD reconnect hint runtime smoke still needs closure | `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001` |
-| Governance | Issue presence/ambiguity check exists and staging warning mode is hardened; close/reopen guard is not automated | `TASK-CICD-ISSUE-CLOSE-GUARD-001` |
+| Governance | Issue close guard exists; remote Issue/Actions/ref audit remains opt-in follow-up | `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001` |
 | Governance | Lease registry is file-backed; child repo AI rule sync remains follow-up | Future child repo rules sync TASK |
 
 Before dispatching any new task, check whether the next task is already present

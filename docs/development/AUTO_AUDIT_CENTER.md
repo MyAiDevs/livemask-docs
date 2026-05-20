@@ -135,4 +135,5 @@ Each finding includes:
 - Optional remote `origin/dev` verification across runtime repos.
 - Optional GitHub Actions workflow result audit.
 - Lease registry audit is now handled by `scripts/check-task-leases.py`.
-- Optional close/reopen guard audit after `TASK-CICD-ISSUE-CLOSE-GUARD-001`.
+- Guarded close/reopen automation is now handled by
+  `livemask-ci-cd/scripts/issue-close-guard.sh`.

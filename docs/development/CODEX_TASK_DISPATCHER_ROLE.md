@@ -124,10 +124,14 @@ project health:
   read-only, offline by default, and layered into gate, warning, and suggestion
   findings. Do not promote a warning to a gate without a dedicated migration
   TASK.
-- `TASK-CICD-ISSUE-CLOSE-GUARD-001`: guarded Issue close/reopen automation is
-  ready but not implemented.
+- `TASK-CICD-ISSUE-CLOSE-GUARD-001` is completed. Guarded close/reopen
+  automation is available in `livemask-ci-cd`, with dry-run default and write
+  mode gated by explicit input.
 - `TASK-DOCS-LEASE-REGISTRY-001` is completed. Active lease state is
   file-backed in `docs/development/task-leases.json`, and
   `scripts/check-task-leases.py` detects overlapping active leases.
+- `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001`: optional read-only GitHub Issue,
+  Actions, and remote-ref audit is ready but not implemented. It must remain
+  opt-in so base docs checks stay offline.
 - Historical tasks are not fully backfilled into `task-state-ledger.json`; the
   ledger is an active snapshot that grows as reports are processed.

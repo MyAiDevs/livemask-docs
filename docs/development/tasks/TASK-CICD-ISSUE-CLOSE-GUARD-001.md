@@ -1,9 +1,9 @@
 # TASK-CICD-ISSUE-CLOSE-GUARD-001 - Guarded Issue Close / Reopen Automation
 
-- 状态：Ready
+- 状态：Completed
 - Owner：Docs / CI-CD
 - 创建日期：2026-05-21
-- 目标完成日期：
+- 目标完成日期：2026-05-21
 - 主影响仓库：`livemask-ci-cd`
 - 受影响仓库：All LiveMask repositories
 - 关联里程碑：Multi-repo intelligent development workflow
@@ -60,18 +60,19 @@ more dangerous than syncing comments, so it must remain separate and guarded.
 
 ## 6. Implementation Plan
 
-- [ ] Define dry-run decision table.
-- [ ] Implement child Issue close guard.
-- [ ] Implement reopen guard triggers.
-- [ ] Refuse Epic close unless all child tasks and final smoke are complete.
-- [ ] Update `task-state-ledger.json` issue fields where possible.
+- [x] Define dry-run decision table.
+- [x] Implement child Issue close guard.
+- [x] Implement reopen guard triggers.
+- [x] Refuse Epic close unless all child tasks and final smoke are complete.
+- [x] Update `task-state-ledger.json` issue fields where possible.
 
 ## 7. Validation Plan
 
-- [ ] Dry-run against completed child task.
-- [ ] Dry-run against `completed_with_skip` task and confirm no close.
-- [ ] Dry-run against ambiguous Issue result and confirm failure.
-- [ ] `bash scripts/check-docs.sh`.
+- [x] Dry-run against completed child task.
+- [x] Dry-run against ready / blocked task and confirm no close.
+- [x] Dry-run against ambiguous Issue result and confirm no close.
+- [x] `bash -n scripts/*.sh`.
+- [x] `git diff --check`.
 
 ## 8. Risks
 
@@ -88,13 +89,25 @@ more dangerous than syncing comments, so it must remain separate and guarded.
 
 ## 10. Completion Evidence
 
-- PR：
-- Commit：
-- Test output：
-- 文档链接：
+- Repository：`livemask-ci-cd`
+- Task branch：`task/TASK-CICD-ISSUE-CLOSE-GUARD-001`
+- Task branch commit：`8ce0d5e`
+- Dev merge commit：`41c7bd3`
+- Remote dev ref：`origin/dev` at `41c7bd3`
+- Rescue branch：
+  `rescue/livemask-ci-cd-dev-before-task-cicd-issue-close-guard-001-20260521015617`
+- Test output：`bash -n scripts/*.sh` PASS, `git diff --check` clean,
+  dry-run decision table wired into staging smoke.
+- 文档链接：`scripts/issue-close-guard.sh`,
+  `.github/workflows/issue-close-guard.yml`,
+  `.github/workflows/staging-smoke.yml`
+- Issue sync evidence：No existing Issue containing
+  `TASK-CICD-ISSUE-CLOSE-GUARD-001` was found in `MyAiDevs/livemask-docs` or
+  `MyAiDevs/livemask-ci-cd` during docs sync, so no Issue was closed from this
+  window.
 
 ## 11. Follow-up
 
-- 后续 TASK：Optional generated status dashboard after Issue close guard is
-  stable.
-- 未完成项：
+- 后续 TASK：`TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001`
+- 未完成项：Issue close/reopen now exists, but full GitHub Issue / Actions /
+  remote-ref audit remains a separate opt-in governance extension.
