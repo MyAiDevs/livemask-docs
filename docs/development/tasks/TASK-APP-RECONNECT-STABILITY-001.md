@@ -17,11 +17,15 @@ endpoint changes.
 
 | File | Change |
 | --- | --- |
+| `lib/models/connect_models.dart` | Added `ReconnectHintsResponse` and `PolledReconnectHint` models with JSON, expiry, and deferral helpers. |
 | `lib/api/connect_api_client.dart` | Added abstract `fetchConnectConfig()`. |
-| `lib/api/real_connect_api_client.dart` | Implemented `GET /api/v1/connect/config`. |
-| `lib/api/mock_connect_api_client.dart` | Added mock implementation and `injectConnectConfig()` test helper. |
-| `lib/providers/connect_providers.dart` | Refactored reconnect into a three-step safe flow. |
-| `test/mock_connect_api_client_test.dart` | Added three `fetchConnectConfig()` scenario tests. |
+| `lib/api/connect_api_client.dart` | Added `fetchReconnectHints({String? sessionId})` to the abstract interface. |
+| `lib/api/real_connect_api_client.dart` | Implemented `GET /api/v1/connect/config` and `GET /api/v1/reconnect-hints`. |
+| `lib/api/mock_connect_api_client.dart` | Added mock implementations plus injectable reconnect hint helpers. |
+| `lib/providers/connect_providers.dart` | Refactored reconnect into a three-step safe flow and added polling, deduplication, start/stop lifecycle, and non-disruptive error handling. |
+| `test/connect_models_test.dart` | Added reconnect hint model tests for JSON, expiry, deferral, labels, and safe fields. |
+| `test/mock_connect_api_client_test.dart` | Added `fetchConnectConfig()` and `fetchReconnectHints()` scenario tests. |
+| `test/real_connect_api_client_test.dart` | Added real client reconnect hint request tests. |
 
 ## 3. Reconnect Stability Behavior
 
@@ -36,6 +40,11 @@ The App now follows a three-step reconnect method:
 Safety behavior:
 
 - Reconnect hint is treated as a signal only.
+- Polled reconnect hints are fetched from `GET /api/v1/reconnect-hints`.
+- Hint payloads are never trusted as connect configuration; the App always
+  fetches a fresh `connect_config`.
+- Processed hint IDs are deduplicated to prevent repeated reconnect attempts.
+- Polling errors are swallowed and do not break the active connection.
 - `fetchConnectConfig()` pulls config and does not create a new session.
 - Old tunnel is not immediately disconnected.
 - `unsupported`, `skeleton`, and `hysteria2 engine pending` states restore
@@ -58,10 +67,10 @@ Safety behavior:
 | Field | Value |
 | --- | --- |
 | Task branch | `task/TASK-APP-RECONNECT-STABILITY-001` |
-| Task branch commit | `6eefee4` |
-| Dev merge commit | `17e83c9` |
-| Remote dev ref | `17e83c9` |
-| Validation | `flutter test` PASS (84/84 focused tests); custom reconnect/connect API tests PASS; dev-merge-guard PASS |
+| Task branch commit | `6eefee4`; latest polling increment included in `TASK-APP-RECONNECT-STABILITY-001` |
+| Dev merge commit | `17e83c9`; latest polling dev merge `5a433f9` |
+| Remote dev ref | `5a433f9` |
+| Validation | `flutter test` PASS (84/84 focused tests) for the original flow; latest polling validation PASS (`flutter test`, 592/592). `flutter analyze` has pre-existing info/warnings only, with 0 new issues from this task. |
 
 Custom validation command:
 
@@ -73,16 +82,46 @@ flutter test test/reconnect_hint_test.dart test/connect_models_test.dart test/mo
 
 - Backend must ensure `GET /api/v1/connect/config` is available and returns the
   correct fresh `connect_config`.
+- Backend must ensure `GET /api/v1/reconnect-hints` is available and returns
+  safe hint metadata without secrets or full connect config payloads.
 - CI/CD should add `TASK-CICD-RECONNECT-HINT-001` or fold reconnect hint checks
   into protocol stability runtime smoke.
 - Real App + Backend integration should validate:
-  hint -> fetch config -> safe pending or new session -> new tunnel start.
+  poll hints -> fetch config -> safe pending or new session -> new tunnel start.
 
 ## 7. Done Criteria
 
 - [x] App consumes Backend reconnect hints as signals only.
+- [x] App polls `GET /api/v1/reconnect-hints`.
 - [x] App fetches fresh connect config before reconnect.
 - [x] Old tunnel/session state is preserved until the new config is safe.
 - [x] Unsupported/app_pending/skeleton profiles do not blackhole the tunnel.
 - [x] Focused reconnect tests pass.
+- [x] Full App test suite passes after polling implementation.
 - [x] App changes are merged to `dev`.
+
+## 8. Incremental Update: Reconnect Hint Polling
+
+Latest App dev merge `5a433f9` completes the polling side of this task. The
+App now consumes Backend reconnect hints from `GET /api/v1/reconnect-hints`,
+deduplicates processed hint IDs, and then runs the existing safe reconnect
+flow by fetching a fresh `connect_config`.
+
+| Area | Change |
+| --- | --- |
+| Models | Added `ReconnectHintsResponse` and `PolledReconnectHint` with JSON, expiry, deferral, and safety helpers. |
+| API clients | Added `fetchReconnectHints({String? sessionId})` to abstract, real, and mock clients. |
+| Provider | Added polling timer lifecycle, deduplication, safe polled reconnect execution, and non-disruptive error swallowing. |
+| Tests | Added model, real client, and mock client coverage for reconnect hints. |
+
+Evidence:
+
+| Field | Value |
+| --- | --- |
+| Integration branch | `integration/task-app-reconnect-stability-001-task-TASK-APP-RECONNECT-STABILITY-001-20260520183945` (`e740710`) |
+| Dev merge commit | `5a433f9` |
+| Remote dev ref | `origin/dev` (`5a433f9`) |
+| Validation | `flutter test` PASS (592/592); `flutter analyze` only reports pre-existing info/warnings with 0 new issues from this task |
+
+No new UI surface was added; this increment is background polling and reconnect
+control logic only.
