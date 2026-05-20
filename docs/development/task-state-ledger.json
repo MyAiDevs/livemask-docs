@@ -336,7 +336,7 @@
     {
       "module_id": "backend-api-documentation",
       "summary": "Backend Swagger/OpenAPI documentation, API contract discoverability, and future client integration support.",
-      "overall_status": "completed",
+      "overall_status": "partial",
       "owner_repo": "livemask-docs",
       "tasks": [
         {
@@ -369,6 +369,21 @@
           "notes": "Admin-authenticated Swagger UI completed at livemask-admin dev 656d4d9. /admin/api-docs is protected by AuthGuard, fetches /admin/openapi.json via same-origin proxy, injects bearer token in requestInterceptor, and defaults Try it out to disabled."
         },
         {
+          "task_id": "TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001",
+          "repo": "livemask-admin",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#15, livemask-admin#3",
+          "validation": "",
+          "blocked_by": [
+            "TASK-ADMIN-SWAGGER-API-DOCS-UI-001"
+          ],
+          "unlocks": [],
+          "notes": "Root-cause follow-up for reported /admin/api-docs 404/stale-cache confusion. Current Admin dev route returns HTTP 200, but /admin/openapi.json proxy was unreachable locally; task must add no-store/cache-busting, safe build/ref diagnostics, and precise proxy failure states."
+        },
+        {
           "task_id": "TASK-CICD-OPENAPI-DRIFT-CHECK-001",
           "repo": "livemask-ci-cd",
           "status": "completed",
@@ -382,7 +397,9 @@
           "notes": "Completed in combined CI/CD branch task/TASK-CICD-OPENAPI-DRIFT-RECONNECT-SMOKE-001 at dev c5f628a. Added scripts/openapi-drift-smoke.sh and staging-smoke step to run Backend scripts/validate-openapi.sh with PASS/SKIP/FAIL classification."
         }
       ],
-      "open_gaps": []
+      "open_gaps": [
+        "Admin API Docs needs stale build/cache diagnostics so old Next dev server state and Backend OpenAPI proxy failure cannot be mistaken for route 404."
+      ]
     }
   ]
 }

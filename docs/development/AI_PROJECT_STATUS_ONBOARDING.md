@@ -98,9 +98,12 @@ drift or safety defect.
 
 Use `task-state-ledger.json` and `MVP_IMPLEMENTATION_PLAN.md` for the full
 snapshot. At this snapshot, the repo-native audit queue has no ready
-high-priority product/runtime TASK. Before inventing new work, run the audit
-center and inspect the ledger/MVP plan for drift, remote CI smoke results, or
-new user requirements.
+high-priority product/runtime TASK except
+`TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001`, which should be dispatched to
+`livemask-admin` to root-cause stale `/admin/api-docs` 404/cache/proxy
+ambiguity. Before inventing additional work, run the audit center and inspect
+the ledger/MVP plan for drift, remote CI smoke results, or new user
+requirements.
 
 Before dispatching any new task, check whether the next task is already present
 in the ledger or task README. Prefer existing tasks over inventing new ones.
