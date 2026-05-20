@@ -8,5 +8,164 @@
     "expired",
     "abandoned"
   ],
-  "leases": []
+  "leases": [
+    {
+      "task_id": "TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001",
+      "repo": "livemask-admin",
+      "branch": "task/TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001",
+      "expected_files": [
+        "src/app/admin/api-docs",
+        "src/app/admin/api/build-info",
+        "src/lib/swagger-api.ts",
+        "src/__tests__/swagger-api-docs.test.ts",
+        "next.config.ts"
+      ],
+      "lease_owner": "cursor-admin-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [
+        "TASK-ADMIN-SWAGGER-API-DOCS-UI-001"
+      ],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001",
+      "repo": "livemask-backend",
+      "branch": "task/TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001",
+      "expected_files": [
+        "internal",
+        "cmd",
+        "docs/openapi.yaml",
+        "docs/openapi.json",
+        "scripts/validate-openapi.sh"
+      ],
+      "lease_owner": "cursor-backend-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [
+        "TASK-DOC-GROWTH-REWARD-NOTIFICATION-001"
+      ],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-P3-01",
+      "repo": "livemask-app",
+      "branch": "task/TASK-P3-01-connection-quality-report-app-slice",
+      "expected_files": [
+        "lib",
+        "test",
+        "integration_test"
+      ],
+      "lease_owner": "cursor-app-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [
+        "TASK-P2-05"
+      ],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-NA-CONFIG-001",
+      "repo": "livemask-nodeagent",
+      "branch": "task/TASK-NA-CONFIG-001-config-sync-hot-reload",
+      "expected_files": [
+        "internal",
+        "cmd",
+        "pkg",
+        "tests"
+      ],
+      "lease_owner": "cursor-nodeagent-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [
+        "TASK-P0-03"
+      ],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001",
+      "repo": "livemask-website",
+      "branch": "task/TASK-WEBSITE-RELEASE-CONTROL-REGRESSION-001",
+      "expected_files": [
+        "src",
+        "app",
+        "pages",
+        "components",
+        "lib",
+        "tests"
+      ],
+      "lease_owner": "cursor-website-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [
+        "TASK-BACKEND-APP-RELEASE-LATEST-001"
+      ],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-JOBS-APP-RELEASE-001",
+      "repo": "livemask-job-service",
+      "branch": "task/TASK-JOBS-APP-RELEASE-001",
+      "expected_files": [
+        "cmd",
+        "internal",
+        "pkg",
+        "tests"
+      ],
+      "lease_owner": "cursor-job-service-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [
+        "TASK-DOC-APP-RELEASE-DISTRIBUTION-001"
+      ],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-CICD-CLOSED-LOOP-BATCH-001",
+      "repo": "livemask-ci-cd",
+      "branch": "task/TASK-CICD-CLOSED-LOOP-BATCH-001",
+      "expected_files": [
+        "scripts",
+        ".github/workflows",
+        "infra"
+      ],
+      "lease_owner": "cursor-cicd-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-DOC-NAT-SHARING-GUARD-001",
+      "repo": "livemask-docs",
+      "branch": "task/TASK-DOC-NAT-SHARING-GUARD-001",
+      "expected_files": [
+        "docs/development/tasks/TASK-DOC-NAT-SHARING-GUARD-001.md",
+        "docs/contracts/vpn/NAT_SHARING_GUARD_CONTRACT.md",
+        "docs/development/MVP_IMPLEMENTATION_PLAN.md",
+        "docs/development/tasks/README.md"
+      ],
+      "lease_owner": "cursor-docs-window",
+      "started_at": "2026-05-21T20:25:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [],
+      "blocked_by": [],
+      "status": "active"
+    }
+  ]
 }
