@@ -193,7 +193,8 @@
             "TASK-DOCS-LEASE-REGISTRY-001"
           ],
           "unlocks": [
-            "TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001"
+            "TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001",
+            "TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001"
           ],
           "notes": "Guarded Issue close/reopen automation is merged to livemask-ci-cd dev. No existing docs/ci-cd Issue was found during docs sync, so no Issue was closed from this window."
         },
@@ -219,23 +220,41 @@
         {
           "task_id": "TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001",
           "repo": "livemask-docs",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "python3 scripts/audit-task-center.py --remote-ref-self-test, python3 scripts/audit-task-center.py --remote-refs --no-log, python3 scripts/audit-task-center.py --remote-actions --no-log --format json, python3 scripts/audit-task-center.py --remote-issues --no-log --format json, bash scripts/check-docs.sh, git diff --check",
+          "blocked_by": [
+            "TASK-CICD-ISSUE-CLOSE-GUARD-001",
+            "TASK-DOCS-AUTO-AUDIT-CENTER-001"
+          ],
+          "unlocks": [
+            "TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001"
+          ],
+          "notes": "Adds opt-in read-only GitHub Issue, Actions, and sibling origin/dev audit modes to audit-task-center.py while keeping base docs checks offline."
+        },
+        {
+          "task_id": "TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001",
+          "repo": "livemask-docs",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001.md",
           "dev_merge_commit": "",
           "remote_dev_ref": "",
           "issue": "",
           "validation": "",
           "blocked_by": [
-            "TASK-CICD-ISSUE-CLOSE-GUARD-001",
-            "TASK-DOCS-AUTO-AUDIT-CENTER-001"
+            "TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001",
+            "TASK-DOCS-LEASE-REGISTRY-001"
           ],
           "unlocks": [],
-          "notes": "Optional next governance step: read-only GitHub Issue, Actions, and remote origin/dev audit without making base docs checks network-dependent."
+          "notes": "Next governance step: mirror lease, completion report, docs boundary, and remote audit rules into child repo AI/Cursor rules."
         }
       ],
       "open_gaps": [
         "Ledger should grow as completion reports are processed; it is not yet exhaustive for every historical TASK.",
-        "Auto audit center is offline-only; GitHub Issue, Actions, and remote-ref audit remain future opt-in extensions."
+        "Child repo AI/Cursor rules still need to mirror the docs governance source of truth."
       ]
     },
     {

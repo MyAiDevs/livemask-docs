@@ -1,9 +1,9 @@
 # TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001 - Optional Remote Governance Audit
 
-- 状态：Ready
+- 状态：Completed
 - Owner：Docs / CI-CD
 - 创建日期：2026-05-21
-- 目标完成日期：
+- 目标完成日期：2026-05-21
 - 主影响仓库：`livemask-docs`
 - 受影响仓库：All LiveMask repositories
 - 关联里程碑：Multi-repo intelligent development workflow
@@ -63,20 +63,23 @@ making the base docs validation flaky or credential-dependent.
 
 ## 6. Implementation Plan
 
-- [ ] Decide whether to extend `scripts/audit-task-center.py` or add a focused
+- [x] Decide whether to extend `scripts/audit-task-center.py` or add a focused
   remote audit script.
-- [ ] Add opt-in flags for GitHub Issue, Actions, and remote ref checks.
-- [ ] Ensure no remote check runs from base `check-docs.sh`.
-- [ ] Preserve JSON report structure.
-- [ ] Document exact commands and failure semantics.
+- [x] Add opt-in flags for GitHub Issue, Actions, and remote ref checks.
+- [x] Ensure no remote check runs from base `check-docs.sh`.
+- [x] Preserve JSON report structure.
+- [x] Document exact commands and failure semantics.
 
 ## 7. Validation Plan
 
-- [ ] Offline docs checks still pass without token/network.
-- [ ] Remote dry-run with missing token reports warning or clear gate only in
+- [x] Offline docs checks still pass without token/network.
+- [x] Remote dry-run with missing token reports warning or clear gate only in
   remote mode.
-- [ ] Remote ref comparison detects a known mismatch in fixture/sample mode.
-- [ ] `bash scripts/check-docs.sh`.
+- [x] Remote ref comparison detects a known mismatch in fixture/sample mode.
+- [x] `python3 scripts/audit-task-center.py --remote-refs --no-log`
+- [x] `python3 scripts/audit-task-center.py --remote-actions --no-log --format json`
+- [x] `python3 scripts/audit-task-center.py --remote-issues --no-log --format json`
+- [x] `bash scripts/check-docs.sh`.
 
 ## 8. Risks
 
@@ -94,13 +97,15 @@ making the base docs validation flaky or credential-dependent.
 
 ## 10. Completion Evidence
 
-- PR：
-- Commit：
-- Test output：
-- 文档链接：
+- Commit：this docs task branch / dev merge
+- Test output：offline audit PASS, remote ref self-test PASS, remote refs audit
+  PASS with warnings, remote Actions no-token warning PASS, remote Issues JSON
+  parse PASS, `bash scripts/check-docs.sh` PASS, `git diff --check` clean.
+- 文档链接：`scripts/audit-task-center.py`,
+  `docs/development/AUTO_AUDIT_CENTER.md`
 
 ## 11. Follow-up
 
-- 后续 TASK：Child repo AI rule sync for lease/start/end if remote audit finds
-  repeated drift.
-- 未完成项：
+- 后续 TASK：`TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001`
+- 未完成项：Remote checks are read-only and opt-in; base docs validation remains
+  offline.

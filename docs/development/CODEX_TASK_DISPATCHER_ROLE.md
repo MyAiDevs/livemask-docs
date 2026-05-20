@@ -130,8 +130,10 @@ project health:
 - `TASK-DOCS-LEASE-REGISTRY-001` is completed. Active lease state is
   file-backed in `docs/development/task-leases.json`, and
   `scripts/check-task-leases.py` detects overlapping active leases.
-- `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001`: optional read-only GitHub Issue,
-  Actions, and remote-ref audit is ready but not implemented. It must remain
-  opt-in so base docs checks stay offline.
+- `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001` is completed. Optional read-only
+  GitHub Issue, Actions, and remote-ref audit is available through
+  `scripts/audit-task-center.py` remote flags; base docs checks remain offline.
+- `TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001`: child repo AI/Cursor rule sync is
+  ready but not implemented.
 - Historical tasks are not fully backfilled into `task-state-ledger.json`; the
   ledger is an active snapshot that grows as reports are processed.

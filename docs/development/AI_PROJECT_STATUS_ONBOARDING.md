@@ -71,6 +71,7 @@ The docs-side intelligent workflow has these completed building blocks:
 | Hardened Issue sync CI gate | `docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-FIX-001.md` |
 | Offline automatic audit center with local JSONL trace log | `docs/development/AUTO_AUDIT_CENTER.md` / `scripts/audit-task-center.py` / `.local-dev/logs/auto-task-center.log` |
 | Active lease registry and collision check | `docs/development/task-leases.json` / `scripts/check-task-leases.py` |
+| Optional remote governance audit | `python3 scripts/audit-task-center.py --remote-all` |
 
 Validation command:
 
@@ -85,7 +86,7 @@ These are intentional, tracked gaps, not memory-only notes:
 
 | Gap | TASK | Status |
 | --- | --- | --- |
-| Optional GitHub Issue / Actions / remote-ref audit | `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001` | Ready |
+| Child repo AI/Cursor rule sync | `TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001` | Ready |
 | Full historical backfill into `task-state-ledger.json` | Follow-up as reports are processed | Incremental |
 
 Do not claim the governance-control-plane module is fully completed while these
@@ -100,7 +101,7 @@ snapshot. The currently visible high-priority gaps include:
 | --- | --- | --- |
 | Protocol stability | App reconnect runtime must cut over to real Backend APIs | `TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001` |
 | Protocol stability | CI/CD reconnect hint runtime smoke still needs closure | `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001` |
-| Governance | Issue close guard exists; remote Issue/Actions/ref audit remains opt-in follow-up | `TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001` |
+| Governance | Child repo AI/Cursor rules still need to mirror docs governance | `TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001` |
 | Governance | Lease registry is file-backed; child repo AI rule sync remains follow-up | Future child repo rules sync TASK |
 
 Before dispatching any new task, check whether the next task is already present
