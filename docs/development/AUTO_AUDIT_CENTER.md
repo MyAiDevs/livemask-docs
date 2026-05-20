@@ -47,6 +47,11 @@ python3 scripts/audit-task-center.py
 python3 scripts/audit-task-center.py --verbose
 python3 scripts/audit-task-center.py --format json
 python3 scripts/audit-task-center.py --log-file .local-dev/logs/auto-task-center.log
+python3 scripts/audit-task-center.py --remote-refs
+python3 scripts/audit-task-center.py --remote-issues
+python3 scripts/audit-task-center.py --remote-actions
+python3 scripts/audit-task-center.py --remote-all --remote-strict
+python3 scripts/audit-task-center.py --remote-ref-self-test
 ```
 
 `bash scripts/check-docs.sh` runs the text audit and fails only on gate
@@ -68,6 +73,21 @@ The `.local-dev/` directory is ignored by git, so audit history remains local
 and traceable without polluting commits. Use `--log-file` to write a different
 path when a CI job wants to upload the log as an artifact. Use `--no-log` only
 for exceptional parser tests where no audit trail should be written.
+
+Remote audit is explicit opt-in:
+
+- `--remote-refs` compares completed runtime task `remote_dev_ref` values
+  against sibling repo `origin/dev` refs under `--workspace-root`.
+- `--remote-issues` searches GitHub Issues for each TASK when a token or local
+  `gh` auth is available.
+- `--remote-actions` checks the latest `livemask-ci-cd` dev workflow run.
+- `--remote-all` runs all remote checks.
+- `--remote-strict` promotes remote failures to gates; without it, remote drift
+  remains warnings.
+- `--remote-ref-self-test` runs a local mismatch fixture and does not require
+  network.
+
+Base `bash scripts/check-docs.sh` must not run remote audit modes.
 
 ## 5. JSON Contract
 
@@ -131,9 +151,11 @@ Each finding includes:
 
 ## 10. Future Extensions
 
-- Optional GitHub Issue audit using `LIVEMASK_BOT_TOKEN`.
-- Optional remote `origin/dev` verification across runtime repos.
-- Optional GitHub Actions workflow result audit.
+- Optional GitHub Issue audit is implemented behind `--remote-issues`.
+- Optional remote `origin/dev` verification is implemented behind
+  `--remote-refs`.
+- Optional GitHub Actions workflow audit is implemented behind
+  `--remote-actions`.
 - Lease registry audit is now handled by `scripts/check-task-leases.py`.
 - Guarded close/reopen automation is now handled by
   `livemask-ci-cd/scripts/issue-close-guard.sh`.
