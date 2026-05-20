@@ -7,6 +7,24 @@ It is a release gate: a platform is not considered ready merely because the
 shared Flutter UI compiles. The target must compile, launch, reach the login
 screen, and have known platform-specific limitations documented.
 
+## Current AppClient Validation Priority
+
+Until the App client feature backlog is closed, LiveMask uses an
+**Android-first feature validation** policy:
+
+- Android debug on an emulator or authorized physical device is the primary
+  functional acceptance target for App feature tasks.
+- App feature tasks include login, API integration, content feed, growth/reward,
+  release-check, settings/profile, diagnostics, and VPN-client UI work.
+- iOS remains in the matrix, but iOS signing, provisioning, Xcode/CocoaPods,
+  Sequoia xattr, and PacketTunnelProvider hardening are deferred platform
+  hardening unless the TASK is explicitly iOS-scoped.
+- A non-iOS App feature may be marked `Completed (Android-primary)` when Android
+  validation passes, shared Flutter tests pass, and the completion report records
+  iOS as `deferred / not blocking` with a concrete reason.
+- Release candidates still require the full platform matrix before production
+  release. This policy changes feature-task closure, not final release gating.
+
 ## Rolling Support Window
 
 | Platform | Required support window | Current engineering baseline | Verification environment |
@@ -88,3 +106,7 @@ bash scripts/local-app.sh start --target linux
   Intel compile/runtime evidence must be recorded independently.
 - If a platform cannot be verified in the current task, the completion report
   must mark it as blocked or unverified, not completed.
+- For non-iOS App feature tasks, iOS may be recorded as `deferred / not
+  blocking` after Android functional validation passes. Do not use this
+  exception for iOS-scoped tasks, native VPN PacketTunnelProvider work, or final
+  release-candidate sign-off.
