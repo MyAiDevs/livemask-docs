@@ -214,12 +214,12 @@ Draft -> Ready -> In Progress -> Review -> Done
 ## 下一阶段任务
 
 - [TASK-DOC-HYSTERIA2-CONTRACT-001] — Hysteria2 连接配置跨仓库契约（当前任务）
-- [TASK-DOC-NAT-SHARING-GUARD-001](TASK-DOC-NAT-SHARING-GUARD-001.md) — 防止客户端设备作为 NAT/路由器共享 VPN 的跨仓库安全契约
-- TASK-BACKEND-NAT-SHARING-GUARD-001 — Backend session risk policy、Admin API、warn/throttle/revoke
-- TASK-NODEAGENT-NAT-SHARING-GUARD-001 — NodeAgent aggregate counters、redacted risk events、enforcement hooks
-- TASK-APP-NAT-SHARING-GUARD-001 — App native runtime no-sharing posture、warning UI、Sentry redaction
-- TASK-ADMIN-NAT-SHARING-GUARD-001 — Admin settings/risk event UI
-- TASK-CICD-NAT-SHARING-GUARD-001 — NAT sharing guard smoke + privacy leak scan
+- [TASK-DOC-NAT-SHARING-GUARD-001](TASK-DOC-NAT-SHARING-GUARD-001.md) — ✅ Completed：防止客户端设备作为 NAT/路由器共享 VPN 的跨仓库安全契约
+- [TASK-BACKEND-NAT-SHARING-GUARD-001](TASK-BACKEND-NAT-SHARING-GUARD-001.md) — Backend session risk policy、Admin API、warn/throttle/revoke
+- [TASK-NODEAGENT-NAT-SHARING-GUARD-001](TASK-NODEAGENT-NAT-SHARING-GUARD-001.md) — NodeAgent aggregate counters、redacted risk events、enforcement hooks
+- [TASK-APP-NAT-SHARING-GUARD-001](TASK-APP-NAT-SHARING-GUARD-001.md) — App native runtime no-sharing posture、warning UI、Sentry redaction
+- [TASK-ADMIN-NAT-SHARING-GUARD-001](TASK-ADMIN-NAT-SHARING-GUARD-001.md) — Admin settings/risk event UI
+- [TASK-CICD-NAT-SHARING-GUARD-001](TASK-CICD-NAT-SHARING-GUARD-001.md) — NAT sharing guard smoke + privacy leak scan
 - TASK-NODEAGENT-HYSTERIA2-001 — NodeAgent 端 hysteria2 ProtocolProfile 实现（Render / Validate / HealthCheck / Endpoint / Redact）
 - TASK-BACKEND-CONNECT-CONFIG-HYSTERIA2-001 — Backend 端 hysteria2 connect_config 生成 + profile dispatch + skeleton fallback
 - TASK-ADMIN-ENDPOINT-002 — Admin endpoint editor hysteria2 字段支持

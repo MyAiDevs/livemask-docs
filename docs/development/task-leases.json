@@ -65,12 +65,12 @@
       "lease_owner": "cursor-admin-window",
       "started_at": "2026-05-21T20:50:00+08:00",
       "expires_at": "2026-05-22T12:00:00+08:00",
-      "ended_at": "",
+      "ended_at": "2026-05-21T21:05:00+08:00",
       "depends_on": [
         "TASK-BACKEND-APP-RELEASE-LATEST-001"
       ],
       "blocked_by": [],
-      "status": "active"
+      "status": "ended"
     },
     {
       "task_id": "TASK-P3-01",
