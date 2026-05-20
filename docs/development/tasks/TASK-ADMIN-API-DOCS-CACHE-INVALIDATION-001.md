@@ -1,6 +1,6 @@
 # TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001 - Admin API Docs Cache Invalidation And Runtime Diagnostics
 
-> Status: Ready
+> Status: Completed
 > Repository: livemask-admin
 > Environment: dev-local
 > Priority: P1
@@ -179,16 +179,16 @@ Environment: dev-local
 
 ## 7. Acceptance Criteria
 
-- [ ] Browser and curl can distinguish route existence from Backend OpenAPI
+- [x] Browser and curl can distinguish route existence from Backend OpenAPI
   proxy availability.
-- [ ] Stale Admin build/dev-server state is detectable through a safe diagnostic
+- [x] Stale Admin build/dev-server state is detectable through a safe diagnostic
   marker.
-- [ ] API Docs OpenAPI fetches are not served from stale client/proxy cache.
-- [ ] Logged-out users cannot view Swagger UI.
-- [ ] Logged-in Admin users can view Swagger UI when Backend OpenAPI is
+- [x] API Docs OpenAPI fetches are not served from stale client/proxy cache.
+- [x] Logged-out users cannot view Swagger UI.
+- [x] Logged-in Admin users can view Swagger UI when Backend OpenAPI is
   reachable.
-- [ ] Failure states are actionable and do not look like a generic 404.
-- [ ] Task branch is merged to Admin `dev`, validated on `dev`, and pushed to
+- [x] Failure states are actionable and do not look like a generic 404.
+- [x] Task branch is merged to Admin `dev`, validated on `dev`, and pushed to
   `origin/dev`.
 
 ## 8. Risks
@@ -211,16 +211,43 @@ Environment: dev-local
 
 ## 10. Completion Evidence
 
-- PR:
-- Task branch commit:
-- Dev merge commit:
-- Remote dev ref:
-- Validation:
+- Task branch: `task/TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001`
+- Task branch commit: `2c2a627`
+- Dev merge commit: `a4231cb`
+- Remote dev ref: `origin/dev` (`a4231cb`)
+- Validation on Admin `dev`:
+  - `npx vitest run` PASS 225/225
+  - `npx next build` PASS, 56 pages
+  - `git diff --check` clean
 - Route/proxy curl evidence:
-- Browser screenshot/logs:
-- Docs handoff:
+  - `GET /admin/api-docs` -> HTTP 200, protected by `AuthGuard`,
+    `Cache-Control: no-store, must-revalidate`
+  - `GET /admin/api/build-info` -> HTTP 200, returns safe build metadata
+    including `appVersion`, git SHA `2c2a627d...`, and build time
+    `2026-05-20T20:18:44Z`, with no-store/no-cache headers
+  - `GET /admin/openapi.json` -> HTTP 404 from Backend proxy
+  - `GET http://localhost:8080/openapi.json` -> HTTP 404 from Backend runtime
+- Root cause:
+  - The original `/admin/api-docs` confusion was not stale Admin build state.
+  - Admin route exists and returns HTTP 200.
+  - Backend runtime does not currently serve `/openapi.json`, so Admin Swagger
+    UI cannot load the spec until Backend runtime route registration is fixed.
+- Implemented Admin changes:
+  - Added `src/app/admin/api/build-info/route.ts` with safe build metadata,
+    `force-dynamic`, and no-store/no-cache headers.
+  - Added no-store/no-cache OpenAPI fetch behavior and `fetchBuildInfo()` in
+    `src/lib/swagger-api.ts`.
+  - Added build ref badge, parallel build-info fetch, distinct
+    unauthorized/proxy-unreachable/unavailable states, diagnostics panel, and
+    actionable error copy in `src/app/admin/api-docs/page.tsx`.
+  - Added tests for build info route existence, cache-busting headers,
+    `fetchBuildInfo()`, and type exports.
+- Issues: `livemask-docs#15`, `livemask-admin#3`
 
 ## 11. Follow-up
 
-- Optional CI/CD task: add authenticated Admin API Docs route/proxy smoke to
-  local/staging smoke once this Admin diagnostic behavior is stable.
+- `TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001`: Backend runtime must serve
+  `/openapi.json` and `/openapi.yaml` on dev-local/runtime so logged-in Admin
+  Swagger UI can load the real spec.
+- Optional CI/CD task: add authenticated Admin API Docs route/proxy smoke after
+  Backend runtime route fix is merged.

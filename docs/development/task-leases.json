@@ -23,17 +23,17 @@
       "lease_owner": "cursor-admin-window",
       "started_at": "2026-05-21T20:25:00+08:00",
       "expires_at": "2026-05-22T12:00:00+08:00",
-      "ended_at": "",
+      "ended_at": "2026-05-21T20:45:00+08:00",
       "depends_on": [
         "TASK-ADMIN-SWAGGER-API-DOCS-UI-001"
       ],
       "blocked_by": [],
-      "status": "active"
+      "status": "ended"
     },
     {
-      "task_id": "TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001",
+      "task_id": "TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001",
       "repo": "livemask-backend",
-      "branch": "task/TASK-BACKEND-GROWTH-REWARD-JOB-EXECUTOR-API-001",
+      "branch": "task/TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001",
       "expected_files": [
         "internal",
         "cmd",
@@ -46,7 +46,28 @@
       "expires_at": "2026-05-22T12:00:00+08:00",
       "ended_at": "",
       "depends_on": [
-        "TASK-DOC-GROWTH-REWARD-NOTIFICATION-001"
+        "TASK-BACKEND-SWAGGER-API-DOCS-001"
+      ],
+      "blocked_by": [],
+      "status": "active"
+    },
+    {
+      "task_id": "TASK-ADMIN-APP-RELEASE-001",
+      "repo": "livemask-admin",
+      "branch": "task/TASK-ADMIN-APP-RELEASE-001",
+      "expected_files": [
+        "src/app/admin/app/releases",
+        "src/app/admin/releases",
+        "src/lib",
+        "src/components",
+        "src/__tests__"
+      ],
+      "lease_owner": "cursor-admin-window",
+      "started_at": "2026-05-21T20:50:00+08:00",
+      "expires_at": "2026-05-22T12:00:00+08:00",
+      "ended_at": "",
+      "depends_on": [
+        "TASK-BACKEND-APP-RELEASE-LATEST-001"
       ],
       "blocked_by": [],
       "status": "active"

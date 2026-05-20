@@ -371,17 +371,34 @@
         {
           "task_id": "TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001",
           "repo": "livemask-admin",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001.md",
-          "dev_merge_commit": "",
-          "remote_dev_ref": "",
+          "dev_merge_commit": "a4231cb",
+          "remote_dev_ref": "a4231cb",
           "issue": "livemask-docs#15, livemask-admin#3",
-          "validation": "",
+          "validation": "npx vitest run PASS 225/225; npx next build PASS 56 pages; git diff --check clean; /admin/api-docs HTTP 200; /admin/api/build-info HTTP 200; /admin/openapi.json HTTP 404 due Backend runtime; Backend /openapi.json HTTP 404",
           "blocked_by": [
             "TASK-ADMIN-SWAGGER-API-DOCS-UI-001"
           ],
+          "unlocks": [
+            "TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001"
+          ],
+          "notes": "Admin API Docs cache diagnostics completed at dev a4231cb. Added safe build-info route, no-store OpenAPI fetch, build ref badge, distinct unauthorized/proxy-unreachable/unavailable states, and diagnostics panel. Root cause is Backend runtime /openapi.json returning 404, not stale Admin build."
+        },
+        {
+          "task_id": "TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001",
+          "repo": "livemask-backend",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "",
+          "blocked_by": [
+            "TASK-BACKEND-SWAGGER-API-DOCS-001"
+          ],
           "unlocks": [],
-          "notes": "Root-cause follow-up for reported /admin/api-docs 404/stale-cache confusion. Current Admin dev route returns HTTP 200, but /admin/openapi.json proxy was unreachable locally; task must add no-store/cache-busting, safe build/ref diagnostics, and precise proxy failure states."
+          "notes": "Admin completion evidence proves /admin/api-docs route is healthy, but Backend runtime at localhost:8080 returns 404 for /openapi.json. Backend must ensure /openapi.json and /openapi.yaml are registered in the runtime entrypoint while keeping public Swagger UI unavailable."
         },
         {
           "task_id": "TASK-CICD-OPENAPI-DRIFT-CHECK-001",
@@ -398,7 +415,7 @@
         }
       ],
       "open_gaps": [
-        "Admin API Docs needs stale build/cache diagnostics so old Next dev server state and Backend OpenAPI proxy failure cannot be mistaken for route 404."
+        "Backend runtime must serve /openapi.json and /openapi.yaml so Admin Swagger UI can load the spec through /admin/openapi.json."
       ]
     }
   ]

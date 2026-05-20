@@ -134,7 +134,8 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-APP-RUNTIME-CLOSED-LOOP-VALIDATION-001.md](TASK-DOCS-APP-RUNTIME-CLOSED-LOOP-VALIDATION-001.md) — ✅ Completed (App feature tasks require runtime logs and Backend/NodeAgent/JobService closed-loop evidence)
 - [TASK-BACKEND-SWAGGER-API-DOCS-001.md](TASK-BACKEND-SWAGGER-API-DOCS-001.md) — ✅ Completed (`9de2f14`, Backend OpenAPI JSON/YAML + drift gate)
 - [TASK-ADMIN-SWAGGER-API-DOCS-UI-001.md](TASK-ADMIN-SWAGGER-API-DOCS-UI-001.md) — ✅ Completed (`656d4d9`, Admin-authenticated Swagger UI using Backend OpenAPI JSON)
-- [TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001.md](TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001.md) — Ready (root-cause stale API Docs 404/cache/proxy ambiguity)
+- [TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001.md](TASK-ADMIN-API-DOCS-CACHE-INVALIDATION-001.md) — ✅ Completed (`a4231cb`, Admin route/build diagnostics prove backend proxy 404)
+- [TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001.md](TASK-BACKEND-OPENAPI-RUNTIME-ROUTE-FIX-001.md) — Ready (Backend runtime `/openapi.json` and `/openapi.yaml` must return 200)
 - [TASK-CICD-OPENAPI-DRIFT-CHECK-001.md](TASK-CICD-OPENAPI-DRIFT-CHECK-001.md) — ✅ Completed (`c5f628a`, CI/CD OpenAPI drift validation)
 
 ### 跨仓库实现任务
