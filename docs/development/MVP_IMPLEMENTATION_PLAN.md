@@ -148,6 +148,7 @@
 - App Release Distribution（TASK-DOC-APP-RELEASE-DISTRIBUTION-001）— `/admin/app/releases`、App release metadata、S3/OSS/COS/GCS/local artifact storage、App update-check、Website downloads、CI/CD build/sign/upload/register
 - App Runtime Governance（TASK-DOC-APP-RUNTIME-GOVERNANCE-001）— 旧 `vpn_client_governance` 升级为 `/api/v1/app/runtime-config`，覆盖内存、健康检查、重连、Circuit Breaker、缓存和平台 override
 - NAT Sharing Guard（TASK-DOC-NAT-SHARING-GUARD-001）— 防止客户端设备被当作 NAT/路由器共享 VPN 的隐私保护风控契约。结论：可做 best-effort 检测/限流/吊销，但不能宣称 NodeAgent 单点 100% 阻止 rooted/admin 设备或外部路由器。
+- NodeAgent Speedtest & Bandwidth Capacity（TASK-DOC-NODEAGENT-SPEEDTEST-BANDWIDTH-001）— NodeAgent 基于 `showwin/speedtest-go` 或等价 adapter 自测网络能力，Backend/Job Service 调度上报，Admin 展示，CI/CD 验证；最大承载带宽必须 `<= 90%` 安全测得容量。
 - CI/CD Closed-Loop Smoke Batch（TASK-CICD-CLOSED-LOOP-BATCH-001）— Dashboard、System Settings/Scheduler、App Release、Observability、I18N、Jobs Hardening 六域 smoke 已统一接入 `scripts/smoke.sh` 和 staging workflow
 - Docs Governance Sync Batch（TASK-DOCS-GOVERNANCE-SYNC-BATCH-001）— contract index、Cursor handoff、tasks/MVP plan、auth-rbac 权限索引闭环
 - Issue / Task Sync Governance（TASK-DOC-ISSUE-TASK-SYNC-GOVERNANCE-001）— Epic/Child/Verification Issue、multi-window lease、structured statuses、Issue close/reopen rules
