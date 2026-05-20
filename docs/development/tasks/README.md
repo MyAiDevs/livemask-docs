@@ -221,10 +221,13 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 | [TASK-NODEAGENT-PROTOCOL-STABILITY-001.md](TASK-NODEAGENT-PROTOCOL-STABILITY-001.md) | livemask-nodeagent | Assignment LKG, rollback, readiness, event retry, metrics/logs — ✅ Completed (`0fa3e9c`) |
 | [TASK-ADMIN-PROTOCOL-STABILITY-001.md](TASK-ADMIN-PROTOCOL-STABILITY-001.md) | livemask-admin | Replace node detail demo data and implement template/assignment UI plus LKG/rollback observability — ✅ Completed (latest `986dc9c`, original `823f4fe`) |
 | [TASK-ADMIN-PROTOCOL-LKG-MOCK-RETIRE-001.md](TASK-ADMIN-PROTOCOL-LKG-MOCK-RETIRE-001.md) | livemask-admin | Cut Admin LKG/rollback UI over to real Backend fields and isolate mock fallback — Ready |
+| [TASK-BACKEND-RECONNECT-HINT-RUNTIME-001.md](TASK-BACKEND-RECONNECT-HINT-RUNTIME-001.md) | livemask-backend | App-auth reconnect runtime APIs for connect config re-fetch and safe reconnect hints — ✅ Completed (`1442e64`) |
 | [TASK-APP-RECONNECT-STABILITY-001.md](TASK-APP-RECONNECT-STABILITY-001.md) | livemask-app | Verify real reconnect hints, polling, and unsupported protocol safety — ✅ Completed (latest `5a433f9`, original `17e83c9`) |
+| [TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md](TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md) | livemask-app | Cut App reconnect runtime to real Backend endpoints and Android-first validate — Ready |
 | [TASK-JOBS-PROTOCOL-STABILITY-001.md](TASK-JOBS-PROTOCOL-STABILITY-001.md) | livemask-job-service | Harden rollout/rollback executor — ✅ Completed (`16d9ba0`) |
 | [TASK-CICD-PROTOCOL-STABILITY-001.md](TASK-CICD-PROTOCOL-STABILITY-001.md) | livemask-ci-cd | Turn protocol smoke SKIP to PASS and add stability checks — ✅ Completed (`d721677`) |
 | [TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md](TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md) | livemask-ci-cd | Add protocol LKG/rollback API assertions to runtime smoke — Ready |
+| [TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md](TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md) | livemask-ci-cd | Add reconnect hint runtime smoke for App-facing Backend endpoints — Ready |
 
 ## CI/CD Closed-Loop Smoke Batch (TASK-CICD-CLOSED-LOOP-BATCH-001)
 
