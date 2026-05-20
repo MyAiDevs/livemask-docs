@@ -106,7 +106,9 @@ project health:
 | --- | --- |
 | `docs/development/AI_PROJECT_STATUS_ONBOARDING.md` | First-read project status and onboarding entry for any AI tool. |
 | `docs/development/task-state-ledger.json` | Machine-readable module/task state. |
+| `docs/development/AUTO_AUDIT_CENTER.md` | Automatic audit design, layers, and guardrails. |
 | `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md` | Required shape for dispatched Cursor tasks. |
+| `scripts/audit-task-center.py` | Offline gate/warning/suggestion audit report. |
 | `scripts/check-task-state-ledger.py` | Local ledger consistency check. |
 | `docs/development/ISSUE_TASK_SYNC_GOVERNANCE.md` | Issue/task state machine and close rules. |
 | `ai-rules/v3.7/16-Task-Completion-Report.md` | Required completion report fields and docs dispatcher duties. |
@@ -117,6 +119,10 @@ project health:
   self-check into `staging-smoke.yml` in hard-fail mode unless the checked TASK
   is guaranteed to have synchronized Issues; use task-specific repo scope and
   warning mode for migration/self-check gates.
+- `TASK-DOCS-AUTO-AUDIT-CENTER-001` is completed. Automatic audit is now
+  read-only, offline by default, and layered into gate, warning, and suggestion
+  findings. Do not promote a warning to a gate without a dedicated migration
+  TASK.
 - `TASK-CICD-ISSUE-CLOSE-GUARD-001`: guarded Issue close/reopen automation is
   ready but not implemented.
 - `TASK-DOCS-LEASE-REGISTRY-001`: active lease collision detection is ready but

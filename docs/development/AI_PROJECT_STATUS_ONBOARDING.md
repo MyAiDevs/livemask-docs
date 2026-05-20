@@ -69,11 +69,13 @@ The docs-side intelligent workflow has these completed building blocks:
 | Standard Cursor task brief template | `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md` |
 | Strict cross-repo Issue presence / ambiguity check | `docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-001.md` |
 | Hardened Issue sync CI gate | `docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-FIX-001.md` |
+| Offline automatic audit center | `docs/development/AUTO_AUDIT_CENTER.md` / `scripts/audit-task-center.py` |
 
 Validation command:
 
 ```bash
 bash scripts/check-docs.sh
+python3 scripts/audit-task-center.py --format json
 ```
 
 ## 5. Known Open Governance Gaps
