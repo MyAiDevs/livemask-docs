@@ -104,6 +104,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)
 - [TASK-DOC-NAT-SHARING-GUARD-001.md](TASK-DOC-NAT-SHARING-GUARD-001.md) — Ready (NAT/device-as-router abuse guard contract and follow-up tasks)
 - [TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md](TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md) — ✅ Completed (AppClient feature validation is Android-first; iOS deferred hardening)
+- [TASK-APP-ANDROID-FUNCTIONAL-VALIDATION-001.md](TASK-APP-ANDROID-FUNCTIONAL-VALIDATION-001.md) — ✅ Completed (Android-primary AppClient functional validation)
 
 ### 跨仓库实现任务
 
@@ -131,6 +132,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 | [TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md](TASK-CICD-ADMIN-CONTROL-PLANE-SMOKE-RUNTIME-FIX-001.md) | ✅ Completed | ✅ `1f630f0` (via guard) | ✅ `1f630f0` |
 | [TASK-CICD-LOCAL-RUNTIME-WORKSPACE-MOUNT-FIX-001.md](TASK-CICD-LOCAL-RUNTIME-WORKSPACE-MOUNT-FIX-001.md) | ✅ Completed | ✅ `ea69ee9` (via guard) | ✅ `ea69ee9` |
 | [TASK-BACKEND-PROTOCOL-SCHEMA-MIGRATION-FIX-001.md](TASK-BACKEND-PROTOCOL-SCHEMA-MIGRATION-FIX-001.md) | ✅ Completed | ✅ `2e5fda9` (via guard) | ✅ `2e5fda9` |
+| [TASK-APP-ANDROID-FUNCTIONAL-VALIDATION-001.md](TASK-APP-ANDROID-FUNCTIONAL-VALIDATION-001.md) | ✅ Completed (Android-primary) | ✅ `374f6d7` (validation merge) | ✅ `origin/dev` (`374f6d7`) |
 | [TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md](TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001.md) | ✅ Completed | ✅ `5ce5c6c` (via guard) | ✅ `5ce5c6c` |
 | [TASK-APP-IOS-CODESIGN-ENV-001.md](TASK-APP-IOS-CODESIGN-ENV-001.md) | ⚠️ Partial — simulator PASS via safe workdir, device signing BLOCKED | ✅ `a5243cd` (via guard) | ✅ `a5243cd` |
 | [TASK-JOBS-GROWTH-SETTLEMENT-001.md](TASK-JOBS-GROWTH-SETTLEMENT-001.md) | ⚠️ partial / evidence_missing | ❌ missing | ❌ missing |
