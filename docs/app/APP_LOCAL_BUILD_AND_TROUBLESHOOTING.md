@@ -283,3 +283,71 @@ covered by this exception.
 
 Never mark a target complete if it was only inferred from another OS, another
 CPU architecture, or a different host.
+
+## Runtime Closed-Loop Debug Evidence
+
+Compilation success does not close an App task. After the build passes, run the
+App and collect task-relevant debug evidence.
+
+Minimum App runtime evidence:
+
+1. Launch the App on Android emulator or authorized physical Android device.
+2. Log in with a dev-local account or a dev-only role preset.
+3. Trigger the feature under test.
+4. Capture App debug logs showing the relevant request/response, state change,
+   or redacted event.
+5. Correlate the App action with Backend logs or API response.
+6. When applicable, correlate with NodeAgent `/agent/status`, `/metrics`, or
+   NodeAgent logs.
+7. When applicable, correlate with Job Service job run/status/log output.
+
+Suggested local checks:
+
+```bash
+# App-side logs
+bash scripts/local-app.sh start --target android --foreground
+
+# Backend health and logs from the local runtime
+curl -s http://127.0.0.1:18080/api/v1/health
+docker logs --tail 120 livemask-local-backend-1
+
+# NodeAgent status / metrics when the task touches node, protocol, connect,
+# diagnostics, observability, or VPN runtime.
+curl -s http://127.0.0.1:18082/agent/status
+curl -s http://127.0.0.1:18082/metrics | head -80
+docker logs --tail 120 livemask-local-nodeagent-1
+
+# Job Service when the task touches async jobs, rollout, notification dispatch,
+# release checks, growth digest, or scheduled work.
+curl -s http://127.0.0.1:19191/healthz
+docker logs --tail 120 livemask-local-job-service-1
+```
+
+Completion reports must include a table similar to:
+
+| Flow | App evidence | Backend evidence | NodeAgent evidence | Job Service evidence | Result |
+| --- | --- | --- | --- | --- | --- |
+| Login | App debug log + session state | `/api/v1/me` 200 | N/A | N/A | PASS |
+| Connect config | App fetch + UI state | connect config 200 | status/metrics/logs | N/A | PASS |
+| Growth reward | notification fetch + ack | growth API 200 | N/A | dispatch/digest when used | PASS |
+
+If a service is not relevant, mark `N/A`. If it is relevant but unavailable,
+mark `BLOCKED` and name the missing endpoint or container.
+
+## Dev Role Preset Login
+
+Manual credential entry should not be required for every dev-local validation
+pass. App should provide a debug-only role preset switcher.
+
+Required behavior:
+
+- Only visible/enabled in dev-local or debug builds.
+- Offers normal user, promotion ambassador, sponsor ambassador, trial/expired
+  user, and optional debug operator presets.
+- Uses debug-only dart-defines, local dev config, or Backend seed data.
+- Never stores real production credentials in ARB files, release assets, or
+  checked-in public config.
+- Reports which role was used in task completion evidence.
+
+This does not remove normal login testing. It removes repetitive manual typing
+from feature verification and makes role-specific closed loops easier to prove.

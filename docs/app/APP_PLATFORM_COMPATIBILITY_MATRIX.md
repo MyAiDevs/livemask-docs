@@ -22,8 +22,70 @@ Until the App client feature backlog is closed, LiveMask uses an
 - A non-iOS App feature may be marked `Completed (Android-primary)` when Android
   validation passes, shared Flutter tests pass, and the completion report records
   iOS as `deferred / not blocking` with a concrete reason.
+- Build-only evidence is not enough. Android-primary feature validation must
+  include runtime launch plus task-relevant debug logs proving the App can reach
+  Backend APIs and, when applicable, NodeAgent and Job Service.
 - Release candidates still require the full platform matrix before production
   release. This policy changes feature-task closure, not final release gating.
+
+## Runtime Closed-Loop Evidence
+
+Every non-trivial App feature task must prove the feature works after launch.
+Compilation is only the first gate.
+
+Required runtime evidence:
+
+- App launches on Android emulator or authorized physical Android device.
+- Login/session state is established using a real dev-local account or approved
+  dev preset.
+- Task-relevant Backend API calls are visible in App debug logs, Backend logs,
+  or both.
+- If the task touches connect, diagnostics, protocol, node region, node status,
+  observability, or VPN runtime, evidence must include NodeAgent reachability
+  and matching NodeAgent logs/metrics/status.
+- If the task touches release checks, growth digest, notification dispatch,
+  scheduled jobs, rollout state, or other async work, evidence must include Job
+  Service reachability and the relevant job run/status/log.
+- Completion reports must include a closed-loop row:
+  request -> response -> App UI/state -> event/log/metric.
+
+Examples:
+
+| Feature family | Required closed-loop proof |
+| --- | --- |
+| Login/auth | `POST /api/v1/auth/login` or refresh, `/api/v1/me`, App session state, no token leak in logs. |
+| Connect/protocol | Fresh connect config, NodeAgent status/metrics/log evidence, App connection state, safe unsupported/app_pending handling. |
+| Observability | App event/log emission, Backend ingestion or Sentry/runtime config fetch, no secret leakage. |
+| Growth/reward | Backend notification/report fetch, role-specific UI state, ack/report event, no full user/wallet/IM leak. |
+| Release check | Backend release check/latest endpoint, App update state, download URL not logged or sent to Sentry. |
+| Job-backed flows | Job Service run/status evidence and App state reflecting Backend-owned job output. |
+
+## Dev Role Preset Login
+
+`livemask-app` should provide a dev-only role preset login surface so engineers
+can switch users without manually typing credentials during every validation
+run.
+
+Rules:
+
+- The preset switcher is allowed only in dev-local/debug builds.
+- It must be disabled or removed from production, TestFlight, App Store, and
+  release builds.
+- It must not store real production credentials in ARB localization files,
+  release assets, or checked-in public config.
+- Dev credentials should come from debug-only dart-defines, local dev config, or
+  a Backend dev seed endpoint.
+- Completion reports must name the role preset used for validation.
+
+Minimum presets:
+
+| Role preset | Required coverage |
+| --- | --- |
+| Normal user | Login, profile, subscription, content, connect baseline. |
+| Promotion ambassador | Referral link, promotion reward notification, referral report. |
+| Sponsor ambassador | Sponsor report, sponsor reward notification, feedback entry. |
+| Trial / expired user | Plan/paywall/connect-disabled states. |
+| Debug operator account, if supported | Diagnostics and QA-only surfaces. |
 
 ## Rolling Support Window
 
@@ -43,6 +105,7 @@ Every release candidate must record:
 
 - Build command and result for each target.
 - Run command and result for each target that can be run in the current host.
+- Runtime closed-loop evidence for the feature, not just compilation output.
 - Exact OS/runtime version used for verification.
 - Any unverified compatibility cell and the reason it could not be verified.
 - Native VPN runtime status for the target, once VPN native work begins.
