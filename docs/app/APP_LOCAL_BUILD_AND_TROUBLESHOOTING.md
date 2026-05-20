@@ -263,6 +263,14 @@ curl -s -v http://127.0.0.1:3003/ | head -80
 Every App completion report that touches build, runtime, platform code, native
 VPN, secure storage, auth, or UI must include a platform matrix:
 
+Current AppClient feature work is Android-first. For non-iOS feature tasks,
+Android debug on an emulator or authorized physical device is the primary
+functional acceptance target. iOS must still be listed, but signing,
+provisioning, Xcode/CocoaPods, Sequoia xattr, or PacketTunnelProvider blockers
+should be marked `deferred / not blocking` instead of blocking Android-verified
+feature closure. iOS-specific tasks and release-candidate sign-off are not
+covered by this exception.
+
 | Target | Build | Run | Evidence | Notes |
 | --- | --- | --- | --- | --- |
 | macos-arm64 | pass/fail/not run | pass/fail/not run | command/log | Apple Silicon |

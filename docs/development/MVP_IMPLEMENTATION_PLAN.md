@@ -14,6 +14,7 @@
 | **Draft** | 设计或任务仍未闭环 | 文档/计划不完整 |
 | **Partial** | 部分实现存在，但缺页面/API/测试/merge evidence | 明确列出缺失项 |
 | **Evidence missing** | 文档声称完成，但缺 dev merge evidence，需重新核验 | 需对应 repo Cursor 补证据后升级状态 |
+| **Completed (Android-primary)** | App feature task 已在 Android 主平台完成，iOS 作为平台 hardening 延后 | Android build/run 或 emulator/physical evidence + Flutter tests + iOS deferred reason + dev merge evidence |
 
 ### 0.1 同步规则
 
@@ -224,7 +225,12 @@ Current priority order:
 1. Unlock `TASK-ADMIN-OBSERVABILITY-LOGS-001` for `/admin/logs`,
    `/admin/audit-logs`, App exceptions, payment logs, notification logs, and
    Node Detail latest logs / metrics summary.
-2. Fix App platform build blockers (from TASK-APP-INTEGRITY-RECONCILE-001):
+2. AppClient validation policy: Android is now the primary App feature
+   acceptance platform. iOS device signing / Xcode / PacketTunnelProvider work
+   is deferred platform hardening and must not block Android-verified App
+   feature closure unless the TASK is explicitly iOS-scoped. This is tracked by
+   `TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001`.
+3. Fix App platform build blockers (from TASK-APP-INTEGRITY-RECONCILE-001):
    - TASK-APP-ANDROID-SENTRY-KOTLIN-COMPAT-001: completed at App dev merge
      `5ce5c6c`; Android debug/release builds now pass. Real Android release
      signing key configuration remains a separate follow-up.
@@ -237,10 +243,11 @@ Current priority order:
    - TASK-CICD-WORKSPACE-PATH-MIGRATION-001: move active local repos to
      `/Users/sammytan/Developer/LiveMask` and reject old-path edits after
      migration.
-   Run full-platform build matrix after blockers resolved.
-3. Keep `TASK-CICD-SENTRY-CONFIG-SMOKE-001` and
+   Run full-platform build matrix before release-candidate sign-off; do not use
+   iOS blockers to hold ordinary Android-validated feature tasks.
+4. Keep `TASK-CICD-SENTRY-CONFIG-SMOKE-001` and
    `TASK-CICD-OBSERVABILITY-SMOKE-001` in `scripts/smoke.sh` as regression gates.
-4. Start `TASK-BACKEND-PROTOCOL-STABILITY-001` only after the protocol stability
+5. Start `TASK-BACKEND-PROTOCOL-STABILITY-001` only after the protocol stability
    gate is accepted by Backend / NodeAgent / Admin windows.
 
 #### GeoIP 实现层（已交付）
