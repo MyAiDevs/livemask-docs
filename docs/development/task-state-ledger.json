@@ -51,6 +51,19 @@
           "notes": "Defines the docs dispatcher loop for completion report intake, issue sync, module summary, and next task creation."
         },
         {
+          "task_id": "TASK-DOCS-AI-PROJECT-STATUS-ONBOARDING-001",
+          "repo": "livemask-docs",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-DOCS-AI-PROJECT-STATUS-ONBOARDING-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "bash scripts/check-docs.sh",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "Adds the first-read project status onboarding file so any AI tool can start from repo-native state instead of memory."
+        },
+        {
           "task_id": "TASK-DOCS-TASK-STATE-LEDGER-001",
           "repo": "livemask-docs",
           "status": "completed",

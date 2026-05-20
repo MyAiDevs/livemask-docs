@@ -311,6 +311,10 @@ catch drift and drive fast dispatch. Every accepted completion report should
 update the ledger entry for the affected task or explicitly document why the
 ledger is unchanged.
 
+Any AI tool entering the project must start from
+`docs/development/AI_PROJECT_STATUS_ONBOARDING.md` before relying on memory,
+chat history, or a user summary.
+
 The Codex dispatcher role is defined in
 `docs/development/CODEX_TASK_DISPATCHER_ROLE.md`. That document explains what
 Codex does synchronously when reports arrive, what it checks asynchronously, and
@@ -364,6 +368,7 @@ Use docs/development/task-state-ledger.json as the reconciliation snapshot and
 docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md for every new Cursor brief.
 Use docs/development/CODEX_TASK_DISPATCHER_ROLE.md to understand the docs-side
 Codex dispatcher role.
+Start every new AI session with docs/development/AI_PROJECT_STATUS_ONBOARDING.md.
 ```
 
 ## 10. Follow-Up Tasks
@@ -375,6 +380,7 @@ Codex dispatcher role.
 | `TASK-CICD-ISSUE-CLOSE-GUARD-001` | `livemask-ci-cd` | Optional future guard for issue close/reopen automation. |
 | `TASK-DOCS-TASK-STATE-LEDGER-001` | `livemask-docs` | Add a machine-readable task state ledger and validation check. |
 | `TASK-DOCS-CODEX-DISPATCHER-ROLE-001` | `livemask-docs` | Document Codex's task dispatch center role and synchronous/asynchronous workflow. |
+| `TASK-DOCS-AI-PROJECT-STATUS-ONBOARDING-001` | `livemask-docs` | Add a repo-native first-read project status onboarding file for any AI tool. |
 | `TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001` | `livemask-docs` | Standardize next Cursor task dispatch briefs. |
 | `TASK-CICD-TASK-RECONCILER-001` | `livemask-docs` / `livemask-ci-cd` | Add lightweight reconciliation checks before stricter Issue automation. |
 | `TASK-CICD-ISSUE-SYNC-STRICT-001` | `livemask-docs` / `livemask-ci-cd` | Search and update docs plus runtime repo Issues by TASK ID. |

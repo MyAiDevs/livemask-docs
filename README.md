@@ -10,6 +10,7 @@
 
 ### 必读文档
 
+- [docs/development/AI_PROJECT_STATUS_ONBOARDING.md](docs/development/AI_PROJECT_STATUS_ONBOARDING.md) - 任意 AI 工具上手项目的第一入口
 - [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) - 多仓库 + 多窗口开发完整操作指南
 - [docs/development/CODEX_TASK_DISPATCHER_ROLE.md](docs/development/CODEX_TASK_DISPATCHER_ROLE.md) - Codex 任务分发中心角色与工作方式
 - [docs/development/task-state-ledger.json](docs/development/task-state-ledger.json) - 机器可读任务状态快照

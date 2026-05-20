@@ -56,6 +56,7 @@
 
 ## MVP 落地入口
 
+- `development/AI_PROJECT_STATUS_ONBOARDING.md`
 - `development/MVP_IMPLEMENTATION_PLAN.md`
 - `development/CODEX_TASK_DISPATCHER_ROLE.md`
 - `contracts/api/core-mvp.md`

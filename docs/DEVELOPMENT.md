@@ -2,6 +2,9 @@
 
 > 本文档是 LiveMask 项目使用 AI 编辑器同时打开多个仓库进行开发时的核心操作手册。
 
+任何 AI 开发工具第一次进入项目，必须先阅读
+[AI Project Status Onboarding](development/AI_PROJECT_STATUS_ONBOARDING.md)。
+
 ## 1. 多窗口开发核心原则
 
 1. 所有变更必须关联同一个 `TASK-XXXX`。
@@ -37,6 +40,7 @@ Codex 调度窗口的职责见 [Codex Task Dispatcher Role](development/CODEX_TA
 ### 准备阶段
 
 - 同时打开 `livemask-docs`、`livemask-backend`、`livemask-nodeagent`、`livemask-app` 等相关仓库。
+- 任何 AI 工具先读 `docs/development/AI_PROJECT_STATUS_ONBOARDING.md`，再读具体 TASK。
 - 确保每个仓库都加载对应规则文件，例如 `.cursorrules` 或 `.github/copilot-instructions.md`。
 - 在对话开始时明确当前处理的 `TASK-XXXX`。
 - 先阅读 [LiveMask_系统设计文档_v3.6.md](../LiveMask_系统设计文档_v3.6.md) 和 [LiveMask_开发任务清单与里程碑_v3.6.md](../LiveMask_开发任务清单与里程碑_v3.6.md)。

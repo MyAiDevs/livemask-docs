@@ -104,6 +104,7 @@ project health:
 
 | Artifact | Purpose |
 | --- | --- |
+| `docs/development/AI_PROJECT_STATUS_ONBOARDING.md` | First-read project status and onboarding entry for any AI tool. |
 | `docs/development/task-state-ledger.json` | Machine-readable module/task state. |
 | `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md` | Required shape for dispatched Cursor tasks. |
 | `scripts/check-task-state-ledger.py` | Local ledger consistency check. |

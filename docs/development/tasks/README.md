@@ -32,6 +32,8 @@
 > 必须使用 `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md`。
 > Codex 调度窗口的角色、同步/异步工作方式和禁区记录在
 > `docs/development/CODEX_TASK_DISPATCHER_ROLE.md`。
+> 任意 AI 工具进入项目的第一入口是
+> `docs/development/AI_PROJECT_STATUS_ONBOARDING.md`，不要依赖本地记忆或聊天历史。
 
 ## 0. 多窗口同步要求
 
@@ -113,6 +115,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
 - [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
 - [TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md](TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md) — ✅ Completed (completion report intake -> Issue sync -> module summary -> next Cursor task dispatch)
+- [TASK-DOCS-AI-PROJECT-STATUS-ONBOARDING-001.md](TASK-DOCS-AI-PROJECT-STATUS-ONBOARDING-001.md) — ✅ Completed (repo-native AI project status onboarding)
 - [TASK-DOCS-TASK-STATE-LEDGER-001.md](TASK-DOCS-TASK-STATE-LEDGER-001.md) — ✅ Completed (machine-readable task state snapshot + validation)
 - [TASK-DOCS-CODEX-DISPATCHER-ROLE-001.md](TASK-DOCS-CODEX-DISPATCHER-ROLE-001.md) — ✅ Completed (Codex dispatcher role and sync/async workflow)
 - [TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md](TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md) — ✅ Completed (standard next Cursor task brief)
