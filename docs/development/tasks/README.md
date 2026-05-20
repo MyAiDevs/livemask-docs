@@ -98,7 +98,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md](TASK-DOCS-GOVERNANCE-SYNC-BATCH-001.md) — ⚠️ partial / evidence_missing
 - [TASK-CICD-DEV-MERGE-GUARD-001.md](TASK-CICD-DEV-MERGE-GUARD-001.md) — ✅ Done (dev evidence present)
 - [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md](TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md) — ✅ Completed (dev evidence present)
-- [TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md](TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md) — Ready (move local workspace to `~/Developer/LiveMask`)
+- [TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md](TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md) — ✅ Completed (CI/CD scripts enforce `~/Developer/LiveMask` workspace)
 - [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
 - [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
 - [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)
@@ -295,7 +295,8 @@ PR order:
 | TASK-APP-IOS-DEVICE-SIGNING-001 | `livemask-app` / CI-CD | Configure Apple Developer Team ID, signing identity, provisioning profiles, and physical-device validation | Proposed |
 | TASK-APP-ANDROID-RELEASE-SIGNING-001 | `livemask-app` / CI-CD | Configure real Android release signing keys; current release build passes with debug signing config | Proposed |
 | [TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md](TASK-CICD-DEV-MERGE-GUARD-PATH-SPACES-001.md) | `livemask-ci-cd` | Fix dev-merge-guard.sh path handling for spaces in "New project 2" directory name | ✅ Completed |
-| [TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md](TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md) | `livemask-ci-cd` / all repos | Move all local LiveMask repos to `~/Developer/LiveMask`; update rules/scripts/runbooks to reject old workspace edits | Ready |
+| [TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md](TASK-CICD-WORKSPACE-PATH-MIGRATION-001.md) | `livemask-ci-cd` / all repos | Move all local LiveMask repos to `~/Developer/LiveMask`; update rules/scripts/runbooks to reject old workspace edits | ✅ Completed |
+| TASK-DOCS-WORKSPACE-RULES-SYNC-001 | `livemask-docs` / all runtime repos | Mirror CI/CD workspace pre-check and old-path ban into every repo `.cursorrules` | Proposed |
 
 ## Content System（统一内容系统）任务
 
