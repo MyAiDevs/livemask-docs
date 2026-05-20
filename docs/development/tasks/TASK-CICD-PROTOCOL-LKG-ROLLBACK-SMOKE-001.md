@@ -1,6 +1,6 @@
 # TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001 — CI/CD Protocol LKG / Rollback Smoke
 
-> Status: Ready
+> Status: Completed
 > Repository: livemask-ci-cd
 > Environment: dev-local
 
@@ -95,3 +95,38 @@ Cursor must report:
 - PASS/SKIP/FAIL table for each new LKG/rollback check;
 - whether smoke used Docker dev-local services;
 - any remaining Backend/Admin/NodeAgent runtime blockers.
+
+## 7. Completion Evidence
+
+Completed on `livemask-ci-cd` and merged to `dev`.
+
+| Field | Value |
+| --- | --- |
+| Task branch commit | `1a5a009` |
+| Dev merge commit | `c7842e8` |
+| Remote dev ref | `origin/dev` (`c7842e8`) |
+| Validation | `bash -n scripts/protocol-endpoint-smoke.sh` PASS, `bash -n scripts/protocol-capability-smoke.sh` PASS, `git diff --check` clean, dev-merge-guard PASS |
+
+Implemented without creating duplicate smoke entrypoints. Existing scripts were
+enhanced:
+
+- `scripts/protocol-endpoint-smoke.sh`
+  - `[19]` protocol template list LKG fields.
+  - `[20]` protocol template detail LKG fields.
+  - `[21]` protocol assignment list/detail LKG and rollback fields.
+  - `[22]` template eligibility per-node `lkg_version`.
+- `scripts/protocol-capability-smoke.sh`
+  - `[15a]` template list LKG fields.
+  - `[15b]` template detail LKG fields.
+  - `[15c]` template eligibility per-node LKG version.
+  - `[15d]` assignment LKG/rollback fields.
+  - `[15e]` extended secret leak scan for protocol config and key material.
+
+Runtime behavior:
+
+- 401/403 are treated as RBAC PASS only in explicit RBAC checks.
+- 404/501 are SKIP only when an endpoint is genuinely not deployed.
+- Existing endpoints missing required LKG/rollback fields fail the smoke.
+- Assignment checks SKIP with reason when no assignment seed data exists.
+- Local dev runtime was left running; no temporary smoke environment was
+  created or destroyed.
