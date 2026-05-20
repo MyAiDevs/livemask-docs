@@ -1,9 +1,9 @@
 # TASK-DOCS-LEASE-REGISTRY-001 - Active Cursor Lease Registry
 
-- 状态：Ready
+- 状态：Completed
 - Owner：Docs / All Repositories
 - 创建日期：2026-05-21
-- 目标完成日期：
+- 目标完成日期：2026-05-21
 - 主影响仓库：`livemask-docs`
 - 受影响仓库：All LiveMask repositories
 - 关联里程碑：Multi-repo intelligent development workflow
@@ -59,18 +59,20 @@ reuse the same idea of scanable task/Issue state and structured output.
 
 ## 6. Implementation Plan
 
-- [ ] Choose file-backed or Issue-backed lease registry.
-- [ ] Define lease JSON/schema or comment format.
-- [ ] Add collision detection for repo + expected file overlap.
-- [ ] Update Cursor brief template to include lease start/end.
-- [ ] Ensure lease state can be reconciled asynchronously alongside
+- [x] Choose file-backed lease registry; Issue comments remain optional follow-up.
+- [x] Define `docs/development/task-leases.json`.
+- [x] Add collision detection for repo + expected file overlap.
+- [x] Update Cursor brief template to include lease start/end.
+- [x] Ensure lease state can be reconciled asynchronously alongside
   `task-state-ledger.json`.
 
 ## 7. Validation Plan
 
-- [ ] Sample two non-overlapping leases pass.
-- [ ] Sample overlapping leases fail.
-- [ ] `bash scripts/check-docs.sh`.
+- [x] Sample two non-overlapping leases pass.
+- [x] Sample overlapping leases fail.
+- [x] `python3 scripts/check-task-leases.py`
+- [x] `python3 scripts/check-task-leases.py --self-test`
+- [x] `bash scripts/check-docs.sh`.
 
 ## 8. Risks
 
@@ -88,11 +90,16 @@ reuse the same idea of scanable task/Issue state and structured output.
 ## 10. Completion Evidence
 
 - PR：
-- Commit：
-- Test output：
-- 文档链接：
+- Commit：this docs task branch / dev merge
+- Test output：`python3 scripts/check-task-leases.py`,
+  `python3 scripts/check-task-leases.py --self-test`,
+  `bash scripts/check-docs.sh`, `git diff --check`
+- 文档链接：`docs/development/task-leases.json`,
+  `scripts/check-task-leases.py`,
+  `docs/development/ISSUE_TASK_SYNC_GOVERNANCE.md`,
+  `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md`
 
 ## 11. Follow-up
 
 - 后续 TASK：Sync lease rule into child repo AI rules.
-- 未完成项：
+- 未完成项：GitHub Issue comment mirroring is intentionally deferred.

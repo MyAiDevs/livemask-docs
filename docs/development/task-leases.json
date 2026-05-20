@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-05-21",
+  "purpose": "Active task lease registry for LiveMask multi-window coordination.",
+  "status_values": [
+    "active",
+    "ended",
+    "expired",
+    "abandoned"
+  ],
+  "leases": []
+}

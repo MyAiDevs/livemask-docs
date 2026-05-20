@@ -14,6 +14,11 @@ Target repo:
 Branch:
 Priority:
 Environment:
+Lease:
+- registry: `docs/development/task-leases.json`
+- lease_owner:
+- expected_files:
+- expires_at:
 
 ### Why
 - 
@@ -32,6 +37,17 @@ Environment:
 
 ### Expected Files / Areas
 - 
+
+### Lease Start / End
+- Before editing, register or verify the active lease for this task in
+  `docs/development/task-leases.json`.
+- The lease must include `task_id`, `repo`, `branch`, `expected_files`,
+  `lease_owner`, `started_at`, `expires_at`, `depends_on`, `blocked_by`, and
+  `status`.
+- Run `python3 scripts/check-task-leases.py` before edits when the task touches
+  shared docs/governance files.
+- Mark the lease `ended` in the docs completion update, or explain why no
+  lease entry was used.
 
 ### Contract / API Rules
 - 
@@ -76,6 +92,9 @@ Environment:
   on is stable enough for implementation.
 - If two tasks may touch the same repo and same file area, assign an explicit
   lease order or split expected files.
+- Active leases are tracked in `docs/development/task-leases.json`; overlapping
+  active leases for the same repo and expected file area must be resolved before
+  dispatch.
 - If a task is a smoke task, list existing scripts before instructing Cursor to
   edit or create scripts.
 - If a task is App, Admin, Website, Backend, NodeAgent, Job Service, or CI/CD,
@@ -97,3 +116,19 @@ Every dispatched task should be added or updated in
 - `blocked_by`
 - `unlocks`
 - `notes`
+
+## Lease Registry Fields
+
+Each active lease entry should include:
+
+- `task_id`
+- `repo`
+- `branch`
+- `expected_files`
+- `lease_owner`
+- `started_at`
+- `expires_at`
+- `ended_at`
+- `depends_on`
+- `blocked_by`
+- `status`
