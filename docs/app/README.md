@@ -63,6 +63,15 @@ Android、Windows、Linux 和 Web 的编译/运行验证结果。不能用 Apple
 本地编译、运行、日志排查、Flutter/Xcode/Gradle/CocoaPods 注意事项详见
 [`APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md`](APP_LOCAL_BUILD_AND_TROUBLESHOOTING.md)。
 
+App 任务不能只提交编译结果。普通 App feature 任务需要 Android-first 运行验收：
+App 必须能启动、登录、触发功能，并提供 Backend API、NodeAgent（如涉及
+connect/protocol/diagnostics/observability）和 Job Service（如涉及异步任务/rollout/
+notification/release/growth digest）的闭环日志或状态证据。
+
+开发环境应提供 dev-only 角色预设登录，允许快速切换 normal user、promotion
+ambassador、sponsor ambassador、trial/expired user 等验证身份。该入口只能存在于
+debug/dev-local，不得把真实生产凭证写入 ARB、release assets 或公开配置。
+
 ## 7. 协议端点变更与优雅重连
 
 - [Client Reconnect Hint Contract](../contracts/realtime/CLIENT_RECONNECT_HINT_CONTRACT.md) — App 通过 Backend realtime 通道接收协议/端点变更通知，优雅断线后拉取最新 connect_config，使用更新后的协议/端点重新连接。App 需处理 graceful_reconnect / reconnect_if_idle / reconnect_now 三种提示级别，并上报 ACK/result 事件。同时支持 fallback polling 模式。
