@@ -134,7 +134,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-APP-RUNTIME-CLOSED-LOOP-VALIDATION-001.md](TASK-DOCS-APP-RUNTIME-CLOSED-LOOP-VALIDATION-001.md) — ✅ Completed (App feature tasks require runtime logs and Backend/NodeAgent/JobService closed-loop evidence)
 - [TASK-BACKEND-SWAGGER-API-DOCS-001.md](TASK-BACKEND-SWAGGER-API-DOCS-001.md) — ✅ Completed (`9de2f14`, Backend OpenAPI JSON/YAML + drift gate)
 - [TASK-ADMIN-SWAGGER-API-DOCS-UI-001.md](TASK-ADMIN-SWAGGER-API-DOCS-UI-001.md) — ✅ Completed (`656d4d9`, Admin-authenticated Swagger UI using Backend OpenAPI JSON)
-- [TASK-CICD-OPENAPI-DRIFT-CHECK-001.md](TASK-CICD-OPENAPI-DRIFT-CHECK-001.md) — Ready (CI/CD integration for Backend OpenAPI drift validation)
+- [TASK-CICD-OPENAPI-DRIFT-CHECK-001.md](TASK-CICD-OPENAPI-DRIFT-CHECK-001.md) — ✅ Completed (`c5f628a`, CI/CD OpenAPI drift validation)
 
 ### 跨仓库实现任务
 
@@ -256,7 +256,7 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 | [TASK-JOBS-PROTOCOL-STABILITY-001.md](TASK-JOBS-PROTOCOL-STABILITY-001.md) | livemask-job-service | Harden rollout/rollback executor — ✅ Completed (`16d9ba0`) |
 | [TASK-CICD-PROTOCOL-STABILITY-001.md](TASK-CICD-PROTOCOL-STABILITY-001.md) | livemask-ci-cd | Turn protocol smoke SKIP to PASS and add stability checks — ✅ Completed (`d721677`) |
 | [TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md](TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md) | livemask-ci-cd | Add protocol LKG/rollback API assertions to runtime smoke — ✅ Completed (`c7842e8`) |
-| [TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md](TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md) | livemask-ci-cd | Add reconnect hint runtime smoke for App-facing Backend endpoints — Ready |
+| [TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md](TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md) | livemask-ci-cd | Add reconnect hint runtime smoke for App-facing Backend endpoints — ✅ Completed (`c5f628a`) |
 | [TASK-DOCS-PROTOCOL-LKG-COMPLETION-SYNC-001.md](TASK-DOCS-PROTOCOL-LKG-COMPLETION-SYNC-001.md) | livemask-docs | Sync Admin/CICD protocol LKG completion evidence into task ledger — ✅ Completed |
 
 ## NodeAgent Speedtest & Bandwidth Capacity

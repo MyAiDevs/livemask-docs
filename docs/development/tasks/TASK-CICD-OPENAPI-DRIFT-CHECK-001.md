@@ -1,6 +1,6 @@
 # TASK-CICD-OPENAPI-DRIFT-CHECK-001 - CI/CD OpenAPI Drift Check
 
-> Status: Ready
+> Status: Completed
 > Repository: livemask-ci-cd
 > Environment: dev-local / CI
 > Unblocked by: TASK-BACKEND-SWAGGER-API-DOCS-001 (`livemask-backend` dev `9de2f14`)
@@ -69,3 +69,35 @@ land or pass smoke without the OpenAPI contract staying aligned.
 - PASS/SKIP/FAIL evidence for Backend OpenAPI validation;
 - whether the check ran against backend dev `9de2f14` or newer;
 - remaining blockers or follow-up tasks.
+
+## 7. Completion Evidence
+
+| Field | Value |
+| --- | --- |
+| Task branch | `task/TASK-CICD-OPENAPI-DRIFT-RECONNECT-SMOKE-001` |
+| Task branch commit | `10f271b` |
+| Dev merge commit | `c5f628a` |
+| Remote dev ref | `origin/dev` (`c5f628a`) |
+| Validation | `bash -n scripts/openapi-drift-smoke.sh` PASS; `bash -n scripts/protocol-endpoint-smoke.sh` PASS; `bash -n scripts/smoke.sh` PASS; `git diff --check` PASS; dev-merge-guard integration and dev validation PASS |
+| Issues | `livemask-docs#14`, `livemask-ci-cd#2` |
+
+Implemented CI/CD behavior:
+
+- Added `scripts/openapi-drift-smoke.sh`.
+- The script runs Backend `scripts/validate-openapi.sh` when Backend checkout
+  and `BACKEND_REF=dev` are available.
+- Result classification:
+  - PASS when `validate-openapi.sh` exits 0;
+  - SKIP when Backend repo, validation script, `go.mod`, or dev ref is
+    unavailable in the smoke context;
+  - FAIL when `validate-openapi.sh` exits non-zero.
+- Added OpenAPI drift step to `.github/workflows/staging-smoke.yml` after
+  existing smoke checks.
+
+Known behavior:
+
+- Local or staging contexts without a usable Backend checkout may report SKIP
+  with a reason. This is expected by the task contract.
+- If staging uses a different backend checkout path such as
+  `infra/_build_deps/backend`, the script may need a follow-up workspace/path
+  option.

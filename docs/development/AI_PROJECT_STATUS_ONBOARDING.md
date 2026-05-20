@@ -97,12 +97,10 @@ drift or safety defect.
 ## 6. Current High-Priority Product/Runtime Gaps
 
 Use `task-state-ledger.json` and `MVP_IMPLEMENTATION_PLAN.md` for the full
-snapshot. The currently visible high-priority gaps include:
-
-| Module | Gap | Next TASK |
-| --- | --- | --- |
-| Protocol stability | CI/CD reconnect hint runtime smoke still needs closure | `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001` |
-| Backend API documentation | CI/CD should enforce Backend OpenAPI drift checks | `TASK-CICD-OPENAPI-DRIFT-CHECK-001` |
+snapshot. At this snapshot, the repo-native audit queue has no ready
+high-priority product/runtime TASK. Before inventing new work, run the audit
+center and inspect the ledger/MVP plan for drift, remote CI smoke results, or
+new user requirements.
 
 Before dispatching any new task, check whether the next task is already present
 in the ledger or task README. Prefer existing tasks over inventing new ones.
