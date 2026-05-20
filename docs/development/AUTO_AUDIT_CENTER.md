@@ -134,5 +134,5 @@ Each finding includes:
 - Optional GitHub Issue audit using `LIVEMASK_BOT_TOKEN`.
 - Optional remote `origin/dev` verification across runtime repos.
 - Optional GitHub Actions workflow result audit.
-- Optional lease registry audit after `TASK-DOCS-LEASE-REGISTRY-001`.
+- Lease registry audit is now handled by `scripts/check-task-leases.py`.
 - Optional close/reopen guard audit after `TASK-CICD-ISSUE-CLOSE-GUARD-001`.

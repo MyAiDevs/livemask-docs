@@ -70,6 +70,7 @@ The docs-side intelligent workflow has these completed building blocks:
 | Strict cross-repo Issue presence / ambiguity check | `docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-001.md` |
 | Hardened Issue sync CI gate | `docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-FIX-001.md` |
 | Offline automatic audit center with local JSONL trace log | `docs/development/AUTO_AUDIT_CENTER.md` / `scripts/audit-task-center.py` / `.local-dev/logs/auto-task-center.log` |
+| Active lease registry and collision check | `docs/development/task-leases.json` / `scripts/check-task-leases.py` |
 
 Validation command:
 
@@ -85,7 +86,6 @@ These are intentional, tracked gaps, not memory-only notes:
 | Gap | TASK | Status |
 | --- | --- | --- |
 | Guarded Issue close/reopen automation | `TASK-CICD-ISSUE-CLOSE-GUARD-001` | Ready |
-| Active Cursor lease registry / collision detection | `TASK-DOCS-LEASE-REGISTRY-001` | Ready |
 | Full historical backfill into `task-state-ledger.json` | Follow-up as reports are processed | Incremental |
 
 Do not claim the governance-control-plane module is fully completed while these
@@ -101,7 +101,7 @@ snapshot. The currently visible high-priority gaps include:
 | Protocol stability | App reconnect runtime must cut over to real Backend APIs | `TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001` |
 | Protocol stability | CI/CD reconnect hint runtime smoke still needs closure | `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001` |
 | Governance | Issue presence/ambiguity check exists and staging warning mode is hardened; close/reopen guard is not automated | `TASK-CICD-ISSUE-CLOSE-GUARD-001` |
-| Governance | Parallel Cursor leases are documented but not enforced | `TASK-DOCS-LEASE-REGISTRY-001` / `docs/development/cursor-handoffs/DOCS-LEASE-REGISTRY-CURSOR_HANDOFF.md` |
+| Governance | Lease registry is file-backed; child repo AI rule sync remains follow-up | Future child repo rules sync TASK |
 
 Before dispatching any new task, check whether the next task is already present
 in the ledger or task README. Prefer existing tasks over inventing new ones.
