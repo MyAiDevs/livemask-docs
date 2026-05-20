@@ -113,6 +113,10 @@ project health:
 
 ## Current Known Open Automation Gaps
 
+- `TASK-CICD-ISSUE-SYNC-STRICT-FIX-001` is completed. Do not wire a governance
+  self-check into `staging-smoke.yml` in hard-fail mode unless the checked TASK
+  is guaranteed to have synchronized Issues; use task-specific repo scope and
+  warning mode for migration/self-check gates.
 - `TASK-CICD-ISSUE-CLOSE-GUARD-001`: guarded Issue close/reopen automation is
   ready but not implemented.
 - `TASK-DOCS-LEASE-REGISTRY-001`: active lease collision detection is ready but

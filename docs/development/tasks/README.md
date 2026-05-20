@@ -121,6 +121,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md](TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md) — ✅ Completed (standard next Cursor task brief)
 - [TASK-CICD-TASK-RECONCILER-001.md](TASK-CICD-TASK-RECONCILER-001.md) — ✅ Completed (lightweight ledger reconciliation check)
 - [TASK-CICD-ISSUE-SYNC-STRICT-001.md](TASK-CICD-ISSUE-SYNC-STRICT-001.md) — ✅ Completed (cross-repo Issue lookup/update by TASK ID)
+- [TASK-CICD-ISSUE-SYNC-STRICT-FIX-001.md](TASK-CICD-ISSUE-SYNC-STRICT-FIX-001.md) — ✅ Completed (harden strict Issue sync gate, staging warning mode, workflow YAML/help/JSON fixes)
 - [TASK-CICD-ISSUE-CLOSE-GUARD-001.md](TASK-CICD-ISSUE-CLOSE-GUARD-001.md) — Ready (guarded Issue close/reopen automation)
 - [TASK-DOCS-LEASE-REGISTRY-001.md](TASK-DOCS-LEASE-REGISTRY-001.md) — Ready (active Cursor lease registry and collision checks; brief: [DOCS-LEASE-REGISTRY-CURSOR_HANDOFF.md](../cursor-handoffs/DOCS-LEASE-REGISTRY-CURSOR_HANDOFF.md))
 - [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)

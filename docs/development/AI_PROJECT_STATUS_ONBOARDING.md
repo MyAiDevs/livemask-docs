@@ -68,6 +68,7 @@ The docs-side intelligent workflow has these completed building blocks:
 | Ledger validation in docs checks | `scripts/check-task-state-ledger.py` |
 | Standard Cursor task brief template | `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md` |
 | Strict cross-repo Issue presence / ambiguity check | `docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-001.md` |
+| Hardened Issue sync CI gate | `docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-FIX-001.md` |
 
 Validation command:
 
@@ -97,7 +98,7 @@ snapshot. The currently visible high-priority gaps include:
 | --- | --- | --- |
 | Protocol stability | App reconnect runtime must cut over to real Backend APIs | `TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001` |
 | Protocol stability | CI/CD reconnect hint runtime smoke still needs closure | `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001` |
-| Governance | Issue presence/ambiguity check exists; close/reopen guard is not automated | `TASK-CICD-ISSUE-CLOSE-GUARD-001` |
+| Governance | Issue presence/ambiguity check exists and staging warning mode is hardened; close/reopen guard is not automated | `TASK-CICD-ISSUE-CLOSE-GUARD-001` |
 | Governance | Parallel Cursor leases are documented but not enforced | `TASK-DOCS-LEASE-REGISTRY-001` / `docs/development/cursor-handoffs/DOCS-LEASE-REGISTRY-CURSOR_HANDOFF.md` |
 
 Before dispatching any new task, check whether the next task is already present

@@ -133,10 +133,29 @@
             "TASK-CICD-TASK-RECONCILER-001"
           ],
           "unlocks": [
+            "TASK-CICD-ISSUE-SYNC-STRICT-FIX-001",
             "TASK-CICD-ISSUE-CLOSE-GUARD-001",
             "TASK-DOCS-LEASE-REGISTRY-001"
           ],
           "notes": "Cross-repo Issue presence and ambiguity check implemented in livemask-ci-cd; no existing docs/ci-cd Issue was found during docs sync."
+        },
+        {
+          "task_id": "TASK-CICD-ISSUE-SYNC-STRICT-FIX-001",
+          "repo": "livemask-ci-cd",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-FIX-001.md",
+          "dev_merge_commit": "ad9f446",
+          "remote_dev_ref": "ad9f446",
+          "issue": "",
+          "validation": "bash -n scripts/*.sh, git diff --check, workflow YAML parse, issue-sync warn/strict mode checks, dev-merge-guard",
+          "blocked_by": [
+            "TASK-CICD-ISSUE-SYNC-STRICT-001"
+          ],
+          "unlocks": [
+            "TASK-CICD-ISSUE-CLOSE-GUARD-001",
+            "TASK-DOCS-LEASE-REGISTRY-001"
+          ],
+          "notes": "Fixes the first strict Issue sync integration defects: staging self-check now warns instead of blocking on historical missing Issues, scan-all uses task_id+repo pairs, YAML/help/JSON/exit-code bugs are fixed."
         },
         {
           "task_id": "TASK-CICD-ISSUE-CLOSE-GUARD-001",
@@ -148,7 +167,8 @@
           "issue": "",
           "validation": "",
           "blocked_by": [
-            "TASK-CICD-ISSUE-SYNC-STRICT-001"
+            "TASK-CICD-ISSUE-SYNC-STRICT-001",
+            "TASK-CICD-ISSUE-SYNC-STRICT-FIX-001"
           ],
           "unlocks": [],
           "notes": "Next automation step: guarded Issue close/reopen only after final verification state is reliable."
@@ -163,7 +183,8 @@
           "issue": "",
           "validation": "",
           "blocked_by": [
-            "TASK-CICD-ISSUE-SYNC-STRICT-001"
+            "TASK-CICD-ISSUE-SYNC-STRICT-001",
+            "TASK-CICD-ISSUE-SYNC-STRICT-FIX-001"
           ],
           "unlocks": [],
           "notes": "Next governance step: active lease registry to reduce parallel Cursor collisions; strict Issue sync is now available as the scan foundation."
