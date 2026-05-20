@@ -250,7 +250,7 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 | [TASK-ADMIN-PROTOCOL-LKG-MOCK-RETIRE-001.md](TASK-ADMIN-PROTOCOL-LKG-MOCK-RETIRE-001.md) | livemask-admin | Cut Admin LKG/rollback UI over to real Backend fields and isolate mock fallback — ✅ Completed (`4b46435`) |
 | [TASK-BACKEND-RECONNECT-HINT-RUNTIME-001.md](TASK-BACKEND-RECONNECT-HINT-RUNTIME-001.md) | livemask-backend | App-auth reconnect runtime APIs for connect config re-fetch and safe reconnect hints — ✅ Completed (`1442e64`) |
 | [TASK-APP-RECONNECT-STABILITY-001.md](TASK-APP-RECONNECT-STABILITY-001.md) | livemask-app | Verify real reconnect hints, polling, and unsupported protocol safety — ✅ Completed (latest `5a433f9`, original `17e83c9`) |
-| [TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md](TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md) | livemask-app | Cut App reconnect runtime to real Backend endpoints and Android-first validate — Ready |
+| [TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md](TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md) | livemask-app | Cut App reconnect runtime to real Backend endpoints and Android-first validate — ✅ Completed (`e797875`) |
 | [TASK-JOBS-PROTOCOL-STABILITY-001.md](TASK-JOBS-PROTOCOL-STABILITY-001.md) | livemask-job-service | Harden rollout/rollback executor — ✅ Completed (`16d9ba0`) |
 | [TASK-CICD-PROTOCOL-STABILITY-001.md](TASK-CICD-PROTOCOL-STABILITY-001.md) | livemask-ci-cd | Turn protocol smoke SKIP to PASS and add stability checks — ✅ Completed (`d721677`) |
 | [TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md](TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md) | livemask-ci-cd | Add protocol LKG/rollback API assertions to runtime smoke — ✅ Completed (`c7842e8`) |
