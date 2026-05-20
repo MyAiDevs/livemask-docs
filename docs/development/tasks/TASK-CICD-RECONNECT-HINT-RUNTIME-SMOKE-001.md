@@ -3,6 +3,8 @@
 > Status: Ready
 > Repository: livemask-ci-cd
 > Environment: dev-local
+> Issues: livemask-docs#12, livemask-ci-cd#1
+> Unblocked by: TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001 (`livemask-app` dev `e797875`)
 
 ## 1. Background
 

@@ -1,8 +1,9 @@
 # TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001 — App Reconnect Runtime Real Backend Cutover
 
-> Status: Ready
+> Status: Completed
 > Repository: livemask-app
 > Environment: dev-local
+> Issues: livemask-docs#11, livemask-app#1
 
 ## 1. Background
 
@@ -78,3 +79,30 @@ Cursor must report:
 - whether mock reconnect data remains and under which mode;
 - Android-first runtime/build evidence;
 - any remaining Backend/CI runtime blocker.
+
+## 7. Completion Evidence
+
+| Field | Value |
+| --- | --- |
+| Task branch | `task/TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001` |
+| Task branch commit | `09e69c9` |
+| Dev merge commit | `e797875` |
+| Remote dev ref | `origin/dev` (`e797875`) |
+| Validation | `flutter analyze --no-fatal-warnings --no-fatal-infos` PASS with 0 errors and no new issues; `flutter test` PASS 597/597; `git diff --check` PASS; `dev-merge-guard` PASS on integration and dev |
+| Docs issues | `livemask-docs#11`, `livemask-app#1` |
+
+Implemented App behavior:
+
+- `ConnectApiClient.fetchConnectConfig()` accepts optional `sessionId`.
+- `RealConnectApiClient` sends `session_id=<sessionId>` only when non-empty.
+- `MockConnectApiClient` accepts the optional parameter for compatibility.
+- Reconnect flows pass `state.sessionId` in `_executeReconnect()` and
+  `_executePolledReconnect()`.
+- App continues to treat reconnect hints as signals only and never trusts hint
+  payloads as config.
+- Mock reconnect data remains isolated to `AUTH_CLIENT_MODE=mock` through
+  `AppConfig.useMockAuthClient`; real/CI mode uses `RealConnectApiClient`.
+
+Unlocked next task:
+
+- `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001`

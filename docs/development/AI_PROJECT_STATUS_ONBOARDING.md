@@ -101,7 +101,6 @@ snapshot. The currently visible high-priority gaps include:
 
 | Module | Gap | Next TASK |
 | --- | --- | --- |
-| Protocol stability | App reconnect runtime must cut over to real Backend APIs | `TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001` |
 | Protocol stability | CI/CD reconnect hint runtime smoke still needs closure | `TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001` |
 | Backend API documentation | Backend needs Swagger/OpenAPI docs for future iteration | `TASK-BACKEND-SWAGGER-API-DOCS-001` |
 
