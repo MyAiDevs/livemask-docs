@@ -132,6 +132,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md](TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md) — ✅ Completed (AppClient feature validation is Android-first; iOS deferred hardening)
 - [TASK-APP-ANDROID-FUNCTIONAL-VALIDATION-001.md](TASK-APP-ANDROID-FUNCTIONAL-VALIDATION-001.md) — ✅ Completed (Android-primary AppClient functional validation)
 - [TASK-DOCS-APP-RUNTIME-CLOSED-LOOP-VALIDATION-001.md](TASK-DOCS-APP-RUNTIME-CLOSED-LOOP-VALIDATION-001.md) — ✅ Completed (App feature tasks require runtime logs and Backend/NodeAgent/JobService closed-loop evidence)
+- [TASK-BACKEND-SWAGGER-API-DOCS-001.md](TASK-BACKEND-SWAGGER-API-DOCS-001.md) — Ready (Backend Swagger/OpenAPI documentation for future API iteration)
 
 ### 跨仓库实现任务
 
