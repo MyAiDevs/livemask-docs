@@ -80,10 +80,8 @@ flutter test test/reconnect_hint_test.dart test/connect_models_test.dart test/mo
 
 ## 6. Remaining Dependencies
 
-- Backend must ensure `GET /api/v1/connect/config` is available and returns the
-  correct fresh `connect_config`.
-- Backend must ensure `GET /api/v1/reconnect-hints` is available and returns
-  safe hint metadata without secrets or full connect config payloads.
+- Backend runtime dependency is resolved by
+  `TASK-BACKEND-RECONNECT-HINT-RUNTIME-001` at Backend dev merge `1442e64`.
 - CI/CD should add `TASK-CICD-RECONNECT-HINT-001` or fold reconnect hint checks
   into protocol stability runtime smoke.
 - Real App + Backend integration should validate:
