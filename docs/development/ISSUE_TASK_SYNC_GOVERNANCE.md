@@ -311,6 +311,11 @@ catch drift and drive fast dispatch. Every accepted completion report should
 update the ledger entry for the affected task or explicitly document why the
 ledger is unchanged.
 
+The Codex dispatcher role is defined in
+`docs/development/CODEX_TASK_DISPATCHER_ROLE.md`. That document explains what
+Codex does synchronously when reports arrive, what it checks asynchronously, and
+what it must not do.
+
 New Cursor tasks must be dispatched with
 `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md`. A task brief that lacks target
 repo, branch, must-read docs, in-scope/out-of-scope, validation, dev merge
@@ -357,6 +362,8 @@ Cursor tasks. If the ledger has no next task but the project is not landed,
 scan the project and create new TASK docs before dispatching work.
 Use docs/development/task-state-ledger.json as the reconciliation snapshot and
 docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md for every new Cursor brief.
+Use docs/development/CODEX_TASK_DISPATCHER_ROLE.md to understand the docs-side
+Codex dispatcher role.
 ```
 
 ## 10. Follow-Up Tasks
@@ -367,6 +374,7 @@ docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md for every new Cursor brief.
 | `TASK-DOC-AI-RULES-SYNC-001` | `livemask-docs` + all repos | Sync the governance rule into `.cursorrules` / Copilot instructions for every repo. |
 | `TASK-CICD-ISSUE-CLOSE-GUARD-001` | `livemask-ci-cd` | Optional future guard for issue close/reopen automation. |
 | `TASK-DOCS-TASK-STATE-LEDGER-001` | `livemask-docs` | Add a machine-readable task state ledger and validation check. |
+| `TASK-DOCS-CODEX-DISPATCHER-ROLE-001` | `livemask-docs` | Document Codex's task dispatch center role and synchronous/asynchronous workflow. |
 | `TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001` | `livemask-docs` | Standardize next Cursor task dispatch briefs. |
 | `TASK-CICD-TASK-RECONCILER-001` | `livemask-docs` / `livemask-ci-cd` | Add lightweight reconciliation checks before stricter Issue automation. |
 | `TASK-CICD-ISSUE-SYNC-STRICT-001` | `livemask-docs` / `livemask-ci-cd` | Search and update docs plus runtime repo Issues by TASK ID. |

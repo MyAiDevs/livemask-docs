@@ -28,6 +28,7 @@
     文档、contracts、handoff、QA/runbook 和相关任务状态，识别缺口并创建新的 `TASK-*.md`。
 
 详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
+Codex 调度窗口的职责见 [Codex Task Dispatcher Role](development/CODEX_TASK_DISPATCHER_ROLE.md)。
 任务状态快照见 [Task State Ledger](development/task-state-ledger.json)。
 新任务派发必须使用 [Cursor Task Brief Template](development/CURSOR_TASK_BRIEF_TEMPLATE.md)。
 
@@ -41,6 +42,8 @@
 - 先阅读 [LiveMask_系统设计文档_v3.6.md](../LiveMask_系统设计文档_v3.6.md) 和 [LiveMask_开发任务清单与里程碑_v3.6.md](../LiveMask_开发任务清单与里程碑_v3.6.md)。
 - `livemask-docs` 调度窗口还必须查看 `docs/development/task-state-ledger.json`，
   并用 `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md` 生成下一批任务。
+- 其它 AI 编辑器需要理解 Codex 调度职责时，先读
+  `docs/development/CODEX_TASK_DISPATCHER_ROLE.md`。
 
 ### 开发阶段
 

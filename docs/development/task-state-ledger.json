@@ -30,7 +30,7 @@
     {
       "module_id": "governance-control-plane",
       "summary": "Docs-owned completion report intake, task ledger, issue sync, module status summary, and next Cursor task dispatch.",
-      "overall_status": "completed",
+      "overall_status": "partial",
       "owner_repo": "livemask-docs",
       "tasks": [
         {
@@ -64,6 +64,19 @@
             "TASK-CICD-TASK-RECONCILER-001"
           ],
           "notes": "Introduces this machine-readable ledger and validation script."
+        },
+        {
+          "task_id": "TASK-DOCS-CODEX-DISPATCHER-ROLE-001",
+          "repo": "livemask-docs",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-DOCS-CODEX-DISPATCHER-ROLE-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "bash scripts/check-docs.sh",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "Documents Codex as the docs-side task dispatch center and defines synchronous/asynchronous workflows."
         },
         {
           "task_id": "TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001",

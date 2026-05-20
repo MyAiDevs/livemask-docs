@@ -14,6 +14,17 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 LEDGER = ROOT / "docs/development/task-state-ledger.json"
 TASK_RE = re.compile(r"^TASK-[A-Z0-9]+(?:-[A-Z0-9]+)*$")
 SHA_RE = re.compile(r"^[0-9a-f]{7,40}$")
+DONE_STATUSES = {"completed", "completed_with_skip", "deferred", "cancelled"}
+OPEN_STATUSES = {
+    "draft",
+    "ready",
+    "in_progress",
+    "implemented",
+    "verified",
+    "partial",
+    "blocked",
+    "evidence_missing",
+}
 
 
 def fail(message: str, failures: list[str]) -> None:
@@ -57,6 +68,7 @@ def main() -> int:
     repos = set(require_list(data, "repos", "ledger", failures))
     modules = require_list(data, "modules", "ledger", failures)
     seen_tasks: set[str] = set()
+    referenced_tasks: list[tuple[str, str]] = []
 
     for module in modules:
         if not isinstance(module, dict):
@@ -73,6 +85,7 @@ def main() -> int:
         tasks = require_list(module, "tasks", context, failures)
         if not tasks:
             fail(f"{context}: must list at least one task", failures)
+        task_statuses: list[str] = []
 
         for task in tasks:
             if not isinstance(task, dict):
@@ -98,6 +111,8 @@ def main() -> int:
                 fail(f"{task_context}: repo {repo} is not in ledger repos", failures)
             if status and status not in statuses:
                 fail(f"{task_context}: invalid status {status}", failures)
+            if status:
+                task_statuses.append(status)
             if task_doc:
                 path = ROOT / task_doc
                 if not path.exists():
@@ -110,9 +125,43 @@ def main() -> int:
             if status == "completed":
                 if not task.get("validation"):
                     fail(f"{task_context}: completed tasks must include validation", failures)
+                if repo != "livemask-docs" and (not dev_merge_commit or not remote_dev_ref):
+                    fail(
+                        f"{task_context}: completed runtime tasks must include dev_merge_commit "
+                        "and remote_dev_ref",
+                        failures,
+                    )
             for dep in blocked_by + unlocks:
                 if not isinstance(dep, str) or not TASK_RE.fullmatch(dep):
                     fail(f"{task_context}: dependency/unlock must be TASK ID: {dep!r}", failures)
+                else:
+                    referenced_tasks.append((task_context, dep))
+
+        if overall_status == "completed":
+            open_tasks = [
+                status
+                for status in task_statuses
+                if status not in DONE_STATUSES
+            ]
+            if open_tasks:
+                fail(
+                    f"{context}: overall_status completed but module has open task statuses: "
+                    + ", ".join(sorted(set(open_tasks))),
+                    failures,
+                )
+
+        if overall_status in OPEN_STATUSES and task_statuses and all(
+            status in DONE_STATUSES for status in task_statuses
+        ):
+            fail(
+                f"{context}: overall_status {overall_status} but all listed tasks are closed; "
+                "mark module completed or add open gaps as ready/blocked tasks",
+                failures,
+            )
+
+    for context, task_id in referenced_tasks:
+        if task_id not in seen_tasks:
+            fail(f"{context}: references TASK not present in ledger: {task_id}", failures)
 
     if failures:
         print("Task state ledger check failed:")

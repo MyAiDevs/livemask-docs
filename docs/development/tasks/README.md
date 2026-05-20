@@ -30,6 +30,8 @@
 > 项目文档和任务状态，创建新的 `TASK-*.md`，更新台账后再派发任务。
 > 任务状态快照必须同步到 `docs/development/task-state-ledger.json`；新的 Cursor 任务
 > 必须使用 `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md`。
+> Codex 调度窗口的角色、同步/异步工作方式和禁区记录在
+> `docs/development/CODEX_TASK_DISPATCHER_ROLE.md`。
 
 ## 0. 多窗口同步要求
 
@@ -112,6 +114,7 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
 - [TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md](TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md) — ✅ Completed (completion report intake -> Issue sync -> module summary -> next Cursor task dispatch)
 - [TASK-DOCS-TASK-STATE-LEDGER-001.md](TASK-DOCS-TASK-STATE-LEDGER-001.md) — ✅ Completed (machine-readable task state snapshot + validation)
+- [TASK-DOCS-CODEX-DISPATCHER-ROLE-001.md](TASK-DOCS-CODEX-DISPATCHER-ROLE-001.md) — ✅ Completed (Codex dispatcher role and sync/async workflow)
 - [TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md](TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md) — ✅ Completed (standard next Cursor task brief)
 - [TASK-CICD-TASK-RECONCILER-001.md](TASK-CICD-TASK-RECONCILER-001.md) — ✅ Completed (lightweight ledger reconciliation check)
 - [TASK-CICD-ISSUE-SYNC-STRICT-001.md](TASK-CICD-ISSUE-SYNC-STRICT-001.md) — Ready (cross-repo Issue lookup/update by TASK ID)

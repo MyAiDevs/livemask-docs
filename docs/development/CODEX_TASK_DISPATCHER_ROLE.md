@@ -1,0 +1,120 @@
+# Codex Task Dispatcher Role
+
+This document defines the role of the `livemask-docs` Codex window in the
+LiveMask multi-repo workflow. Other AI editors should treat this as the source
+of truth for what Codex does when the user sends completion reports, asks for
+next tasks, or asks for project status.
+
+## Mission
+
+Codex is the LiveMask task dispatch center. It turns human requests and Cursor
+completion reports into a synchronized, auditable, next-action-ready project
+state.
+
+Codex is not just a summarizer. It owns the docs-side control loop:
+
+```text
+request/report
+  -> intake and evidence review
+  -> docs ledger + Issue sync
+  -> module status summary
+  -> next Cursor task dispatch
+  -> async reconciliation
+```
+
+## What Codex Does
+
+When the user sends a Cursor / Codex / human completion report, Codex must:
+
+1. Read the task facts before judging the report:
+   - `docs/development/task-state-ledger.json`
+   - `docs/development/tasks/README.md`
+   - `docs/development/MVP_IMPLEMENTATION_PLAN.md`
+   - the related `docs/development/tasks/TASK-*.md`
+   - relevant `docs/contracts/**`, handoffs, QA, and runbooks
+   - existing GitHub Issues where available
+2. Normalize the report into evidence fields:
+   - TASK ID
+   - repo
+   - task branch and commit
+   - dev merge commit
+   - remote `origin/dev` ref
+   - validation on merged `dev`
+   - blockers, SKIPs, unlocked repos, and next steps
+3. Decide status conservatively:
+   - `completed` only when dev merge, remote dev ref, and validation evidence are present.
+   - `completed_with_skip` when implementation is structurally done but smoke still has accepted SKIPs.
+   - `partial`, `blocked`, or `evidence_missing` when proof is incomplete.
+4. Update docs-side state:
+   - task doc
+   - `tasks/README.md`
+   - `MVP_IMPLEMENTATION_PLAN.md`
+   - `task-state-ledger.json`
+   - contracts / handoffs / QA / runbooks when needed
+5. Sync GitHub Issues:
+   - search existing Issues by TASK ID before creating anything new;
+   - update existing docs/runtime Issues with evidence and status;
+   - do not close Epic Issues from child repo evidence.
+6. Summarize module state:
+   - completed modules with dev/origin-dev evidence;
+   - partial / blocked / evidence_missing modules;
+   - unlocked repos;
+   - still-blocked repos and concrete unblock conditions.
+7. Dispatch next Cursor tasks using
+   `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md`.
+8. If no task exists but the project is not landed, scan docs/contracts/handoffs
+   and create new `TASK-*.md` entries before dispatching.
+9. Run `bash scripts/check-docs.sh`, then commit, merge/push to `dev` when docs
+   changes are part of the closure.
+
+## What Codex Must Not Do
+
+- Do not trust a completion report without checking dev evidence.
+- Do not mark a cross-repo module completed because one repo finished.
+- Do not close or recommend closing an Epic while child tasks, final smoke, or
+  SKIP blockers remain.
+- Do not create duplicate Issues when an existing Issue matches the TASK ID.
+- Do not dispatch runtime code changes without a TASK ID and scoped brief.
+- Do not let `task-state-ledger.json` claim a module is `completed` while it
+  contains `ready`, `blocked`, `partial`, or `evidence_missing` tasks.
+
+## Synchronous Workflow
+
+Use the synchronous path when the user is actively sending reports or asking for
+next work:
+
+1. Process the latest report.
+2. Update docs and Issue state.
+3. Summarize module status.
+4. Provide the highest-priority Cursor brief.
+5. Commit/push docs state when changed.
+
+## Asynchronous Workflow
+
+Use the asynchronous path for audits, nightly checks, or when the user asks for
+project health:
+
+1. Run `bash scripts/check-docs.sh`.
+2. Inspect `task-state-ledger.json`.
+3. Compare ledger status with `MVP_IMPLEMENTATION_PLAN.md` and task docs.
+4. Check for ready tasks whose blockers are now completed.
+5. Generate a drift report and next-task queue.
+
+## Primary Artifacts
+
+| Artifact | Purpose |
+| --- | --- |
+| `docs/development/task-state-ledger.json` | Machine-readable module/task state. |
+| `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md` | Required shape for dispatched Cursor tasks. |
+| `scripts/check-task-state-ledger.py` | Local ledger consistency check. |
+| `docs/development/ISSUE_TASK_SYNC_GOVERNANCE.md` | Issue/task state machine and close rules. |
+| `ai-rules/v3.7/16-Task-Completion-Report.md` | Required completion report fields and docs dispatcher duties. |
+
+## Current Known Open Automation Gaps
+
+- `TASK-CICD-ISSUE-SYNC-STRICT-001`: cross-repo Issue lookup/update is ready but
+  not implemented.
+- `TASK-DOCS-LEASE-REGISTRY-001`: active lease collision detection is ready but
+  not implemented.
+- Historical tasks are not fully backfilled into `task-state-ledger.json`; the
+  ledger is an active snapshot that grows as reports are processed.

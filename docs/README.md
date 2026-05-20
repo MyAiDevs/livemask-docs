@@ -57,6 +57,7 @@
 ## MVP 落地入口
 
 - `development/MVP_IMPLEMENTATION_PLAN.md`
+- `development/CODEX_TASK_DISPATCHER_ROLE.md`
 - `contracts/api/core-mvp.md`
 - `contracts/config/core-configs.md`
 - `contracts/events/core-events.md`
