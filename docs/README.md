@@ -65,6 +65,8 @@
 - `data/outbox-compensation.md`
 - `qa/P0_VALIDATION_MATRIX.md`
 - `operations/RELEASE_RUNBOOK.md`
+- `development/task-state-ledger.json`
+- `development/CURSOR_TASK_BRIEF_TEMPLATE.md`
 
 ## 未来模块链路入口
 

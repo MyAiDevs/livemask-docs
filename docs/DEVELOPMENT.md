@@ -28,6 +28,8 @@
     文档、contracts、handoff、QA/runbook 和相关任务状态，识别缺口并创建新的 `TASK-*.md`。
 
 详细规则见 [Issue, Task Sync, And Multi-Window Governance](development/ISSUE_TASK_SYNC_GOVERNANCE.md)。
+任务状态快照见 [Task State Ledger](development/task-state-ledger.json)。
+新任务派发必须使用 [Cursor Task Brief Template](development/CURSOR_TASK_BRIEF_TEMPLATE.md)。
 
 ## 2. 日常多窗口开发工作流
 
@@ -37,6 +39,8 @@
 - 确保每个仓库都加载对应规则文件，例如 `.cursorrules` 或 `.github/copilot-instructions.md`。
 - 在对话开始时明确当前处理的 `TASK-XXXX`。
 - 先阅读 [LiveMask_系统设计文档_v3.6.md](../LiveMask_系统设计文档_v3.6.md) 和 [LiveMask_开发任务清单与里程碑_v3.6.md](../LiveMask_开发任务清单与里程碑_v3.6.md)。
+- `livemask-docs` 调度窗口还必须查看 `docs/development/task-state-ledger.json`，
+  并用 `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md` 生成下一批任务。
 
 ### 开发阶段
 
@@ -66,6 +70,8 @@
 - [ ] 已确认是否影响配置热更新、FeatureFlag、支付风控或降级模式
 - [ ] 已确认代码注释中是否需要包含 `TASK-XXXX`
 - [ ] 已确认 PR 描述是否说明跨仓库影响和验证结果
+- [ ] `livemask-docs` 调度窗口已更新或确认无需更新 `task-state-ledger.json`
+- [ ] 新派发任务使用了 Cursor task brief 模板
 
 ## 4. 常见场景处理
 

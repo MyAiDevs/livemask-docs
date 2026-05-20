@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 python3 "$ROOT/scripts/check-doc-links.py"
 python3 "$ROOT/scripts/check-task-traceability.py"
+python3 "$ROOT/scripts/check-task-state-ledger.py"
 python3 "$ROOT/scripts/check-ai-rule-links.py"
 python3 "$ROOT/scripts/check-role-handoff.py"
 python3 "$ROOT/scripts/check-e2e-chain.py"

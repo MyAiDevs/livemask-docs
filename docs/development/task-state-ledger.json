@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-05-21",
+  "purpose": "Machine-readable task state snapshot for LiveMask multi-repo dispatch, reconciliation, and next-task planning.",
+  "status_values": [
+    "draft",
+    "ready",
+    "in_progress",
+    "implemented",
+    "verified",
+    "completed",
+    "completed_with_skip",
+    "partial",
+    "blocked",
+    "evidence_missing",
+    "deferred",
+    "cancelled"
+  ],
+  "repos": [
+    "livemask-docs",
+    "livemask-backend",
+    "livemask-nodeagent",
+    "livemask-app",
+    "livemask-admin",
+    "livemask-website",
+    "livemask-job-service",
+    "livemask-ci-cd"
+  ],
+  "modules": [
+    {
+      "module_id": "governance-control-plane",
+      "summary": "Docs-owned completion report intake, task ledger, issue sync, module status summary, and next Cursor task dispatch.",
+      "overall_status": "completed",
+      "owner_repo": "livemask-docs",
+      "tasks": [
+        {
+          "task_id": "TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001",
+          "repo": "livemask-docs",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md",
+          "dev_merge_commit": "b763b7a",
+          "remote_dev_ref": "b763b7a",
+          "issue": "",
+          "validation": "bash scripts/check-docs.sh",
+          "blocked_by": [],
+          "unlocks": [
+            "TASK-DOCS-TASK-STATE-LEDGER-001",
+            "TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001",
+            "TASK-CICD-TASK-RECONCILER-001"
+          ],
+          "notes": "Defines the docs dispatcher loop for completion report intake, issue sync, module summary, and next task creation."
+        },
+        {
+          "task_id": "TASK-DOCS-TASK-STATE-LEDGER-001",
+          "repo": "livemask-docs",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-DOCS-TASK-STATE-LEDGER-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "bash scripts/check-docs.sh",
+          "blocked_by": [],
+          "unlocks": [
+            "TASK-CICD-TASK-RECONCILER-001"
+          ],
+          "notes": "Introduces this machine-readable ledger and validation script."
+        },
+        {
+          "task_id": "TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001",
+          "repo": "livemask-docs",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "bash scripts/check-docs.sh",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "Adds a standard Cursor task brief template for scoped dispatch."
+        },
+        {
+          "task_id": "TASK-CICD-TASK-RECONCILER-001",
+          "repo": "livemask-docs",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-CICD-TASK-RECONCILER-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "bash scripts/check-docs.sh",
+          "blocked_by": [],
+          "unlocks": [
+            "TASK-CICD-ISSUE-SYNC-STRICT-001",
+            "TASK-DOCS-LEASE-REGISTRY-001"
+          ],
+          "notes": "Adds a lightweight local reconciler for ledger shape, task docs, and evidence sanity."
+        },
+        {
+          "task_id": "TASK-CICD-ISSUE-SYNC-STRICT-001",
+          "repo": "livemask-docs",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-CICD-ISSUE-SYNC-STRICT-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "",
+          "blocked_by": [
+            "TASK-CICD-TASK-RECONCILER-001"
+          ],
+          "unlocks": [],
+          "notes": "Next automation step: search and update docs plus runtime repo issues by TASK ID."
+        },
+        {
+          "task_id": "TASK-DOCS-LEASE-REGISTRY-001",
+          "repo": "livemask-docs",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-DOCS-LEASE-REGISTRY-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "",
+          "blocked_by": [
+            "TASK-CICD-TASK-RECONCILER-001"
+          ],
+          "unlocks": [],
+          "notes": "Next governance step: active lease registry to reduce parallel Cursor collisions."
+        }
+      ],
+      "open_gaps": [
+        "Issue sync still needs strict cross-repo lookup and update automation.",
+        "Lease registry is documented as next task but not yet enforced by tooling.",
+        "Ledger should grow as completion reports are processed; it is not yet exhaustive for every historical TASK."
+      ]
+    },
+    {
+      "module_id": "protocol-stability",
+      "summary": "Protocol template, LKG, rollback, reconnect, and smoke closure across Backend, NodeAgent, Job Service, Admin, App, and CI/CD.",
+      "overall_status": "partial",
+      "owner_repo": "livemask-docs",
+      "tasks": [
+        {
+          "task_id": "TASK-BACKEND-PROTOCOL-LKG-ROLLBACK-API-001",
+          "repo": "livemask-backend",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-BACKEND-PROTOCOL-LKG-ROLLBACK-API-001.md",
+          "dev_merge_commit": "9a06111",
+          "remote_dev_ref": "9a06111",
+          "issue": "",
+          "validation": "go test ./..., go vet ./..., go build ./..., git diff --check",
+          "blocked_by": [],
+          "unlocks": [
+            "TASK-ADMIN-PROTOCOL-LKG-MOCK-RETIRE-001",
+            "TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001"
+          ],
+          "notes": "Backend real LKG/rollback API fields landed on dev."
+        },
+        {
+          "task_id": "TASK-ADMIN-PROTOCOL-LKG-MOCK-RETIRE-001",
+          "repo": "livemask-admin",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-ADMIN-PROTOCOL-LKG-MOCK-RETIRE-001.md",
+          "dev_merge_commit": "4b46435",
+          "remote_dev_ref": "4b46435",
+          "issue": "",
+          "validation": "vitest 207/207 PASS, next build PASS, git diff --check clean",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "Admin LKG mock fallback is isolated; 401/403 and mutations do not fallback."
+        },
+        {
+          "task_id": "TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001",
+          "repo": "livemask-ci-cd",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md",
+          "dev_merge_commit": "c7842e8",
+          "remote_dev_ref": "c7842e8",
+          "issue": "",
+          "validation": "bash -n protocol smoke scripts, git diff --check, dev-merge-guard",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "LKG/rollback smoke assertions added; runtime rerun can still convert SKIP paths to PASS."
+        },
+        {
+          "task_id": "TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001",
+          "repo": "livemask-app",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "",
+          "blocked_by": [],
+          "unlocks": [],
+          "notes": "Next protocol-stability client closure task."
+        },
+        {
+          "task_id": "TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001",
+          "repo": "livemask-ci-cd",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "",
+          "validation": "",
+          "blocked_by": [
+            "TASK-APP-RECONNECT-RUNTIME-REAL-BACKEND-001"
+          ],
+          "unlocks": [],
+          "notes": "Runtime smoke should run after App real-backend reconnect cutover evidence."
+        }
+      ],
+      "open_gaps": [
+        "App reconnect runtime real-backend closure remains ready, not completed.",
+        "CI/CD reconnect hint runtime smoke remains ready.",
+        "Final cross-repo runtime smoke must distinguish PASS from accepted SKIP."
+      ]
+    }
+  ]
+}

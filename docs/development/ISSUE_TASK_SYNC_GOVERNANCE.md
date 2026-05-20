@@ -304,6 +304,18 @@ the `livemask-docs` window must scan project documents, contracts, handoffs,
 runbooks, QA matrices, and existing task state, then create new `TASK-*.md`
 entries and update the task ledger before issuing Cursor briefs.
 
+The current machine-readable snapshot is
+`docs/development/task-state-ledger.json`. It is not a replacement for the
+human-readable TASK files or MVP table; it is the reconciliation layer used to
+catch drift and drive fast dispatch. Every accepted completion report should
+update the ledger entry for the affected task or explicitly document why the
+ledger is unchanged.
+
+New Cursor tasks must be dispatched with
+`docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md`. A task brief that lacks target
+repo, branch, must-read docs, in-scope/out-of-scope, validation, dev merge
+requirements, and completion report fields is not ready for implementation.
+
 ## 8. CI/CD SKIP Rules
 
 CI/CD smoke tasks may report:
@@ -343,6 +355,8 @@ When processing completion reports, livemask-docs must update existing GitHub
 Issues, summarize completed/unfinished modules, and assign or create the next
 Cursor tasks. If the ledger has no next task but the project is not landed,
 scan the project and create new TASK docs before dispatching work.
+Use docs/development/task-state-ledger.json as the reconciliation snapshot and
+docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md for every new Cursor brief.
 ```
 
 ## 10. Follow-Up Tasks
@@ -352,6 +366,11 @@ scan the project and create new TASK docs before dispatching work.
 | `TASK-CICD-TASK-SYNC-GOVERNANCE-001` | `livemask-docs` / `livemask-ci-cd` | Upgrade task-sync workflow/scripts to structured result fields and safer comments. |
 | `TASK-DOC-AI-RULES-SYNC-001` | `livemask-docs` + all repos | Sync the governance rule into `.cursorrules` / Copilot instructions for every repo. |
 | `TASK-CICD-ISSUE-CLOSE-GUARD-001` | `livemask-ci-cd` | Optional future guard for issue close/reopen automation. |
+| `TASK-DOCS-TASK-STATE-LEDGER-001` | `livemask-docs` | Add a machine-readable task state ledger and validation check. |
+| `TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001` | `livemask-docs` | Standardize next Cursor task dispatch briefs. |
+| `TASK-CICD-TASK-RECONCILER-001` | `livemask-docs` / `livemask-ci-cd` | Add lightweight reconciliation checks before stricter Issue automation. |
+| `TASK-CICD-ISSUE-SYNC-STRICT-001` | `livemask-docs` / `livemask-ci-cd` | Search and update docs plus runtime repo Issues by TASK ID. |
+| `TASK-DOCS-LEASE-REGISTRY-001` | `livemask-docs` + all repos | Track active Cursor leases and detect overlapping task/file ownership. |
 
 ## 11. Done Criteria
 

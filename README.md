@@ -11,6 +11,8 @@
 ### 必读文档
 
 - [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) - 多仓库 + 多窗口开发完整操作指南
+- [docs/development/task-state-ledger.json](docs/development/task-state-ledger.json) - 机器可读任务状态快照
+- [docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md](docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md) - Cursor 任务派发模板
 - [design/README.md](design/README.md) - App / Admin / Website 设计事实源与 Atoms 导出目录
 - [ai-rules/v3.7/MultiWindow_Development_Rules_Summary_v3.7.md](ai-rules/v3.7/MultiWindow_Development_Rules_Summary_v3.7.md) - 多窗口开发核心规则汇总
 - [LiveMask_系统设计文档_v3.6.md](LiveMask_系统设计文档_v3.6.md) - 当前架构基线

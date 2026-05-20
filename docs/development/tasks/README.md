@@ -28,6 +28,8 @@
 > `origin/dev`、验证证据和跨仓库影响；更新 docs 台账和 Issue；总结已完成/未完成模块；
 > 主动分配下一批 Cursor 任务。如果现有任务清单没有下一步但项目仍未落地，必须扫描
 > 项目文档和任务状态，创建新的 `TASK-*.md`，更新台账后再派发任务。
+> 任务状态快照必须同步到 `docs/development/task-state-ledger.json`；新的 Cursor 任务
+> 必须使用 `docs/development/CURSOR_TASK_BRIEF_TEMPLATE.md`。
 
 ## 0. 多窗口同步要求
 
@@ -109,6 +111,11 @@ Draft -> Ready -> In Progress -> Review -> Done
 - [TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md](TASK-DOCS-CURSORRULES-DOCS-SYNC-BOUNDARY-001.md) — Ready (docs ledger ownership rule)
 - [TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md](TASK-DOCS-NATURAL-LANGUAGE-TASK-INTAKE-001.md) — Ready (plain text request -> TASK intake -> docs handoff)
 - [TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md](TASK-DOCS-COMPLETION-REPORT-DISPATCH-GOVERNANCE-001.md) — ✅ Completed (completion report intake -> Issue sync -> module summary -> next Cursor task dispatch)
+- [TASK-DOCS-TASK-STATE-LEDGER-001.md](TASK-DOCS-TASK-STATE-LEDGER-001.md) — ✅ Completed (machine-readable task state snapshot + validation)
+- [TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md](TASK-DOCS-CURSOR-BRIEF-TEMPLATE-001.md) — ✅ Completed (standard next Cursor task brief)
+- [TASK-CICD-TASK-RECONCILER-001.md](TASK-CICD-TASK-RECONCILER-001.md) — ✅ Completed (lightweight ledger reconciliation check)
+- [TASK-CICD-ISSUE-SYNC-STRICT-001.md](TASK-CICD-ISSUE-SYNC-STRICT-001.md) — Ready (cross-repo Issue lookup/update by TASK ID)
+- [TASK-DOCS-LEASE-REGISTRY-001.md](TASK-DOCS-LEASE-REGISTRY-001.md) — Ready (active Cursor lease registry and collision checks)
 - [TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md](TASK-DOCS-CICD-SMOKE-SCRIPT-DISCOVERY-001.md) — ✅ Completed (CI/CD must discover scripts before wiring smoke)
 - [TASK-DOC-NAT-SHARING-GUARD-001.md](TASK-DOC-NAT-SHARING-GUARD-001.md) — Ready (NAT/device-as-router abuse guard contract and follow-up tasks)
 - [TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md](TASK-DOCS-APP-ANDROID-FIRST-VALIDATION-001.md) — ✅ Completed (AppClient feature validation is Android-first; iOS deferred hardening)
