@@ -30,7 +30,7 @@
     {
       "module_id": "governance-control-plane",
       "summary": "Docs-owned completion report intake, task ledger, issue sync, module status summary, and next Cursor task dispatch.",
-      "overall_status": "partial",
+      "overall_status": "completed",
       "owner_repo": "livemask-docs",
       "tasks": [
         {
@@ -238,24 +238,21 @@
         {
           "task_id": "TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001",
           "repo": "livemask-docs",
-          "status": "ready",
+          "status": "completed",
           "task_doc": "docs/development/tasks/TASK-DOCS-CHILD-REPO-AI-RULE-SYNC-001.md",
           "dev_merge_commit": "",
           "remote_dev_ref": "",
           "issue": "",
-          "validation": "",
+          "validation": "Child repo dev-merge-guard PASS for livemask-backend, livemask-nodeagent, livemask-app, livemask-admin, livemask-website, livemask-job-service, livemask-ci-cd; bash scripts/check-docs.sh; python3 scripts/audit-task-center.py --no-log; git diff --check",
           "blocked_by": [
             "TASK-DOCS-GOVERNANCE-REMOTE-AUDIT-001",
             "TASK-DOCS-LEASE-REGISTRY-001"
           ],
           "unlocks": [],
-          "notes": "Next governance step: mirror lease, completion report, docs boundary, and remote audit rules into child repo AI/Cursor rules."
+          "notes": "Mirrored lease registry, completion report, docs boundary, and remote audit/Issue close guard rules into child repo .cursorrules. Child repo remote dev refs: backend 4aa7116, nodeagent 0c4ed4f, app 18ed56c, admin 668cda6, website 1a35282, job-service 4f7ae82, ci-cd 350ee0c."
         }
       ],
-      "open_gaps": [
-        "Ledger should grow as completion reports are processed; it is not yet exhaustive for every historical TASK.",
-        "Child repo AI/Cursor rules still need to mirror the docs governance source of truth."
-      ]
+      "open_gaps": []
     },
     {
       "module_id": "protocol-stability",
