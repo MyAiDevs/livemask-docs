@@ -229,6 +229,17 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 | [TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md](TASK-CICD-PROTOCOL-LKG-ROLLBACK-SMOKE-001.md) | livemask-ci-cd | Add protocol LKG/rollback API assertions to runtime smoke — Ready |
 | [TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md](TASK-CICD-RECONNECT-HINT-RUNTIME-SMOKE-001.md) | livemask-ci-cd | Add reconnect hint runtime smoke for App-facing Backend endpoints — Ready |
 
+## NodeAgent Speedtest & Bandwidth Capacity
+
+| TASK | Repo | Scope |
+| --- | --- | --- |
+| [TASK-DOC-NODEAGENT-SPEEDTEST-BANDWIDTH-001.md](TASK-DOC-NODEAGENT-SPEEDTEST-BANDWIDTH-001.md) | livemask-docs | Contract and cross-repo task split for NodeAgent speedtest and 90% bandwidth cap — Ready |
+| [TASK-NODEAGENT-SPEEDTEST-BANDWIDTH-001.md](TASK-NODEAGENT-SPEEDTEST-BANDWIDTH-001.md) | livemask-nodeagent | Local speedtest runner, LKG capacity, Backend report upload, self bandwidth cap — Ready |
+| [TASK-BACKEND-NODE-SPEEDTEST-BANDWIDTH-001.md](TASK-BACKEND-NODE-SPEEDTEST-BANDWIDTH-001.md) | livemask-backend | Persist reports/capacity, Admin APIs, executor API, 90% cap enforcement — Ready |
+| [TASK-JOBS-NODEAGENT-SPEEDTEST-SCHEDULE-001.md](TASK-JOBS-NODEAGENT-SPEEDTEST-SCHEDULE-001.md) | livemask-job-service | Scheduled/manual speedtest job definitions and Backend executor calls — Ready |
+| [TASK-ADMIN-NODE-SPEEDTEST-BANDWIDTH-001.md](TASK-ADMIN-NODE-SPEEDTEST-BANDWIDTH-001.md) | livemask-admin | Node Detail speedtest/capacity UI and manual run action — Ready |
+| [TASK-CICD-NODEAGENT-SPEEDTEST-BANDWIDTH-001.md](TASK-CICD-NODEAGENT-SPEEDTEST-BANDWIDTH-001.md) | livemask-ci-cd | Runtime smoke for report upload, 90% cap, Job Service trigger, Admin APIs — Ready |
+
 ## CI/CD Closed-Loop Smoke Batch (TASK-CICD-CLOSED-LOOP-BATCH-001)
 
 完整的 CI/CD 验收闭环，覆盖 6 个功能域的端到端 smoke 验证：
