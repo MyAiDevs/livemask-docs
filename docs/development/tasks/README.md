@@ -216,7 +216,7 @@ reconnect hint、Admin Node Detail 真接口、QA/CI 验证矩阵收敛为统一
 
 | TASK | Repo | Scope |
 | --- | --- | --- |
-| TASK-BACKEND-PROTOCOL-STABILITY-001 | livemask-backend | Real Admin/Internal APIs, eligibility, reconnect hint authority, node detail data |
+| [TASK-BACKEND-PROTOCOL-STABILITY-001.md](TASK-BACKEND-PROTOCOL-STABILITY-001.md) | livemask-backend | Real Admin/Internal APIs, eligibility, reconnect hint authority, node detail data — ✅ Completed |
 | TASK-NODEAGENT-PROTOCOL-STABILITY-001 | livemask-nodeagent | Assignment LKG, rollback, readiness, event retry, metrics/logs |
 | TASK-ADMIN-PROTOCOL-STABILITY-001 | livemask-admin | Replace node detail demo data and implement template/assignment UI |
 | TASK-APP-RECONNECT-STABILITY-001 | livemask-app | Verify real reconnect hints and unsupported protocol safety |
