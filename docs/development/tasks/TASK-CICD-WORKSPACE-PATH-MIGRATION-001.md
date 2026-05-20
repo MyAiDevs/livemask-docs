@@ -1,6 +1,6 @@
 # TASK-CICD-WORKSPACE-PATH-MIGRATION-001 — Workspace Path Migration
 
-- Status: Ready
+- Status: Completed
 - Owner: DevOps / Docs
 - Created: 2026-05-20
 - Primary repository: `livemask-ci-cd`
@@ -149,3 +149,38 @@ Completion report must include:
 - Validation command output summary.
 - Dev merge commit and remote dev ref.
 - Any repos still blocked by environment dependencies.
+
+## 8. Completion Evidence
+
+| Field | Value |
+| --- | --- |
+| Repository | `livemask-ci-cd` |
+| Task branch | `task/TASK-CICD-WORKSPACE-PATH-MIGRATION-001` |
+| Previous dev ref | `1f630f0` |
+| Rescue branch | `rescue/livemask-ci-cd-dev-before-task-cicd-workspace-path-migration-001-20260520155016` |
+| Validation on dev | `bash -n scripts/dev-merge-guard.sh` PASS; `bash -n scripts/local-dev-status.sh` PASS; `bash -n scripts/local-dev.sh` PASS; `bash -n scripts/lib/base_service.sh` PASS; `git diff --check` PASS; `scripts/dev-merge-guard.sh --help` PASS |
+
+Implemented files:
+
+- `scripts/lib/base_service.sh` added `lm_workspace_check()` with
+  `LIVEMASK_WORKSPACE_ROOT`, repository presence checks, and Docker checks.
+- `scripts/local-dev.sh` now reads `WORKSPACE_DIR` from
+  `LIVEMASK_WORKSPACE_ROOT` with fallback to parent directory discovery.
+- `scripts/dev-merge-guard.sh` added `_guard_old_path()` startup protection and
+  fails closed if run from `/Users/sammytan/Documents/New project 2`.
+- `.cursorrules` gained a workspace pre-check section, banned old path, and
+  default workspace root rule.
+- `scripts/local-dev-status.sh` was created as the workspace/runtime diagnostic
+  status report.
+
+## 9. Follow-Up
+
+`livemask-ci-cd` now enforces the workspace pre-check. Other runtime repos must
+mirror the same old-path stop rule in their repo-local `.cursorrules`.
+
+Follow-up task:
+
+- `TASK-DOCS-WORKSPACE-RULES-SYNC-001` — replicate the workspace pre-check and
+  old-path ban across `livemask-app`, `livemask-admin`, `livemask-backend`,
+  `livemask-nodeagent`, `livemask-job-service`, `livemask-website`, and
+  `livemask-docs` rules where missing.
