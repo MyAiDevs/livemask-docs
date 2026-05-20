@@ -15,6 +15,7 @@
 ## 3. 必须更新文档的场景
 
 - API 字段、错误码、状态机变化
+- Swagger/OpenAPI 文档必须同步所有 Backend API 的新增、修改和删除
 - 配置结构、默认值、热更新策略变化
 - 支付回调、订单状态、退款、风控变化
 - 数据库迁移或审计字段变化
@@ -23,6 +24,9 @@
 ## 4. 完成标准
 
 - [ ] 接口契约有说明
+- [ ] Backend API 和 Swagger/OpenAPI 完全对齐；新增、修改、删除 API 已同步 OpenAPI
+- [ ] route/API drift 校验通过；未同步 OpenAPI 的 Backend API 变更不得完成
+- [ ] Swagger UI 只能在登录后的 `livemask-admin` 中查看；Backend 不暴露公开未登录 UI
 - [ ] 兼容策略有说明
 - [ ] 回滚策略有说明
 - [ ] App / NodeAgent 影响已检查
@@ -31,6 +35,21 @@
 ## 5. 实现输入
 
 - `docs/backend/LIVEMASK_BACKEND_IMPLEMENTATION_BRIEF.md`
+
+## 5.1 Swagger / OpenAPI 强制对齐
+
+- `TASK-BACKEND-SWAGGER-API-DOCS-001` 建立 Backend OpenAPI 3 / Swagger 契约。
+- Backend 的所有 API 路由、request/response schema、错误码、auth/RBAC、分页/查询参数、
+  状态机字段和敏感字段 redaction 规则都必须和 OpenAPI 文档一致。
+- 后续任何 Backend API 新增、修改、删除，必须在同一个 TASK 中同步 OpenAPI；否则任务
+  状态只能是 `partial` / `evidence_missing`，不能标记为 `completed`。
+- Backend 应提供机器可读 OpenAPI JSON 给 Admin/CI 使用，但不得公开未登录 Swagger UI。
+- Swagger UI 的 human-facing 入口必须在 `livemask-admin` 内，且必须要求 Admin 登录。
+- 完成报告必须包含：
+  - OpenAPI validation 结果；
+  - route/API drift check 结果；
+  - 证明 Backend 没有公开未登录 Swagger UI；
+  - 证明 `livemask-admin` 登录后可以查看 Swagger UI。
 
 该文档用于后端 AI 辅助开发，包含 MVP 模块边界、API / DB / Redis / 状态机 / 幂等 / 错误模型 / 测试矩阵和可直接使用的 AI 实现 Prompt。
 
