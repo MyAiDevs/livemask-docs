@@ -417,6 +417,111 @@
       "open_gaps": [
         "Backend runtime must serve /openapi.json and /openapi.yaml so Admin Swagger UI can load the spec through /admin/openapi.json."
       ]
+    },
+    {
+      "module_id": "nat-sharing-guard",
+      "summary": "Privacy-preserving, best-effort guard against one App session being used as a LAN router, hotspot, NAT gateway, or shared proxy.",
+      "overall_status": "partial",
+      "owner_repo": "livemask-docs",
+      "tasks": [
+        {
+          "task_id": "TASK-DOC-NAT-SHARING-GUARD-001",
+          "repo": "livemask-docs",
+          "status": "completed",
+          "task_doc": "docs/development/tasks/TASK-DOC-NAT-SHARING-GUARD-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#17",
+          "validation": "bash scripts/check-docs.sh; python3 scripts/check-task-leases.py; git diff --check",
+          "blocked_by": [],
+          "unlocks": [
+            "TASK-BACKEND-NAT-SHARING-GUARD-001",
+            "TASK-NODEAGENT-NAT-SHARING-GUARD-001",
+            "TASK-APP-NAT-SHARING-GUARD-001",
+            "TASK-ADMIN-NAT-SHARING-GUARD-001",
+            "TASK-CICD-NAT-SHARING-GUARD-001"
+          ],
+          "notes": "Defines threat model, privacy boundary, policy schema, Backend/NodeAgent/App/Admin/CI-CD responsibilities, and best-effort limitation. No document should claim NodeAgent alone can perfectly block rooted/admin devices or external routers."
+        },
+        {
+          "task_id": "TASK-BACKEND-NAT-SHARING-GUARD-001",
+          "repo": "livemask-backend",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-BACKEND-NAT-SHARING-GUARD-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#18, livemask-backend#3",
+          "validation": "",
+          "blocked_by": [
+            "TASK-DOC-NAT-SHARING-GUARD-001"
+          ],
+          "unlocks": [],
+          "notes": "Backend owns nat_sharing_guard policy, aggregate risk event storage, scoring/actions, Admin APIs, App warning/status response, audit logs, and OpenAPI alignment."
+        },
+        {
+          "task_id": "TASK-NODEAGENT-NAT-SHARING-GUARD-001",
+          "repo": "livemask-nodeagent",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-NODEAGENT-NAT-SHARING-GUARD-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#20, livemask-nodeagent#1",
+          "validation": "",
+          "blocked_by": [
+            "TASK-DOC-NAT-SHARING-GUARD-001"
+          ],
+          "unlocks": [],
+          "notes": "NodeAgent collects aggregate per-session/window signals, emits privacy-safe events, applies supported caps, and must not store raw destinations, domains, URLs, payloads, or unredacted session IDs."
+        },
+        {
+          "task_id": "TASK-APP-NAT-SHARING-GUARD-001",
+          "repo": "livemask-app",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-APP-NAT-SHARING-GUARD-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#19, livemask-app#2",
+          "validation": "",
+          "blocked_by": [
+            "TASK-DOC-NAT-SHARING-GUARD-001"
+          ],
+          "unlocks": [],
+          "notes": "App owns no-sharing runtime posture, warning/throttle/revoke UX, and Sentry/log redaction. It must not expose VPN sharing, LAN proxy, router mode, or hotspot-forwarding features."
+        },
+        {
+          "task_id": "TASK-ADMIN-NAT-SHARING-GUARD-001",
+          "repo": "livemask-admin",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-ADMIN-NAT-SHARING-GUARD-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#21, livemask-admin#4",
+          "validation": "",
+          "blocked_by": [
+            "TASK-DOC-NAT-SHARING-GUARD-001"
+          ],
+          "unlocks": [],
+          "notes": "Admin owns App Runtime/Security Settings UI, dry-run defaults, validation ranges, rollback/preview behavior, RBAC, and redacted risk event views."
+        },
+        {
+          "task_id": "TASK-CICD-NAT-SHARING-GUARD-001",
+          "repo": "livemask-ci-cd",
+          "status": "ready",
+          "task_doc": "docs/development/tasks/TASK-CICD-NAT-SHARING-GUARD-001.md",
+          "dev_merge_commit": "",
+          "remote_dev_ref": "",
+          "issue": "livemask-docs#22, livemask-ci-cd#3",
+          "validation": "",
+          "blocked_by": [
+            "TASK-DOC-NAT-SHARING-GUARD-001"
+          ],
+          "unlocks": [],
+          "notes": "CI/CD owns smoke and privacy scan after runtime repos implement their slices. It must discover existing scripts before wiring new smoke paths."
+        }
+      ],
+      "open_gaps": [
+        "Runtime implementation remains pending in Backend, NodeAgent, App, Admin, and CI/CD follow-up tasks."
+      ]
     }
   ]
 }

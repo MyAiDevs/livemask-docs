@@ -2,8 +2,9 @@
 
 > Owner: Docs / Security / Backend / NodeAgent / App / Admin / CI-CD
 > Repo: `livemask-docs`
-> Status: Ready
+> Status: Completed
 > Environment: dev-local
+> Issues: livemask-docs#17
 
 ## 1. Background
 
@@ -71,11 +72,11 @@ Excluded:
 
 | Task | Repo | Scope | Validation |
 | --- | --- | --- | --- |
-| `TASK-BACKEND-NAT-SHARING-GUARD-001` | `livemask-backend` | Policy storage, session risk scoring, Admin APIs, App warning/status response | Go tests + smoke |
-| `TASK-NODEAGENT-NAT-SHARING-GUARD-001` | `livemask-nodeagent` | Aggregate counters, redacted events, enforcement hooks | Go tests + synthetic traffic counters |
-| `TASK-APP-NAT-SHARING-GUARD-001` | `livemask-app` | Native runtime no-sharing posture, warning UI, no-Sentry leakage tests | Flutter tests + platform runtime checks |
-| `TASK-ADMIN-NAT-SHARING-GUARD-001` | `livemask-admin` | App runtime/security settings UI and redacted event views | Vitest + Next build |
-| `TASK-CICD-NAT-SHARING-GUARD-001` | `livemask-ci-cd` | End-to-end smoke and privacy leak scan | Docker dev-local smoke |
+| [TASK-BACKEND-NAT-SHARING-GUARD-001](TASK-BACKEND-NAT-SHARING-GUARD-001.md) | `livemask-backend` | Policy storage, session risk scoring, Admin APIs, App warning/status response | Go tests + smoke |
+| [TASK-NODEAGENT-NAT-SHARING-GUARD-001](TASK-NODEAGENT-NAT-SHARING-GUARD-001.md) | `livemask-nodeagent` | Aggregate counters, redacted events, enforcement hooks | Go tests + synthetic traffic counters |
+| [TASK-APP-NAT-SHARING-GUARD-001](TASK-APP-NAT-SHARING-GUARD-001.md) | `livemask-app` | Native runtime no-sharing posture, warning UI, no-Sentry leakage tests | Flutter tests + platform runtime checks |
+| [TASK-ADMIN-NAT-SHARING-GUARD-001](TASK-ADMIN-NAT-SHARING-GUARD-001.md) | `livemask-admin` | App runtime/security settings UI and redacted event views | Vitest + Next build |
+| [TASK-CICD-NAT-SHARING-GUARD-001](TASK-CICD-NAT-SHARING-GUARD-001.md) | `livemask-ci-cd` | End-to-end smoke and privacy leak scan | Docker dev-local smoke |
 
 ## 6. Validation
 
@@ -89,3 +90,13 @@ Excluded:
 - Privacy rules forbid destination history, domains, URLs, and payload storage.
 - Follow-up implementation tasks are registered in task/MVP indexes.
 - Docs validation passes.
+
+## 8. Completion Evidence
+
+| Field | Value |
+| --- | --- |
+| Task branch | `task/TASK-DOC-NAT-SHARING-GUARD-001` |
+| Contract | `docs/contracts/vpn/NAT_SHARING_GUARD_CONTRACT.md` |
+| Follow-up tasks | Backend, NodeAgent, App, Admin, CI/CD implementation TASK files created |
+| Validation | `bash scripts/check-docs.sh`; `python3 scripts/check-task-leases.py`; `git diff --check` |
+| Docs handoff | Runtime repos must implement only their follow-up TASKs and must not edit `livemask-docs` directly. |
